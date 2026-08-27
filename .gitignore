@@ -5,4 +5,7 @@ __pycache__/
 
 # Downloaded Kaggle worker logs and raw run outputs stay local.
 test_results/kaggle_tpu_capability_v*/
+test_results/kaggle_stream1_ab_v*/
 
+# Kaggle bootstrap pins a commit and is generated locally per run.
+kaggle_stream1_ab/

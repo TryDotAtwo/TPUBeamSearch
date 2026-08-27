@@ -72,7 +72,8 @@ def _folded_input_kernel(
     value = flat_index % NUM_CLASSES
     valid = position < STATE_LEN
     position = jnp.minimum(position, STATE_LEN - 1)
-    one_hot = (state_ref[:, position] == value[None, :]) & valid[None, :]
+    states = state_ref[...]
+    one_hot = (states[:, position] == value[None, :]) & valid[None, :]
     accumulator_ref[...] += jnp.dot(
         one_hot.astype(jnp.bfloat16),
         weight_ref[...],
@@ -166,7 +167,7 @@ def _embedding_sum_kernel(
 
     weight_row = position * NUM_CLASSES + states_ref[parent, position]
     local_row = weight_row % weight_row_block
-    accumulator_ref[...] += weight_ref[local_row, :][None, :].astype(jnp.float32)
+    accumulator_ref[...] += weight_ref[...][local_row, :][None, :].astype(jnp.float32)
 
     @pl.when(position == STATE_LEN - 1)
     def finish():
