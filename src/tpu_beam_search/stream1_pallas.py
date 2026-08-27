@@ -525,10 +525,10 @@ def pallas_fused_folded_hidden(
     *,
     STATE_LEN: int,
     NUM_CLASSES: int,
-    bm: int = 128,
+    bm: int = 256,
     bk_input: int = 128,
-    bn_input: int = 256,
-    bk_hidden: int = 128,
+    bn_input: int = 512,
+    bk_hidden: int = 256,
     bn_hidden: int = 512,
     interpret: bool = False,
 ):
