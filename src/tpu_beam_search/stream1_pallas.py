@@ -72,7 +72,7 @@ def _folded_input_kernel(
     value = flat_index % NUM_CLASSES
     valid = position < STATE_LEN
     position = jnp.minimum(position, STATE_LEN - 1)
-    states = state_ref[...]
+    states = state_ref[...].astype(jnp.int32)
     position_index = jnp.broadcast_to(position[None, :], (states.shape[0], bk))
     selected_state = jnp.take_along_axis(states, position_index, axis=1)
     one_hot = (selected_state == value[None, :]) & valid[None, :]
