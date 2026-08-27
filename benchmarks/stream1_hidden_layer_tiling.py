@@ -70,6 +70,8 @@ def main():
             "checkpoint": str(checkpoint_path),
             "inspected_checkpoints": inspected,
             "batch": batch,
+            "timing_warmups": 10,
+            "timing_samples": 31,
         },
         "first_layer": {
             "compile_and_first_seconds": first_compile,

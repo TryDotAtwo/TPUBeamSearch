@@ -73,11 +73,14 @@ def make_reachable_states(generators: np.ndarray, rows: int, STATE_LEN: int, STA
     return jnp.asarray(states)
 
 
-def timed(call, repeats=7):
+def timed(call, repeats=31, warmups=10):
     first_started = time.perf_counter()
     output = call()
     output.block_until_ready()
     first_seconds = time.perf_counter() - first_started
+    for _ in range(warmups):
+        output = call()
+        output.block_until_ready()
     samples = []
     for _ in range(repeats):
         started = time.perf_counter()
