@@ -4,6 +4,7 @@ import jax.numpy as jnp
 import numpy as np
 
 from tpu_beam_search.config import BeamConfig
+from tpu_beam_search.tpu_layout import pad_to_multiple, validate_matrix_tile
 from tpu_beam_search.stream1_reference import (
     apply_all_moves,
     folded_input_linear,
@@ -85,3 +86,19 @@ def test_quantize_score_matches_cuda_clamp_and_round_to_nearest_even():
     actual = quantize_score(scores, SCORE_SCALE=1024, SCORE_MAX_Q=300.0)
 
     np.testing.assert_array_equal(actual, np.array([0, 0, 2, 2, 307200], dtype=np.uint32))
+
+
+def test_tpu_padding_never_truncates_logical_shape():
+    assert pad_to_multiple(120, 128) == 128
+    assert pad_to_multiple(1536, 128) == 1536
+    assert pad_to_multiple(513, 128) == 640
+
+
+def test_production_matrix_tiles_reject_unaligned_dimensions():
+    validate_matrix_tile(bm=128, bk=256, bn=512)
+    with np.testing.assert_raises_regex(ValueError, "bm.*8"):
+        validate_matrix_tile(bm=127, bk=256, bn=512)
+    with np.testing.assert_raises_regex(ValueError, "bk.*128"):
+        validate_matrix_tile(bm=128, bk=192, bn=512)
+    with np.testing.assert_raises_regex(ValueError, "bn.*128"):
+        validate_matrix_tile(bm=128, bk=256, bn=320)

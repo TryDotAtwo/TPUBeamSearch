@@ -8,6 +8,8 @@ import jax.numpy as jnp
 from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
 
+from .tpu_layout import pad_to_multiple, validate_matrix_tile
+
 
 def pallas_apply_all_moves(
     parents,
@@ -61,6 +63,7 @@ def _folded_input_kernel(
     NUM_CLASSES: int,
     bk: int,
     nsteps: int,
+    relu: bool,
 ):
     k_step = pl.program_id(2)
     @pl.when(k_step == 0)
@@ -84,7 +87,10 @@ def _folded_input_kernel(
 
     @pl.when(k_step == nsteps - 1)
     def finish():
-        output_ref[...] = accumulator_ref[...] + bias_ref[...][None, :].astype(jnp.float32)
+        value = accumulator_ref[...] + bias_ref[...][None, :].astype(jnp.float32)
+        if relu:
+            value = jnp.maximum(value, 0.0)
+        output_ref[...] = value.astype(jnp.bfloat16)
 
 
 def pallas_folded_input_linear(
@@ -97,6 +103,7 @@ def pallas_folded_input_linear(
     bm: int = 128,
     bk: int = 128,
     bn: int = 256,
+    relu: bool = True,
     interpret: bool = False,
 ):
     rows = states.shape[0]
@@ -107,9 +114,12 @@ def pallas_folded_input_linear(
     if bias.shape != (output_width,):
         raise ValueError("bias shape must equal output width")
 
-    padded_rows = math.ceil(rows / bm) * bm
-    padded_input = math.ceil(input_width / bk) * bk
-    padded_output = math.ceil(output_width / bn) * bn
+    if not interpret:
+        validate_matrix_tile(bm=bm, bk=bk, bn=bn)
+
+    padded_rows = pad_to_multiple(rows, bm)
+    padded_input = pad_to_multiple(input_width, bk)
+    padded_output = pad_to_multiple(output_width, bn)
     states_padded = jnp.pad(states, ((0, padded_rows - rows), (0, 0)))
     weight_padded = jnp.pad(
         weight,
@@ -125,6 +135,7 @@ def pallas_folded_input_linear(
             NUM_CLASSES=NUM_CLASSES,
             bk=bk,
             nsteps=nsteps,
+            relu=relu,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
@@ -138,7 +149,7 @@ def pallas_folded_input_linear(
             grid=(padded_rows // bm, padded_output // bn, nsteps),
         ),
         out_shape=jax.ShapeDtypeStruct(
-            (padded_rows, padded_output), jnp.float32
+            (padded_rows, padded_output), jnp.bfloat16
         ),
         compiler_params=pltpu.CompilerParams(
             dimension_semantics=("parallel", "parallel", "arbitrary")
@@ -269,3 +280,94 @@ def pallas_embedding_sum_linear(
         name="stream1_embedding_sum_linear",
     )
     return call(states, weight_padded, bias_padded)[:, :output_width]
+
+
+def _dense_linear_kernel(
+    input_ref,
+    weight_ref,
+    bias_ref,
+    output_ref,
+    accumulator_ref,
+    *,
+    nsteps: int,
+    relu: bool,
+):
+    k_step = pl.program_id(2)
+
+    @pl.when(k_step == 0)
+    def initialize():
+        accumulator_ref[...] = jnp.zeros_like(accumulator_ref[...])
+
+    accumulator_ref[...] += jnp.dot(
+        input_ref[...],
+        weight_ref[...],
+        preferred_element_type=jnp.float32,
+    )
+
+    @pl.when(k_step == nsteps - 1)
+    def finish():
+        value = accumulator_ref[...] + bias_ref[...][None, :].astype(jnp.float32)
+        if relu:
+            value = jnp.maximum(value, 0.0)
+        output_ref[...] = value.astype(jnp.bfloat16)
+
+
+def pallas_dense_linear(
+    values,
+    weight,
+    bias,
+    *,
+    bm: int = 128,
+    bk: int = 128,
+    bn: int = 256,
+    relu: bool = False,
+    interpret: bool = False,
+):
+    if not interpret:
+        validate_matrix_tile(bm=bm, bk=bk, bn=bn)
+    rows, input_width = values.shape
+    if weight.shape[0] != input_width:
+        raise ValueError("weight rows must equal input width")
+    output_width = weight.shape[1]
+    if bias.shape != (output_width,):
+        raise ValueError("bias shape must equal output width")
+
+    padded_rows = pad_to_multiple(rows, bm)
+    padded_input = pad_to_multiple(input_width, bk)
+    padded_output = pad_to_multiple(output_width, bn)
+    values_padded = jnp.pad(
+        values.astype(jnp.bfloat16),
+        ((0, padded_rows - rows), (0, padded_input - input_width)),
+    )
+    weight_padded = jnp.pad(
+        weight.astype(jnp.bfloat16),
+        ((0, padded_input - input_width), (0, padded_output - output_width)),
+    )
+    bias_padded = jnp.pad(
+        bias.astype(jnp.bfloat16), ((0, padded_output - output_width),)
+    )
+    nsteps = padded_input // bk
+
+    call = pl.pallas_call(
+        functools.partial(_dense_linear_kernel, nsteps=nsteps, relu=relu),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[
+                pl.BlockSpec((bm, bk), lambda i, j, k: (i, k)),
+                pl.BlockSpec((bk, bn), lambda i, j, k: (k, j)),
+                pl.BlockSpec((bn,), lambda i, j, k: (j,)),
+            ],
+            out_specs=pl.BlockSpec((bm, bn), lambda i, j, k: (i, j)),
+            scratch_shapes=[pltpu.VMEM((bm, bn), jnp.float32)],
+            grid=(padded_rows // bm, padded_output // bn, nsteps),
+        ),
+        out_shape=jax.ShapeDtypeStruct(
+            (padded_rows, padded_output), jnp.bfloat16
+        ),
+        compiler_params=pltpu.CompilerParams(
+            dimension_semantics=("parallel", "parallel", "arbitrary")
+        ),
+        interpret=interpret,
+        name="stream1_dense_linear",
+    )
+    return call(values_padded, weight_padded, bias_padded)[:rows, :output_width]

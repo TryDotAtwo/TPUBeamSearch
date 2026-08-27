@@ -3,6 +3,7 @@ import numpy as np
 
 from tpu_beam_search.stream1_pallas import (
     pallas_apply_all_moves,
+    pallas_dense_linear,
     pallas_embedding_sum_linear,
     pallas_folded_input_linear,
 )
@@ -67,6 +68,7 @@ def test_pallas_folded_input_builds_one_hot_tiles_inside_kernel():
         interpret=True,
     )
 
+    assert actual.dtype == jnp.bfloat16
     np.testing.assert_array_equal(
         np.asarray(actual, dtype=np.float32),
         np.array([[14, 140], [13, 130]], dtype=np.float32),
@@ -101,4 +103,29 @@ def test_pallas_embedding_sum_reads_only_selected_weight_rows():
     np.testing.assert_array_equal(
         np.asarray(actual, dtype=np.float32),
         np.array([[14, 140], [13, 130]], dtype=np.float32),
+    )
+
+
+def test_pallas_dense_linear_fuses_bias_and_relu_with_bf16_output():
+    values = jnp.array([[1, 2, 3, 4], [2, 0, 1, 3]], dtype=jnp.bfloat16)
+    weight = jnp.array(
+        [[1, -1], [2, 1], [0, 2], [-1, 0]], dtype=jnp.bfloat16
+    )
+    bias = jnp.array([-1, 2], dtype=jnp.bfloat16)
+
+    actual = pallas_dense_linear(
+        values,
+        weight,
+        bias,
+        bm=2,
+        bk=2,
+        bn=2,
+        relu=True,
+        interpret=True,
+    )
+
+    assert actual.dtype == jnp.bfloat16
+    np.testing.assert_array_equal(
+        np.asarray(actual, dtype=np.float32),
+        np.array([[0, 9], [0, 2]], dtype=np.float32),
     )
