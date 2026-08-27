@@ -169,10 +169,10 @@ def _embedding_sum_kernel(
 
     weight_row = position * NUM_CLASSES + states_ref[parent, position]
     local_row = weight_row % weight_row_block
-    weight_tile = weight_ref[...]
+    weight_tile = weight_ref[...].astype(jnp.float32)
     row_index = jnp.broadcast_to(local_row, (1, weight_tile.shape[1]))
     selected_weight = jnp.take_along_axis(weight_tile, row_index, axis=0)
-    accumulator_ref[...] += selected_weight.astype(jnp.float32)
+    accumulator_ref[...] += selected_weight
 
     @pl.when(position == STATE_LEN - 1)
     def finish():
