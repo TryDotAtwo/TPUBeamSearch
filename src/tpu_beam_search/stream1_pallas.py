@@ -202,6 +202,22 @@ def pallas_embedding_sum_linear(
         raise ValueError("bias shape must equal output width")
     if states.size * states.dtype.itemsize > 16 * 1024:
         raise ValueError("embedding-sum scalar-prefetch states exceed TPU SMEM")
+    if rows > 1:
+        return jnp.concatenate(
+            [
+                pallas_embedding_sum_linear(
+                    states[row : row + 1],
+                    weight,
+                    bias,
+                    STATE_LEN=STATE_LEN,
+                    NUM_CLASSES=NUM_CLASSES,
+                    bn=bn,
+                    interpret=interpret,
+                )
+                for row in range(rows)
+            ],
+            axis=0,
+        )
 
     padded_output = math.ceil(output_width / bn) * bn
     weight_padded = jnp.pad(weight, ((0, 0), (0, padded_output - output_width)))
