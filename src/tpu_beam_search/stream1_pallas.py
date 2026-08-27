@@ -371,3 +371,268 @@ def pallas_dense_linear(
         name="stream1_dense_linear",
     )
     return call(values_padded, weight_padded, bias_padded)[:rows, :output_width]
+
+
+def _fused_folded_hidden_kernel(
+    state_ref,
+    input_weight_ref,
+    input_bias_ref,
+    hidden_weight_ref,
+    hidden_bias_ref,
+    output_ref,
+    hidden_ref,
+    input_accumulator_ref,
+    hidden_accumulator_ref,
+    *,
+    STATE_LEN: int,
+    NUM_CLASSES: int,
+    bk_input: int,
+    input_ksteps: int,
+    hidden_ksteps: int,
+    input_output_blocks: int,
+    hidden_output_blocks: int,
+):
+    def input_body(weight_tile_ref, bias_tile_ref, hidden_tile_ref, accumulator_ref):
+        k_step = pl.program_id(1)
+
+        @pl.when(k_step == 0)
+        def initialize():
+            accumulator_ref[...] = jnp.zeros_like(accumulator_ref[...])
+
+        flat_index = k_step * bk_input + jnp.arange(bk_input, dtype=jnp.int32)
+        position = flat_index // NUM_CLASSES
+        value = flat_index % NUM_CLASSES
+        valid = position < STATE_LEN
+        position = jnp.minimum(position, STATE_LEN - 1)
+        states = state_ref[...].astype(jnp.int32)
+        position_index = jnp.broadcast_to(
+            position[None, :], (states.shape[0], bk_input)
+        )
+        selected_state = jnp.take_along_axis(states, position_index, axis=1)
+        one_hot = (selected_state == value[None, :]) & valid[None, :]
+        accumulator_ref[...] += jnp.dot(
+            one_hot.astype(jnp.bfloat16),
+            weight_tile_ref[...],
+            preferred_element_type=jnp.float32,
+        )
+
+        @pl.when(k_step == input_ksteps - 1)
+        def finish():
+            value_with_bias = (
+                accumulator_ref[...]
+                + bias_tile_ref[...][None, :].astype(jnp.float32)
+            )
+            hidden_tile_ref[...] = jnp.maximum(value_with_bias, 0.0).astype(
+                jnp.bfloat16
+            )
+
+    input_pipeline = pltpu.emit_pipeline(
+        input_body,
+        grid=(input_output_blocks, input_ksteps),
+        in_specs=[
+            pl.BlockSpec(
+                (bk_input, input_weight_ref.shape[1] // input_output_blocks),
+                lambda output_block, k_step: (k_step, output_block),
+            ),
+            pl.BlockSpec(
+                (input_bias_ref.shape[0] // input_output_blocks,),
+                lambda output_block, k_step: (output_block,),
+            ),
+        ],
+        out_specs=pl.BlockSpec(
+            (state_ref.shape[0], hidden_ref.shape[1] // input_output_blocks),
+            lambda output_block, k_step: (0, output_block),
+        ),
+        dimension_semantics=("parallel", "arbitrary"),
+    )
+    input_pipeline(
+        input_weight_ref,
+        input_bias_ref,
+        hidden_ref,
+        scratches=(input_accumulator_ref,),
+    )
+
+    def hidden_body(
+        hidden_tile_ref,
+        weight_tile_ref,
+        bias_tile_ref,
+        output_tile_ref,
+        accumulator_ref,
+    ):
+        k_step = pl.program_id(1)
+
+        @pl.when(k_step == 0)
+        def initialize():
+            accumulator_ref[...] = jnp.zeros_like(accumulator_ref[...])
+
+        accumulator_ref[...] += jnp.dot(
+            hidden_tile_ref[...],
+            weight_tile_ref[...],
+            preferred_element_type=jnp.float32,
+        )
+
+        @pl.when(k_step == hidden_ksteps - 1)
+        def finish():
+            value_with_bias = (
+                accumulator_ref[...]
+                + bias_tile_ref[...][None, :].astype(jnp.float32)
+            )
+            output_tile_ref[...] = jnp.maximum(value_with_bias, 0.0).astype(
+                jnp.bfloat16
+            )
+
+    hidden_pipeline = pltpu.emit_pipeline(
+        hidden_body,
+        grid=(hidden_output_blocks, hidden_ksteps),
+        in_specs=[
+            pl.BlockSpec(
+                (state_ref.shape[0], hidden_ref.shape[1] // hidden_ksteps),
+                lambda output_block, k_step: (0, k_step),
+            ),
+            pl.BlockSpec(
+                (
+                    hidden_weight_ref.shape[0] // hidden_ksteps,
+                    hidden_weight_ref.shape[1] // hidden_output_blocks,
+                ),
+                lambda output_block, k_step: (k_step, output_block),
+            ),
+            pl.BlockSpec(
+                (hidden_bias_ref.shape[0] // hidden_output_blocks,),
+                lambda output_block, k_step: (output_block,),
+            ),
+        ],
+        out_specs=pl.BlockSpec(
+            (state_ref.shape[0], output_ref.shape[1] // hidden_output_blocks),
+            lambda output_block, k_step: (0, output_block),
+        ),
+        dimension_semantics=("parallel", "arbitrary"),
+    )
+    hidden_pipeline(
+        hidden_ref,
+        hidden_weight_ref,
+        hidden_bias_ref,
+        output_ref,
+        scratches=(hidden_accumulator_ref,),
+    )
+
+
+def pallas_fused_folded_hidden(
+    states,
+    input_weight,
+    input_bias,
+    hidden_weight,
+    hidden_bias,
+    *,
+    STATE_LEN: int,
+    NUM_CLASSES: int,
+    bm: int = 128,
+    bk_input: int = 128,
+    bn_input: int = 256,
+    bk_hidden: int = 128,
+    bn_hidden: int = 512,
+    interpret: bool = False,
+):
+    if not interpret:
+        validate_matrix_tile(bm=bm, bk=bk_input, bn=bn_input)
+        validate_matrix_tile(bm=bm, bk=bk_hidden, bn=bn_hidden)
+
+    rows = states.shape[0]
+    input_width = STATE_LEN * NUM_CLASSES
+    if input_weight.shape[0] != input_width:
+        raise ValueError("input weight rows must equal STATE_LEN * NUM_CLASSES")
+    hidden_width = input_weight.shape[1]
+    if input_bias.shape != (hidden_width,):
+        raise ValueError("input bias shape must equal input-layer output width")
+    if hidden_weight.shape[0] != hidden_width:
+        raise ValueError("hidden weight rows must equal input-layer output width")
+    output_width = hidden_weight.shape[1]
+    if hidden_bias.shape != (output_width,):
+        raise ValueError("hidden bias shape must equal hidden-layer output width")
+
+    if interpret:
+        virtual_one_hot = jax.nn.one_hot(
+            states[:, :STATE_LEN].astype(jnp.int32),
+            NUM_CLASSES,
+            dtype=jnp.bfloat16,
+        ).reshape(rows, input_width)
+        hidden = jnp.maximum(
+            virtual_one_hot.astype(jnp.float32)
+            @ input_weight.astype(jnp.float32)
+            + input_bias.astype(jnp.float32),
+            0.0,
+        ).astype(jnp.bfloat16)
+        return jnp.maximum(
+            hidden.astype(jnp.float32) @ hidden_weight.astype(jnp.float32)
+            + hidden_bias.astype(jnp.float32),
+            0.0,
+        ).astype(jnp.bfloat16)
+
+    padded_rows = pad_to_multiple(rows, bm)
+    padded_input = pad_to_multiple(input_width, bk_input)
+    padded_hidden = pad_to_multiple(
+        hidden_width, max(bn_input, bk_hidden)
+    )
+    padded_output = pad_to_multiple(output_width, bn_hidden)
+    states_padded = jnp.pad(states, ((0, padded_rows - rows), (0, 0)))
+    input_weight_padded = jnp.pad(
+        input_weight.astype(jnp.bfloat16),
+        ((0, padded_input - input_width), (0, padded_hidden - hidden_width)),
+    )
+    input_bias_padded = jnp.pad(
+        input_bias.astype(jnp.bfloat16), ((0, padded_hidden - hidden_width),)
+    )
+    hidden_weight_padded = jnp.pad(
+        hidden_weight.astype(jnp.bfloat16),
+        ((0, padded_hidden - hidden_width), (0, padded_output - output_width)),
+    )
+    hidden_bias_padded = jnp.pad(
+        hidden_bias.astype(jnp.bfloat16), ((0, padded_output - output_width),)
+    )
+
+    input_ksteps = padded_input // bk_input
+    hidden_ksteps = padded_hidden // bk_hidden
+    input_output_blocks = padded_hidden // bn_input
+    hidden_output_blocks = padded_output // bn_hidden
+    call = pl.pallas_call(
+        functools.partial(
+            _fused_folded_hidden_kernel,
+            STATE_LEN=STATE_LEN,
+            NUM_CLASSES=NUM_CLASSES,
+            bk_input=bk_input,
+            input_ksteps=input_ksteps,
+            hidden_ksteps=hidden_ksteps,
+            input_output_blocks=input_output_blocks,
+            hidden_output_blocks=hidden_output_blocks,
+        ),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[
+                pl.BlockSpec((bm, states.shape[1]), lambda row_block: (row_block, 0)),
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+            ],
+            out_specs=pl.BlockSpec(
+                (bm, padded_output), lambda row_block: (row_block, 0)
+            ),
+            scratch_shapes=[
+                pltpu.VMEM((bm, padded_hidden), jnp.bfloat16),
+                pltpu.VMEM((bm, bn_input), jnp.float32),
+                pltpu.VMEM((bm, bn_hidden), jnp.float32),
+            ],
+            grid=(padded_rows // bm,),
+        ),
+        out_shape=jax.ShapeDtypeStruct(
+            (padded_rows, padded_output), jnp.bfloat16
+        ),
+        interpret=interpret,
+        name="stream1_fused_folded_hidden",
+    )
+    return call(
+        states_padded,
+        input_weight_padded,
+        input_bias_padded,
+        hidden_weight_padded,
+        hidden_bias_padded,
+    )[:rows, :output_width]

@@ -7,7 +7,9 @@ __pycache__/
 test_results/kaggle_tpu_capability_v*/
 test_results/kaggle_stream1_ab_v*/
 test_results/kaggle_stream1_hidden_v*/
+test_results/kaggle_stream1_fused_hidden_v*/
 
 # Kaggle bootstrap pins a commit and is generated locally per run.
 kaggle_stream1_ab/
 kaggle_stream1_hidden/
+kaggle_stream1_fused_hidden/
