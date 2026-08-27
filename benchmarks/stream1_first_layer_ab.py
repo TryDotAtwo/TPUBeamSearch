@@ -144,7 +144,7 @@ def main():
                         b,
                         STATE_LEN=config.STATE_LEN,
                         NUM_CLASSES=config.NUM_CLASSES,
-                        bn=128,
+                        bn=256,
                     )
                 )
             return jnp.concatenate(chunks, axis=0)

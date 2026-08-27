@@ -96,7 +96,7 @@ def pallas_folded_input_linear(
     NUM_CLASSES: int,
     bm: int = 128,
     bk: int = 128,
-    bn: int = 128,
+    bn: int = 256,
     interpret: bool = False,
 ):
     rows = states.shape[0]
