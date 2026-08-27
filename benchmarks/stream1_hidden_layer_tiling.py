@@ -143,7 +143,9 @@ def main():
     hidden1_bytes = batch * input_weight.shape[1] * 2
     hbm_roundtrip_bytes = hidden1_bytes * 2
     hbm_bandwidth_bytes_per_second = 412.5e9
-    ideal_saved_seconds = hbm_roundtrip_bytes / hbm_bandwidth_bytes_per_second
+    peak_bandwidth_roundtrip_seconds = (
+        hbm_roundtrip_bytes / hbm_bandwidth_bytes_per_second
+    )
     result["decision"] = {
         "best_tile": f"bm{best_bm}_bk{best_bk}_bn{best_bn}",
         "best_hidden_seconds": best_seconds,
@@ -159,9 +161,11 @@ def main():
         "pipeline_steady_samples": pipeline_samples,
         "pipeline_checksum": float(jnp.sum(pipeline_output.astype(jnp.float32))),
         "hidden1_hbm_roundtrip_bytes": int(hbm_roundtrip_bytes),
-        "ideal_fusion_saved_seconds_at_peak_hbm": ideal_saved_seconds,
-        "ideal_fusion_ceiling_fraction_of_pipeline": ideal_saved_seconds
-        / pipeline_steady,
+        "peak_hbm_bandwidth_bytes_per_second": hbm_bandwidth_bytes_per_second,
+        "peak_bandwidth_roundtrip_seconds_estimate": peak_bandwidth_roundtrip_seconds,
+        "peak_bandwidth_roundtrip_fraction_of_pipeline": (
+            peak_bandwidth_roundtrip_seconds / pipeline_steady
+        ),
     }
 
     result_path = Path("/kaggle/working/stream1_hidden_layer_tiling.json")
