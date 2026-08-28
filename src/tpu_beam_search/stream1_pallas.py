@@ -740,7 +740,13 @@ def _fused_folded_hidden_kernel(
     hidden_ksteps: int,
     input_output_blocks: int,
     hidden_output_blocks: int,
+    pipeline_buffer_count: int,
+    pipeline_lookahead: bool,
 ):
+    pipeline_mode = pl.Buffered(
+        buffer_count=pipeline_buffer_count,
+        use_lookahead=pipeline_lookahead,
+    )
     def input_body(weight_tile_ref, bias_tile_ref, hidden_tile_ref, accumulator_ref):
         k_step = pl.program_id(1)
 
@@ -782,15 +788,18 @@ def _fused_folded_hidden_kernel(
             pl.BlockSpec(
                 (bk_input, input_weight_ref.shape[1] // input_output_blocks),
                 lambda output_block, k_step: (k_step, output_block),
+                pipeline_mode=pipeline_mode,
             ),
             pl.BlockSpec(
                 (input_bias_ref.shape[0] // input_output_blocks,),
                 lambda output_block, k_step: (output_block,),
+                pipeline_mode=pipeline_mode,
             ),
         ],
         out_specs=pl.BlockSpec(
             (state_ref.shape[0], hidden_ref.shape[1] // input_output_blocks),
             lambda output_block, k_step: (0, output_block),
+            pipeline_mode=pipeline_mode,
         ),
         dimension_semantics=("parallel", "arbitrary"),
     )
@@ -837,6 +846,7 @@ def _fused_folded_hidden_kernel(
             pl.BlockSpec(
                 (state_ref.shape[0], hidden_ref.shape[1] // hidden_ksteps),
                 lambda output_block, k_step: (0, k_step),
+                pipeline_mode=pipeline_mode,
             ),
             pl.BlockSpec(
                 (
@@ -844,15 +854,18 @@ def _fused_folded_hidden_kernel(
                     hidden_weight_ref.shape[1] // hidden_output_blocks,
                 ),
                 lambda output_block, k_step: (k_step, output_block),
+                pipeline_mode=pipeline_mode,
             ),
             pl.BlockSpec(
                 (hidden_bias_ref.shape[0] // hidden_output_blocks,),
                 lambda output_block, k_step: (output_block,),
+                pipeline_mode=pipeline_mode,
             ),
         ],
         out_specs=pl.BlockSpec(
             (state_ref.shape[0], output_ref.shape[1] // hidden_output_blocks),
             lambda output_block, k_step: (0, output_block),
+            pipeline_mode=pipeline_mode,
         ),
         dimension_semantics=("parallel", "arbitrary"),
     )
@@ -879,8 +892,12 @@ def pallas_fused_folded_hidden(
     bn_input: int = 512,
     bk_hidden: int = 256,
     bn_hidden: int = 512,
+    pipeline_buffer_count: int = 2,
+    pipeline_lookahead: bool = False,
     interpret: bool = False,
 ):
+    if pipeline_buffer_count not in (1, 2):
+        raise ValueError("TPU pipeline_buffer_count must be 1 or 2")
     if not interpret:
         validate_matrix_tile(bm=bm, bk=bk_input, bn=bn_input)
         validate_matrix_tile(bm=bm, bk=bk_hidden, bn=bn_hidden)
@@ -952,6 +969,8 @@ def pallas_fused_folded_hidden(
             hidden_ksteps=hidden_ksteps,
             input_output_blocks=input_output_blocks,
             hidden_output_blocks=hidden_output_blocks,
+            pipeline_buffer_count=pipeline_buffer_count,
+            pipeline_lookahead=pipeline_lookahead,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
@@ -1029,6 +1048,8 @@ def _fused_mlp_kernel(
         hidden_ksteps=hidden_ksteps,
         input_output_blocks=input_output_blocks,
         hidden_output_blocks=hidden_output_blocks,
+        pipeline_buffer_count=2,
+        pipeline_lookahead=False,
     )
 
     def output_body(

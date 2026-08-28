@@ -206,6 +206,8 @@ def stream1_pallas_inference(
     bn_input: int = 512,
     bk_hidden: int = 256,
     bn_hidden: int = 512,
+    prefix_pipeline_buffer_count: int = 2,
+    prefix_pipeline_lookahead: bool = False,
     bk_residual: int = 256,
     bn_residual: int = 512,
     bk_output: int = 512,
@@ -229,6 +231,8 @@ def stream1_pallas_inference(
         bn_input=bn_input,
         bk_hidden=bk_hidden,
         bn_hidden=bn_hidden,
+        pipeline_buffer_count=prefix_pipeline_buffer_count,
+        pipeline_lookahead=prefix_pipeline_lookahead,
         interpret=interpret,
     )
     if residual_fusion not in ("separate", "per_block", "pairs"):

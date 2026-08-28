@@ -177,6 +177,37 @@ def test_pallas_fused_folded_hidden_keeps_relu_hidden_between_matmuls():
     )
 
 
+def test_pallas_fused_folded_hidden_accepts_pipeline_controls_in_interpret_mode():
+    states = jnp.array([[0, 1]], dtype=jnp.uint8)
+    input_weight = jnp.eye(4, dtype=jnp.bfloat16)
+    input_bias = jnp.zeros(4, dtype=jnp.bfloat16)
+    hidden_weight = jnp.eye(4, dtype=jnp.bfloat16)
+    hidden_bias = jnp.zeros(4, dtype=jnp.bfloat16)
+
+    actual = pallas_fused_folded_hidden(
+        states,
+        input_weight,
+        input_bias,
+        hidden_weight,
+        hidden_bias,
+        STATE_LEN=2,
+        NUM_CLASSES=2,
+        bm=2,
+        bk_input=2,
+        bn_input=2,
+        bk_hidden=2,
+        bn_hidden=2,
+        pipeline_buffer_count=1,
+        pipeline_lookahead=False,
+        interpret=True,
+    )
+
+    np.testing.assert_array_equal(
+        np.asarray(actual, dtype=np.float32),
+        np.array([[1, 0, 0, 1]], dtype=np.float32),
+    )
+
+
 def test_pallas_fused_mlp_returns_only_logical_move_logits():
     states = jnp.array([[0, 2], [1, 0]], dtype=jnp.uint8)
     input_weight = jnp.array(
