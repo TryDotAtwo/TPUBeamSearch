@@ -20,8 +20,11 @@ def _layer_norm_kernel(
     *,
     logical_width: int,
     epsilon: float,
+    fp32_statistics: bool,
 ):
-    values = values_ref[...].astype(jnp.float32)
+    values = values_ref[...]
+    if fp32_statistics:
+        values = values.astype(jnp.float32)
     columns = jnp.arange(values.shape[1], dtype=jnp.int32)
     valid = columns < logical_width
     masked_values = jnp.where(valid[None, :], values, 0.0)
@@ -29,10 +32,12 @@ def _layer_norm_kernel(
     centered = jnp.where(valid[None, :], values - mean, 0.0)
     variance = jnp.sum(jnp.square(centered), axis=1, keepdims=True) / logical_width
     normalized = centered * jax.lax.rsqrt(variance + epsilon)
-    result = (
-        normalized * scale_ref[...][None, :].astype(jnp.float32)
-        + bias_ref[...][None, :].astype(jnp.float32)
-    )
+    scale = scale_ref[...][None, :]
+    bias = bias_ref[...][None, :]
+    if fp32_statistics:
+        scale = scale.astype(jnp.float32)
+        bias = bias.astype(jnp.float32)
+    result = normalized * scale + bias
     output_ref[...] = jnp.where(valid[None, :], result, 0.0).astype(jnp.bfloat16)
 
 
@@ -44,6 +49,7 @@ def pallas_layer_norm(
     bm: int = 128,
     width_alignment: int = 128,
     epsilon: float = 1e-5,
+    fp32_statistics: bool = True,
     interpret: bool = False,
 ):
     """Per-row LayerNorm with FP32 reductions and aligned BF16 storage."""
@@ -76,6 +82,7 @@ def pallas_layer_norm(
             _layer_norm_kernel,
             logical_width=logical_width,
             epsilon=epsilon,
+            fp32_statistics=fp32_statistics,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
@@ -120,6 +127,7 @@ def _fused_dense_layer_norm_kernel(
     epsilon: float,
     add_skip: bool,
     relu: bool,
+    fp32_statistics: bool,
 ):
     def dense_body(
         input_tile_ref,
@@ -183,22 +191,28 @@ def _fused_dense_layer_norm_kernel(
         scratches=(accumulator_ref,),
     )
 
-    dense = dense_ref[...].astype(jnp.float32)
+    dense = dense_ref[...]
+    if fp32_statistics:
+        dense = dense.astype(jnp.float32)
     columns = jnp.arange(dense.shape[1], dtype=jnp.int32)
     valid = columns < logical_output_width
     masked = jnp.where(valid[None, :], dense, 0.0)
     mean = jnp.sum(masked, axis=1, keepdims=True) / logical_output_width
     centered = jnp.where(valid[None, :], dense - mean, 0.0)
     variance = jnp.sum(jnp.square(centered), axis=1, keepdims=True) / logical_output_width
-    result = (
-        centered
-        * jax.lax.rsqrt(variance + epsilon)
-        * scale_ref[...][None, :].astype(jnp.float32)
-        + beta_ref[...][None, :].astype(jnp.float32)
-    )
-    result = result.astype(jnp.bfloat16).astype(jnp.float32)
+    scale = scale_ref[...][None, :]
+    beta = beta_ref[...][None, :]
+    if fp32_statistics:
+        scale = scale.astype(jnp.float32)
+        beta = beta.astype(jnp.float32)
+    result = centered * jax.lax.rsqrt(variance + epsilon) * scale + beta
+    result = result.astype(jnp.bfloat16)
     if add_skip:
-        result += skip_ref[...].astype(jnp.float32)
+        skip = skip_ref[...]
+        if fp32_statistics:
+            result = result.astype(jnp.float32)
+            skip = skip.astype(jnp.float32)
+        result += skip
     if relu:
         result = jnp.maximum(result, 0.0)
     output_ref[...] = jnp.where(valid[None, :], result, 0.0).astype(jnp.bfloat16)
@@ -218,6 +232,7 @@ def pallas_fused_dense_layer_norm(
     bk: int = 256,
     bn: int = 512,
     epsilon: float = 1e-5,
+    fp32_statistics: bool = True,
     interpret: bool = False,
 ):
     """Fuse dense output, FP32 LayerNorm, optional skip, and ReLU in VMEM."""
@@ -272,6 +287,7 @@ def pallas_fused_dense_layer_norm(
             epsilon=epsilon,
             add_skip=add_skip,
             relu=relu,
+            fp32_statistics=fp32_statistics,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
@@ -350,6 +366,7 @@ def pallas_layernorm_input_prefix(
     bk_dense: int | None = None,
     bn_dense: int | None = None,
     fuse_dense_layer_norm: bool = False,
+    fp32_statistics: bool = True,
     interpret: bool = False,
 ):
     """Execute encoding, first dense, FP32 LayerNorm, and ReLU."""
@@ -375,6 +392,7 @@ def pallas_layernorm_input_prefix(
                 bk=dense_bk,
                 bn=dense_bn,
                 epsilon=architecture.LAYER_NORM_EPSILON,
+                fp32_statistics=fp32_statistics,
                 interpret=interpret,
             )
         hidden = pallas_dense_linear(
@@ -418,6 +436,7 @@ def pallas_layernorm_input_prefix(
                 bk=dense_bk,
                 bn=dense_bn,
                 epsilon=architecture.LAYER_NORM_EPSILON,
+                fp32_statistics=fp32_statistics,
                 interpret=interpret,
             )
         hidden = pallas_dense_linear(
@@ -454,6 +473,7 @@ def pallas_layernorm_input_prefix(
         weights.input.normalization.bias,
         bm=bm,
         epsilon=architecture.LAYER_NORM_EPSILON,
+        fp32_statistics=fp32_statistics,
         interpret=interpret,
     )
     return jax.nn.relu(normalized).astype(jnp.bfloat16)
@@ -468,6 +488,7 @@ def _pallas_normalized_dense(
     bm: int,
     bk: int,
     bn: int,
+    fp32_statistics: bool,
     interpret: bool,
 ):
     dense = pallas_dense_linear(
@@ -486,6 +507,7 @@ def _pallas_normalized_dense(
         layer.normalization.bias,
         bm=bm,
         epsilon=epsilon,
+        fp32_statistics=fp32_statistics,
         interpret=interpret,
     )
     return jax.nn.relu(normalized).astype(jnp.bfloat16) if relu else normalized
@@ -506,6 +528,7 @@ def stream1_layernorm_pallas_inference(
     bk_output: int = 128,
     bn_output: int = 128,
     layernorm_fusion: str = "separate",
+    fp32_statistics: bool = True,
     interpret: bool = False,
 ):
     """Complete correctness-first Pallas LayerNorm ResMLP inference."""
@@ -526,6 +549,7 @@ def stream1_layernorm_pallas_inference(
             layernorm_fusion == "per_layer"
             and encoding is not InputEncodingKind.FUSED_VIRTUAL_ONE_HOT
         ),
+        fp32_statistics=fp32_statistics,
         interpret=interpret,
     )
     for block in weights.residuals:
@@ -542,6 +566,7 @@ def stream1_layernorm_pallas_inference(
                 bk=bk_hidden,
                 bn=bn_hidden,
                 epsilon=architecture.LAYER_NORM_EPSILON,
+                fp32_statistics=fp32_statistics,
                 interpret=interpret,
             )
             hidden = pallas_fused_dense_layer_norm(
@@ -557,6 +582,7 @@ def stream1_layernorm_pallas_inference(
                 bk=bk_hidden,
                 bn=bn_hidden,
                 epsilon=architecture.LAYER_NORM_EPSILON,
+                fp32_statistics=fp32_statistics,
                 interpret=interpret,
             )
             continue
@@ -568,6 +594,7 @@ def stream1_layernorm_pallas_inference(
             bm=bm,
             bk=bk_hidden,
             bn=bn_hidden,
+            fp32_statistics=fp32_statistics,
             interpret=interpret,
         )
         branch = _pallas_normalized_dense(
@@ -578,11 +605,13 @@ def stream1_layernorm_pallas_inference(
             bm=bm,
             bk=bk_hidden,
             bn=bn_hidden,
+            fp32_statistics=fp32_statistics,
             interpret=interpret,
         )
-        hidden = jax.nn.relu(
-            skip.astype(jnp.float32) + branch.astype(jnp.float32)
-        ).astype(jnp.bfloat16)
+        if fp32_statistics:
+            skip = skip.astype(jnp.float32)
+            branch = branch.astype(jnp.float32)
+        hidden = jax.nn.relu(skip + branch).astype(jnp.bfloat16)
     return pallas_dense_linear(
         hidden,
         weights.output.weight,

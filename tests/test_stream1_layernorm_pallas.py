@@ -72,6 +72,30 @@ def test_pallas_layer_norm_constant_rows_are_finite_and_equal_bias():
     np.testing.assert_array_equal(np.asarray(actual), np.asarray(bias[None, :]).repeat(2, 0))
 
 
+def test_pallas_layer_norm_can_match_artgor_bf16_statistics():
+    values = (
+        jnp.arange(3 * 128, dtype=jnp.float32).reshape(3, 128) / 17
+    ).astype(jnp.bfloat16)
+    scale = jnp.linspace(0.7, 1.3, 128).astype(jnp.bfloat16)
+    bias = jnp.linspace(-0.2, 0.2, 128).astype(jnp.bfloat16)
+    mean = jnp.mean(values, axis=-1, keepdims=True)
+    variance = jnp.mean(jnp.square(values - mean), axis=-1, keepdims=True)
+    expected = (
+        (values - mean) * jax_rsqrt(variance + 1e-5) * scale + bias
+    )
+
+    actual = pallas_layer_norm(
+        values,
+        scale,
+        bias,
+        bm=4,
+        fp32_statistics=False,
+        interpret=True,
+    )
+
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
 def test_pallas_layer_norm_rejects_non_vector_affine_weights():
     values = jnp.ones((2, 128), dtype=jnp.bfloat16)
     with pytest.raises(ValueError, match="scale and bias"):
@@ -223,6 +247,29 @@ def test_complete_fused_layernorm_resmlp_matches_separate_kernels():
         bk_output=8,
         bn_output=8,
         interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(fused), np.asarray(separate))
+
+
+def test_complete_bf16_statistics_fusion_matches_separate_kernels():
+    states, weights, architecture = _prefix_fixture()
+    common = dict(
+        input_encoding=InputEncodingKind.EMBEDDING_GATHER,
+        fp32_statistics=False,
+        bm=2,
+        bk_input=8,
+        bn_input=8,
+        bk_hidden=8,
+        bn_hidden=8,
+        bk_output=8,
+        bn_output=8,
+        interpret=True,
+    )
+    separate = stream1_layernorm_pallas_inference(
+        states, weights, architecture, layernorm_fusion="separate", **common
+    )
+    fused = stream1_layernorm_pallas_inference(
+        states, weights, architecture, layernorm_fusion="per_layer", **common
     )
     np.testing.assert_array_equal(np.asarray(fused), np.asarray(separate))
 

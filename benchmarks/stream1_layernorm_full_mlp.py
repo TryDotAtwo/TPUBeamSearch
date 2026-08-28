@@ -23,8 +23,8 @@ REPEATS = 9
 
 def candidate_configs():
     return (
-        ("separate", 256, 256, 512),
-        ("per_layer", 256, 256, 512),
+        ("separate", False, 256, 256, 512),
+        ("per_layer", False, 256, 256, 512),
     )
 
 
@@ -102,7 +102,7 @@ def main():
     path = Path("/kaggle/working/stream1_layernorm_full_mlp.json")
     path.write_text(json.dumps(result, indent=2), encoding="utf-8")
 
-    for fusion, bm, bk, bn in candidate_configs():
+    for fusion, fp32_statistics, bm, bk, bn in candidate_configs():
         compiled = jax.jit(
             lambda x: stream1_layernorm_pallas_inference(
                 x,
@@ -117,6 +117,7 @@ def main():
                 bk_output=256,
                 bn_output=128,
                 layernorm_fusion=fusion,
+                fp32_statistics=fp32_statistics,
             )
         )
         try:
@@ -127,30 +128,37 @@ def main():
             absolute = jnp.abs(
                 output.astype(jnp.float32) - oracle.astype(jnp.float32)
             )
+            finite = bool(jnp.all(jnp.isfinite(output)))
+            max_abs = float(jnp.max(absolute))
+            mean_abs = float(jnp.mean(absolute))
+            argmax_agreement = float(
+                jnp.mean(
+                    jnp.argmax(output, axis=-1)
+                    == jnp.argmax(oracle, axis=-1)
+                )
+            )
+            correctness_valid = finite and max_abs == 0.0 and argmax_agreement == 1.0
             entry = {
                 "fusion": fusion,
+                "statistics_dtype": "float32" if fp32_statistics else "bfloat16",
                 "bm": bm,
                 "bk": bk,
                 "bn": bn,
-                "status": "valid",
+                "status": "valid" if correctness_valid else "correctness_failed",
                 "compile_and_first_seconds": candidate_first,
                 "steady_seconds_median": candidate_median,
                 "states_per_second": LOCAL_BATCH / candidate_median,
                 "speedup_vs_original": median / candidate_median,
-                "max_abs_vs_original": float(jnp.max(absolute)),
-                "mean_abs_vs_original": float(jnp.mean(absolute)),
-                "argmax_agreement": float(
-                    jnp.mean(
-                        jnp.argmax(output, axis=-1)
-                        == jnp.argmax(oracle, axis=-1)
-                    )
-                ),
-                "finite": bool(jnp.all(jnp.isfinite(output))),
+                "max_abs_vs_original": max_abs,
+                "mean_abs_vs_original": mean_abs,
+                "argmax_agreement": argmax_agreement,
+                "finite": finite,
                 "samples": candidate_samples,
             }
         except Exception as error:
             entry = {
                 "fusion": fusion,
+                "statistics_dtype": "float32" if fp32_statistics else "bfloat16",
                 "bm": bm,
                 "bk": bk,
                 "bn": bn,
