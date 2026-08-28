@@ -2,6 +2,7 @@ __pycache__/
 .pytest_cache/
 *.py[cod]
 .venv/
+.local/
 
 # Downloaded Kaggle worker logs and raw run outputs stay local.
 test_results/kaggle_tpu_capability_v*/
