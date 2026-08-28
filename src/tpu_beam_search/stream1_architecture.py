@@ -61,6 +61,7 @@ class LayerNormStream1Weights(NamedTuple):
     input: LayerNormDenseWeights
     residuals: tuple[LayerNormResidualWeights, ...]
     output: DenseWeights
+    fused_input_weight: jax.Array | None = None
 
 
 @dataclass(frozen=True)

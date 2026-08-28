@@ -21,6 +21,7 @@ from .stream1_architecture import (
     NormalizationKind,
 )
 from .stream1_layernorm_reference import stream1_layernorm_reference_inference
+from .stream1_layernorm_pallas import stream1_layernorm_pallas_inference
 
 
 def _validate_shapes(
@@ -223,6 +224,23 @@ def stream1_pallas_inference(
     interpret: bool = False,
 ) -> jax.Array:
     """Complete MLP inference; architecture and tile arguments are compile-time static."""
+
+    if architecture.NORMALIZATION is NormalizationKind.LAYER_NORM:
+        return stream1_layernorm_pallas_inference(
+            states,
+            weights,
+            architecture,
+            input_encoding=architecture.INPUT_ENCODING,
+            fused_input_weight=weights.fused_input_weight,
+            bm=bm,
+            bk_input=bk_input,
+            bn_input=bn_input,
+            bk_hidden=bk_hidden,
+            bn_hidden=bn_hidden,
+            bk_output=bk_output,
+            bn_output=bn_output,
+            interpret=interpret,
+        )
 
     _validate_shapes(states, weights, architecture)
     hidden = pallas_fused_folded_hidden(

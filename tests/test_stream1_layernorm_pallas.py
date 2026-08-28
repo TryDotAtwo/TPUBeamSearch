@@ -9,6 +9,7 @@ from tpu_beam_search.stream1_layernorm_pallas import (
     make_fused_virtual_one_hot_weight,
     pallas_layer_norm,
     pallas_layernorm_input_prefix,
+    stream1_layernorm_pallas_inference,
 )
 from tpu_beam_search.stream1_layernorm_reference import (
     layernorm_stream1_weights_from_artgor_params,
@@ -96,9 +97,20 @@ def _prefix_fixture():
             "ln_gamma": jnp.linspace(0.8, 1.2, hidden),
             "ln_beta": jnp.linspace(-0.1, 0.1, hidden),
         }],
-        "res_blocks": [],
-        "head_w": jnp.zeros((hidden, 3), dtype=jnp.float32),
-        "head_b": jnp.zeros((3,), dtype=jnp.float32),
+        "res_blocks": [{
+            "lin1_w": jnp.arange(64, dtype=jnp.float32).reshape(8, 8) / 43,
+            "lin1_b": jnp.linspace(-0.1, 0.1, hidden),
+            "ln1_gamma": jnp.linspace(0.9, 1.1, hidden),
+            "ln1_beta": jnp.linspace(-0.05, 0.05, hidden),
+            "lin2_w": jnp.flip(
+                jnp.arange(64, dtype=jnp.float32).reshape(8, 8), axis=0
+            ) / 41,
+            "lin2_b": jnp.linspace(0.1, -0.1, hidden),
+            "ln2_gamma": jnp.linspace(1.1, 0.9, hidden),
+            "ln2_beta": jnp.linspace(0.05, -0.05, hidden),
+        }],
+        "head_w": jnp.arange(24, dtype=jnp.float32).reshape(8, 3) / 23,
+        "head_b": jnp.linspace(-0.2, 0.2, 3),
     }
     architecture = Stream1Architecture.from_artgor_params(params, STATE_STORAGE_LEN=4)
     weights = layernorm_stream1_weights_from_artgor_params(params, architecture)
@@ -145,4 +157,35 @@ def test_pallas_input_candidates_match_fp32_prefix_reference(encoding):
         np.asarray(expected, dtype=np.float32),
         rtol=0,
         atol=0.0625,
+    )
+
+
+def test_complete_pallas_layernorm_resmlp_matches_reference():
+    from tpu_beam_search.stream1_layernorm_reference import (
+        stream1_layernorm_reference_inference,
+    )
+
+    states, weights, architecture = _prefix_fixture()
+    expected = stream1_layernorm_reference_inference(states, weights, architecture)
+    actual = stream1_layernorm_pallas_inference(
+        states,
+        weights,
+        architecture,
+        input_encoding=InputEncodingKind.EMBEDDING_GATHER,
+        bm=2,
+        bk_input=8,
+        bn_input=8,
+        bk_hidden=8,
+        bn_hidden=8,
+        bk_output=8,
+        bn_output=8,
+        interpret=True,
+    )
+    assert actual.shape == (2, architecture.MOVE_COUNT)
+    assert bool(jnp.all(jnp.isfinite(actual)))
+    np.testing.assert_allclose(
+        np.asarray(actual, dtype=np.float32),
+        np.asarray(expected, dtype=np.float32),
+        rtol=0,
+        atol=0.125,
     )

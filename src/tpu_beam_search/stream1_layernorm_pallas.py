@@ -208,3 +208,102 @@ def pallas_layernorm_input_prefix(
         interpret=interpret,
     )
     return jax.nn.relu(normalized).astype(jnp.bfloat16)
+
+
+def _pallas_normalized_dense(
+    values,
+    layer,
+    *,
+    epsilon: float,
+    relu: bool,
+    bm: int,
+    bk: int,
+    bn: int,
+    interpret: bool,
+):
+    dense = pallas_dense_linear(
+        values,
+        layer.dense.weight,
+        layer.dense.bias,
+        bm=bm,
+        bk=bk,
+        bn=bn,
+        relu=False,
+        interpret=interpret,
+    )
+    normalized = pallas_layer_norm(
+        dense,
+        layer.normalization.scale,
+        layer.normalization.bias,
+        bm=bm,
+        epsilon=epsilon,
+        interpret=interpret,
+    )
+    return jax.nn.relu(normalized).astype(jnp.bfloat16) if relu else normalized
+
+
+def stream1_layernorm_pallas_inference(
+    states,
+    weights: LayerNormStream1Weights,
+    architecture: Stream1Architecture,
+    *,
+    input_encoding: InputEncodingKind | None = None,
+    fused_input_weight=None,
+    bm: int = 128,
+    bk_input: int = 128,
+    bn_input: int = 128,
+    bk_hidden: int = 128,
+    bn_hidden: int = 128,
+    bk_output: int = 128,
+    bn_output: int = 128,
+    interpret: bool = False,
+):
+    """Complete correctness-first Pallas LayerNorm ResMLP inference."""
+
+    encoding = input_encoding or architecture.INPUT_ENCODING
+    hidden = pallas_layernorm_input_prefix(
+        states,
+        weights,
+        architecture,
+        input_encoding=encoding,
+        fused_input_weight=fused_input_weight,
+        bm=bm,
+        bk=bk_input,
+        bn=bn_input,
+        interpret=interpret,
+    )
+    for block in weights.residuals:
+        skip = hidden
+        branch = _pallas_normalized_dense(
+            hidden,
+            block.first,
+            epsilon=architecture.LAYER_NORM_EPSILON,
+            relu=True,
+            bm=bm,
+            bk=bk_hidden,
+            bn=bn_hidden,
+            interpret=interpret,
+        )
+        branch = _pallas_normalized_dense(
+            branch,
+            block.second,
+            epsilon=architecture.LAYER_NORM_EPSILON,
+            relu=False,
+            bm=bm,
+            bk=bk_hidden,
+            bn=bn_hidden,
+            interpret=interpret,
+        )
+        hidden = jax.nn.relu(
+            skip.astype(jnp.float32) + branch.astype(jnp.float32)
+        ).astype(jnp.bfloat16)
+    return pallas_dense_linear(
+        hidden,
+        weights.output.weight,
+        weights.output.bias,
+        bm=bm,
+        bk=bk_output,
+        bn=bn_output,
+        relu=False,
+        interpret=interpret,
+    )
