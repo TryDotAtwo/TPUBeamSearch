@@ -33,7 +33,7 @@ REPEATS = 15
 def candidate_configs():
     """Aligned prefix candidates: (BM, BK_input, BN_input, buffers, lookahead)."""
     configs = {
-        (bm, bk, bn, 2, False)
+        (bm, bk, bn, 0, False)
         for bm in (256, 512, 1024)
         for bk in (128, 256, 512)
         for bn in (256, 512, 768, 1536)
@@ -41,6 +41,7 @@ def candidate_configs():
     configs.update(
         {
             (256, 128, 512, 1, False),
+            (256, 128, 512, 2, False),
             (256, 128, 512, 2, True),
         }
     )
@@ -126,7 +127,7 @@ def main():
     screen_states = make_reachable_states(
         generators, SCREEN_BATCH, beam.STATE_LEN, beam.STATE_STORAGE_LEN
     )
-    baseline_config = (256, 128, 512, 2, False)
+    baseline_config = (256, 128, 512, 0, False)
     baseline_output = jax.jit(
         lambda states: prefix_call(states, weights, architecture, baseline_config)
     )(screen_states)
@@ -172,7 +173,7 @@ def main():
     # Host/kernel launch startup is amortized by batch; per-row-block pipeline bubbles
     # are exposed by comparing BM and buffer modes over the same batch frontier.
     diagnostic_configs = []
-    for config in (baseline_config, winner, (256, 128, 512, 1, False), (256, 128, 512, 2, True)):
+    for config in (baseline_config, winner, (256, 128, 512, 1, False), (256, 128, 512, 2, False), (256, 128, 512, 2, True)):
         if config not in diagnostic_configs and key(config) in result["screen"] and "rejected" not in result["screen"][key(config)]:
             diagnostic_configs.append(config)
     for config in diagnostic_configs:
