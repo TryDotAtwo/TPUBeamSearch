@@ -88,6 +88,7 @@ def main():
         "original_jax": {},
         "pallas": {},
     }
+    path = Path("/kaggle/working/stream1_layernorm_tiling.json")
     first, median, samples = measure(lambda: original(values, scale, bias))
     original_output = original(values, scale, bias)
     result["original_jax"] = {
@@ -108,30 +109,39 @@ def main():
                 epsilon=EPSILON,
             )
         )
-        first, median, samples = measure(lambda: candidate(values, scale, bias))
-        output = candidate(values, scale, bias)
-        absolute = jnp.abs(
-            output.astype(jnp.float32) - fp32_reference.astype(jnp.float32)
-        )
-        original_absolute = jnp.abs(
-            output.astype(jnp.float32) - original_output.astype(jnp.float32)
-        )
-        entry = {
-            "bm": bm,
-            "compile_and_first_seconds": first,
-            "steady_seconds_median": median,
-            "rows_per_second": LOCAL_BATCH / median,
-            "speedup_vs_original": result["original_jax"]["steady_seconds_median"] / median,
-            "max_abs_vs_fp32_reference": float(jnp.max(absolute)),
-            "mean_abs_vs_fp32_reference": float(jnp.mean(absolute)),
-            "max_abs_vs_original_bf16": float(jnp.max(original_absolute)),
-            "finite": bool(jnp.all(jnp.isfinite(output))),
-            "samples": samples,
-        }
+        try:
+            first, median, samples = measure(lambda: candidate(values, scale, bias))
+            output = candidate(values, scale, bias)
+            absolute = jnp.abs(
+                output.astype(jnp.float32) - fp32_reference.astype(jnp.float32)
+            )
+            original_absolute = jnp.abs(
+                output.astype(jnp.float32) - original_output.astype(jnp.float32)
+            )
+            entry = {
+                "bm": bm,
+                "status": "valid",
+                "compile_and_first_seconds": first,
+                "steady_seconds_median": median,
+                "rows_per_second": LOCAL_BATCH / median,
+                "speedup_vs_original": result["original_jax"]["steady_seconds_median"] / median,
+                "max_abs_vs_fp32_reference": float(jnp.max(absolute)),
+                "mean_abs_vs_fp32_reference": float(jnp.mean(absolute)),
+                "max_abs_vs_original_bf16": float(jnp.max(original_absolute)),
+                "finite": bool(jnp.all(jnp.isfinite(output))),
+                "samples": samples,
+            }
+        except Exception as error:
+            entry = {
+                "bm": bm,
+                "status": "rejected_compile_error",
+                "error_type": type(error).__name__,
+                "error": str(error),
+            }
         result["pallas"][str(bm)] = entry
         print("PALLAS", json.dumps(entry), flush=True)
+        path.write_text(json.dumps(result, indent=2), encoding="utf-8")
 
-    path = Path("/kaggle/working/stream1_layernorm_tiling.json")
     path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("RESULT_PATH", path, flush=True)
 
