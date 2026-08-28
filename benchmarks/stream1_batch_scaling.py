@@ -25,7 +25,7 @@ from tpu_beam_search.stream1_inference import (
 from tpu_beam_search.sharding import make_sharded_inference
 
 
-BATCHES = (64, 128, 256, 512, 1024, 2048, 4096)
+BATCHES = (64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536)
 BLOCK_ROWS = (128, 256, 512)
 WARMUPS = 5
 REPEATS = 21
@@ -105,13 +105,17 @@ def main():
         states = make_reachable_states(
             generators, batch, beam.STATE_LEN, beam.STATE_STORAGE_LEN
         )
-        reference = make_jitted_stream1_inference(
-            architecture, backend="reference"
-        )
-        reference_output = reference(states, weights)
-        reference_output.block_until_ready()
-        reference_calls[batch] = reference_output
+        reference_output = None
+        if batch <= 4096:
+            reference = make_jitted_stream1_inference(
+                architecture, backend="reference"
+            )
+            reference_output = reference(states, weights)
+            reference_output.block_until_ready()
+            reference_calls[batch] = reference_output
         for bm in BLOCK_ROWS:
+            if batch > 4096 and bm != 512:
+                continue
             key = f"b{batch}_bm{bm}"
             infer = make_jitted_stream1_inference(
                 architecture,
@@ -129,16 +133,20 @@ def main():
                 }
                 print("REJECTED", key, repr(error), flush=True)
                 continue
-            max_error = float(
-                jnp.max(
-                    jnp.abs(
-                        output.astype(jnp.float32)
-                        - reference_output.astype(jnp.float32)
+            if not bool(jnp.all(jnp.isfinite(output.astype(jnp.float32)))):
+                raise AssertionError(f"{key} produced non-finite logits")
+            max_error = None
+            if reference_output is not None:
+                max_error = float(
+                    jnp.max(
+                        jnp.abs(
+                            output.astype(jnp.float32)
+                            - reference_output.astype(jnp.float32)
+                        )
                     )
                 )
-            )
-            if not np.isfinite(max_error) or max_error > 0.25:
-                raise AssertionError(f"{key} exceeds BF16 error gate: {max_error}")
+                if not np.isfinite(max_error) or max_error > 0.25:
+                    raise AssertionError(f"{key} exceeds BF16 error gate: {max_error}")
             entry = {
                 "batch": batch,
                 "bm": bm,
