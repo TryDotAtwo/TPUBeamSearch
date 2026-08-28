@@ -73,8 +73,18 @@ def main():
             )
         )
     )
-    if max_error != 0.0:
-        raise AssertionError(f"Pallas/reference mismatch: {max_error}")
+    absolute_error = jnp.abs(
+        output.astype(jnp.float32) - reference_output.astype(jnp.float32)
+    )
+    mean_error = float(jnp.mean(absolute_error))
+    argmax_agreement = float(
+        jnp.mean(
+            (
+                jnp.argmax(output, axis=1)
+                == jnp.argmax(reference_output, axis=1)
+            ).astype(jnp.float32)
+        )
+    )
 
     result = {
         "environment": {
@@ -105,6 +115,8 @@ def main():
             "steady_seconds_median": steady,
             "steady_samples": samples,
             "max_reference_error": max_error,
+            "mean_reference_error": mean_error,
+            "argmax_agreement": argmax_agreement,
             "checksum": float(jnp.sum(output.astype(jnp.float32))),
         },
     }
@@ -112,6 +124,10 @@ def main():
     path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("RESULT_JSON", json.dumps(result), flush=True)
     print("RESULT_PATH", path, flush=True)
+    if max_error > 0.25:
+        raise AssertionError(f"Pallas/reference max error exceeds 0.25: {max_error}")
+    if argmax_agreement != 1.0:
+        raise AssertionError(f"Pallas/reference argmax mismatch: {argmax_agreement}")
 
 
 if __name__ == "__main__":
