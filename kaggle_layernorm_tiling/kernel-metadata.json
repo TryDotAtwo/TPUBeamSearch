@@ -1,0 +1,15 @@
+{
+  "id": "trydotatwo/tpu-layernorm-tiling",
+  "title": "TPU Pallas LayerNorm Tiling",
+  "code_file": "run_layernorm_tiling.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
