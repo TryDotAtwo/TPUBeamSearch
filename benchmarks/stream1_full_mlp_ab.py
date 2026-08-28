@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import statistics
+import time
 
 import jax
 import jax.numpy as jnp
@@ -20,6 +22,43 @@ from tpu_beam_search.stream1_pallas import (
     pallas_fused_folded_hidden,
     pallas_fused_mlp,
 )
+
+
+def timed_pair(call_a, call_b, repeats=31, warmups=10):
+    compile_started = time.perf_counter()
+    output_a = call_a()
+    output_a.block_until_ready()
+    compile_a = time.perf_counter() - compile_started
+    compile_started = time.perf_counter()
+    output_b = call_b()
+    output_b.block_until_ready()
+    compile_b = time.perf_counter() - compile_started
+    for _ in range(warmups):
+        output_a = call_a()
+        output_a.block_until_ready()
+        output_b = call_b()
+        output_b.block_until_ready()
+    samples_a = []
+    samples_b = []
+    for repeat in range(repeats):
+        calls = ((call_a, samples_a), (call_b, samples_b))
+        if repeat % 2:
+            calls = tuple(reversed(calls))
+        for call, samples in calls:
+            started = time.perf_counter()
+            output = call()
+            output.block_until_ready()
+            samples.append(time.perf_counter() - started)
+    return {
+        "output_a": output_a,
+        "output_b": output_b,
+        "compile_a": compile_a,
+        "compile_b": compile_b,
+        "median_a": statistics.median(samples_a),
+        "median_b": statistics.median(samples_b),
+        "samples_a": samples_a,
+        "samples_b": samples_b,
+    }
 
 
 def main():
@@ -88,15 +127,12 @@ def main():
         },
         "separate_head": {},
         "fused_head": {},
+        "paired_ab_ba": {},
     }
 
-    separate_outputs = {}
-    best_separate = None
-    for bk_output, bn_output in configurations:
-        key = f"bko{bk_output}_bno{bn_output}"
-        separate = jax.jit(
-            lambda s, w1, b1, w2, b2, w3, b3,
-            bk_output=bk_output, bn_output=bn_output:
+    def make_separate(bk_output, bn_output):
+        return jax.jit(
+            lambda s, w1, b1, w2, b2, w3, b3:
             pallas_dense_linear(
                 pallas_fused_folded_hidden(
                     s,
@@ -120,16 +156,50 @@ def main():
                 relu=False,
             )
         )
+
+    def make_fused(bk_output, bn_output):
+        return jax.jit(
+            lambda s, w1, b1, w2, b2, w3, b3:
+            pallas_fused_mlp(
+                s,
+                w1,
+                b1,
+                w2,
+                b2,
+                w3,
+                b3,
+                STATE_LEN=config.STATE_LEN,
+                NUM_CLASSES=config.NUM_CLASSES,
+                MOVE_COUNT=config.MOVE_COUNT,
+                bm=256,
+                bk_input=128,
+                bn_input=512,
+                bk_hidden=256,
+                bn_hidden=512,
+                bk_output=bk_output,
+                bn_output=bn_output,
+            )
+        )
+
+    arguments = (
+        states,
+        input_weight,
+        input_bias,
+        hidden_weight,
+        hidden_bias,
+        output_weight,
+        output_bias,
+    )
+
+    separate_outputs = {}
+    best_separate = None
+    for bk_output, bn_output in configurations:
+        key = f"bko{bk_output}_bno{bn_output}"
+        separate = make_separate(bk_output, bn_output)
         try:
             output, compile_seconds, steady_seconds, samples = timed(
                 lambda separate=separate: separate(
-                    states,
-                    input_weight,
-                    input_bias,
-                    hidden_weight,
-                    hidden_bias,
-                    output_weight,
-                    output_bias,
+                    *arguments,
                 )
             )
         except Exception as error:
@@ -157,39 +227,11 @@ def main():
         if key not in separate_outputs:
             result["fused_head"][key] = {"skipped": "separate rejected"}
             continue
-        fused = jax.jit(
-            lambda s, w1, b1, w2, b2, w3, b3,
-            bk_output=bk_output, bn_output=bn_output:
-            pallas_fused_mlp(
-                s,
-                w1,
-                b1,
-                w2,
-                b2,
-                w3,
-                b3,
-                STATE_LEN=config.STATE_LEN,
-                NUM_CLASSES=config.NUM_CLASSES,
-                MOVE_COUNT=config.MOVE_COUNT,
-                bm=256,
-                bk_input=128,
-                bn_input=512,
-                bk_hidden=256,
-                bn_hidden=512,
-                bk_output=bk_output,
-                bn_output=bn_output,
-            )
-        )
+        fused = make_fused(bk_output, bn_output)
         try:
             output, compile_seconds, steady_seconds, samples = timed(
                 lambda fused=fused: fused(
-                    states,
-                    input_weight,
-                    input_bias,
-                    hidden_weight,
-                    hidden_bias,
-                    output_weight,
-                    output_bias,
+                    *arguments,
                 )
             )
         except Exception as error:
@@ -224,10 +266,51 @@ def main():
         if best_fused is None or steady_seconds < best_fused[1]:
             best_fused = (key, steady_seconds, max_error)
 
-    if best_separate is None or best_fused is None:
+    best_paired_separate = None
+    best_paired_fused = None
+    for bk_output, bn_output in configurations:
+        key = f"bko{bk_output}_bno{bn_output}"
+        if key not in separate_outputs or "rejected" in result["fused_head"][key]:
+            continue
+        separate = make_separate(bk_output, bn_output)
+        fused = make_fused(bk_output, bn_output)
+        paired = timed_pair(
+            lambda separate=separate: separate(*arguments),
+            lambda fused=fused: fused(*arguments),
+        )
+        max_error = float(
+            jnp.max(
+                jnp.abs(
+                    paired["output_a"].astype(jnp.float32)
+                    - paired["output_b"].astype(jnp.float32)
+                )
+            )
+        )
+        entry = {
+            "separate_compile_and_first_seconds": paired["compile_a"],
+            "fused_compile_and_first_seconds": paired["compile_b"],
+            "separate_seconds_median": paired["median_a"],
+            "fused_seconds_median": paired["median_b"],
+            "separate_samples": paired["samples_a"],
+            "fused_samples": paired["samples_b"],
+            "speedup": paired["median_a"] / paired["median_b"],
+            "saved_seconds": paired["median_a"] - paired["median_b"],
+            "max_error": max_error,
+        }
+        result["paired_ab_ba"][key] = entry
+        print("PAIRED", key, json.dumps(entry), flush=True)
+        if (
+            best_paired_separate is None
+            or paired["median_a"] < best_paired_separate[1]
+        ):
+            best_paired_separate = (key, paired["median_a"])
+        if best_paired_fused is None or paired["median_b"] < best_paired_fused[1]:
+            best_paired_fused = (key, paired["median_b"], max_error)
+
+    if best_paired_separate is None or best_paired_fused is None:
         raise RuntimeError("no valid separate/fused head pair")
-    best_separate_key, best_separate_seconds = best_separate
-    best_fused_key, best_fused_seconds, best_fused_error = best_fused
+    best_separate_key, best_separate_seconds = best_paired_separate
+    best_fused_key, best_fused_seconds, best_fused_error = best_paired_fused
     result["decision"] = {
         "best_separate_tile": best_separate_key,
         "best_separate_seconds": best_separate_seconds,
