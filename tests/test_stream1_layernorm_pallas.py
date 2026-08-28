@@ -4,7 +4,16 @@ import jax.numpy as jnp
 import numpy as np
 import pytest
 
-from tpu_beam_search.stream1_layernorm_pallas import pallas_layer_norm
+from tpu_beam_search.stream1_architecture import InputEncodingKind, Stream1Architecture
+from tpu_beam_search.stream1_layernorm_pallas import (
+    make_fused_virtual_one_hot_weight,
+    pallas_layer_norm,
+    pallas_layernorm_input_prefix,
+)
+from tpu_beam_search.stream1_layernorm_reference import (
+    layernorm_stream1_weights_from_artgor_params,
+    layer_norm_reference,
+)
 
 
 def _reference(values, scale, bias, epsilon):
@@ -70,3 +79,70 @@ def test_pallas_layer_norm_rejects_non_vector_affine_weights():
             jnp.zeros((128,), dtype=jnp.bfloat16),
             interpret=True,
         )
+
+
+def _prefix_fixture():
+    hidden = 8
+    params = {
+        "encoding": "embedding",
+        "state_size": 2,
+        "num_classes": 5,
+        "d_model": hidden,
+        "output_dim": 3,
+        "embed": jnp.arange(15, dtype=jnp.float32).reshape(5, 3) / 11,
+        "input_stack": [{
+            "lin_w": jnp.arange(48, dtype=jnp.float32).reshape(6, 8) / 37,
+            "lin_b": jnp.linspace(-0.2, 0.2, hidden),
+            "ln_gamma": jnp.linspace(0.8, 1.2, hidden),
+            "ln_beta": jnp.linspace(-0.1, 0.1, hidden),
+        }],
+        "res_blocks": [],
+        "head_w": jnp.zeros((hidden, 3), dtype=jnp.float32),
+        "head_b": jnp.zeros((3,), dtype=jnp.float32),
+    }
+    architecture = Stream1Architecture.from_artgor_params(params, STATE_STORAGE_LEN=4)
+    weights = layernorm_stream1_weights_from_artgor_params(params, architecture)
+    states = jnp.asarray([[0, 1, 9, 9], [4, 3, 8, 8]], dtype=jnp.uint8)
+    return states, weights, architecture
+
+
+@pytest.mark.parametrize("encoding", list(InputEncodingKind))
+def test_pallas_input_candidates_match_fp32_prefix_reference(encoding):
+    states, weights, architecture = _prefix_fixture()
+    logical = states[:, : architecture.STATE_LEN]
+    encoded = weights.embedding[logical.astype(jnp.int32)].reshape(2, -1)
+    dense = (
+        encoded.astype(jnp.float32)
+        @ weights.input.dense.weight.astype(jnp.float32)
+        + weights.input.dense.bias.astype(jnp.float32)
+    ).astype(jnp.bfloat16)
+    expected = jnp.maximum(
+        layer_norm_reference(
+            dense.astype(jnp.float32),
+            weights.input.normalization,
+            epsilon=architecture.LAYER_NORM_EPSILON,
+        ),
+        0,
+    ).astype(jnp.bfloat16)
+    fused = make_fused_virtual_one_hot_weight(
+        weights.embedding,
+        weights.input.dense.weight,
+        STATE_LEN=architecture.STATE_LEN,
+    )
+    actual = pallas_layernorm_input_prefix(
+        states,
+        weights,
+        architecture,
+        input_encoding=encoding,
+        fused_input_weight=fused,
+        bm=2,
+        bk=8,
+        bn=8,
+        interpret=True,
+    )
+    np.testing.assert_allclose(
+        np.asarray(actual, dtype=np.float32),
+        np.asarray(expected, dtype=np.float32),
+        rtol=0,
+        atol=0.0625,
+    )

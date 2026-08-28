@@ -8,6 +8,8 @@ from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
 
 from .tpu_layout import pad_to_multiple
+from .stream1_architecture import InputEncodingKind, LayerNormStream1Weights, Stream1Architecture
+from .stream1_pallas import pallas_dense_linear, pallas_folded_input_linear
 
 
 def _layer_norm_kernel(
@@ -99,3 +101,110 @@ def pallas_layer_norm(
         name="stream1_layer_norm",
     )
     return call(values_padded, scale_padded, bias_padded)[:rows, :logical_width]
+
+
+def make_fused_virtual_one_hot_weight(
+    embedding,
+    input_weight,
+    *,
+    STATE_LEN: int,
+):
+    """Fold embedding and first dense weights outside the timed inference call."""
+
+    num_classes, embed_dim = embedding.shape
+    if input_weight.shape[0] != STATE_LEN * embed_dim:
+        raise ValueError("input weight rows must equal STATE_LEN * EMBED_DIM")
+    hidden = input_weight.shape[1]
+    per_position = input_weight.reshape(STATE_LEN, embed_dim, hidden)
+    return jnp.einsum(
+        "ce,seh->sch",
+        embedding.astype(jnp.float32),
+        per_position.astype(jnp.float32),
+    ).reshape(STATE_LEN * num_classes, hidden).astype(jnp.bfloat16)
+
+
+def pallas_layernorm_input_prefix(
+    states,
+    weights: LayerNormStream1Weights,
+    architecture: Stream1Architecture,
+    *,
+    input_encoding: InputEncodingKind,
+    fused_input_weight=None,
+    bm: int = 128,
+    bk: int = 128,
+    bn: int = 128,
+    interpret: bool = False,
+):
+    """Execute encoding, first dense, FP32 LayerNorm, and ReLU."""
+
+    logical_states = states[:, : architecture.STATE_LEN]
+    if input_encoding is InputEncodingKind.EMBEDDING_GATHER:
+        encoded = weights.embedding[logical_states.astype(jnp.int32)].reshape(
+            states.shape[0], architecture.STATE_LEN * architecture.EMBED_DIM
+        ).astype(jnp.bfloat16)
+        hidden = pallas_dense_linear(
+            encoded,
+            weights.input.dense.weight,
+            weights.input.dense.bias,
+            bm=bm,
+            bk=bk,
+            bn=bn,
+            relu=False,
+            interpret=interpret,
+        )
+    elif input_encoding is InputEncodingKind.VIRTUAL_ONE_HOT_MXU:
+        flattened_states = logical_states.reshape(-1, 1)
+        zero_embedding_bias = jnp.zeros(
+            (architecture.EMBED_DIM,), dtype=jnp.bfloat16
+        )
+        encoded = pallas_folded_input_linear(
+            flattened_states,
+            weights.embedding,
+            zero_embedding_bias,
+            STATE_LEN=1,
+            NUM_CLASSES=architecture.NUM_CLASSES,
+            bm=bm,
+            bk=bk,
+            bn=bn,
+            relu=False,
+            interpret=interpret,
+        ).reshape(
+            states.shape[0], architecture.STATE_LEN * architecture.EMBED_DIM
+        )
+        hidden = pallas_dense_linear(
+            encoded,
+            weights.input.dense.weight,
+            weights.input.dense.bias,
+            bm=bm,
+            bk=bk,
+            bn=bn,
+            relu=False,
+            interpret=interpret,
+        )
+    elif input_encoding is InputEncodingKind.FUSED_VIRTUAL_ONE_HOT:
+        if fused_input_weight is None:
+            raise ValueError("fused_input_weight is required for fused encoding")
+        hidden = pallas_folded_input_linear(
+            logical_states,
+            fused_input_weight,
+            weights.input.dense.bias,
+            STATE_LEN=architecture.STATE_LEN,
+            NUM_CLASSES=architecture.NUM_CLASSES,
+            bm=bm,
+            bk=bk,
+            bn=bn,
+            relu=False,
+            interpret=interpret,
+        )
+    else:
+        raise ValueError(f"unsupported input encoding: {input_encoding}")
+
+    normalized = pallas_layer_norm(
+        hidden,
+        weights.input.normalization.scale,
+        weights.input.normalization.bias,
+        bm=bm,
+        epsilon=architecture.LAYER_NORM_EPSILON,
+        interpret=interpret,
+    )
+    return jax.nn.relu(normalized).astype(jnp.bfloat16)
