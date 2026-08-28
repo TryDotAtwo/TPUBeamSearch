@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "a5aa1ae06250e00d9485c55ec001cc570edaacca"
+COMMIT_SHA = "1183691da9671fa45311e6105c49000598271e9e"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch")
 
