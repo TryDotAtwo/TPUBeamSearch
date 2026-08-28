@@ -3,6 +3,7 @@ from __future__ import annotations
 import jax.numpy as jnp
 import numpy as np
 import pytest
+import tpu_beam_search.stream1_layernorm_pallas as layernorm_pallas
 
 from tpu_beam_search.stream1_architecture import InputEncodingKind, Stream1Architecture
 from tpu_beam_search.stream1_layernorm_pallas import (
@@ -188,4 +189,85 @@ def test_complete_pallas_layernorm_resmlp_matches_reference():
         np.asarray(expected, dtype=np.float32),
         rtol=0,
         atol=0.125,
+    )
+
+
+def test_complete_fused_layernorm_resmlp_matches_separate_kernels():
+    states, weights, architecture = _prefix_fixture()
+    separate = stream1_layernorm_pallas_inference(
+        states,
+        weights,
+        architecture,
+        input_encoding=InputEncodingKind.EMBEDDING_GATHER,
+        layernorm_fusion="separate",
+        bm=2,
+        bk_input=8,
+        bn_input=8,
+        bk_hidden=8,
+        bn_hidden=8,
+        bk_output=8,
+        bn_output=8,
+        interpret=True,
+    )
+    fused = stream1_layernorm_pallas_inference(
+        states,
+        weights,
+        architecture,
+        input_encoding=InputEncodingKind.EMBEDDING_GATHER,
+        layernorm_fusion="per_layer",
+        bm=2,
+        bk_input=8,
+        bn_input=8,
+        bk_hidden=8,
+        bn_hidden=8,
+        bk_output=8,
+        bn_output=8,
+        interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(fused), np.asarray(separate))
+
+
+@pytest.mark.parametrize("add_skip,relu", [(False, True), (True, True), (False, False)])
+def test_fused_dense_layer_norm_matches_fp32_reference(add_skip, relu):
+    values = (jnp.arange(24, dtype=jnp.float32).reshape(3, 8) / 13).astype(
+        jnp.bfloat16
+    )
+    weight = (jnp.arange(64, dtype=jnp.float32).reshape(8, 8) / 29).astype(
+        jnp.bfloat16
+    )
+    bias = jnp.linspace(-0.2, 0.2, 8).astype(jnp.bfloat16)
+    scale = jnp.linspace(0.8, 1.2, 8).astype(jnp.bfloat16)
+    beta = jnp.linspace(-0.1, 0.1, 8).astype(jnp.bfloat16)
+    skip = jnp.flip(values, axis=1)
+    dense = (
+        values.astype(jnp.float32) @ weight.astype(jnp.float32)
+        + bias.astype(jnp.float32)
+    ).astype(jnp.bfloat16)
+    expected = _reference(dense, scale, beta, 1e-5)
+    if add_skip:
+        expected = expected.astype(jnp.float32) + skip.astype(jnp.float32)
+    if relu:
+        expected = jnp.maximum(expected, 0).astype(jnp.bfloat16)
+    else:
+        expected = expected.astype(jnp.bfloat16)
+
+    actual = layernorm_pallas.pallas_fused_dense_layer_norm(
+        values,
+        weight,
+        bias,
+        scale,
+        beta,
+        skip=skip,
+        add_skip=add_skip,
+        relu=relu,
+        bm=4,
+        bk=8,
+        bn=8,
+        interpret=True,
+    )
+    np.testing.assert_allclose(
+        np.asarray(actual, dtype=np.float32),
+        np.asarray(expected, dtype=np.float32),
+        rtol=0,
+        atol=0,
     )
