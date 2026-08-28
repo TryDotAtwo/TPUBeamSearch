@@ -1,8 +1,13 @@
-# TPU Stream1 full-MLP head-fusion A/B
+# TPU Stream1 prefix/head-fusion A/B
+
+> Correction after inspecting the exact output-24 checkpoint: this experiment
+> covered the input block, hidden block, and output head, but omitted the two
+> `512 -> 512 -> 512` residual blocks. Its component timings remain valid; it
+> is not a benchmark of the complete checkpoint graph.
 
 ## Contract
 
-- MLP: virtual one-hot `14400 -> 1536`, ReLU, `1536 -> 512`, ReLU, `512 -> MOVE_COUNT`.
+- Tested prefix/head: virtual one-hot `14400 -> 1536`, ReLU, `1536 -> 512`, ReLU, `512 -> MOVE_COUNT`.
 - `MOVE_COUNT=24`; output head has no ReLU.
 - Batch: 256 reachable Megaminx states.
 - Inputs, weights, and layer boundaries: BF16; dot accumulation: FP32.
