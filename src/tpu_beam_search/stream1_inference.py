@@ -18,7 +18,9 @@ from .stream1_architecture import (
     ResidualWeights,
     Stream1Architecture,
     Stream1Weights,
+    NormalizationKind,
 )
+from .stream1_layernorm_reference import stream1_layernorm_reference_inference
 
 
 def _validate_shapes(
@@ -175,6 +177,11 @@ def stream1_reference_inference(
     architecture: Stream1Architecture,
 ) -> jax.Array:
     """Inference with the same BF16 layer boundaries as the Pallas path."""
+
+    if architecture.NORMALIZATION is NormalizationKind.LAYER_NORM:
+        return stream1_layernorm_reference_inference(
+            states, weights, architecture
+        )
 
     _validate_shapes(states, weights, architecture)
     logical_states = states[:, : architecture.STATE_LEN]
