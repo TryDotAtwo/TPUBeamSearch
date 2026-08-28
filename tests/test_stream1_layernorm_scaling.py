@@ -8,6 +8,7 @@ from benchmarks.stream1_layernorm_scaling import (
 
 
 def test_scaling_state_tile_is_valid_and_diverse():
+    assert NUM_CLASSES == 150
     states = valid_state_tile(256)
     assert states.shape == (256, STATE_SIZE)
     assert states.dtype == np.uint8

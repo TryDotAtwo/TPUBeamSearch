@@ -11,9 +11,9 @@ def test_full_layernorm_mlp_compares_separate_and_selected_fusion():
 
 
 def test_full_layernorm_benchmark_states_are_diverse_and_in_domain():
-    states = np.asarray(make_valid_states(64, 150, 24))
+    states = np.asarray(make_valid_states(64, 150, 150))
     assert states.shape == (64, 150)
     assert states.dtype == np.uint8
     assert int(states.min()) >= 0
-    assert int(states.max()) < 24
+    assert int(states.max()) < 150
     assert np.unique(states, axis=0).shape[0] > 32

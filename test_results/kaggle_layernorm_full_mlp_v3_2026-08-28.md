@@ -2,7 +2,8 @@
 
 Private Kaggle TPU v3-8 run `trydotatwo/tpu-layernorm-full-mlp`, version 3,
 used 16,384 deterministic diverse states with all 150 categorical values in
-the checkpoint's valid `[0, 24)` embedding domain.
+the checkpoint's valid `[0, 150)` embedding domain. The checkpoint embedding
+shape is `150 x 24`: 150 categorical values and embedding width 24.
 
 | implementation | states/s | versus JAX | max abs | mean abs | argmax agreement |
 |---|---:|---:|---:|---:|---:|
