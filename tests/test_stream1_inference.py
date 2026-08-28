@@ -158,6 +158,44 @@ def test_jitted_pallas_inference_executes_the_complete_graph():
     )
 
 
+@pytest.mark.parametrize("residual_fusion", ["per_block", "pairs"])
+def test_pallas_inference_residual_fusion_modes_preserve_complete_graph(residual_fusion):
+    architecture = Stream1Architecture(
+        STATE_LEN=2,
+        STATE_STORAGE_LEN=4,
+        NUM_CLASSES=3,
+        HIDDEN1=4,
+        HIDDEN2=2,
+        RESIDUAL_COUNT=2,
+        MOVE_COUNT=3,
+    )
+    base = tiny_weights()
+    weights = base._replace(residuals=(base.residuals[0], base.residuals[0]))
+    states = jnp.array([[0, 2, 99, 88], [1, 0, 77, 66]], dtype=jnp.uint8)
+
+    actual = stream1_pallas_inference(
+        states,
+        weights,
+        architecture,
+        residual_fusion=residual_fusion,
+        interpret=True,
+        bm=2,
+        bk_input=2,
+        bn_input=2,
+        bk_hidden=2,
+        bn_hidden=2,
+        bk_residual=2,
+        bn_residual=2,
+        bk_output=2,
+        bn_output=2,
+    )
+
+    np.testing.assert_array_equal(
+        np.asarray(actual, dtype=np.float32),
+        np.array([[2, 65, 32], [1, 21, 11]], dtype=np.float32),
+    )
+
+
 def test_architecture_rejects_storage_shorter_than_logical_state():
     with pytest.raises(ValueError, match="STATE_STORAGE_LEN"):
         Stream1Architecture(

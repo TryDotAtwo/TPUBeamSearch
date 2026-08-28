@@ -7,6 +7,8 @@ from tpu_beam_search.stream1_pallas import (
     pallas_embedding_sum_linear,
     pallas_fused_folded_hidden,
     pallas_fused_mlp,
+    pallas_fused_residual_block,
+    pallas_fused_two_residual_blocks,
     pallas_folded_input_linear,
 )
 
@@ -224,4 +226,58 @@ def test_pallas_fused_mlp_returns_only_logical_move_logits():
     np.testing.assert_array_equal(
         np.asarray(actual, dtype=np.float32),
         np.array([[5, 7, 0], [1, 3, 2]], dtype=np.float32),
+    )
+
+
+def test_pallas_fused_residual_block_keeps_skip_until_second_matmul_finishes():
+    values = jnp.array([[4, 4], [0, 2]], dtype=jnp.bfloat16)
+    first_weight = jnp.eye(2, dtype=jnp.bfloat16)
+    first_bias = jnp.array([1, -1], dtype=jnp.bfloat16)
+    second_weight = jnp.array([[1, 1], [-1, 1]], dtype=jnp.bfloat16)
+    second_bias = jnp.array([0, 1], dtype=jnp.bfloat16)
+
+    actual = pallas_fused_residual_block(
+        values,
+        first_weight,
+        first_bias,
+        second_weight,
+        second_bias,
+        bm=2,
+        bk=2,
+        bn=2,
+        interpret=True,
+    )
+
+    np.testing.assert_array_equal(
+        np.asarray(actual, dtype=np.float32),
+        np.array([[6, 13], [0, 5]], dtype=np.float32),
+    )
+
+
+def test_pallas_fused_two_residual_blocks_keeps_inter_block_value_in_vmem():
+    values = jnp.array([[4, 4], [0, 2]], dtype=jnp.bfloat16)
+    first_weight = jnp.eye(2, dtype=jnp.bfloat16)
+    first_bias = jnp.array([1, -1], dtype=jnp.bfloat16)
+    second_weight = jnp.array([[1, 1], [-1, 1]], dtype=jnp.bfloat16)
+    second_bias = jnp.array([0, 1], dtype=jnp.bfloat16)
+
+    actual = pallas_fused_two_residual_blocks(
+        values,
+        first_weight,
+        first_bias,
+        second_weight,
+        second_bias,
+        first_weight,
+        first_bias,
+        second_weight,
+        second_bias,
+        bm=2,
+        bk=2,
+        bn=2,
+        interpret=True,
+    )
+
+    np.testing.assert_array_equal(
+        np.asarray(actual, dtype=np.float32),
+        np.array([[1, 33], [0, 11]], dtype=np.float32),
     )

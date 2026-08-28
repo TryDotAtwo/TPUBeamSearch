@@ -373,6 +373,355 @@ def pallas_dense_linear(
     return call(values_padded, weight_padded, bias_padded)[:rows, :output_width]
 
 
+def _emit_fused_residual(
+    input_ref,
+    first_weight_ref,
+    first_bias_ref,
+    second_weight_ref,
+    second_bias_ref,
+    output_ref,
+    branch_ref,
+    first_accumulator_ref,
+    second_accumulator_ref,
+    *,
+    ksteps: int,
+    output_blocks: int,
+):
+    def first_body(
+        input_tile_ref,
+        weight_tile_ref,
+        bias_tile_ref,
+        branch_tile_ref,
+        accumulator_ref,
+    ):
+        k_step = pl.program_id(1)
+
+        @pl.when(k_step == 0)
+        def initialize():
+            accumulator_ref[...] = jnp.zeros_like(accumulator_ref[...])
+
+        accumulator_ref[...] += jnp.dot(
+            input_tile_ref[...],
+            weight_tile_ref[...],
+            preferred_element_type=jnp.float32,
+        )
+
+        @pl.when(k_step == ksteps - 1)
+        def finish():
+            value = accumulator_ref[...] + bias_tile_ref[...][None, :].astype(
+                jnp.float32
+            )
+            branch_tile_ref[...] = jnp.maximum(value, 0.0).astype(jnp.bfloat16)
+
+    first_pipeline = pltpu.emit_pipeline(
+        first_body,
+        grid=(output_blocks, ksteps),
+        in_specs=[
+            pl.BlockSpec(
+                (input_ref.shape[0], input_ref.shape[1] // ksteps),
+                lambda output_block, k_step: (0, k_step),
+            ),
+            pl.BlockSpec(
+                (
+                    first_weight_ref.shape[0] // ksteps,
+                    first_weight_ref.shape[1] // output_blocks,
+                ),
+                lambda output_block, k_step: (k_step, output_block),
+            ),
+            pl.BlockSpec(
+                (first_bias_ref.shape[0] // output_blocks,),
+                lambda output_block, k_step: (output_block,),
+            ),
+        ],
+        out_specs=pl.BlockSpec(
+            (input_ref.shape[0], branch_ref.shape[1] // output_blocks),
+            lambda output_block, k_step: (0, output_block),
+        ),
+        dimension_semantics=("parallel", "arbitrary"),
+    )
+    first_pipeline(
+        input_ref,
+        first_weight_ref,
+        first_bias_ref,
+        branch_ref,
+        scratches=(first_accumulator_ref,),
+    )
+
+    def second_body(
+        branch_tile_ref,
+        weight_tile_ref,
+        bias_tile_ref,
+        skip_tile_ref,
+        output_tile_ref,
+        accumulator_ref,
+    ):
+        k_step = pl.program_id(1)
+
+        @pl.when(k_step == 0)
+        def initialize():
+            accumulator_ref[...] = jnp.zeros_like(accumulator_ref[...])
+
+        accumulator_ref[...] += jnp.dot(
+            branch_tile_ref[...],
+            weight_tile_ref[...],
+            preferred_element_type=jnp.float32,
+        )
+
+        @pl.when(k_step == ksteps - 1)
+        def finish():
+            value = (
+                accumulator_ref[...]
+                + bias_tile_ref[...][None, :].astype(jnp.float32)
+                + skip_tile_ref[...].astype(jnp.float32)
+            )
+            output_tile_ref[...] = jnp.maximum(value, 0.0).astype(jnp.bfloat16)
+
+    second_pipeline = pltpu.emit_pipeline(
+        second_body,
+        grid=(output_blocks, ksteps),
+        in_specs=[
+            pl.BlockSpec(
+                (branch_ref.shape[0], branch_ref.shape[1] // ksteps),
+                lambda output_block, k_step: (0, k_step),
+            ),
+            pl.BlockSpec(
+                (
+                    second_weight_ref.shape[0] // ksteps,
+                    second_weight_ref.shape[1] // output_blocks,
+                ),
+                lambda output_block, k_step: (k_step, output_block),
+            ),
+            pl.BlockSpec(
+                (second_bias_ref.shape[0] // output_blocks,),
+                lambda output_block, k_step: (output_block,),
+            ),
+            pl.BlockSpec(
+                (input_ref.shape[0], input_ref.shape[1] // output_blocks),
+                lambda output_block, k_step: (0, output_block),
+            ),
+        ],
+        out_specs=pl.BlockSpec(
+            (output_ref.shape[0], output_ref.shape[1] // output_blocks),
+            lambda output_block, k_step: (0, output_block),
+        ),
+        dimension_semantics=("parallel", "arbitrary"),
+    )
+    second_pipeline(
+        branch_ref,
+        second_weight_ref,
+        second_bias_ref,
+        input_ref,
+        output_ref,
+        scratches=(second_accumulator_ref,),
+    )
+
+
+def _fused_residual_block_kernel(
+    input_ref,
+    first_weight_ref,
+    first_bias_ref,
+    second_weight_ref,
+    second_bias_ref,
+    output_ref,
+    branch_ref,
+    first_accumulator_ref,
+    second_accumulator_ref,
+    *,
+    ksteps: int,
+    output_blocks: int,
+):
+    _emit_fused_residual(
+        input_ref,
+        first_weight_ref,
+        first_bias_ref,
+        second_weight_ref,
+        second_bias_ref,
+        output_ref,
+        branch_ref,
+        first_accumulator_ref,
+        second_accumulator_ref,
+        ksteps=ksteps,
+        output_blocks=output_blocks,
+    )
+
+
+def _pad_residual_arguments(values, first_weight, first_bias, second_weight, second_bias, *, bm, bk, bn):
+    rows, width = values.shape
+    if first_weight.shape != (width, width) or second_weight.shape != (width, width):
+        raise ValueError("residual weights must both have shape (width, width)")
+    if first_bias.shape != (width,) or second_bias.shape != (width,):
+        raise ValueError("residual biases must both have shape (width,)")
+    padded_rows = pad_to_multiple(rows, bm)
+    padded_width = pad_to_multiple(width, max(bk, bn))
+    return (
+        rows,
+        width,
+        padded_rows,
+        padded_width,
+        jnp.pad(values.astype(jnp.bfloat16), ((0, padded_rows - rows), (0, padded_width - width))),
+        jnp.pad(first_weight.astype(jnp.bfloat16), ((0, padded_width - width), (0, padded_width - width))),
+        jnp.pad(first_bias.astype(jnp.bfloat16), ((0, padded_width - width),)),
+        jnp.pad(second_weight.astype(jnp.bfloat16), ((0, padded_width - width), (0, padded_width - width))),
+        jnp.pad(second_bias.astype(jnp.bfloat16), ((0, padded_width - width),)),
+    )
+
+
+def pallas_fused_residual_block(
+    values,
+    first_weight,
+    first_bias,
+    second_weight,
+    second_bias,
+    *,
+    bm: int = 256,
+    bk: int = 256,
+    bn: int = 512,
+    interpret: bool = False,
+):
+    if not interpret:
+        validate_matrix_tile(bm=bm, bk=bk, bn=bn)
+    args = _pad_residual_arguments(
+        values, first_weight, first_bias, second_weight, second_bias,
+        bm=bm, bk=bk, bn=bn,
+    )
+    rows, width, padded_rows, padded_width, *arrays = args
+    ksteps = padded_width // bk
+    output_blocks = padded_width // bn
+    call = pl.pallas_call(
+        functools.partial(
+            _fused_residual_block_kernel,
+            ksteps=ksteps,
+            output_blocks=output_blocks,
+        ),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[
+                pl.BlockSpec((bm, padded_width), lambda row_block: (row_block, 0)),
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+            ],
+            out_specs=pl.BlockSpec((bm, padded_width), lambda row_block: (row_block, 0)),
+            scratch_shapes=[
+                pltpu.VMEM((bm, padded_width), jnp.bfloat16),
+                pltpu.VMEM((bm, bn), jnp.float32),
+                pltpu.VMEM((bm, bn), jnp.float32),
+            ],
+            grid=(padded_rows // bm,),
+        ),
+        out_shape=jax.ShapeDtypeStruct((padded_rows, padded_width), jnp.bfloat16),
+        interpret=interpret,
+        name="stream1_fused_residual_block",
+    )
+    return call(*arrays)[:rows, :width]
+
+
+def _fused_two_residual_blocks_kernel(
+    input_ref,
+    first_weight_0_ref,
+    first_bias_0_ref,
+    second_weight_0_ref,
+    second_bias_0_ref,
+    first_weight_1_ref,
+    first_bias_1_ref,
+    second_weight_1_ref,
+    second_bias_1_ref,
+    output_ref,
+    branch_ref,
+    intermediate_ref,
+    first_accumulator_ref,
+    second_accumulator_ref,
+    *,
+    ksteps: int,
+    output_blocks: int,
+):
+    _emit_fused_residual(
+        input_ref,
+        first_weight_0_ref,
+        first_bias_0_ref,
+        second_weight_0_ref,
+        second_bias_0_ref,
+        intermediate_ref,
+        branch_ref,
+        first_accumulator_ref,
+        second_accumulator_ref,
+        ksteps=ksteps,
+        output_blocks=output_blocks,
+    )
+    _emit_fused_residual(
+        intermediate_ref,
+        first_weight_1_ref,
+        first_bias_1_ref,
+        second_weight_1_ref,
+        second_bias_1_ref,
+        output_ref,
+        branch_ref,
+        first_accumulator_ref,
+        second_accumulator_ref,
+        ksteps=ksteps,
+        output_blocks=output_blocks,
+    )
+
+
+def pallas_fused_two_residual_blocks(
+    values,
+    first_weight_0,
+    first_bias_0,
+    second_weight_0,
+    second_bias_0,
+    first_weight_1,
+    first_bias_1,
+    second_weight_1,
+    second_bias_1,
+    *,
+    bm: int = 256,
+    bk: int = 256,
+    bn: int = 512,
+    interpret: bool = False,
+):
+    if not interpret:
+        validate_matrix_tile(bm=bm, bk=bk, bn=bn)
+    first = _pad_residual_arguments(
+        values, first_weight_0, first_bias_0, second_weight_0, second_bias_0,
+        bm=bm, bk=bk, bn=bn,
+    )
+    second = _pad_residual_arguments(
+        values, first_weight_1, first_bias_1, second_weight_1, second_bias_1,
+        bm=bm, bk=bk, bn=bn,
+    )
+    rows, width, padded_rows, padded_width, values_padded, *first_arrays = first
+    _, _, _, _, _, *second_arrays = second
+    ksteps = padded_width // bk
+    output_blocks = padded_width // bn
+    call = pl.pallas_call(
+        functools.partial(
+            _fused_two_residual_blocks_kernel,
+            ksteps=ksteps,
+            output_blocks=output_blocks,
+        ),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[
+                pl.BlockSpec((bm, padded_width), lambda row_block: (row_block, 0)),
+                *([pl.no_block_spec] * 8),
+            ],
+            out_specs=pl.BlockSpec((bm, padded_width), lambda row_block: (row_block, 0)),
+            scratch_shapes=[
+                pltpu.VMEM((bm, padded_width), jnp.bfloat16),
+                pltpu.VMEM((bm, padded_width), jnp.bfloat16),
+                pltpu.VMEM((bm, bn), jnp.float32),
+                pltpu.VMEM((bm, bn), jnp.float32),
+            ],
+            grid=(padded_rows // bm,),
+        ),
+        out_shape=jax.ShapeDtypeStruct((padded_rows, padded_width), jnp.bfloat16),
+        interpret=interpret,
+        name="stream1_fused_two_residual_blocks",
+    )
+    return call(values_padded, *first_arrays, *second_arrays)[:rows, :width]
+
+
 def _fused_folded_hidden_kernel(
     state_ref,
     input_weight_ref,

@@ -6,7 +6,12 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 
-from .stream1_pallas import pallas_dense_linear, pallas_fused_folded_hidden
+from .stream1_pallas import (
+    pallas_dense_linear,
+    pallas_fused_folded_hidden,
+    pallas_fused_residual_block,
+    pallas_fused_two_residual_blocks,
+)
 from .stream1_reference import folded_input_linear
 from .stream1_architecture import (
     DenseWeights,
@@ -205,6 +210,7 @@ def stream1_pallas_inference(
     bn_residual: int = 512,
     bk_output: int = 512,
     bn_output: int = 256,
+    residual_fusion: str = "separate",
     interpret: bool = False,
 ) -> jax.Array:
     """Complete MLP inference; architecture and tile arguments are compile-time static."""
@@ -225,7 +231,45 @@ def stream1_pallas_inference(
         bn_hidden=bn_hidden,
         interpret=interpret,
     )
-    for residual in weights.residuals:
+    if residual_fusion not in ("separate", "per_block", "pairs"):
+        raise ValueError("residual_fusion must be 'separate', 'per_block', or 'pairs'")
+
+    residual_index = 0
+    while residual_index < len(weights.residuals):
+        residual = weights.residuals[residual_index]
+        if residual_fusion == "pairs" and residual_index + 1 < len(weights.residuals):
+            next_residual = weights.residuals[residual_index + 1]
+            hidden = pallas_fused_two_residual_blocks(
+                hidden,
+                residual.first.weight,
+                residual.first.bias,
+                residual.second.weight,
+                residual.second.bias,
+                next_residual.first.weight,
+                next_residual.first.bias,
+                next_residual.second.weight,
+                next_residual.second.bias,
+                bm=bm,
+                bk=bk_residual,
+                bn=bn_residual,
+                interpret=interpret,
+            )
+            residual_index += 2
+            continue
+        if residual_fusion in ("per_block", "pairs"):
+            hidden = pallas_fused_residual_block(
+                hidden,
+                residual.first.weight,
+                residual.first.bias,
+                residual.second.weight,
+                residual.second.bias,
+                bm=bm,
+                bk=bk_residual,
+                bn=bn_residual,
+                interpret=interpret,
+            )
+            residual_index += 1
+            continue
         skip = hidden
         branch = pallas_dense_linear(
             hidden,
@@ -250,6 +294,7 @@ def stream1_pallas_inference(
         hidden = jnp.maximum(
             skip.astype(jnp.float32) + branch.astype(jnp.float32), 0.0
         ).astype(jnp.bfloat16)
+        residual_index += 1
     return pallas_dense_linear(
         hidden,
         weights.output.weight,
