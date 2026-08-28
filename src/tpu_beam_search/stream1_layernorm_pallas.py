@@ -133,11 +133,19 @@ def pallas_layernorm_input_prefix(
     bm: int = 128,
     bk: int = 128,
     bn: int = 128,
+    bk_embedding: int | None = None,
+    bn_embedding: int | None = None,
+    bk_dense: int | None = None,
+    bn_dense: int | None = None,
     interpret: bool = False,
 ):
     """Execute encoding, first dense, FP32 LayerNorm, and ReLU."""
 
     logical_states = states[:, : architecture.STATE_LEN]
+    embedding_bk = bk if bk_embedding is None else bk_embedding
+    embedding_bn = bn if bn_embedding is None else bn_embedding
+    dense_bk = bk if bk_dense is None else bk_dense
+    dense_bn = bn if bn_dense is None else bn_dense
     if input_encoding is InputEncodingKind.EMBEDDING_GATHER:
         encoded = weights.embedding[logical_states.astype(jnp.int32)].reshape(
             states.shape[0], architecture.STATE_LEN * architecture.EMBED_DIM
@@ -147,8 +155,8 @@ def pallas_layernorm_input_prefix(
             weights.input.dense.weight,
             weights.input.dense.bias,
             bm=bm,
-            bk=bk,
-            bn=bn,
+            bk=dense_bk,
+            bn=dense_bn,
             relu=False,
             interpret=interpret,
         )
@@ -164,8 +172,8 @@ def pallas_layernorm_input_prefix(
             STATE_LEN=1,
             NUM_CLASSES=architecture.NUM_CLASSES,
             bm=bm,
-            bk=bk,
-            bn=bn,
+            bk=embedding_bk,
+            bn=embedding_bn,
             relu=False,
             interpret=interpret,
         ).reshape(
@@ -176,8 +184,8 @@ def pallas_layernorm_input_prefix(
             weights.input.dense.weight,
             weights.input.dense.bias,
             bm=bm,
-            bk=bk,
-            bn=bn,
+            bk=dense_bk,
+            bn=dense_bn,
             relu=False,
             interpret=interpret,
         )
@@ -191,8 +199,8 @@ def pallas_layernorm_input_prefix(
             STATE_LEN=architecture.STATE_LEN,
             NUM_CLASSES=architecture.NUM_CLASSES,
             bm=bm,
-            bk=bk,
-            bn=bn,
+            bk=dense_bk,
+            bn=dense_bn,
             relu=False,
             interpret=interpret,
         )
