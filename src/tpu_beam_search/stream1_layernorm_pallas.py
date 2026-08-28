@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import math
 
 import jax
 import jax.numpy as jnp
@@ -329,6 +330,229 @@ def pallas_fused_dense_layer_norm(
         beta_padded,
         skip_padded,
     )[:rows, :output_width]
+
+
+def _fused_residual_block_kernel(
+    input_ref,
+    weight1_ref,
+    bias1_ref,
+    scale1_ref,
+    beta1_ref,
+    weight2_ref,
+    bias2_ref,
+    scale2_ref,
+    beta2_ref,
+    output_ref,
+    hidden_ref,
+    dense_ref,
+    accumulator_ref,
+    *,
+    logical_width: int,
+    ksteps: int,
+    output_blocks: int,
+    epsilon: float,
+    fp32_statistics: bool,
+):
+    def run_dense(source_ref, weight_ref, bias_ref):
+        def dense_body(
+            source_tile_ref,
+            weight_tile_ref,
+            bias_tile_ref,
+            dense_tile_ref,
+            tile_accumulator_ref,
+        ):
+            kstep = pl.program_id(1)
+
+            @pl.when(kstep == 0)
+            def initialize():
+                tile_accumulator_ref[...] = jnp.zeros_like(
+                    tile_accumulator_ref[...]
+                )
+
+            tile_accumulator_ref[...] += jnp.dot(
+                source_tile_ref[...],
+                weight_tile_ref[...],
+                preferred_element_type=jnp.float32,
+            )
+
+            @pl.when(kstep == ksteps - 1)
+            def finish():
+                dense_tile_ref[...] = (
+                    tile_accumulator_ref[...]
+                    + bias_tile_ref[...][None, :].astype(jnp.float32)
+                ).astype(jnp.bfloat16)
+
+        pipeline = pltpu.emit_pipeline(
+            dense_body,
+            grid=(output_blocks, ksteps),
+            in_specs=[
+                pl.BlockSpec(
+                    (source_ref.shape[0], source_ref.shape[1] // ksteps),
+                    lambda output_block, kstep: (0, kstep),
+                ),
+                pl.BlockSpec(
+                    (
+                        weight_ref.shape[0] // ksteps,
+                        weight_ref.shape[1] // output_blocks,
+                    ),
+                    lambda output_block, kstep: (kstep, output_block),
+                ),
+                pl.BlockSpec(
+                    (bias_ref.shape[0] // output_blocks,),
+                    lambda output_block, kstep: (output_block,),
+                ),
+            ],
+            out_specs=pl.BlockSpec(
+                (dense_ref.shape[0], dense_ref.shape[1] // output_blocks),
+                lambda output_block, kstep: (0, output_block),
+            ),
+            dimension_semantics=("parallel", "arbitrary"),
+        )
+        pipeline(
+            source_ref,
+            weight_ref,
+            bias_ref,
+            dense_ref,
+            scratches=(accumulator_ref,),
+        )
+
+    def normalize(dense, scale_ref, beta_ref):
+        if fp32_statistics:
+            dense = dense.astype(jnp.float32)
+        columns = jnp.arange(dense.shape[1], dtype=jnp.int32)
+        valid = columns < logical_width
+        masked = jnp.where(valid[None, :], dense, 0.0)
+        mean = jnp.sum(masked, axis=1, keepdims=True) / logical_width
+        centered = jnp.where(valid[None, :], dense - mean, 0.0)
+        variance = (
+            jnp.sum(jnp.square(centered), axis=1, keepdims=True) / logical_width
+        )
+        scale = scale_ref[...][None, :]
+        beta = beta_ref[...][None, :]
+        if fp32_statistics:
+            scale = scale.astype(jnp.float32)
+            beta = beta.astype(jnp.float32)
+        return (
+            centered * jax.lax.rsqrt(variance + epsilon) * scale + beta
+        ).astype(jnp.bfloat16)
+
+    run_dense(input_ref, weight1_ref, bias1_ref)
+    hidden_ref[...] = jnp.maximum(
+        normalize(dense_ref[...], scale1_ref, beta1_ref), 0.0
+    ).astype(jnp.bfloat16)
+    run_dense(hidden_ref, weight2_ref, bias2_ref)
+    branch = normalize(dense_ref[...], scale2_ref, beta2_ref)
+    skip = input_ref[...]
+    if fp32_statistics:
+        branch = branch.astype(jnp.float32)
+        skip = skip.astype(jnp.float32)
+    columns = jnp.arange(branch.shape[1], dtype=jnp.int32)
+    valid = columns < logical_width
+    output_ref[...] = jnp.where(
+        valid[None, :], jnp.maximum(skip + branch, 0.0), 0.0
+    ).astype(jnp.bfloat16)
+
+
+def pallas_fused_residual_block(
+    values,
+    block,
+    *,
+    bm: int = 128,
+    bk: int = 256,
+    bn: int = 512,
+    epsilon: float = 1e-5,
+    fp32_statistics: bool = True,
+    interpret: bool = False,
+):
+    """Execute a complete two-dense residual block in one Pallas kernel."""
+
+    if values.ndim != 2:
+        raise ValueError("values must be a matrix")
+    rows, width = values.shape
+    layers = (block.first, block.second)
+    for layer in layers:
+        if layer.dense.weight.shape != (width, width):
+            raise ValueError("residual dense weights must be square and match values")
+        if layer.dense.bias.shape != (width,):
+            raise ValueError("residual dense bias must match values width")
+        if layer.normalization.scale.shape != (width,):
+            raise ValueError("residual LayerNorm scale must match values width")
+        if layer.normalization.bias.shape != (width,):
+            raise ValueError("residual LayerNorm bias must match values width")
+    if not interpret:
+        validate_matrix_tile(bm=bm, bk=bk, bn=bn)
+
+    padded_rows = pad_to_multiple(rows, bm)
+    padded_width = pad_to_multiple(width, math.lcm(bk, bn))
+    values_padded = jnp.pad(
+        values.astype(jnp.bfloat16),
+        ((0, padded_rows - rows), (0, padded_width - width)),
+    )
+
+    def pad_matrix(value):
+        return jnp.pad(
+            value.astype(jnp.bfloat16),
+            ((0, padded_width - width), (0, padded_width - width)),
+        )
+
+    def pad_vector(value):
+        return jnp.pad(
+            value.astype(jnp.bfloat16), ((0, padded_width - width),)
+        )
+
+    inputs = (
+        values_padded,
+        pad_matrix(block.first.dense.weight),
+        pad_vector(block.first.dense.bias),
+        pad_vector(block.first.normalization.scale),
+        pad_vector(block.first.normalization.bias),
+        pad_matrix(block.second.dense.weight),
+        pad_vector(block.second.dense.bias),
+        pad_vector(block.second.normalization.scale),
+        pad_vector(block.second.normalization.bias),
+    )
+    ksteps = padded_width // bk
+    output_blocks = padded_width // bn
+    call = pl.pallas_call(
+        functools.partial(
+            _fused_residual_block_kernel,
+            logical_width=width,
+            ksteps=ksteps,
+            output_blocks=output_blocks,
+            epsilon=epsilon,
+            fp32_statistics=fp32_statistics,
+        ),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[
+                pl.BlockSpec((bm, padded_width), lambda row_block: (row_block, 0)),
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+                pl.no_block_spec,
+            ],
+            out_specs=pl.BlockSpec(
+                (bm, padded_width), lambda row_block: (row_block, 0)
+            ),
+            scratch_shapes=[
+                pltpu.VMEM((bm, padded_width), jnp.bfloat16),
+                pltpu.VMEM((bm, padded_width), jnp.bfloat16),
+                pltpu.VMEM((bm, bn), jnp.float32),
+            ],
+            grid=(padded_rows // bm,),
+        ),
+        out_shape=jax.ShapeDtypeStruct(
+            (padded_rows, padded_width), jnp.bfloat16
+        ),
+        compiler_params=pltpu.CompilerParams(dimension_semantics=("parallel",)),
+        interpret=interpret,
+        name="stream1_fused_residual_block",
+    )
+    return call(*inputs)[:rows, :width]
 
 
 def make_fused_virtual_one_hot_weight(

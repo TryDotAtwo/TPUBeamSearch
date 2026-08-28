@@ -8,6 +8,7 @@ import tpu_beam_search.stream1_layernorm_pallas as layernorm_pallas
 from tpu_beam_search.stream1_architecture import InputEncodingKind, Stream1Architecture
 from tpu_beam_search.stream1_layernorm_pallas import (
     make_fused_virtual_one_hot_weight,
+    pallas_fused_residual_block,
     pallas_layer_norm,
     pallas_layernorm_input_prefix,
     stream1_layernorm_pallas_inference,
@@ -272,6 +273,61 @@ def test_complete_bf16_statistics_fusion_matches_separate_kernels():
         states, weights, architecture, layernorm_fusion="per_layer", **common
     )
     np.testing.assert_array_equal(np.asarray(fused), np.asarray(separate))
+
+
+def test_one_kernel_residual_block_matches_two_fused_layers():
+    states, weights, architecture = _prefix_fixture()
+    hidden = pallas_layernorm_input_prefix(
+        states,
+        weights,
+        architecture,
+        input_encoding=InputEncodingKind.EMBEDDING_GATHER,
+        bm=2,
+        bk=8,
+        bn=8,
+        fp32_statistics=False,
+        interpret=True,
+    )
+    block = weights.residuals[0]
+    branch = layernorm_pallas.pallas_fused_dense_layer_norm(
+        hidden,
+        block.first.dense.weight,
+        block.first.dense.bias,
+        block.first.normalization.scale,
+        block.first.normalization.bias,
+        relu=True,
+        bm=2,
+        bk=8,
+        bn=8,
+        fp32_statistics=False,
+        interpret=True,
+    )
+    expected = layernorm_pallas.pallas_fused_dense_layer_norm(
+        branch,
+        block.second.dense.weight,
+        block.second.dense.bias,
+        block.second.normalization.scale,
+        block.second.normalization.bias,
+        skip=hidden,
+        add_skip=True,
+        relu=True,
+        bm=2,
+        bk=8,
+        bn=8,
+        fp32_statistics=False,
+        interpret=True,
+    )
+    actual = pallas_fused_residual_block(
+        hidden,
+        block,
+        bm=2,
+        bk=8,
+        bn=8,
+        epsilon=architecture.LAYER_NORM_EPSILON,
+        fp32_statistics=False,
+        interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
 
 
 @pytest.mark.parametrize("add_skip,relu", [(False, True), (True, True), (False, False)])

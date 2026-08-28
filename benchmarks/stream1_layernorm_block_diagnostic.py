@@ -11,7 +11,10 @@ import jax.numpy as jnp
 
 from benchmarks.stream1_layernorm_full_mlp import make_valid_states
 from tpu_beam_search.stream1_architecture import Stream1Architecture
-from tpu_beam_search.stream1_layernorm_pallas import pallas_fused_dense_layer_norm
+from tpu_beam_search.stream1_layernorm_pallas import (
+    pallas_fused_dense_layer_norm,
+    pallas_fused_residual_block,
+)
 from tpu_beam_search.stream1_layernorm_reference import (
     layernorm_stream1_weights_from_artgor_params,
 )
@@ -25,6 +28,10 @@ REPEATS = 9
 
 def diagnostic_levels():
     return ("dense1", "dense1_layernorm_relu", "residual_block")
+
+
+def residual_block_candidates():
+    return ("two_kernel", "one_kernel")
 
 
 def find_dataset() -> Path:
@@ -168,6 +175,16 @@ def main():
             fp32_statistics=False,
         )
 
+    def pallas_block_one_kernel(x):
+        return pallas_fused_residual_block(
+            x,
+            block,
+            bm=256,
+            bk=256,
+            bn=512,
+            fp32_statistics=False,
+        )
+
     pairs = {
         "dense1": (jax.jit(jax_dense1), jax.jit(pallas_dense1)),
         "dense1_layernorm_relu": (
@@ -218,6 +235,29 @@ def main():
             },
             "correctness": metrics(actual, expected),
         }
+        if name == "residual_block":
+            one_kernel_call = jax.jit(pallas_block_one_kernel)
+            one_first, one_steady, one_samples = measure(
+                lambda: one_kernel_call(hidden)
+            )
+            one_output = one_kernel_call(hidden)
+            result["levels"][name]["pallas_two_kernel"] = result[
+                "levels"
+            ][name].pop("pallas")
+            result["levels"][name]["two_kernel_correctness"] = result[
+                "levels"
+            ][name].pop("correctness")
+            result["levels"][name]["pallas_one_kernel"] = {
+                "compile_and_first_seconds": one_first,
+                "steady_seconds_median": one_steady,
+                "states_per_second": LOCAL_BATCH / one_steady,
+                "speedup_vs_jax": reference_steady / one_steady,
+                "speedup_vs_two_kernel": pallas_steady / one_steady,
+                "samples": one_samples,
+            }
+            result["levels"][name]["one_kernel_correctness"] = metrics(
+                one_output, expected
+            )
         print(name, json.dumps(result["levels"][name]), flush=True)
 
     path = Path("/kaggle/working/stream1_layernorm_block_diagnostic.json")
