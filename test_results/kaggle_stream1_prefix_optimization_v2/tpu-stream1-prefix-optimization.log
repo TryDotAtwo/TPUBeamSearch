@@ -1,0 +1,34 @@
+[{"stream_name":"stderr","time":20.051106402,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":23.902571561,"data":"\n"}
+,{"stream_name":"stderr","time":23.902628681,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":23.902635801,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":24.049012163,"data":"Cloning into '/tmp/TPUBeamSearch'...\n"}
+,{"stream_name":"stderr","time":25.369543758,"data":"HEAD is now at 03b508e Fix prefix pipeline buffer allocation sweep\n"}
+,{"stream_name":"stderr","time":29.483407001,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stderr","time":29.483443511,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":42.020756802,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stderr","time":42.020789162,"data":"E0000 00:00:1787914055.940299      40 common_lib.cc:947] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stderr","time":42.020796612,"data":"=== Source Location Trace: === \n"}
+,{"stream_name":"stderr","time":42.020801512,"data":"learning/45eac/tfrc/runtime/common_lib.cc:239\n"}
+,{"stream_name":"stderr","time":55.057788627,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":55.057830847,"data":"  File \"\u003cfrozen runpy\u003e\", line 198, in _run_module_as_main\n"}
+,{"stream_name":"stderr","time":55.057837407,"data":"  File \"\u003cfrozen runpy\u003e\", line 88, in _run_code\n"}
+,{"stream_name":"stderr","time":55.057841767,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_prefix_optimization.py\", line 260, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":55.057897987,"data":"    main()\n"}
+,{"stream_name":"stderr","time":55.057938287,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_prefix_optimization.py\", line 131, in main\n"}
+,{"stream_name":"stderr","time":55.058005716,"data":"    baseline_output = jax.jit(\n"}
+,{"stream_name":"stderr","time":55.058042527,"data":"                      ^^^^^^^^\n"}
+,{"stream_name":"stderr","time":55.058049167,"data":"jax.errors.JaxRuntimeError: RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\n"}
+,{"stream_name":"stderr","time":55.058055427,"data":"Ran out of memory in memory space vmem while allocating on stack for %stream1_fused_folded_hidden.1 = bf16[4096,512]{1,0:T(8,128)(2,1)} custom-call(%states.1, %constant.1, %constant.6, %constant.7, %constant.8), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={u8[4096,128]{1,0}, bf16[14464,1536]{1,0}, bf16[1536]{0}, bf16[1536,512]{1,0}, bf16[512]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(\u003clambda\u003e)/stream1_fused_folded_hidden/pallas_call\" stack_frame_id=12}. Scoped allocation with size 46.19M and limit 16.00M exceeded scoped vmem limit by 30.19M. It should not be possible to run out of scoped vmem - \n"}
+,{"stream_name":"stderr","time":55.058063327,"data":"See https://openxla.org/xla/errors/error_1001 for more details.\n"}
+,{"stream_name":"stderr","time":55.058081776,"data":"--------------------\n"}
+,{"stream_name":"stderr","time":55.058084987,"data":"For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.\n"}
+,{"stream_name":"stderr","time":59.718253622,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":59.718297702,"data":"  File \"/kaggle/src/script.py\", line 31, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":59.718304912,"data":"    subprocess.run(\n"}
+,{"stream_name":"stderr","time":59.718309812,"data":"  File \"/usr/local/lib/python3.12/subprocess.py\", line 571, in run\n"}
+,{"stream_name":"stderr","time":59.721725303,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":59.721736143,"data":"subprocess.CalledProcessError: Command '('/usr/local/bin/python', '-m', 'benchmarks.stream1_prefix_optimization')' returned non-zero exit status 1.\n"}
+,{"stream_name":"stderr","time":63.842002567,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":66.407790702,"data":"[NbConvertApp] Writing 278737 bytes to __results__.html\n"}
+]

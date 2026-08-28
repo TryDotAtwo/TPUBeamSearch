@@ -83,6 +83,13 @@ def prefix_call(states, weights, architecture, config):
     )
 
 
+def make_prefix_benchmark_call(architecture, config):
+    """JIT states and weights as runtime arguments; never embed model weights."""
+    return jax.jit(
+        lambda states, weights: prefix_call(states, weights, architecture, config)
+    )
+
+
 def key(config):
     bm, bk, bn, buffers, lookahead = config
     return f"bm{bm}_bk{bk}_bn{bn}_buf{buffers}_look{int(lookahead)}"
@@ -128,19 +135,18 @@ def main():
         generators, SCREEN_BATCH, beam.STATE_LEN, beam.STATE_STORAGE_LEN
     )
     baseline_config = (256, 128, 512, 0, False)
-    baseline_output = jax.jit(
-        lambda states: prefix_call(states, weights, architecture, baseline_config)
-    )(screen_states)
+    baseline_call = make_prefix_benchmark_call(architecture, baseline_config)
+    baseline_output = baseline_call(screen_states, weights)
     baseline_output.block_until_ready()
 
     accepted = []
     for config in candidate_configs():
         name = key(config)
-        compiled = jax.jit(
-            lambda states, config=config: prefix_call(states, weights, architecture, config)
-        )
+        compiled = make_prefix_benchmark_call(architecture, config)
         try:
-            output, first, steady, samples = measure(lambda: compiled(screen_states))
+            output, first, steady, samples = measure(
+                lambda: compiled(screen_states, weights)
+            )
             max_error = float(jnp.max(jnp.abs(
                 output.astype(jnp.float32) - baseline_output.astype(jnp.float32)
             )))
@@ -183,10 +189,10 @@ def main():
             states = make_reachable_states(
                 generators, batch, beam.STATE_LEN, beam.STATE_STORAGE_LEN
             )
-            compiled = jax.jit(
-                lambda states, config=config: prefix_call(states, weights, architecture, config)
+            compiled = make_prefix_benchmark_call(architecture, config)
+            output, first, steady, samples = measure(
+                lambda: compiled(states, weights)
             )
-            output, first, steady, samples = measure(lambda: compiled(states))
             entry = {
                 "batch": batch,
                 "compile_and_first_seconds": first,

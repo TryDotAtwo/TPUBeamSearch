@@ -1,4 +1,9 @@
-from benchmarks.stream1_prefix_optimization import candidate_configs
+import inspect
+
+from benchmarks.stream1_prefix_optimization import (
+    candidate_configs,
+    make_prefix_benchmark_call,
+)
 
 
 def test_prefix_optimization_candidates_include_baseline_and_pipeline_controls():
@@ -11,3 +16,10 @@ def test_prefix_optimization_candidates_include_baseline_and_pipeline_controls()
     assert all(bk % 128 == 0 for _, bk, _, _, _ in candidates)
     assert all(bn % 128 == 0 for _, _, bn, _, _ in candidates)
     assert len(candidates) == len(set(candidates))
+
+
+def test_prefix_benchmark_jit_keeps_weights_as_runtime_argument():
+    compiled = make_prefix_benchmark_call(object(), (256, 128, 512, 0, False))
+    parameters = tuple(inspect.signature(compiled).parameters)
+
+    assert parameters == ("states", "weights")
