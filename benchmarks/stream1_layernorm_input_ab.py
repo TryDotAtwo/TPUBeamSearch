@@ -76,6 +76,17 @@ def measure(call):
     return compile_and_first, statistics.median(samples), samples
 
 
+def attempt_measure(call):
+    try:
+        return measure(call), None
+    except Exception as error:
+        return None, {
+            "status": "rejected_compile_error",
+            "error_type": type(error).__name__,
+            "error": str(error),
+        }
+
+
 def main():
     dataset = find_dataset()
     sys.path.insert(0, str(dataset))
@@ -123,6 +134,8 @@ def main():
         },
         "candidates": [],
     }
+    path = Path("/kaggle/working/stream1_layernorm_input_ab.json")
+    path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     for encoding, bm, bk_dense, bn_dense in candidate_configs():
         compiled = jax.jit(
             lambda x: pallas_layernorm_input_prefix(
@@ -140,7 +153,20 @@ def main():
                 bn_dense=bn_dense,
             )
         )
-        first, candidate_median, candidate_samples = measure(lambda: compiled(states))
+        measured, rejection = attempt_measure(lambda: compiled(states))
+        if rejection is not None:
+            entry = {
+                "encoding": encoding.value,
+                "bm": bm,
+                "bk_dense": bk_dense,
+                "bn_dense": bn_dense,
+                **rejection,
+            }
+            result["candidates"].append(entry)
+            print("CANDIDATE", json.dumps(entry), flush=True)
+            path.write_text(json.dumps(result, indent=2), encoding="utf-8")
+            continue
+        first, candidate_median, candidate_samples = measured
         output = compiled(states)
         absolute = jnp.abs(
             output.astype(jnp.float32) - oracle_output.astype(jnp.float32)
@@ -150,6 +176,7 @@ def main():
             "bm": bm,
             "bk_dense": bk_dense,
             "bn_dense": bn_dense,
+            "status": "valid",
             "compile_and_first_seconds": first,
             "steady_seconds_median": candidate_median,
             "states_per_second": LOCAL_BATCH / candidate_median,
@@ -161,8 +188,8 @@ def main():
         }
         result["candidates"].append(entry)
         print("CANDIDATE", json.dumps(entry), flush=True)
+        path.write_text(json.dumps(result, indent=2), encoding="utf-8")
 
-    path = Path("/kaggle/working/stream1_layernorm_input_ab.json")
     path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("RESULT_PATH", path, flush=True)
 
