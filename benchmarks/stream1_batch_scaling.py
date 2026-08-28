@@ -22,6 +22,7 @@ from tpu_beam_search.stream1_inference import (
     stream1_pallas_inference,
     stream1_weights_from_pytorch_state_dict,
 )
+from tpu_beam_search.sharding import make_sharded_inference
 
 
 BATCHES = (64, 128, 256, 512, 1024, 2048, 4096)
@@ -175,8 +176,6 @@ def main():
         weights_replicated = jax.tree.map(
             lambda value: jax.device_put(value, replicated), weights
         )
-        weight_specs = jax.tree.map(lambda _: P(), weights)
-
         def local_infer(local_states, local_weights):
             return stream1_pallas_inference(
                 local_states,
@@ -185,13 +184,10 @@ def main():
                 **inference_options(best_bm),
             )
 
-        mapped = jax.jit(
-            jax.shard_map(
-                local_infer,
-                mesh=mesh,
-                in_specs=(P("core", None), weight_specs),
-                out_specs=P("core", None),
-            )
+        mapped = make_sharded_inference(
+            local_infer,
+            mesh=mesh,
+            weights_example=weights,
         )
         key = f"cores{core_count}"
         try:
