@@ -1,0 +1,149 @@
+{
+  "environment": {
+    "jax": "0.10.2",
+    "backend": "tpu",
+    "devices": [
+      "TPU_0(process=0,(0,0,0,0))",
+      "TPU_1(process=0,(1,0,0,0))",
+      "TPU_2(process=0,(0,1,0,0))",
+      "TPU_3(process=0,(1,1,0,0))",
+      "TPU_4(process=0,(0,2,0,0))",
+      "TPU_5(process=0,(1,2,0,0))",
+      "TPU_6(process=0,(0,3,0,0))",
+      "TPU_7(process=0,(1,3,0,0))"
+    ]
+  },
+  "contract": {
+    "checkpoint": "q555_2k_BEST.pt",
+    "local_batch": 16384,
+    "state_len": 150,
+    "num_classes": 150,
+    "embed_dim": 24,
+    "hidden": 1024,
+    "dtype": "bfloat16",
+    "warmups": 5,
+    "repeats": 15
+  },
+  "original_jax": {
+    "compile_and_first_seconds": 5.819431968999993,
+    "steady_seconds_median": 0.0070208490000140955,
+    "states_per_second": 2333620.905387241,
+    "samples": [
+      0.007128779999959534,
+      0.007037119000017356,
+      0.0070208490000140955,
+      0.007030158000020492,
+      0.00703835000001618,
+      0.007000968999989254,
+      0.007002518999968288,
+      0.007013110000002598,
+      0.007027509000010923,
+      0.0070058489999951234,
+      0.007013019000055465,
+      0.0070386489999805235,
+      0.007035519999988082,
+      0.007006890000013755,
+      0.007000458999982584
+    ]
+  },
+  "candidates": [
+    {
+      "encoding": "embedding_gather",
+      "bm": 256,
+      "bk_dense": 256,
+      "bn_dense": 512,
+      "status": "valid",
+      "compile_and_first_seconds": 5.874307643999998,
+      "steady_seconds_median": 0.00836871799998562,
+      "states_per_second": 1957767.0080445001,
+      "speedup_vs_original": 0.8389396081963999,
+      "max_abs_vs_original": 0.0078125,
+      "mean_abs_vs_original": 0.00011573731899261475,
+      "finite": true,
+      "samples": [
+        0.008351657999980944,
+        0.0083025799999632,
+        0.008317689999955746,
+        0.008386459000007562,
+        0.008337820000008378,
+        0.008470998999996482,
+        0.00844923900001504,
+        0.008448289000000386,
+        0.008458829999995032,
+        0.008490108000046348,
+        0.0084393100000284,
+        0.00836554900001829,
+        0.00836871799998562,
+        0.00828876000002765,
+        0.008320768999965367
+      ]
+    },
+    {
+      "encoding": "embedding_gather",
+      "bm": 1024,
+      "bk_dense": 256,
+      "bn_dense": 512,
+      "status": "rejected_compile_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_layer_norm.1 = bf16[16384,1024]{1,0:T(8,128)(2,1)S(1)} custom-call(%stream1_dense_linear.1, %copy-done.3, %copy-done.2), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[16384,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_layer_norm/pallas_call\" stack_frame_id=20}. Scoped allocation with size 35.80M and limit 16.00M exceeded scoped vmem limit by 19.80M. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "encoding": "virtual_one_hot_mxu",
+      "bm": 256,
+      "bk_dense": 256,
+      "bn_dense": 512,
+      "status": "valid",
+      "compile_and_first_seconds": 1.528842410999971,
+      "steady_seconds_median": 0.011166458999980478,
+      "states_per_second": 1467251.1670914337,
+      "speedup_vs_original": 0.6287444390407353,
+      "max_abs_vs_original": 0.0078125,
+      "mean_abs_vs_original": 0.00011573731899261475,
+      "finite": true,
+      "samples": [
+        0.011182069000028605,
+        0.01112363900000446,
+        0.011139168999989124,
+        0.011111228999993727,
+        0.011044088999994983,
+        0.01107720900000686,
+        0.011161769000011645,
+        0.01117588900001465,
+        0.011248079000040434,
+        0.011247969000010016,
+        0.01118026900002178,
+        0.01111306899997544,
+        0.011237778999998227,
+        0.011276178999992226,
+        0.011166458999980478
+      ]
+    },
+    {
+      "encoding": "virtual_one_hot_mxu",
+      "bm": 1024,
+      "bk_dense": 256,
+      "bn_dense": 512,
+      "status": "rejected_compile_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_layer_norm.1 = bf16[16384,1024]{1,0:T(8,128)(2,1)S(1)} custom-call(%stream1_dense_linear.1, %copy-done.3, %copy-done.2), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[16384,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_layer_norm/pallas_call\" stack_frame_id=25}. Scoped allocation with size 35.80M and limit 16.00M exceeded scoped vmem limit by 19.80M. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "encoding": "fused_virtual_one_hot",
+      "bm": 256,
+      "bk_dense": 128,
+      "bn_dense": 512,
+      "status": "rejected_compile_error",
+      "error_type": "MosaicError",
+      "error": "INTERNAL: Mosaic failed to compile TPU kernel with MLIR module name `<no name>` HLO name `stream1_folded_input_linear.1`: Not implemented: Multiple source vregs along gather dimension\n\nThe MLIR operation involved:\n  %436 = \"tpu.dynamic_gather\"(%391, %435) <{dimensions = array<i32: 1>}> {in_layout = [#mosaic_tc.vpad<\"32,{0,0},(8,128)\">, #mosaic_tc.vpad<\"32,{0,0},(8,128)\">], out_layout = [#mosaic_tc.vpad<\"32,{0,0},(8,128)\">]} : (vector<256x150xi32>, vector<256x128xi32>) -> vector<256x128xi32>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"
+    },
+    {
+      "encoding": "fused_virtual_one_hot",
+      "bm": 1024,
+      "bk_dense": 128,
+      "bn_dense": 512,
+      "status": "rejected_compile_error",
+      "error_type": "MosaicError",
+      "error": "INTERNAL: Mosaic failed to compile TPU kernel with MLIR module name `<no name>` HLO name `stream1_folded_input_linear.1`: Not implemented: Multiple source vregs along gather dimension\n\nThe MLIR operation involved:\n  %1444 = \"tpu.dynamic_gather\"(%1303, %1443) <{dimensions = array<i32: 1>}> {in_layout = [#mosaic_tc.vpad<\"32,{0,0},(8,128)\">, #mosaic_tc.vpad<\"32,{0,0},(8,128)\">], out_layout = [#mosaic_tc.vpad<\"32,{0,0},(8,128)\">]} : (vector<1024x150xi32>, vector<1024x128xi32>) -> vector<1024x128xi32>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"
+    }
+  ]
+}
