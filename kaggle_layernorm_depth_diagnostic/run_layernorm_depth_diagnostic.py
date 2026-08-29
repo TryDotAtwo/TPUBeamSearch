@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "TO_BE_PINNED"
+COMMIT_SHA = "407ac45839314866c1404ced97c6eec91cee615f"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch")
 
