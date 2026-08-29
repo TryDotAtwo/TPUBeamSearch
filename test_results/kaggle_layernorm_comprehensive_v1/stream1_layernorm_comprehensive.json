@@ -1,0 +1,1037 @@
+{
+  "environment": {
+    "jax": "0.10.2",
+    "backend": "tpu",
+    "devices": [
+      "TPU_0(process=0,(0,0,0,0))",
+      "TPU_1(process=0,(1,0,0,0))",
+      "TPU_2(process=0,(0,1,0,0))",
+      "TPU_3(process=0,(1,1,0,0))",
+      "TPU_4(process=0,(0,2,0,0))",
+      "TPU_5(process=0,(1,2,0,0))",
+      "TPU_6(process=0,(0,3,0,0))",
+      "TPU_7(process=0,(1,3,0,0))"
+    ]
+  },
+  "contract": {
+    "checkpoint": "q555_2k_BEST.pt",
+    "parameters": 24757807,
+    "state_len": 150,
+    "num_classes": 150,
+    "embed_dim": 24,
+    "hidden": 1024,
+    "residual_count": 10,
+    "move_count": 30,
+    "dtype": "bfloat16",
+    "screen_batch": 4096,
+    "promotion_batches": [
+      16384,
+      32768
+    ],
+    "full_batch": 16384
+  },
+  "screening": [
+    {
+      "id": "per_layer-bm128-bk128-bn256-statsbf16",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 1.3573851570000102,
+      "steady_seconds_median": 0.0012337000000002263,
+      "states_per_second": 3320094.0260997396,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005440416862256825,
+        "exact_fraction": 0.7216546535491943,
+        "valid": true
+      },
+      "samples": [
+        0.001247739999996611,
+        0.0012337000000002263,
+        0.0012469800000189935,
+        0.0012165800000047966,
+        0.0012095600000066042
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk128-bn256-statsbf16",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.2204974029999676,
+      "steady_seconds_median": 0.001130330000023605,
+      "states_per_second": 3623720.506325111,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005440416862256825,
+        "exact_fraction": 0.7216546535491943,
+        "valid": true
+      },
+      "samples": [
+        0.001200380000000223,
+        0.0011489999999980682,
+        0.001130330000023605,
+        0.0011237590000519049,
+        0.0011203310000382771
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk128-bn256-statsfp32",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.1260501329999784,
+      "steady_seconds_median": 0.0010406899999679808,
+      "states_per_second": 3935850.2533184933,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.0012943425681442022,
+        "exact_fraction": 0.550837516784668,
+        "valid": true
+      },
+      "samples": [
+        0.0010499200000140263,
+        0.0010406899999679808,
+        0.0010372500000244145,
+        0.0010478899999952773,
+        0.0010374500000125408
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk128-bn256-statsfp32",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.6242673260000515,
+      "steady_seconds_median": 0.0009852000000023509,
+      "states_per_second": 4157531.4656823245,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.0012943425681442022,
+        "exact_fraction": 0.550837516784668,
+        "valid": true
+      },
+      "samples": [
+        0.0009861710000222956,
+        0.0009852000000023509,
+        0.0009831799999915347,
+        0.0009872399999721893,
+        0.0009817800000178067
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk128-bn512-statsbf16",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 1.3462545840000075,
+      "steady_seconds_median": 0.0010667899999816655,
+      "states_per_second": 3839556.0513975536,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005440416862256825,
+        "exact_fraction": 0.7216546535491943,
+        "valid": true
+      },
+      "samples": [
+        0.0010667899999816655,
+        0.0010684800000149153,
+        0.001103049999983341,
+        0.0010422500000117907,
+        0.0010379000000284577
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk128-bn512-statsbf16",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.2459186250000016,
+      "steady_seconds_median": 0.0010700100000349266,
+      "states_per_second": 3828001.6073366613,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005440416862256825,
+        "exact_fraction": 0.7216546535491943,
+        "valid": true
+      },
+      "samples": [
+        0.0011097499999550564,
+        0.0011017399999673216,
+        0.0010700100000349266,
+        0.0010631899999680172,
+        0.0010259399999767993
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk128-bn512-statsfp32",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.027680920000023,
+      "steady_seconds_median": 0.0009124610000412758,
+      "states_per_second": 4488958.97996157,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.0012943425681442022,
+        "exact_fraction": 0.550837516784668,
+        "valid": true
+      },
+      "samples": [
+        0.000977009999985512,
+        0.0009392499999876236,
+        0.0009124610000412758,
+        0.0008941000000390886,
+        0.0008891690000041308
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk128-bn512-statsfp32",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.652334537999991,
+      "steady_seconds_median": 0.0008386509999809277,
+      "states_per_second": 4884034.002336073,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.0012943425681442022,
+        "exact_fraction": 0.550837516784668,
+        "valid": true
+      },
+      "samples": [
+        0.0011965310000050522,
+        0.0008867089999853306,
+        0.0008386509999809277,
+        0.0008287100000075043,
+        0.0008242300000347313
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk256-bn256-statsbf16",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 1.3100765110000339,
+      "steady_seconds_median": 0.001017300000000887,
+      "states_per_second": 4026344.244565447,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005441185785457492,
+        "exact_fraction": 0.7216291427612305,
+        "valid": true
+      },
+      "samples": [
+        0.0010384490000205915,
+        0.0010119010000266826,
+        0.001017300000000887,
+        0.0010018300000069758,
+        0.0010219299999789655
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk256-bn256-statsbf16",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.2862290479999956,
+      "steady_seconds_median": 0.0009651299999973162,
+      "states_per_second": 4243987.856569986,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005441185785457492,
+        "exact_fraction": 0.7216291427612305,
+        "valid": true
+      },
+      "samples": [
+        0.0010044900000139023,
+        0.0009712800000443167,
+        0.0009651299999973162,
+        0.0009620800000220697,
+        0.0009538600000382758
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk256-bn256-statsfp32",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 0.9847810469999558,
+      "steady_seconds_median": 0.0008719300000166186,
+      "states_per_second": 4697624.8092414895,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.001294357585720718,
+        "exact_fraction": 0.5508308410644531,
+        "valid": true
+      },
+      "samples": [
+        0.0009304499999984728,
+        0.0008913800000414085,
+        0.0008719300000166186,
+        0.0008623900000088724,
+        0.0008666200000106983
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk256-bn256-statsfp32",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.6789016300000412,
+      "steady_seconds_median": 0.0008315399999787587,
+      "states_per_second": 4925800.322419403,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.001294357585720718,
+        "exact_fraction": 0.5508308410644531,
+        "valid": true
+      },
+      "samples": [
+        0.0008607500000152868,
+        0.0008286400000088179,
+        0.0008500600000047598,
+        0.0008287699999982578,
+        0.0008315399999787587
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk256-bn512-statsbf16",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 1.2927078000000165,
+      "steady_seconds_median": 0.0009520499999666754,
+      "states_per_second": 4302295.04767961,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005441185785457492,
+        "exact_fraction": 0.7216291427612305,
+        "valid": true
+      },
+      "samples": [
+        0.0009702899999979309,
+        0.0009520499999666754,
+        0.0009560799999803749,
+        0.000948260000029677,
+        0.0009419300000104158
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk256-bn512-statsbf16",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.2845822180000255,
+      "steady_seconds_median": 0.0009046799999623545,
+      "states_per_second": 4527567.758953932,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005441185785457492,
+        "exact_fraction": 0.7216291427612305,
+        "valid": true
+      },
+      "samples": [
+        0.0009428800000250703,
+        0.0009046799999623545,
+        0.000882120000028408,
+        0.0008825199999478173,
+        0.0009133199999951103
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk256-bn512-statsfp32",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.016771019000032,
+      "steady_seconds_median": 0.0008108199999696808,
+      "states_per_second": 5051676.081193314,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.001294357585720718,
+        "exact_fraction": 0.5508308410644531,
+        "valid": true
+      },
+      "samples": [
+        0.0008413099999984297,
+        0.0008108199999696808,
+        0.0007996400000251924,
+        0.0008184309999705874,
+        0.0008023909999792522
+      ]
+    },
+    {
+      "id": "per_block-bm128-bk256-bn512-statsfp32",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.658940259000019,
+      "steady_seconds_median": 0.0007735000000366199,
+      "states_per_second": 5295410.471630359,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.001294357585720718,
+        "exact_fraction": 0.5508308410644531,
+        "valid": true
+      },
+      "samples": [
+        0.0008422599999562408,
+        0.0007812199999648328,
+        0.0007735000000366199,
+        0.0007685599999831538,
+        0.0007707899999900292
+      ]
+    },
+    {
+      "id": "per_layer-bm256-bk128-bn256-statsbf16",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.6261704940000072,
+      "steady_seconds_median": 0.001037090000011176,
+      "states_per_second": 3949512.5784221813,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005440416862256825,
+        "exact_fraction": 0.7216546535491943,
+        "valid": true
+      },
+      "samples": [
+        0.0010543900000357098,
+        0.001041439999994509,
+        0.001037090000011176,
+        0.001003529999991315,
+        0.0009988900000053036
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk128-bn256-statsbf16",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.06M and limit 16.00M exceeded scoped vmem limit by 64.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "id": "per_layer-bm256-bk128-bn256-statsfp32",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.8325590929999862,
+      "steady_seconds_median": 0.0009079999999812571,
+      "states_per_second": 4511013.215952147,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.0012943425681442022,
+        "exact_fraction": 0.550837516784668,
+        "valid": true
+      },
+      "samples": [
+        0.0009160700000165889,
+        0.0009156899999993584,
+        0.0009074399999917659,
+        0.00090210999996998,
+        0.0009079999999812571
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk128-bn256-statsfp32",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 128,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.11M and limit 16.00M exceeded scoped vmem limit by 116.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "id": "per_layer-bm256-bk128-bn512-statsbf16",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.739265082999964,
+      "steady_seconds_median": 0.0009452700000451841,
+      "states_per_second": 4333153.49032997,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005440416862256825,
+        "exact_fraction": 0.7216546535491943,
+        "valid": true
+      },
+      "samples": [
+        0.0009857800000077077,
+        0.0009452700000451841,
+        0.0009379600000443133,
+        0.0009407699999997021,
+        0.0009478700000045137
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk128-bn512-statsbf16",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.31M and limit 16.00M exceeded scoped vmem limit by 320.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "id": "per_layer-bm256-bk128-bn512-statsfp32",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.9151871579999806,
+      "steady_seconds_median": 0.0008284499999717809,
+      "states_per_second": 4944172.853086511,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.0012943425681442022,
+        "exact_fraction": 0.550837516784668,
+        "valid": true
+      },
+      "samples": [
+        0.0008876199999576784,
+        0.0008284499999717809,
+        0.0008296900000459573,
+        0.0008204400000408896,
+        0.000827969999988909
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk128-bn512-statsfp32",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 128,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.36M and limit 16.00M exceeded scoped vmem limit by 372.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "id": "per_layer-bm256-bk256-bn256-statsbf16",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.65584933599996,
+      "steady_seconds_median": 0.0009306000000037784,
+      "states_per_second": 4401461.422720147,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005441185785457492,
+        "exact_fraction": 0.7216291427612305,
+        "valid": true
+      },
+      "samples": [
+        0.0009629610000274624,
+        0.0009688199999686731,
+        0.0009306000000037784,
+        0.0009195599999998194,
+        0.0009278800000060983
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk256-bn256-statsbf16",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": false,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.06M and limit 16.00M exceeded scoped vmem limit by 64.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "id": "per_layer-bm256-bk256-bn256-statsfp32",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.9402517010000224,
+      "steady_seconds_median": 0.0008154500000046028,
+      "states_per_second": 5022993.439176994,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.001294357585720718,
+        "exact_fraction": 0.5508308410644531,
+        "valid": true
+      },
+      "samples": [
+        0.0008581300000400915,
+        0.0008101499999497719,
+        0.0007931799999596478,
+        0.0008154500000046028,
+        0.0008770299999696363
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk256-bn256-statsfp32",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 256,
+      "bn": 256,
+      "fp32_statistics": true,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.11M and limit 16.00M exceeded scoped vmem limit by 116.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "id": "per_layer-bm256-bk256-bn512-statsbf16",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "valid",
+      "compile_and_first_seconds": 2.6950728589999926,
+      "steady_seconds_median": 0.0009058100000061131,
+      "states_per_second": 4521919.6078342665,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.1875,
+        "mean_abs": 0.0005441185785457492,
+        "exact_fraction": 0.7216291427612305,
+        "valid": true
+      },
+      "samples": [
+        0.0009670499999856474,
+        0.0008895099999790546,
+        0.0008874600000012833,
+        0.0009058100000061131,
+        0.0009392999999704443
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk256-bn512-statsbf16",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": false,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.31M and limit 16.00M exceeded scoped vmem limit by 320.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    },
+    {
+      "id": "per_layer-bm256-bk256-bn512-statsfp32",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "valid",
+      "compile_and_first_seconds": 1.9636730830000033,
+      "steady_seconds_median": 0.0007735899999943285,
+      "states_per_second": 5294794.400173256,
+      "correctness": {
+        "finite": true,
+        "max_abs": 0.125,
+        "mean_abs": 0.001294357585720718,
+        "exact_fraction": 0.5508308410644531,
+        "valid": true
+      },
+      "samples": [
+        0.0008662700000172663,
+        0.0008207600000105231,
+        0.0007735899999943285,
+        0.0007637200000090161,
+        0.0007490400000165209
+      ]
+    },
+    {
+      "id": "per_block-bm256-bk256-bn512-statsfp32",
+      "fusion": "per_block",
+      "bm": 256,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "rejected_error",
+      "error_type": "JaxRuntimeError",
+      "error": "RESOURCE_EXHAUSTED: E1001: CompileTimeScopedVmemOom:\nRan out of memory in memory space vmem while allocating on stack for %stream1_fused_residual_block.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %constant.9, %constant.10, %constant.11, %constant.12, /*index=5*/%constant.13, %constant.14, %constant.15, %constant.16), custom_call_target=\"tpu_custom_call\", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name=\"jit(<lambda>)/stream1_fused_residual_block/pallas_call\" stack_frame_id=25}. Scoped allocation with size 16.36M and limit 16.00M exceeded scoped vmem limit by 372.0K. It should not be possible to run out of scoped vmem - \nSee https://openxla.org/xla/errors/error_1001 for more details."
+    }
+  ],
+  "promoted": [
+    {
+      "id": "per_block-bm128-bk256-bn512-statsfp32",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "batches": [
+        {
+          "batch": 16384,
+          "status": "valid",
+          "compile_and_first_seconds": 1.6685715360000017,
+          "steady_seconds_median": 0.0022661110000399276,
+          "states_per_second": 7230007.70911545,
+          "correctness": {
+            "finite": true,
+            "max_abs": 0.125,
+            "mean_abs": 0.0012962666805833578,
+            "exact_fraction": 0.5505297780036926,
+            "valid": true
+          },
+          "samples": [
+            0.002265599999986989,
+            0.0022636099999999715,
+            0.0022942499999771826,
+            0.0022765299999605304,
+            0.0022661110000399276,
+            0.002260859999978493,
+            0.002293010000016693
+          ]
+        },
+        {
+          "batch": 32768,
+          "status": "valid",
+          "compile_and_first_seconds": 1.645768739999994,
+          "steady_seconds_median": 0.0043804010000485505,
+          "states_per_second": 7480593.671592353,
+          "correctness": {
+            "finite": true,
+            "max_abs": 0.125,
+            "mean_abs": 0.0012927191564813256,
+            "exact_fraction": 0.5510355234146118,
+            "valid": true
+          },
+          "samples": [
+            0.004389539999920089,
+            0.004401950000101351,
+            0.004369330000031368,
+            0.0043804010000485505,
+            0.004385099000046466,
+            0.004351500999973723,
+            0.004370250000079068
+          ]
+        }
+      ]
+    },
+    {
+      "id": "per_layer-bm256-bk256-bn512-statsfp32",
+      "fusion": "per_layer",
+      "bm": 256,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "batches": [
+        {
+          "batch": 16384,
+          "status": "valid",
+          "compile_and_first_seconds": 1.8130398370000194,
+          "steady_seconds_median": 0.002194410000015523,
+          "states_per_second": 7466243.773900092,
+          "correctness": {
+            "finite": true,
+            "max_abs": 0.125,
+            "mean_abs": 0.0012962666805833578,
+            "exact_fraction": 0.5505297780036926,
+            "valid": true
+          },
+          "samples": [
+            0.0022389800000155446,
+            0.002265550000061012,
+            0.0022132199999305158,
+            0.002190920000089136,
+            0.002194410000015523,
+            0.002189540000017587,
+            0.0021601800000325966
+          ]
+        },
+        {
+          "batch": 32768,
+          "status": "valid",
+          "compile_and_first_seconds": 1.8581400180000855,
+          "steady_seconds_median": 0.004080939999994371,
+          "states_per_second": 8029522.609997991,
+          "correctness": {
+            "finite": true,
+            "max_abs": 0.125,
+            "mean_abs": 0.0012927191564813256,
+            "exact_fraction": 0.5510355234146118,
+            "valid": true
+          },
+          "samples": [
+            0.004089851000003364,
+            0.004072250000035638,
+            0.00407011999993756,
+            0.004080939999994371,
+            0.004112159999976939,
+            0.004090760000053706,
+            0.0040805700000419165
+          ]
+        }
+      ]
+    },
+    {
+      "id": "per_layer-bm128-bk256-bn512-statsfp32",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "batches": [
+        {
+          "batch": 16384,
+          "status": "valid",
+          "compile_and_first_seconds": 0.9854105449999224,
+          "steady_seconds_median": 0.002409411000030559,
+          "states_per_second": 6800002.158117564,
+          "correctness": {
+            "finite": true,
+            "max_abs": 0.125,
+            "mean_abs": 0.0012962666805833578,
+            "exact_fraction": 0.5505297780036926,
+            "valid": true
+          },
+          "samples": [
+            0.002433980000091651,
+            0.002418190000071263,
+            0.0023973600000317674,
+            0.002402009999968868,
+            0.002409411000030559,
+            0.0024124099999198734,
+            0.002394219999928282
+          ]
+        },
+        {
+          "batch": 32768,
+          "status": "valid",
+          "compile_and_first_seconds": 1.021642767000003,
+          "steady_seconds_median": 0.004653670000038801,
+          "states_per_second": 7041324.374037435,
+          "correctness": {
+            "finite": true,
+            "max_abs": 0.125,
+            "mean_abs": 0.0012927191564813256,
+            "exact_fraction": 0.5510355234146118,
+            "valid": true
+          },
+          "samples": [
+            0.0047642299999779425,
+            0.004661970000029214,
+            0.004653670000038801,
+            0.00455353000006653,
+            0.00464623000004849,
+            0.0046713110000382585,
+            0.004591920000052596
+          ]
+        }
+      ]
+    }
+  ],
+  "full_model": [
+    {
+      "id": "original_jax",
+      "status": "valid",
+      "compile_and_first_seconds": 7.50205973300001,
+      "steady_seconds_median": 0.011824059999980818,
+      "states_per_second": 1385649.2609160119,
+      "samples": [
+        0.011863910000101896,
+        0.01189626000007138,
+        0.011914150999928097,
+        0.011824059999980818,
+        0.011765709999963292,
+        0.011731151000049067,
+        0.011756479999917246,
+        0.01181858999996166,
+        0.011905029999979888
+      ]
+    },
+    {
+      "id": "full-separate",
+      "fusion": "separate",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "correctness_failed",
+      "compile_and_first_seconds": 8.151001720000068,
+      "steady_seconds_median": 0.028390790999992532,
+      "states_per_second": 577088.535504499,
+      "speedup_vs_original": 0.4164751873233799,
+      "correctness": {
+        "finite": true,
+        "max_abs": 1.125,
+        "mean_abs": 0.1413409560918808,
+        "exact_fraction": 0.14399617910385132,
+        "argmax_agreement": 0.7369384765625,
+        "valid": false
+      },
+      "samples": [
+        0.02849794100006875,
+        0.028385680000042157,
+        0.028357170999925074,
+        0.028430201000105626,
+        0.028390790999992532,
+        0.02846329000010428,
+        0.028454731000010725,
+        0.02834831099994517,
+        0.02834559099994749
+      ]
+    },
+    {
+      "id": "full-per_layer",
+      "fusion": "per_layer",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "correctness_failed",
+      "compile_and_first_seconds": 8.139374100000055,
+      "steady_seconds_median": 0.02995092100002239,
+      "states_per_second": 547028.2533210833,
+      "speedup_vs_original": 0.39478118218708463,
+      "correctness": {
+        "finite": true,
+        "max_abs": 1.125,
+        "mean_abs": 0.1413409560918808,
+        "exact_fraction": 0.14399617910385132,
+        "argmax_agreement": 0.7369384765625,
+        "valid": false
+      },
+      "samples": [
+        0.029977482999925087,
+        0.030084929999929955,
+        0.02994881000006444,
+        0.02995092100002239,
+        0.02992199100003745,
+        0.030021751000049335,
+        0.029809290000002875,
+        0.02994386199998189,
+        0.03002019999996719
+      ]
+    },
+    {
+      "id": "full-per_block",
+      "fusion": "per_block",
+      "bm": 128,
+      "bk": 256,
+      "bn": 512,
+      "fp32_statistics": true,
+      "status": "correctness_failed",
+      "compile_and_first_seconds": 7.987234935999936,
+      "steady_seconds_median": 0.02899376100003792,
+      "states_per_second": 565087.0889078024,
+      "speedup_vs_original": 0.4078139431433319,
+      "correctness": {
+        "finite": true,
+        "max_abs": 1.125,
+        "mean_abs": 0.1413409560918808,
+        "exact_fraction": 0.14399617910385132,
+        "argmax_agreement": 0.7369384765625,
+        "valid": false
+      },
+      "samples": [
+        0.029003940000052353,
+        0.028877710999950068,
+        0.028970740999966438,
+        0.02899376100003792,
+        0.02900565100003405,
+        0.029037260999984937,
+        0.02903816100001677,
+        0.02892570100004832,
+        0.028870101000052273
+      ]
+    }
+  ],
+  "scaling": {
+    "status": "skipped_no_correct_pallas_full_model",
+    "reason": "no Pallas full-model candidate passed the 99% argmax gate"
+  }
+}

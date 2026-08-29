@@ -66,3 +66,18 @@ not silently turn into architecture assumptions.
    candidate passes the numerical and argmax gates.
 5. Atomically checkpoint JSON after every candidate; compile/VMEM failures are
    recorded and do not terminate the remaining sweep.
+
+## Comprehensive run result: 2026-08-29
+
+- 24/32 block candidates passed; all eight rejections were one-kernel BM256
+  scoped-VMEM overflows (16.06-16.36 MiB requested versus 16.00 MiB).
+- One-kernel BM128/BK256/BN512 FP32 won batch-4096 screening at 5.295M
+  states/s, essentially tied with two-kernel BM256/BK256/BN512 FP32.
+- At batch 16,384 and 32,768, two-kernel BM256 won with 7.466M and 8.030M
+  states/s; one-kernel BM128 reached 7.230M and 7.481M.
+- Full-model JAX reached 1.386M states/s. Pallas separate/per-layer/per-block
+  reached 0.577M/0.547M/0.565M with identical 73.69% argmax agreement.
+- Because all fusion boundaries produce the same full-model error, arithmetic
+  drift accumulates through depth independently of the storage boundary.
+- Next diagnostic: per-depth Pallas-prefix/JAX-suffix hybrid curves for hidden
+  error and final-head ranking agreement.
