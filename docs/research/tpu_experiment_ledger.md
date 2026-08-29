@@ -81,3 +81,19 @@ not silently turn into architecture assumptions.
   drift accumulates through depth independently of the storage boundary.
 - Next diagnostic: per-depth Pallas-prefix/JAX-suffix hybrid curves for hidden
   error and final-head ranking agreement.
+
+## Per-depth diagnostic result: 2026-08-29
+
+- Per-block BM128 and per-layer BM256 produce identical tensors for a fixed
+  statistics mode; fusion boundary is not the source of ranking divergence.
+- Ranking agreement falls immediately after replacing only residual block 1:
+  73.01% with BF16 statistics and 72.14% with FP32 statistics.
+- The BF16 block-1 hidden differs by only 0.000545 mean absolute value and has
+  cosine 0.999991, but the unchanged JAX suffix amplifies it to 0.172 mean
+  output error.
+- No later block creates a unique ranking cliff. Block 3 has the largest
+  isolated error, while agreement remains roughly 72-74% across depths 1-10.
+- FP32 statistics reduce final mean output error at depth 10 from 0.17228 to
+  0.14048, but argmax is still only 73.93%.
+- Next attribution experiment must independently cross JAX/Pallas Dense and
+  JAX/Pallas LayerNorm for block 1, followed by the identical JAX suffix.
