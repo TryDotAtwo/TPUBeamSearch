@@ -758,8 +758,10 @@ def stream1_layernorm_pallas_inference(
     """Complete correctness-first Pallas LayerNorm ResMLP inference."""
 
     encoding = input_encoding or architecture.INPUT_ENCODING
-    if layernorm_fusion not in ("separate", "per_layer"):
-        raise ValueError("layernorm_fusion must be 'separate' or 'per_layer'")
+    if layernorm_fusion not in ("separate", "per_layer", "per_block"):
+        raise ValueError(
+            "layernorm_fusion must be 'separate', 'per_layer', or 'per_block'"
+        )
     hidden = pallas_layernorm_input_prefix(
         states,
         weights,
@@ -770,7 +772,7 @@ def stream1_layernorm_pallas_inference(
         bk=bk_input,
         bn=bn_input,
         fuse_dense_layer_norm=(
-            layernorm_fusion == "per_layer"
+            layernorm_fusion in ("per_layer", "per_block")
             and encoding is not InputEncodingKind.FUSED_VIRTUAL_ONE_HOT
         ),
         fp32_statistics=fp32_statistics,
@@ -778,6 +780,18 @@ def stream1_layernorm_pallas_inference(
     )
     for block in weights.residuals:
         skip = hidden
+        if layernorm_fusion == "per_block":
+            hidden = pallas_fused_residual_block(
+                hidden,
+                block,
+                bm=bm,
+                bk=bk_hidden,
+                bn=bn_hidden,
+                epsilon=architecture.LAYER_NORM_EPSILON,
+                fp32_statistics=fp32_statistics,
+                interpret=interpret,
+            )
+            continue
         if layernorm_fusion == "per_layer":
             branch = pallas_fused_dense_layer_norm(
                 hidden,

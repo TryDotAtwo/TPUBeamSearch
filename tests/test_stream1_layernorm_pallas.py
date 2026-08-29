@@ -330,6 +330,29 @@ def test_one_kernel_residual_block_matches_two_fused_layers():
     np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
 
 
+def test_complete_per_block_fusion_matches_per_layer_fusion():
+    states, weights, architecture = _prefix_fixture()
+    common = dict(
+        input_encoding=InputEncodingKind.EMBEDDING_GATHER,
+        fp32_statistics=False,
+        bm=2,
+        bk_input=8,
+        bn_input=8,
+        bk_hidden=8,
+        bn_hidden=8,
+        bk_output=8,
+        bn_output=8,
+        interpret=True,
+    )
+    expected = stream1_layernorm_pallas_inference(
+        states, weights, architecture, layernorm_fusion="per_layer", **common
+    )
+    actual = stream1_layernorm_pallas_inference(
+        states, weights, architecture, layernorm_fusion="per_block", **common
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
 @pytest.mark.parametrize("add_skip,relu", [(False, True), (True, True), (False, False)])
 def test_fused_dense_layer_norm_matches_fp32_reference(add_skip, relu):
     values = (jnp.arange(24, dtype=jnp.float32).reshape(3, 8) / 13).astype(
