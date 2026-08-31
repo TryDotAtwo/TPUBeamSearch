@@ -187,3 +187,29 @@ diagnostic constraints, not a new TPU result:
 Two project experts reviewed control/consumer questions. Their profile-only-
 accepted recommendation was rejected for diagnosis, while acceptance remains
 unchanged. No source, BN defaults, kernel launch or automation changed here.
+
+## Arithmetic follow-up implementation: 2026-08-31
+
+User approved the bounded [next bundle](2026-08-31-arithmetic-followup-bundle.md).
+The new experimental LN module preserves production defaults and separates
+legacy predicate controls, one-mask-at-a-time variants, promoted select
+operands, direct2D predicates, and the HLO-informed mixed arithmetic hypothesis.
+Full `late Dense + JAX LN` replaces only residual Dense operators; JAX
+embedding/input/head and a complete JAX/JAX builder control are retained.
+
+TDD covers expression-level widths130/1024, poisoned padded tails, predicate
+ranks, already-compiled timing, retained queue outputs, runtime model controls,
+strict promotion, profile eligibility separation, and partial failures.
+Initial missing-feature tests failed before implementation. Independent review
+found sequential singleton operator timing and an uncaught group-timing failure;
+both were corrected with regression tests (five expected failures before fix).
+Re-review found no remaining blocking issue. Final local regression:
+`python -m pytest -q` ->252 passed in55.70s. This remains CPU/interpreter evidence,
+not TPU compilation or acceleration.
+
+Production Dense/LN/block/full measurements now use matched compiled groups.
+Failed paired groups retain errors and unpaired diagnostic salvage, which is
+ineligible for promotion. Speedups stay null until exactness and comparable
+timing hold on both corpora for the same batch. Queued calls are explicitly
+not real128-chunk scans; profiles are diagnostic even for rejected candidates.
+Launch provenance and actual TPU results will be recorded separately.
