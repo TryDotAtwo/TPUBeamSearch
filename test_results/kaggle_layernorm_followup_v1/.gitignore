@@ -1,0 +1,3 @@
+# Oversized raw originals remain local; artifact_manifest mapping is lossless.
+/arithmetic_followup/hlo/full-16384-categorical_stress-captured_control.stablehlo.txt
+/arithmetic_followup/hlo/full-16384-legal_scrambles-captured_control.stablehlo.txt

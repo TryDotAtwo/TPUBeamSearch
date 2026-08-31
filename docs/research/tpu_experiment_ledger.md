@@ -223,3 +223,51 @@ reported RUNNING at06:22:37 MSK. Actual device/runtime and execution results
 are not yet verified. See [launch record](../../test_results/kaggle_layernorm_followup_v1/launch.md).
 Heartbeat `check-tpu-arithmetic-follow-up` checks every10minutes and removes
 itself after terminal analysis/publication. No previous kernel was restarted.
+
+## Arithmetic follow-up v1 completed: 2026-08-31
+
+The pending launch status above is superseded by the
+[completed report](../../test_results/kaggle_layernorm_followup_v1/report.md)
+at source `d58cf9fd8e86ec145c6bbc4f6c7f5aff489d6e21`.
+
+- Runtime remains JAX/jaxlib0.10.2, libtpu0.0.42.1, actual **TPU v5 lite**, eight
+  visible / one active. Checkpoint, original-model-source, puzzle and both
+  32768-input hashes match arithmetic v1. All258 output paths plus the full
+  Kaggle log were downloaded; two oversized identical StableHLO files are
+  published losslessly compressed, with raw-byte hashes in the manifest.
+- Of56 synthetic and36 checkpoint-operator cases,14+10 fail Mosaic predicate
+  relayout compilation, not VMEM allocation. All14 block,14 full,6 baseline
+  and2 same-suffix-control rows execute. All8 paired timing groups succeed.
+- Minimal BF16 rank1-predicate broadcast fails4/4 width/BM cases; direct2D
+  succeeds4/4 exactly. FP32 selection succeeds with either construction.
+  Removing aligned redundant masks and FP32-where also permit LN compilation.
+  These are measured compiler workarounds, not arithmetic equivalence.
+- Mixed LN improves standalone exact fractions from about48%/53% to90%/88%
+  (legal/stress), but no surviving LN operator is exact. The exact remaining
+  target arithmetic mechanism is unresolved; matching coarse HLO dtype
+  boundaries is insufficient.
+- Late Dense differs in20/31 of4,194,304 standalone elements, yet full late/JAX
+  Q exactness is32.87%/17.59%, argmin agreement92.65%/86.74%, topK overlap
+  75.06%/92.99%. Same-suffix JAX-only controls separate a real monolithic-versus-
+  partitioned-JAX effect; aggregate errors must not be subtracted to attribute it.
+- All six Pallas-containing full configurations fail exact Q on each16K corpus
+  and lose to original JAX in all12 paired rounds. Original11.494/11.504ms;
+  late/JAX16.068/16.088ms. Typed/captured/JAX-builder controls are exact. All
+  eligible speedups remain null: **no32K promotion or8TPU scaling**.
+- Ten device Chrome traces show20 replaced residual operators per forward.
+  FP32-where LN accounts for about14.36ms extra module time versus unmasked;
+  mixed masked LN for about8.83ms. Queued same-executable calls reduce observed
+  full-call cost by0.33–0.48ms, not those device penalties; they are not real
+  128-chunk scans. XPlane files are retained but not decoded.
+- Common embedding gather plus flattening reshape costs about5.47ms of the
+  original10.97ms device module. Next proposed target: exact-value flat gather,
+  isolated and inside full JAX with unchanged Q gate. No speedup is inferred
+  from operation removal, and no new TPU job is launched by this analysis.
+- Legal16K has11401 unique states /11606(state,last_move) pairs; duplicate
+  representatives are30.41%. K-boundary ties remain numerous. Stress inverse
+  masking is a no-op because last_move=-1. Global topK is not distributed beam.
+
+No BN or production inference default changed. Fresh local regression:
+252 tests passed; reproducible numerical and device-profile summaries are
+published alongside raw artifacts. The completed follow-up monitor is retired
+after publication, without submitting a new TPU job.

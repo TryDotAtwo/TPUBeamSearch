@@ -1,0 +1,1555 @@
+[{"stream_name":"stderr","time":16.599643244,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":19.429256373,"data":"\n"}
+,{"stream_name":"stderr","time":19.429286373,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":19.429293082,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":19.588085338,"data":"Cloning into '/tmp/TPUBeamSearch'...\n"}
+,{"stream_name":"stderr","time":20.783908787,"data":"HEAD is now at d58cf9f Add controlled TPU LayerNorm follow-up bundle\n"}
+,{"stream_name":"stdout","time":20.787049507,"data":"SOURCE_COMMIT=d58cf9fd8e86ec145c6bbc4f6c7f5aff489d6e21\n"}
+,{"stream_name":"stdout","time":24.750809585,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":24.750837845,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":29.75152997,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":29.75155727,"data":"E0000 00:00:1788146578.725553      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":29.75156374,"data":"=== Source Location Trace: ===\n"}
+,{"stream_name":"stdout","time":29.75156878,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":39.058127703,"data":"{\n"}
+,{"stream_name":"stdout","time":39.058192543,"data":"  \"python\": \"3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]\",\n"}
+,{"stream_name":"stdout","time":39.058200083,"data":"  \"platform\": \"Linux-6.6.143+-x86_64-with-glibc2.41\",\n"}
+,{"stream_name":"stdout","time":39.058204732,"data":"  \"versions\": {\n"}
+,{"stream_name":"stdout","time":39.058209123,"data":"    \"jax\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":39.058213532,"data":"    \"jaxlib\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":39.058218343,"data":"    \"libtpu\": \"0.0.42.1\",\n"}
+,{"stream_name":"stdout","time":39.058222543,"data":"    \"numpy\": \"2.5.0\",\n"}
+,{"stream_name":"stdout","time":39.058226563,"data":"    \"torch\": \"2.8.0+cpu\"\n"}
+,{"stream_name":"stdout","time":39.058230683,"data":"  },\n"}
+,{"stream_name":"stdout","time":39.058235392,"data":"  \"devices\": [\n"}
+,{"stream_name":"stdout","time":39.058239423,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058243623,"data":"      \"id\": 0,\n"}
+,{"stream_name":"stdout","time":39.058248012,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058252663,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058257123,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058261443,"data":"    },\n"}
+,{"stream_name":"stdout","time":39.058265283,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058269152,"data":"      \"id\": 1,\n"}
+,{"stream_name":"stdout","time":39.058273012,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058292643,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058296072,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058299392,"data":"    },\n"}
+,{"stream_name":"stdout","time":39.058302572,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058310172,"data":"      \"id\": 2,\n"}
+,{"stream_name":"stdout","time":39.058314003,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058317343,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058320643,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058324292,"data":"    },\n"}
+,{"stream_name":"stdout","time":39.058327492,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058331183,"data":"      \"id\": 3,\n"}
+,{"stream_name":"stdout","time":39.058334512,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058337792,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058341112,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058345023,"data":"    },\n"}
+,{"stream_name":"stdout","time":39.058348963,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058352192,"data":"      \"id\": 4,\n"}
+,{"stream_name":"stdout","time":39.058355443,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058359112,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058362992,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058366403,"data":"    },\n"}
+,{"stream_name":"stdout","time":39.058370612,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058376452,"data":"      \"id\": 5,\n"}
+,{"stream_name":"stdout","time":39.058380203,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058384103,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058387463,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058390932,"data":"    },\n"}
+,{"stream_name":"stdout","time":39.058394192,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058397972,"data":"      \"id\": 6,\n"}
+,{"stream_name":"stdout","time":39.058401372,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058406783,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058410323,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058416403,"data":"    },\n"}
+,{"stream_name":"stdout","time":39.058420812,"data":"    {\n"}
+,{"stream_name":"stdout","time":39.058424252,"data":"      \"id\": 7,\n"}
+,{"stream_name":"stdout","time":39.058547932,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":39.058557932,"data":"      \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":39.058562503,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":39.058565892,"data":"    }\n"}
+,{"stream_name":"stdout","time":39.058568952,"data":"  ],\n"}
+,{"stream_name":"stdout","time":39.058571832,"data":"  \"process_count\": 1,\n"}
+,{"stream_name":"stdout","time":39.058574852,"data":"  \"process_index\": 0,\n"}
+,{"stream_name":"stdout","time":39.058577743,"data":"  \"local_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":39.058580632,"data":"  \"active_device_count\": 1,\n"}
+,{"stream_name":"stdout","time":39.058583583,"data":"  \"default_matmul_precision\": null,\n"}
+,{"stream_name":"stdout","time":39.058596312,"data":"  \"x64_enabled\": false\n"}
+,{"stream_name":"stdout","time":39.058599332,"data":"}\n"}
+,{"stream_name":"stdout","time":49.482233745,"data":"START synthetic/predicate-bm128-w1024-bf16-broadcast  \n"}
+,{"stream_name":"stdout","time":49.542563046,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":49.542588116,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":49.542593846,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":49.542598026,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542602126,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":49.542609206,"data":"\n"}
+,{"stream_name":"stdout","time":49.542613276,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":49.542617696,"data":"\n"}
+,{"stream_name":"stdout","time":49.542621486,"data":"\n"}
+,{"stream_name":"stdout","time":49.542625496,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":49.542629556,"data":"\n"}
+,{"stream_name":"stdout","time":49.542633466,"data":"\n"}
+,{"stream_name":"stdout","time":49.542637276,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":49.542641486,"data":"\n"}
+,{"stream_name":"stdout","time":49.542645366,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":49.542650096,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":49.542654226,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":49.542658156,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542662036,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 483, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":49.542666226,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values,), expected, k))\n"}
+,{"stream_name":"stdout","time":49.542670566,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542674776,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":49.542681566,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":49.542685736,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542689756,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":49.542693866,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":49.542697786,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542701686,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":49.542705696,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":49.542719496,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542722456,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":49.542725326,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":49.542728046,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542730756,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":49.542734546,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":49.542737346,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542740046,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":49.542742946,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":49.542746056,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542748806,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":49.542751656,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":49.542754346,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542756996,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":49.542759856,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":49.542762526,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542765786,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":49.542768646,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":49.542771416,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":49.542774056,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":49.542777696,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":49.542780646,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":49.542784226,"data":"\n"}
+,{"stream_name":"stdout","time":49.542786876,"data":"\n"}
+,{"stream_name":"stdout","time":49.542803336,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":49.542806306,"data":"\n"}
+,{"stream_name":"stdout","time":49.542809146,"data":"\n"}
+,{"stream_name":"stdout","time":49.544234236,"data":"START synthetic/predicate-bm128-w1024-bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":49.711416237,"data":"START synthetic/predicate-bm128-w1024-fp32-broadcast  \n"}
+,{"stream_name":"stdout","time":49.896128359,"data":"START synthetic/predicate-bm128-w1024-fp32-direct_2d  \n"}
+,{"stream_name":"stdout","time":49.97078492,"data":"START synthetic/ln-bm128-w1024-legacy_bf16-all  \n"}
+,{"stream_name":"stdout","time":50.02842906,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.02844746,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.02845237,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.02845613,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02845974,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.02846473,"data":"\n"}
+,{"stream_name":"stdout","time":50.02846812,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":50.02847176,"data":"\n"}
+,{"stream_name":"stdout","time":50.02847504,"data":"\n"}
+,{"stream_name":"stdout","time":50.02847828,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.02848168,"data":"\n"}
+,{"stream_name":"stdout","time":50.02848501,"data":"\n"}
+,{"stream_name":"stdout","time":50.02848817,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":50.02849159,"data":"\n"}
+,{"stream_name":"stdout","time":50.02849473,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.02849799,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":50.02850188,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":50.02850524,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02851421,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":50.02851847,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":50.02852207,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02852563,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":50.02852923,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":50.02853268,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.028536,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":50.02853955,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":50.02854292,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02854618,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":50.02855795,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":50.02856156,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02856501,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":50.02857715,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":50.02858092,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02858605,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":50.02858975,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":50.0285932,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02859662,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":50.02860025,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":50.02860358,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02860689,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":50.02861183,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":50.02861521,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02861846,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":50.02862201,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.02862531,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02862859,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":50.02863206,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":50.02863528,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.02863925,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.02864282,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":50.02864745,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.02865164,"data":"\n"}
+,{"stream_name":"stdout","time":50.0286549,"data":"\n"}
+,{"stream_name":"stdout","time":50.02865882,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.02866247,"data":"\n"}
+,{"stream_name":"stdout","time":50.02871812,"data":"\n"}
+,{"stream_name":"stdout","time":50.02995246,"data":"START synthetic/ln-bm128-w1024-legacy_bf16-none  \n"}
+,{"stream_name":"stdout","time":50.168726231,"data":"START synthetic/ln-bm128-w1024-legacy_bf16-input  \n"}
+,{"stream_name":"stdout","time":50.220984282,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.221006972,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.221011422,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.221014912,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221018312,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.221033302,"data":"\n"}
+,{"stream_name":"stdout","time":50.221036942,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":50.221040592,"data":"\n"}
+,{"stream_name":"stdout","time":50.221043722,"data":"\n"}
+,{"stream_name":"stdout","time":50.221046962,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.221050352,"data":"\n"}
+,{"stream_name":"stdout","time":50.221053532,"data":"\n"}
+,{"stream_name":"stdout","time":50.221056712,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":50.221060492,"data":"\n"}
+,{"stream_name":"stdout","time":50.221063752,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.221067152,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":50.221070632,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":50.221073852,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221077162,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":50.221080782,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":50.221084422,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221087972,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":50.221096632,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":50.221100362,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221103822,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":50.221107292,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":50.221110562,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221113742,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":50.221117322,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":50.221120812,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221124142,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":50.221127682,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":50.221130892,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221134342,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":50.221137932,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":50.221141172,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221148242,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":50.221167342,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":50.221170912,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221176722,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":50.221180432,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":50.221183772,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221187052,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":50.221191552,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.221199492,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221203122,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":50.221206752,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":50.221209972,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.221213292,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.221216942,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":50.221221552,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.221225822,"data":"\n"}
+,{"stream_name":"stdout","time":50.221229122,"data":"\n"}
+,{"stream_name":"stdout","time":50.221232362,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.221235772,"data":"\n"}
+,{"stream_name":"stdout","time":50.221284412,"data":"\n"}
+,{"stream_name":"stdout","time":50.222700742,"data":"START synthetic/ln-bm128-w1024-legacy_bf16-center  \n"}
+,{"stream_name":"stdout","time":50.272565952,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.272581832,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.272586172,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.272589672,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272593092,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.272597592,"data":"\n"}
+,{"stream_name":"stdout","time":50.272600952,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":50.272604572,"data":"\n"}
+,{"stream_name":"stdout","time":50.272607732,"data":"\n"}
+,{"stream_name":"stdout","time":50.272610972,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.272627142,"data":"\n"}
+,{"stream_name":"stdout","time":50.272630722,"data":"\n"}
+,{"stream_name":"stdout","time":50.272634052,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":50.272637442,"data":"\n"}
+,{"stream_name":"stdout","time":50.272640702,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.272644032,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":50.272647682,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":50.272654312,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272657722,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":50.272661392,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":50.272665072,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272668472,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":50.272672022,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":50.272675562,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272679012,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":50.272682632,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":50.272685932,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272689322,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":50.272692852,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":50.272696202,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272699482,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":50.272703062,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":50.272706432,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272711112,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":50.272714772,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":50.272718062,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272721342,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":50.272724782,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":50.272728282,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272731662,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":50.272738662,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":50.272742222,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272745522,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":50.272749832,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.272753182,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272756662,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":50.272760192,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":50.272763482,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.272766762,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.272770922,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":50.272774452,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.272778612,"data":"\n"}
+,{"stream_name":"stdout","time":50.272781672,"data":"\n"}
+,{"stream_name":"stdout","time":50.272784742,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.272788382,"data":"\n"}
+,{"stream_name":"stdout","time":50.272842892,"data":"\n"}
+,{"stream_name":"stdout","time":50.274254652,"data":"START synthetic/ln-bm128-w1024-legacy_bf16-output  \n"}
+,{"stream_name":"stdout","time":50.322866863,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.322880333,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.322883983,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.322886913,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.322889823,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.322893913,"data":"\n"}
+,{"stream_name":"stdout","time":50.322896793,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":50.322899913,"data":"\n"}
+,{"stream_name":"stdout","time":50.322902693,"data":"\n"}
+,{"stream_name":"stdout","time":50.322905503,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.322908463,"data":"\n"}
+,{"stream_name":"stdout","time":50.322912503,"data":"\n"}
+,{"stream_name":"stdout","time":50.322915343,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":50.322918393,"data":"\n"}
+,{"stream_name":"stdout","time":50.322921253,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":50.322924133,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":50.322935003,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":50.322937973,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.322940863,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":50.322944923,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":50.322948103,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.322951163,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":50.322954263,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":50.322958253,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.322961363,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":50.322964433,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":50.322967323,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.322970423,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":50.322974013,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":50.322977023,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.322979943,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":50.322983273,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":50.322993563,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.323002683,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":50.323007203,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":50.323011953,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.323015013,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":50.323018243,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":50.323021563,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.323024563,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":50.323027863,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":50.323045553,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.323049283,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":50.323052423,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":50.323055323,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.323066973,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":50.323070293,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":50.323073573,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":50.323076533,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":50.323079593,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":50.323096283,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":50.323100803,"data":"\n"}
+,{"stream_name":"stdout","time":50.323103763,"data":"\n"}
+,{"stream_name":"stdout","time":50.323107263,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":50.323110413,"data":"\n"}
+,{"stream_name":"stdout","time":50.323113203,"data":"\n"}
+,{"stream_name":"stdout","time":50.324177593,"data":"START synthetic/ln-bm128-w1024-legacy_bf16-fp32_where  \n"}
+,{"stream_name":"stdout","time":51.279370321,"data":"START synthetic/ln-bm128-w1024-legacy_bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":51.438225593,"data":"START synthetic/ln-bm128-w1024-hlo_mixed-all  \n"}
+,{"stream_name":"stdout","time":52.048889568,"data":"START synthetic/ln-bm128-w1024-hlo_mixed-none  \n"}
+,{"stream_name":"stdout","time":52.182648109,"data":"START synthetic/ln-bm128-w1024-hlo_mixed-input  \n"}
+,{"stream_name":"stdout","time":52.361680521,"data":"START synthetic/ln-bm128-w1024-hlo_mixed-center  \n"}
+,{"stream_name":"stdout","time":52.914374946,"data":"START synthetic/ln-bm128-w1024-hlo_mixed-output  \n"}
+,{"stream_name":"stdout","time":53.215013538,"data":"START synthetic/ln-bm128-w1024-hlo_mixed-fp32_where  \n"}
+,{"stream_name":"stdout","time":53.820374204,"data":"START synthetic/ln-bm128-w1024-hlo_mixed-direct_2d  \n"}
+,{"stream_name":"stdout","time":54.098124886,"data":"START synthetic/predicate-bm128-w130-bf16-broadcast  \n"}
+,{"stream_name":"stdout","time":54.146791717,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":54.146817797,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":54.146826247,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":54.146833937,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.146841377,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":54.146851827,"data":"\n"}
+,{"stream_name":"stdout","time":54.146858897,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":54.146867517,"data":"\n"}
+,{"stream_name":"stdout","time":54.146874487,"data":"\n"}
+,{"stream_name":"stdout","time":54.146881847,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":54.146889877,"data":"\n"}
+,{"stream_name":"stdout","time":54.146901677,"data":"\n"}
+,{"stream_name":"stdout","time":54.146920787,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":54.146926377,"data":"\n"}
+,{"stream_name":"stdout","time":54.146931017,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":54.146935487,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":54.146940787,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":54.146945617,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.146950577,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 483, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":54.146959547,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values,), expected, k))\n"}
+,{"stream_name":"stdout","time":54.146964847,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.146970017,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":54.146977467,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":54.146982957,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.146988327,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":54.146993557,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":54.146999187,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147003796999996,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":54.147008897,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":54.147046097,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147055357,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":54.147060047,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":54.147063337,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147072577,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":54.147075837,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":54.147110357,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147113917,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":54.147117097,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":54.147147937,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147172897,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":54.147269127,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":54.147276517,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147289537,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":54.147294867,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":54.147299657,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147304327,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":54.147310297,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":54.147315217,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.147326417,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":54.147333217,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":54.147371617,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":54.147379687,"data":"\n"}
+,{"stream_name":"stdout","time":54.147385097,"data":"\n"}
+,{"stream_name":"stdout","time":54.147391147,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":54.147403067,"data":"\n"}
+,{"stream_name":"stdout","time":54.147438247,"data":"\n"}
+,{"stream_name":"stdout","time":54.149923677,"data":"START synthetic/predicate-bm128-w130-bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":54.278385818,"data":"START synthetic/predicate-bm128-w130-fp32-broadcast  \n"}
+,{"stream_name":"stdout","time":54.371365369,"data":"START synthetic/predicate-bm128-w130-fp32-direct_2d  \n"}
+,{"stream_name":"stdout","time":54.447594939,"data":"START synthetic/ln-bm128-w130-legacy_bf16-all  \n"}
+,{"stream_name":"stdout","time":54.51258029,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":54.51260135,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":54.51260772,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":54.51261333,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51261855,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":54.51262517,"data":"\n"}
+,{"stream_name":"stdout","time":54.5126302,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":54.51263581,"data":"\n"}
+,{"stream_name":"stdout","time":54.51264075,"data":"\n"}
+,{"stream_name":"stdout","time":54.51264559,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":54.51265078,"data":"\n"}
+,{"stream_name":"stdout","time":54.51265569,"data":"\n"}
+,{"stream_name":"stdout","time":54.51266063,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":54.51266597,"data":"\n"}
+,{"stream_name":"stdout","time":54.51267135,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":54.51268774,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":54.51269184,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":54.51269932,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51270279,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":54.51270677,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":54.51271036,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51271405,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":54.5127175,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":54.51272098,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51272463,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":54.5127282,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":54.51273146,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51273492,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":54.51273897,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":54.51274253,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51274583,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":54.51274941,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":54.51275274,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51276043,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":54.51276431,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":54.51276799,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51277132,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":54.51277488,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":54.51277806,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51278139,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":54.51278489,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":54.51278817,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51279164,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":54.51279624,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":54.51280374,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51280766,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":54.51281204,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":54.51281847,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":54.51282186,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":54.5128254,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":54.51282881,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":54.51283322,"data":"\n"}
+,{"stream_name":"stdout","time":54.5128364,"data":"\n"}
+,{"stream_name":"stdout","time":54.51283963,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":54.51284311,"data":"\n"}
+,{"stream_name":"stdout","time":54.51288124,"data":"\n"}
+,{"stream_name":"stdout","time":54.5154825,"data":"START synthetic/ln-bm128-w130-legacy_bf16-fp32_where  \n"}
+,{"stream_name":"stdout","time":54.808445812,"data":"START synthetic/ln-bm128-w130-legacy_bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":54.910250553,"data":"START synthetic/ln-bm128-w130-hlo_mixed-all  \n"}
+,{"stream_name":"stdout","time":55.120549925,"data":"START synthetic/ln-bm128-w130-hlo_mixed-fp32_where  \n"}
+,{"stream_name":"stdout","time":55.327432977,"data":"START synthetic/ln-bm128-w130-hlo_mixed-direct_2d  \n"}
+,{"stream_name":"stdout","time":55.433756298,"data":"START synthetic/predicate-bm256-w1024-bf16-broadcast  \n"}
+,{"stream_name":"stdout","time":55.478638478,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":55.478664369,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":55.478672078,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":55.478677998,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478683598,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":55.478690598,"data":"\n"}
+,{"stream_name":"stdout","time":55.478696049,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":55.478701418,"data":"\n"}
+,{"stream_name":"stdout","time":55.478706538,"data":"\n"}
+,{"stream_name":"stdout","time":55.478712089,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":55.478717858,"data":"\n"}
+,{"stream_name":"stdout","time":55.478722778,"data":"\n"}
+,{"stream_name":"stdout","time":55.478726149,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":55.478731458,"data":"\n"}
+,{"stream_name":"stdout","time":55.478734858,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":55.478738209,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":55.478752029,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":55.478754558,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478756929,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 483, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":55.478759558,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values,), expected, k))\n"}
+,{"stream_name":"stdout","time":55.478762029,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478764489,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":55.478766969,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":55.478769478,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478771909,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":55.478775318,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":55.478777689,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478780018,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":55.478782409,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":55.478784869,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478787289,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":55.478789758,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":55.478792098,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478794458,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":55.478796989,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":55.478799978,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478802358,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":55.478804858,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":55.478807189,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478809518,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":55.478812409,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":55.478814769,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478817458,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":55.478819949,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":55.478830289,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478845849,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":55.478850789,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":55.478853329,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":55.478855649,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":55.478858818,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":55.478861629,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":55.478903289,"data":"\n"}
+,{"stream_name":"stdout","time":55.478907438,"data":"\n"}
+,{"stream_name":"stdout","time":55.478909829,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":55.478912278,"data":"\n"}
+,{"stream_name":"stdout","time":55.478936549,"data":"\n"}
+,{"stream_name":"stdout","time":55.483098518,"data":"START synthetic/predicate-bm256-w1024-bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":55.564478249,"data":"START synthetic/predicate-bm256-w1024-fp32-broadcast  \n"}
+,{"stream_name":"stdout","time":55.863645942,"data":"START synthetic/predicate-bm256-w1024-fp32-direct_2d  \n"}
+,{"stream_name":"stdout","time":55.991666953,"data":"START synthetic/ln-bm256-w1024-legacy_bf16-all  \n"}
+,{"stream_name":"stdout","time":56.048968114,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.049002744,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.049010314,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.049016054,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049021504,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.049028334,"data":"\n"}
+,{"stream_name":"stdout","time":56.049033464,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":56.049039384,"data":"\n"}
+,{"stream_name":"stdout","time":56.049044614,"data":"\n"}
+,{"stream_name":"stdout","time":56.049050194,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.049055394,"data":"\n"}
+,{"stream_name":"stdout","time":56.049060764,"data":"\n"}
+,{"stream_name":"stdout","time":56.049065964,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":56.049071664,"data":"\n"}
+,{"stream_name":"stdout","time":56.049076814,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.049082294,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":56.049087944,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":56.049093294,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049111694,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":56.049116224,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":56.049120234,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049124444,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":56.049128504,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":56.049132514,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049136544,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":56.049140834,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":56.049144404,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049175334,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":56.049179834,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":56.049183823,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049194334,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":56.049198423,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":56.049214114,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049218183,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":56.049222163,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":56.049226134,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049229983,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":56.049233854,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":56.049237263,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049240763,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":56.049244454,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":56.049247934,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049251494,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":56.049255543,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.049259374,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049263143,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":56.049266923,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":56.049276023,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.049279894,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.049283843,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":56.049287854,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.049292623,"data":"\n"}
+,{"stream_name":"stdout","time":56.049296043,"data":"\n"}
+,{"stream_name":"stdout","time":56.049299923,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.049304063,"data":"\n"}
+,{"stream_name":"stdout","time":56.049307663,"data":"\n"}
+,{"stream_name":"stdout","time":56.052661424,"data":"START synthetic/ln-bm256-w1024-legacy_bf16-none  \n"}
+,{"stream_name":"stdout","time":56.264234485,"data":"START synthetic/ln-bm256-w1024-legacy_bf16-input  \n"}
+,{"stream_name":"stdout","time":56.317064026,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.317084906,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.317092146,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.317097626,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317103276,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.317110206,"data":"\n"}
+,{"stream_name":"stdout","time":56.317116106,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":56.317121726,"data":"\n"}
+,{"stream_name":"stdout","time":56.317126866,"data":"\n"}
+,{"stream_name":"stdout","time":56.317132316,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.317138326,"data":"\n"}
+,{"stream_name":"stdout","time":56.317144056,"data":"\n"}
+,{"stream_name":"stdout","time":56.317164896,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":56.317173396,"data":"\n"}
+,{"stream_name":"stdout","time":56.317179566,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.317185056,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":56.317191226,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":56.317196616,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317215656,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":56.317221826,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":56.317227786,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317243276,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":56.317247666,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":56.317251766,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317260106,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":56.317264486,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":56.317268376,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317272506,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":56.317277036,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":56.317280896,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317284786,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":56.317288716,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":56.317292436,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317296006,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":56.317306736,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":56.317310486,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317314346,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":56.317319776,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":56.317394466,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317403036,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":56.317407906,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":56.317411736,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317415126,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":56.317419236,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.317422576,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317425946,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":56.317429446,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":56.317432736,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.317436016,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.317439586,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":56.317443096,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.317458366,"data":"\n"}
+,{"stream_name":"stdout","time":56.317462006,"data":"\n"}
+,{"stream_name":"stdout","time":56.317469016,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.317472676,"data":"\n"}
+,{"stream_name":"stdout","time":56.317476406,"data":"\n"}
+,{"stream_name":"stdout","time":56.320689046,"data":"START synthetic/ln-bm256-w1024-legacy_bf16-center  \n"}
+,{"stream_name":"stdout","time":56.367705637,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.367720657,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.367725677,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.367729846,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367733697,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.367738617,"data":"\n"}
+,{"stream_name":"stdout","time":56.367742446,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":56.367746257,"data":"\n"}
+,{"stream_name":"stdout","time":56.367750217,"data":"\n"}
+,{"stream_name":"stdout","time":56.367753857,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.367759937,"data":"\n"}
+,{"stream_name":"stdout","time":56.367763666,"data":"\n"}
+,{"stream_name":"stdout","time":56.367767177,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":56.367771017,"data":"\n"}
+,{"stream_name":"stdout","time":56.367774757,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.367778446,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":56.367783186,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":56.367786837,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367790757,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":56.367808677,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":56.367813057,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367816746,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":56.367839566,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":56.367848517,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367853357,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":56.367876066,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":56.367888317,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367891197,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":56.367893886,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":56.367896397,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367898897,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":56.367927386,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":56.367933546,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367937377,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":56.367941266,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":56.367945206,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367950526,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":56.367954677,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":56.367958557,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367962746,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":56.367967357,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":56.367971057,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367974977,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":56.367979537,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.367983326,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.367987617,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":56.367991697,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":56.368011366,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.368015186,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.368022637,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":56.368025197,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.368049346,"data":"\n"}
+,{"stream_name":"stdout","time":56.368052197,"data":"\n"}
+,{"stream_name":"stdout","time":56.368054517,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.368056946,"data":"\n"}
+,{"stream_name":"stdout","time":56.368065066,"data":"\n"}
+,{"stream_name":"stdout","time":56.371355986,"data":"START synthetic/ln-bm256-w1024-legacy_bf16-output  \n"}
+,{"stream_name":"stdout","time":56.420927667,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.420938077,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.420941587,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.420944507,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.420947497,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.420951517,"data":"\n"}
+,{"stream_name":"stdout","time":56.420954757,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":56.420957907,"data":"\n"}
+,{"stream_name":"stdout","time":56.420960717,"data":"\n"}
+,{"stream_name":"stdout","time":56.420993007,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.421002847,"data":"\n"}
+,{"stream_name":"stdout","time":56.421008347,"data":"\n"}
+,{"stream_name":"stdout","time":56.421013227,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":56.421018237,"data":"\n"}
+,{"stream_name":"stdout","time":56.421045177,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":56.421049907,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":56.421053307,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":56.421056267,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421066557,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":56.421070397,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":56.421074267,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421117097,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":56.421126097,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":56.421131287,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421146087,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":56.421165777,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":56.421174167,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421190437,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":56.421271197,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":56.421277667,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421281777,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":56.421294177,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":56.421298407,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421302707,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":56.421308107,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":56.421311787,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421315497,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":56.421320197,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":56.421324027,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421353627,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":56.421361917,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":56.421368997,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421373867,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":56.421394377,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":56.421399687,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421424077,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":56.421430087,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":56.421435737,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":56.421441097,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":56.421463787,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":56.421468297,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":56.421498547,"data":"\n"}
+,{"stream_name":"stdout","time":56.421502007,"data":"\n"}
+,{"stream_name":"stdout","time":56.421504877,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":56.421528746999996,"data":"\n"}
+,{"stream_name":"stdout","time":56.421531947,"data":"\n"}
+,{"stream_name":"stdout","time":56.424605527,"data":"START synthetic/ln-bm256-w1024-legacy_bf16-fp32_where  \n"}
+,{"stream_name":"stdout","time":58.324506534,"data":"START synthetic/ln-bm256-w1024-legacy_bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":58.544542986,"data":"START synthetic/ln-bm256-w1024-hlo_mixed-all  \n"}
+,{"stream_name":"stdout","time":59.675228416,"data":"START synthetic/ln-bm256-w1024-hlo_mixed-none  \n"}
+,{"stream_name":"stdout","time":59.846954967,"data":"START synthetic/ln-bm256-w1024-hlo_mixed-input  \n"}
+,{"stream_name":"stdout","time":60.1191839,"data":"START synthetic/ln-bm256-w1024-hlo_mixed-center  \n"}
+,{"stream_name":"stdout","time":61.122724959,"data":"START synthetic/ln-bm256-w1024-hlo_mixed-output  \n"}
+,{"stream_name":"stdout","time":61.632556033,"data":"START synthetic/ln-bm256-w1024-hlo_mixed-fp32_where  \n"}
+,{"stream_name":"stdout","time":62.751278253,"data":"START synthetic/ln-bm256-w1024-hlo_mixed-direct_2d  \n"}
+,{"stream_name":"stdout","time":62.938987135,"data":"START synthetic/predicate-bm256-w130-bf16-broadcast  \n"}
+,{"stream_name":"stdout","time":62.996271145,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":62.996293435,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":62.996301175,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":62.996308605,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996315255,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":62.996325485,"data":"\n"}
+,{"stream_name":"stdout","time":62.996332545,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":62.996339415,"data":"\n"}
+,{"stream_name":"stdout","time":62.996345775,"data":"\n"}
+,{"stream_name":"stdout","time":62.996351905,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":62.996358995,"data":"\n"}
+,{"stream_name":"stdout","time":62.996365615,"data":"\n"}
+,{"stream_name":"stdout","time":62.996372635,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":62.996380325,"data":"\n"}
+,{"stream_name":"stdout","time":62.996387955,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":62.996395415,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":62.996402785,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":62.996409195,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996415725,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 483, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":62.996423245,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values,), expected, k))\n"}
+,{"stream_name":"stdout","time":62.996430265,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996436855,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":62.996451305,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":62.996458525,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996473425,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":62.996480525,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":62.996487165,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996493955,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":62.996513545,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":62.996518885,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996524625,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":62.996531305,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":62.996536185,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996540835,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":62.996545905,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":62.996550825,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996555595,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":62.996560615,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":62.996564955,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996569725,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":62.996574565,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":62.996579175,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996583865,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":62.996589505,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":62.996594225,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996598885,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":62.996604505,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":62.996609395,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":62.996613615,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":62.996660885,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":62.996670025,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":62.996675625,"data":"\n"}
+,{"stream_name":"stdout","time":62.996686405,"data":"\n"}
+,{"stream_name":"stdout","time":62.996689955,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":62.996718885,"data":"\n"}
+,{"stream_name":"stdout","time":62.996726635,"data":"\n"}
+,{"stream_name":"stdout","time":63.002615645,"data":"START synthetic/predicate-bm256-w130-bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":63.199731317,"data":"START synthetic/predicate-bm256-w130-fp32-broadcast  \n"}
+,{"stream_name":"stdout","time":63.325569078,"data":"START synthetic/predicate-bm256-w130-fp32-direct_2d  \n"}
+,{"stream_name":"stdout","time":63.401949539,"data":"START synthetic/ln-bm256-w130-legacy_bf16-all  \n"}
+,{"stream_name":"stdout","time":63.46376798,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":63.463800049,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":63.46380524,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":63.463809389,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.46381348,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":63.46381922,"data":"\n"}
+,{"stream_name":"stdout","time":63.46382326,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":63.463827489,"data":"\n"}
+,{"stream_name":"stdout","time":63.463831069,"data":"\n"}
+,{"stream_name":"stdout","time":63.46383462,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":63.46383874,"data":"\n"}
+,{"stream_name":"stdout","time":63.463842169,"data":"\n"}
+,{"stream_name":"stdout","time":63.46384582,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":63.46384992,"data":"\n"}
+,{"stream_name":"stdout","time":63.46385404,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":63.46385776,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":63.46386172,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":63.46386574,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.463869389,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 490, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":63.46387312,"data":"    record(\"synthetic\", key, lambda c=call, k=key: measure_probe(c, (values, norm), expected_ln, k))\n"}
+,{"stream_name":"stdout","time":63.463883689,"data":"                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.46388776,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 272, in measure_probe\n"}
+,{"stream_name":"stdout","time":63.463891649,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":63.46389572,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.463899609,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":63.46390374,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":63.463907389,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.463911469,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":63.46391544,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":63.46391936,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.46393782,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":63.463942069,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":63.46394608,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.463953249,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":63.46395734,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":63.463961089,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.463965089,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":63.463969389,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":63.46397302,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.46397674,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":63.46398216,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":63.463989789,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.4639934,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":63.463997929,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":63.464005289,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.46400908,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":63.464023969,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":63.46403502,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":63.46404172,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":63.464046209,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":63.464100769,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c256x256xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":63.464110349,"data":"\n"}
+,{"stream_name":"stdout","time":63.46411424,"data":"\n"}
+,{"stream_name":"stdout","time":63.46411794,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":63.4641219,"data":"\n"}
+,{"stream_name":"stdout","time":63.464124689,"data":"\n"}
+,{"stream_name":"stdout","time":63.4686992,"data":"START synthetic/ln-bm256-w130-legacy_bf16-fp32_where  \n"}
+,{"stream_name":"stdout","time":63.969219954,"data":"START synthetic/ln-bm256-w130-legacy_bf16-direct_2d  \n"}
+,{"stream_name":"stdout","time":64.093649085,"data":"START synthetic/ln-bm256-w130-hlo_mixed-all  \n"}
+,{"stream_name":"stdout","time":64.421067028,"data":"START synthetic/ln-bm256-w130-hlo_mixed-fp32_where  \n"}
+,{"stream_name":"stdout","time":64.749136791,"data":"START synthetic/ln-bm256-w130-hlo_mixed-direct_2d  \n"}
+,{"stream_name":"stdout","time":71.452242751,"data":"START controls/same-suffix-zero-replacement legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":72.258635988,"data":"START operators/legal_scrambles-ln-jax-reference legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":72.55256406,"data":"START operators/legal_scrambles-ln-legacy-v1 legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":72.608250701,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":72.608281611,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":72.608288111,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":72.608293241,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608298681,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":72.608305601,"data":"\n"}
+,{"stream_name":"stdout","time":72.608310801,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":72.608316271,"data":"\n"}
+,{"stream_name":"stdout","time":72.608332131,"data":"\n"}
+,{"stream_name":"stdout","time":72.608337301,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":72.608342471,"data":"\n"}
+,{"stream_name":"stdout","time":72.608347441,"data":"\n"}
+,{"stream_name":"stdout","time":72.608352341,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":72.608357421,"data":"\n"}
+,{"stream_name":"stdout","time":72.608362341,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":72.608367471,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":72.608372791,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":72.608377911,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608383041,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 363, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":72.608388311,"data":"    lambda c=call, a=args, e=expected, k=key, s=scope: compile_probe(c, a, e, k, s),\n"}
+,{"stream_name":"stdout","time":72.608393561,"data":"                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608399161,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":72.608404351,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":72.608409351,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608414501,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":72.608419521,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":72.608424431,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608429331,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":72.608448141,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":72.608474591,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608484811,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":72.608488461,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":72.608491511,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608494401,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":72.608497201,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":72.608499591,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608502081,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":72.608504651,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":72.608507021,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608509371,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":72.608511811,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":72.608514061,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608516371,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":72.608518831,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":72.608521131,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608523411,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":72.608525841,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":72.608528111,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":72.608530391,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":72.608532771,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":72.608536281,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":72.608539411,"data":"\n"}
+,{"stream_name":"stdout","time":72.608541741,"data":"\n"}
+,{"stream_name":"stdout","time":72.608544011,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":72.608546441,"data":"\n"}
+,{"stream_name":"stdout","time":72.608548641,"data":"\n"}
+,{"stream_name":"stdout","time":72.614564831,"data":"START operators/legal_scrambles-dense-jax legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":73.066796825,"data":"START operators/legal_scrambles-dense-late legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":73.242256376,"data":"START operators/legal_scrambles-ln-legacy_bf16-all legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":73.295340527,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":73.295361037,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":73.295365937,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":73.295369437,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295373217,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":73.295380057,"data":"\n"}
+,{"stream_name":"stdout","time":73.295383297,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":73.295386897,"data":"\n"}
+,{"stream_name":"stdout","time":73.295390057,"data":"\n"}
+,{"stream_name":"stdout","time":73.295393257,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":73.295396727,"data":"\n"}
+,{"stream_name":"stdout","time":73.295399867,"data":"\n"}
+,{"stream_name":"stdout","time":73.295403267,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":73.295407047,"data":"\n"}
+,{"stream_name":"stdout","time":73.295410367,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":73.295413647,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":73.295417197,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":73.295420387,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295423637,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":73.295427257,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":73.295431127,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295434597,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":73.295437957,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":73.295449407,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295453397,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":73.295457737,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":73.295461327,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295464617,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":73.295468647,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":73.295472357,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295476367,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":73.295491437,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":73.295495837,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295499627,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":73.295503597,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":73.295506897,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295510477,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":73.295514087,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":73.295517537,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295521247,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":73.295525417,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":73.295528717,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295535997,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":73.295539567,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":73.295542877,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295546197,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":73.295549647,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":73.295552857,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":73.295556067,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":73.295559537,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":73.295562967,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":73.295567127,"data":"\n"}
+,{"stream_name":"stdout","time":73.295570307,"data":"\n"}
+,{"stream_name":"stdout","time":73.295573837,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":73.295577887,"data":"\n"}
+,{"stream_name":"stdout","time":73.295581137,"data":"\n"}
+,{"stream_name":"stdout","time":73.301812167,"data":"START operators/legal_scrambles-ln-hlo_mixed-all legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":73.941344433,"data":"START operators/legal_scrambles-ln-legacy_bf16-none legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":74.140908015,"data":"START operators/legal_scrambles-ln-hlo_mixed-none legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":74.332383436,"data":"START operators/legal_scrambles-ln-legacy_bf16-input legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":74.387725807,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":74.387748927,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":74.387767127,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":74.387771147,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387774897,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":74.387783427,"data":"\n"}
+,{"stream_name":"stdout","time":74.387787237,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":74.387791097,"data":"\n"}
+,{"stream_name":"stdout","time":74.387794447,"data":"\n"}
+,{"stream_name":"stdout","time":74.387797737,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":74.387801087,"data":"\n"}
+,{"stream_name":"stdout","time":74.387804487,"data":"\n"}
+,{"stream_name":"stdout","time":74.387807697,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":74.387811017,"data":"\n"}
+,{"stream_name":"stdout","time":74.387814087,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":74.387817407,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":74.387820917,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":74.387824267,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387827497,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":74.387831507,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":74.387835087,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387838557,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":74.387842067,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":74.387845577,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387854767,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":74.387859237,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":74.387862687,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387866067,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":74.387869877,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":74.387873317,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387877197,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":74.387880697,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":74.387883967,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387900647,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":74.387904407,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":74.387907907,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387911277,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":74.387914777,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":74.387918127,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387921347,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":74.387924937,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":74.387928297,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387931667,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":74.387935177,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":74.387938537,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387941817,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":74.387945217,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":74.387948517,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.387951777,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":74.387958787,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":74.387962597,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":74.387967257,"data":"\n"}
+,{"stream_name":"stdout","time":74.387970517,"data":"\n"}
+,{"stream_name":"stdout","time":74.387973737,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":74.387977277,"data":"\n"}
+,{"stream_name":"stdout","time":74.388042567,"data":"\n"}
+,{"stream_name":"stdout","time":74.394612517,"data":"START operators/legal_scrambles-ln-hlo_mixed-input legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":74.626895819,"data":"START operators/legal_scrambles-ln-legacy_bf16-center legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":74.682391349,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":74.682402529,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":74.682406119,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":74.682408869,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682413289,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":74.682427479,"data":"\n"}
+,{"stream_name":"stdout","time":74.682439159,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":74.682443309,"data":"\n"}
+,{"stream_name":"stdout","time":74.682447189,"data":"\n"}
+,{"stream_name":"stdout","time":74.682450889,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":74.682455619,"data":"\n"}
+,{"stream_name":"stdout","time":74.682458959,"data":"\n"}
+,{"stream_name":"stdout","time":74.682462559,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":74.682466309,"data":"\n"}
+,{"stream_name":"stdout","time":74.682470429,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":74.682473959,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":74.682477599,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":74.682481099,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682484529,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":74.682489719,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":74.682494069,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682498309,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":74.682521649,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":74.682526179,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682530389,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":74.682533459,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":74.682537419,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682539769,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":74.682542319,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":74.682545029,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682547549,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":74.682550199,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":74.682553559,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682555909,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":74.682558379,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":74.682560689,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682562989,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":74.682571999,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":74.682595569,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682604009,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":74.682608719,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":74.682612149,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682617549,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":74.682621119,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":74.682624739,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682628159,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":74.682646099,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":74.682652489,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":74.682656199,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":74.682659919,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":74.682664249,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":74.682669209,"data":"\n"}
+,{"stream_name":"stdout","time":74.682673859,"data":"\n"}
+,{"stream_name":"stdout","time":74.682677389,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":74.682680879,"data":"\n"}
+,{"stream_name":"stdout","time":74.682702129,"data":"\n"}
+,{"stream_name":"stdout","time":74.689467129,"data":"START operators/legal_scrambles-ln-hlo_mixed-center legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":75.319305335,"data":"START operators/legal_scrambles-ln-legacy_bf16-output legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":75.373075495,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":75.373092495,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":75.373098846,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":75.373104066,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373109646,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":75.373116646,"data":"\n"}
+,{"stream_name":"stdout","time":75.373121755,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":75.373127175,"data":"\n"}
+,{"stream_name":"stdout","time":75.373132006,"data":"\n"}
+,{"stream_name":"stdout","time":75.373148055,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":75.373169006,"data":"\n"}
+,{"stream_name":"stdout","time":75.373172646,"data":"\n"}
+,{"stream_name":"stdout","time":75.373178266,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":75.373181875,"data":"\n"}
+,{"stream_name":"stdout","time":75.373185186,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":75.373188586,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":75.373192126,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":75.373195435,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373198746,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":75.373202366,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":75.373205935,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373209526,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":75.373213026,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":75.373216586,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373240926,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":75.373252555,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":75.373257586,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373261275,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":75.373264886,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":75.373268555,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373272055,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":75.373275995,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":75.373279266,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373282846,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":75.373287775,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":75.373291295,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373294906,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":75.373298706,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":75.373302015,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373305326,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":75.373334166,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":75.373337926,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373341335,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":75.373344875,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":75.373348255,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373351586,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":75.373355226,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":75.373358535,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":75.373361775,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":75.373366035,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":75.373370866,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":75.373375766,"data":"\n"}
+,{"stream_name":"stdout","time":75.373379295,"data":"\n"}
+,{"stream_name":"stdout","time":75.373382586,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":75.373386095,"data":"\n"}
+,{"stream_name":"stdout","time":75.375255615,"data":"\n"}
+,{"stream_name":"stdout","time":75.380035475,"data":"START operators/legal_scrambles-ln-hlo_mixed-output legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":75.726051479,"data":"START operators/legal_scrambles-ln-legacy_bf16-fp32_where legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":76.721119738,"data":"START operators/legal_scrambles-ln-hlo_mixed-fp32_where legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":77.412825714,"data":"START operators/legal_scrambles-ln-legacy_bf16-direct_2d legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":77.623728786,"data":"START operators/legal_scrambles-ln-hlo_mixed-direct_2d legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":78.040760299,"data":"START screen/jax-graph-control legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":79.23540349,"data":"START screen/late-dense-jax-ln legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":79.843560005,"data":"START screen/jax-dense-legacy-unmasked legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":80.753228673,"data":"START screen/jax-dense-legacy-fp32-where legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":81.954099414,"data":"START screen/late-dense-legacy-unmasked legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":82.428357798,"data":"START screen/jax-dense-mixed legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":83.431132617,"data":"START screen/late-dense-mixed legal_scrambles 4096\n"}
+,{"stream_name":"stdout","time":88.639936773,"data":"START controls/same-suffix-zero-replacement categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":89.556128453,"data":"START operators/categorical_stress-ln-jax-reference categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":89.862434316,"data":"START operators/categorical_stress-ln-legacy-v1 categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":89.912918246,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":89.912932457,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":89.912937357,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":89.912940837,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.912944577,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":89.912950846,"data":"\n"}
+,{"stream_name":"stdout","time":89.912954217,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":89.912957966,"data":"\n"}
+,{"stream_name":"stdout","time":89.912961126,"data":"\n"}
+,{"stream_name":"stdout","time":89.912964306,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":89.912967797,"data":"\n"}
+,{"stream_name":"stdout","time":89.912971157,"data":"\n"}
+,{"stream_name":"stdout","time":89.912974617,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":89.913020006,"data":"\n"}
+,{"stream_name":"stdout","time":89.913024457,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":89.913028206,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":89.913031746,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":89.913034986,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913038397,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 363, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":89.913042206,"data":"    lambda c=call, a=args, e=expected, k=key, s=scope: compile_probe(c, a, e, k, s),\n"}
+,{"stream_name":"stdout","time":89.913047337,"data":"                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913050886,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":89.913054786,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":89.913058797,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913062337,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":89.913066017,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":89.913070037,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913073706,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":89.913082306,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":89.913086386,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913089917,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":89.913101617,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":89.913106166,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913109477,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":89.913113006,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":89.913118837,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913122317,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":89.913207986,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":89.913224926,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913229346,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":89.913233386,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":89.913236697,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913240286,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":89.913243837,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":89.913247017,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913250337,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":89.913254197,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":89.913258086,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.913261446,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":89.913264906,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":89.913269037,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":89.913273346,"data":"\n"}
+,{"stream_name":"stdout","time":89.913277646,"data":"\n"}
+,{"stream_name":"stdout","time":89.913281117,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":89.913284617,"data":"\n"}
+,{"stream_name":"stdout","time":89.913288337,"data":"\n"}
+,{"stream_name":"stdout","time":89.930432227,"data":"START operators/categorical_stress-dense-jax categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":90.392938432,"data":"START operators/categorical_stress-dense-late categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":90.579841324,"data":"START operators/categorical_stress-ln-legacy_bf16-all categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":90.631353225,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":90.631366705,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":90.631371745,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":90.631384825,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631388874,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":90.631393945,"data":"\n"}
+,{"stream_name":"stdout","time":90.631397365,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":90.631400865,"data":"\n"}
+,{"stream_name":"stdout","time":90.631404045,"data":"\n"}
+,{"stream_name":"stdout","time":90.631407305,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":90.631410914,"data":"\n"}
+,{"stream_name":"stdout","time":90.631414154,"data":"\n"}
+,{"stream_name":"stdout","time":90.631417434,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":90.631420834,"data":"\n"}
+,{"stream_name":"stdout","time":90.631427094,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":90.631430754,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":90.631435025,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":90.631438445,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631441825,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":90.631445785,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":90.631449474,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631452925,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":90.631456954,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":90.631460494,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631464305,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":90.631467934,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":90.631473645,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631477245,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":90.631481465,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":90.631485174,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631488865,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":90.631492994,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":90.631496965,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631500325,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":90.631542525,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":90.631548685,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631552825,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":90.631556494,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":90.631560234,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631563614,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":90.631567314,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":90.631570545,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631574054,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":90.631577665,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":90.631581085,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631585314,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":90.631588965,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":90.631594605,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":90.631598065,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":90.631602105,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":90.631605805,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":90.631610285,"data":"\n"}
+,{"stream_name":"stdout","time":90.631613474,"data":"\n"}
+,{"stream_name":"stdout","time":90.631616594,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":90.631619905,"data":"\n"}
+,{"stream_name":"stdout","time":90.631693014,"data":"\n"}
+,{"stream_name":"stdout","time":90.648937885,"data":"START operators/categorical_stress-ln-hlo_mixed-all categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":91.300392672,"data":"START operators/categorical_stress-ln-legacy_bf16-none categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":91.516581894,"data":"START operators/categorical_stress-ln-hlo_mixed-none categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":91.713934166,"data":"START operators/categorical_stress-ln-legacy_bf16-input categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":91.766215107,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":91.766234387,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":91.766241487,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":91.766246077,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766250337,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":91.766269367,"data":"\n"}
+,{"stream_name":"stdout","time":91.766273997,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":91.766279587,"data":"\n"}
+,{"stream_name":"stdout","time":91.766283567,"data":"\n"}
+,{"stream_name":"stdout","time":91.766287807,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":91.766292177,"data":"\n"}
+,{"stream_name":"stdout","time":91.766296417,"data":"\n"}
+,{"stream_name":"stdout","time":91.766300427,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":91.766304697,"data":"\n"}
+,{"stream_name":"stdout","time":91.766308707,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":91.766312937,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":91.766317387,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":91.766322017,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766330297,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":91.766335297,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":91.766339747,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766344107,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":91.766348717,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":91.766363077,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766368327,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":91.766372877,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":91.766377067,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766381237,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":91.766385567,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":91.766389887,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766394117,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":91.766398587,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":91.766402807,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766407057,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":91.766411537,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":91.766415747,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766431457,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":91.766436147,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":91.766440457,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766444647,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":91.766449037,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":91.766453237,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766457407,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":91.766461727,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":91.766465817,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766469967,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":91.766474387,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":91.766478527,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":91.766482707,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":91.766487157,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":91.766491847,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":91.766497157,"data":"\n"}
+,{"stream_name":"stdout","time":91.766501787,"data":"\n"}
+,{"stream_name":"stdout","time":91.766505917,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":91.766510207,"data":"\n"}
+,{"stream_name":"stdout","time":91.766545937,"data":"\n"}
+,{"stream_name":"stdout","time":91.783883957,"data":"START operators/categorical_stress-ln-hlo_mixed-input categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":92.02900813,"data":"START operators/categorical_stress-ln-legacy_bf16-center categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":92.082233261,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":92.082249901,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":92.082253701,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":92.082256351,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082258811,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":92.082262491,"data":"\n"}
+,{"stream_name":"stdout","time":92.082264871,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":92.082267491,"data":"\n"}
+,{"stream_name":"stdout","time":92.082278491,"data":"\n"}
+,{"stream_name":"stdout","time":92.082282861,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":92.082285691,"data":"\n"}
+,{"stream_name":"stdout","time":92.082288001,"data":"\n"}
+,{"stream_name":"stdout","time":92.082290301,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":92.082292681,"data":"\n"}
+,{"stream_name":"stdout","time":92.082294981,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":92.082297291,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":92.082299801,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":92.082302181,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082305031,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":92.082307661,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":92.082310191,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082312661,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":92.082315551,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":92.082318031,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082320781,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":92.082336591,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":92.082339211,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082346341,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":92.082349481,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":92.082368111,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082375361,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":92.082379211,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":92.082389461,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082392011,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":92.082394531,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":92.082396831,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082405071,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":92.082407631,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":92.082409931,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082438451,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":92.082443031,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":92.082445441,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082447811,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":92.082450301,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":92.082453101,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082455511,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":92.082458021,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":92.082460621,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.082464101,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":92.082470361,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":92.082479891,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":92.082484981,"data":"\n"}
+,{"stream_name":"stdout","time":92.082491701,"data":"\n"}
+,{"stream_name":"stdout","time":92.082494291,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":92.082512411,"data":"\n"}
+,{"stream_name":"stdout","time":92.082554601,"data":"\n"}
+,{"stream_name":"stdout","time":92.101349741,"data":"START operators/categorical_stress-ln-hlo_mixed-center categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":92.703297228,"data":"START operators/categorical_stress-ln-legacy_bf16-output categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":92.757522908,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":92.757555298,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":92.757560248,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":92.757563848,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757567318,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":92.757573198,"data":"\n"}
+,{"stream_name":"stdout","time":92.757576618,"data":"at location: loc(\"broadcast_in_dim:\"(\"broadcast_in_dim/broadcast_in_dim\"))\n"}
+,{"stream_name":"stdout","time":92.757580228,"data":"\n"}
+,{"stream_name":"stdout","time":92.757583528,"data":"\n"}
+,{"stream_name":"stdout","time":92.757586868,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":92.757590328,"data":"\n"}
+,{"stream_name":"stdout","time":92.757593598,"data":"\n"}
+,{"stream_name":"stdout","time":92.757596898,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":92.757613908,"data":"\n"}
+,{"stream_name":"stdout","time":92.757616438,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":92.757618828,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 260, in record\n"}
+,{"stream_name":"stdout","time":92.757621898,"data":"    row.update(action())\n"}
+,{"stream_name":"stdout","time":92.757624418,"data":"               ^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757626748,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 372, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":92.757629308,"data":"    lambda c=call, k=key: compile_probe(c, (dense, norm), expected_ln, k, \"layernorm\"),\n"}
+,{"stream_name":"stdout","time":92.757631828,"data":"                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757634478,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 346, in compile_probe\n"}
+,{"stream_name":"stdout","time":92.757636908,"data":"    out, compiled, compilation = compile_case(call, args, directory / \"hlo\", key)\n"}
+,{"stream_name":"stdout","time":92.757639348,"data":"                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757641688,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py\", line 106, in compile_case\n"}
+,{"stream_name":"stdout","time":92.757644388,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":92.757646788,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757653198,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":92.757655798,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":92.757658278,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757660668,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":92.757663278,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":92.757666058,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757668398,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":92.757670828,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":92.757673148,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757675458,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":92.757678008,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":92.757680318,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757682698,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":92.757685138,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":92.757687718,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757690288,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":92.757696468,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":92.757698808,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757701178,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":92.757703598,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":92.757705888,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":92.757708198,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":92.757710818,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":92.757715728,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector\u003c128x1024xi1\u003e': \"32,{*,0},(8,128),-2\" -\u003e \"32,{*,0},(8,128)\"\n"}
+,{"stream_name":"stdout","time":92.757718608,"data":"\n"}
+,{"stream_name":"stdout","time":92.757720818,"data":"\n"}
+,{"stream_name":"stdout","time":92.757723068,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":92.757725448,"data":"\n"}
+,{"stream_name":"stdout","time":92.760275648,"data":"\n"}
+,{"stream_name":"stdout","time":92.775248818,"data":"START operators/categorical_stress-ln-hlo_mixed-output categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":93.139406293,"data":"START operators/categorical_stress-ln-legacy_bf16-fp32_where categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":94.155108444,"data":"START operators/categorical_stress-ln-hlo_mixed-fp32_where categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":94.813366841,"data":"START operators/categorical_stress-ln-legacy_bf16-direct_2d categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":95.035027724,"data":"START operators/categorical_stress-ln-hlo_mixed-direct_2d categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":95.570811369,"data":"START screen/jax-graph-control categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":96.912328515,"data":"START screen/late-dense-jax-ln categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":97.634434472,"data":"START screen/jax-dense-legacy-unmasked categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":98.659392174,"data":"START screen/jax-dense-legacy-fp32-where categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":100.006280309,"data":"START screen/late-dense-legacy-unmasked categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":100.596115196,"data":"START screen/jax-dense-mixed categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":101.671260017,"data":"START screen/late-dense-mixed categorical_stress 4096\n"}
+,{"stream_name":"stdout","time":102.968673692,"data":"START full_baselines/original_runtime legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":109.271335572,"data":"START full_baselines/typed_runtime legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":115.997569657,"data":"START full_baselines/captured_control legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":124.724328674,"data":"START full/jax-graph-control legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":131.554404511,"data":"START full/late-dense-jax-ln legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":138.161953964,"data":"START full/jax-dense-legacy-unmasked legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":144.606290256,"data":"START full/jax-dense-legacy-fp32-where legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":151.269534281,"data":"START full/late-dense-legacy-unmasked legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":158.172112527,"data":"START full/jax-dense-mixed legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":165.311791667,"data":"START full/late-dense-mixed legal_scrambles 16384\n"}
+,{"stream_name":"stdout","time":189.856588621,"data":"START full_baselines/original_runtime categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":189.935139942,"data":"START full_baselines/typed_runtime categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":190.686363651,"data":"START full_baselines/captured_control categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":199.269106786,"data":"START full/jax-graph-control categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":206.132424413,"data":"START full/late-dense-jax-ln categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":212.960647449,"data":"START full/jax-dense-legacy-unmasked categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":219.853428956,"data":"START full/jax-dense-legacy-fp32-where categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":226.868512174,"data":"START full/late-dense-legacy-unmasked categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":233.75519647,"data":"START full/jax-dense-mixed categorical_stress 16384\n"}
+,{"stream_name":"stdout","time":240.750912578,"data":"START full/late-dense-mixed categorical_stress 16384\n"}
+,{"stream_name":"stderr","time":267.654617775,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":269.869018314,"data":"[NbConvertApp] Writing 282938 bytes to __results__.html\n"}
+]

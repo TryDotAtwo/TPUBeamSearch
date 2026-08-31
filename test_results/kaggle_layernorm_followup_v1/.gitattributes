@@ -1,0 +1,9 @@
+# Preserve raw runtime evidence and lossless archives byte-for-byte.
+arithmetic_followup/** -text -whitespace
+tpu-layernorm-arithmetic-followup.log -text -whitespace
+archives/** -text -whitespace
+# Generated summaries have deterministic LF bytes checked by their readers.
+*.json -text
+*.csv -text
+# Summary provenance hashes the generator bytes, independent of host checkout.
+*.py -text
