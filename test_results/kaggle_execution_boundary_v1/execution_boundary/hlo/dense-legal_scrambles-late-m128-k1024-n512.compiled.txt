@@ -1,0 +1,66 @@
+HloModule jit_call, is_scheduled=true, entry_computation_layout={(bf16[4096,1024]{1,0:T(8,128)(2,1)}, bf16[1024,1024]{1,0:T(8,128)(2,1)}, bf16[1024]{0:T(1024)(128)(2,1)})->bf16[4096,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_parameters={true,true,true}, allow_spmd_sharding_propagation_to_output={true}, frontend_attributes={arg_layout_modes="default;default;default",arg_memory_spaces="0;0;0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch/benchmarks/stream1_execution_boundary.py"
+3 "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py"
+4 "/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py"
+5 "/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_layernorm_pallas.py"
+6 "/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_pallas.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "run_suite"
+6 "run_suite.<locals>.operators"
+7 "run_suite.<locals>.record"
+8 "run_suite.<locals>.operators.<locals>.action"
+9 "run_suite.<locals>.compile_into"
+10 "compile_case"
+11 "run_suite.<locals>.operators.<locals>.call"
+12 "candidate_dense"
+13 "pallas_layernorm_dense"
+14 "pallas_dense_linear"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=199 column=11 end_column=42}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=27}
+3 {file_name_id=2 function_name_id=3 line=324 end_line=324 column=4 end_column=10}
+4 {file_name_id=2 function_name_id=4 line=318 end_line=320 column=8 end_column=57}
+5 {file_name_id=2 function_name_id=5 line=261 end_line=261 column=8 end_column=19}
+6 {file_name_id=2 function_name_id=6 line=176 end_line=177 column=41 end_column=84}
+7 {file_name_id=2 function_name_id=7 line=87 end_line=87 column=23 end_column=31}
+8 {file_name_id=2 function_name_id=8 line=170 end_line=171 column=43 end_column=84}
+9 {file_name_id=2 function_name_id=9 line=100 end_line=100 column=37 end_column=89}
+10 {file_name_id=3 function_name_id=10 line=99 end_line=99 column=14 end_column=45}
+11 {file_name_id=2 function_name_id=11 line=167 end_line=167 column=32 end_column=104}
+12 {file_name_id=4 function_name_id=12 line=45 end_line=46 column=17 end_column=83}
+13 {file_name_id=5 function_name_id=13 line=78 end_line=80 column=15 end_column=9}
+14 {file_name_id=6 function_name_id=14 line=373 end_line=373 column=11 end_column=58}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+8 {file_location_id=8 parent_frame_id=8}
+9 {file_location_id=9 parent_frame_id=9}
+10 {file_location_id=10 parent_frame_id=10}
+11 {file_location_id=11 parent_frame_id=11}
+12 {file_location_id=12 parent_frame_id=12}
+13 {file_location_id=13 parent_frame_id=13}
+14 {file_location_id=14 parent_frame_id=14}
+
+
+ENTRY %main.4 (x.1: bf16[4096,1024], p_dense_weight.1: bf16[1024,1024], p_dense_bias.1: bf16[1024]) -> bf16[4096,1024] {
+  %p_dense_bias.1 = bf16[1024]{0:T(1024)(128)(2,1)} parameter(2), metadata={op_name="p.dense.bias"}
+  %p_dense_weight.1 = bf16[1024,1024]{1,0:T(8,128)(2,1)} parameter(1), metadata={op_name="p.dense.weight"}
+  %x.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} parameter(0), metadata={op_name="x"}
+  ROOT %stream1_dense_linear.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %p_dense_weight.1, %p_dense_bias.1), custom_call_target="tpu_custom_call", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024,1024]{1,0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(call)/stream1_dense_linear/pallas_call" stack_frame_id=14}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"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AwMXCQMBCwcXYwMNBT0/ExQXA0EJAxs9AwNFBQMDAwNFBQMDBQZFAwUHD0NFAwN7BQMDBQZ7AyUFC0kbBrYCAycDSx0GxgIDKQNNFwaFAwUDTxUHhW0DBQVHUR8G4gIDGQNTAwMxBQMDAwMxBQMDBQYxAxkHDVdZDwUxQwlVDVdZDQAXAwEFDQAXCQABBxEBxQcDCQsHAQEBAQEBAwMBCQMBCQQBBQEFBxEBxwcDCQsHAQEBAQEBAwMBCQMBCQQBBQUDBxEByQcDCQsHAQEBAQEBAwMBCQMBCQQBAwMHEQHNBwMJCwcBAQEBAQEDAwEJAwEJBAEFAQMGAwEFAQB2EIkjESkJEx0nHSUxGx0dKyMhIyktRVMRCwsNDRUHGRkZGSUVDVUtCQ0dJRELEx1LK3MbFyUXIxcPGSMVFxkVGR8PDQkdEWJ1aWx0aW4Ac3RhYmxlX21vc2FpYwB0cHUAYXJpdGgAbW9kdWxlAGFyaXRoLmNvbnN0YW50AHZlY3Rvci5sb2FkAGZ1bmMuZnVuYwBmdW5jLnJldHVybgBhcml0aC5jbXBpAHNjZi55aWVsZAB0cHUudmVjdG9yX3N0b3JlAGFyaXRoLmV4dHVpAHNjZi5pZgBhcml0aC5hZGRmAHZlY3Rvci5icm9hZGNhc3QAdHB1Lm1hdG11bAB2ZWN0b3Iuc2hhcGVfY2FzdABhcml0aC5leHRmAGFyaXRoLnRydW5jZgAvdG1wL1RQVUJlYW1TZWFyY2gvc3JjL3RwdV9iZWFtX3NlYXJjaC9zdHJlYW0xX3BhbGxhcy5weQBfZGVuc2VfbGluZWFyX2tlcm5lbABfZGVuc2VfbGluZWFyX2tlcm5lbC48bG9jYWxzPi5maW5pc2gAZnVuY3Rpb25fdHlwZQBzeW1fbmFtZQBnZXQ6AGdldC9nZXQAdHJhbnNmb3JtX2luZGljZXMAd2luZG93X2JvdW5kcwB2YWx1ZQBlcToAY29udmVydF9lbGVtZW50X3R5cGU6AGNvbnZlcnRfZWxlbWVudF90eXBlL2NvbnZlcnRfZWxlbWVudF90eXBlAHN3YXA6AHN3YXAvc3dhcABicm9hZGNhc3RfaW5fZGltOgB0cmFuc2Zvcm1fMAB0cmFuc2Zvcm1fMQB0cmFuc2Zvcm1fMgB0cmFuc2Zvcm1fMwBlcQBwcmVkaWNhdGUAZXEvZXEAY29uZDoAY29uZABhZGQ6AGFkZC9hZGQAX2RlbnNlX2xpbmVhcl9rZXJuZWwuPGxvY2Fscz4uaW5pdGlhbGl6ZQBicm9hZGNhc3RfaW5fZGltL2Jyb2FkY2FzdF9pbl9kaW0Ac3RhYmxlX21vc2FpYy52ZXJzaW9uAGRpbWVuc2lvbl9zZW1hbnRpY3MAaXRlcmF0aW9uX2JvdW5kcwBzY2FsYXJfcHJlZmV0Y2gAc2NyYXRjaF9vcGVyYW5kcwBzdHJlYW0xX2RlbnNlX2xpbmVhcgB0cHUuY29yZV90eXBlAHdpbmRvd19wYXJhbXMAZG90X2dlbmVyYWw6AGRvdF9nZW5lcmFsL2RvdF9nZW5lcmFsAGRpbWVuc2lvbl9udW1iZXJzAHRyYW5zcG9zZV9saHMAdHJhbnNwb3NlX2xoc19oaW50AHRyYW5zcG9zZV9yaHMAZmFzdG1hdGgAYWRkAG9wZXJhbmRTZWdtZW50U2l6ZXMAc3RyaWRlcwBicm9hZGNhc3RfaW5fZGltAA==","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"3110912"}]}
+}
+

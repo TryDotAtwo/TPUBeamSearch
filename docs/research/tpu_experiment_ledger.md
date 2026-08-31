@@ -341,3 +341,49 @@ private/TPU/GPU metadata and source SHA were verified. Requested `v3-8` maps to
 server `TpuV5E8`; runtime inventory and numerical/performance results remain
 unverified. No BN/default or inference-source changes. The existing heartbeat
 now monitors this submitted version without resubmitting it.
+
+## Execution-boundary v1 completed: 2026-08-31
+
+[Terminal report](../../test_results/kaggle_execution_boundary_v1/report.md)
+supersedes the queued record. Source remains
+`45062324d368f4849adb6d572d21d54f75854d79`; actualTPUv5lite,8visible/1active,
+JAX/jaxlib0.10.2 and libtpu0.0.42.1. All recorded checkpoint/model-source/puzzle/
+input hashes match follow-up v1. All106 cases execute; zero compile or case
+errors. All12 paired timing groups succeed. All240 output files plus full
+Kaggle log are downloaded and hashed; no signed download URLs are published.
+
+- **Pallas banked embedding + otherwise JAX model passes finite elementwise
+  exact original Q on both16K and both actually executed32K corpora.** Full
+ 16K takes9.151/9.134ms versus original11.593/11.677ms,1.267/1.278x throughput.
+ 32K takes18.549/18.626ms versus24.122/24.138ms,1.300/1.296x. It also beats
+ typedBF16 JAX and the exact tiled-JAX lookup in every paired round.
+- Tiled JAX is also exact and gives1.136/1.156x at16K,1.153/1.150x at32K.
+ Naive flat JAX is exact but takes about570ms at16K and is not promoted.
+ Isolated4K lookup favors tiled JAX; full-graph evidence determines the winner.
+- Device modules average10.967ms original,10.942ms typed,9.418ms tiled,
+ 8.564ms banked. Banked lookup is2.414ms, with runtime table-preparation
+ loops still timed. Original gather+flatten costs5.474ms. Static temp storage
+ drops723.660→123.967MiB at16K; these are allocations, not bandwidth counters.
+- Pallas Dense BM128→512 reduces20-call device cost8.337→5.216ms. BK1024
+ reaches exact standalone Dense and same-compiled-LN output on both4K samples,
+ but full Q still fails. All-JAX separate Dense/LN and JAX post-barrier controls
+ already differ from composed JAX. HLO shows different sum/output boundaries
+ and emitters; outerFP32 types are not complete machine-rounding proof.
+- Mixed LN/direct2D remain inexact versus JAX. Direct2D and unmasked outputs
+ match in direct4K controls and show the same full aggregate errors, essentially
+ equal device cost. FP32-where is slower. All Dense/LN full interventions fail
+ unchanged exact-Q gate; high cosine or topK overlap does not override it.
+- Profile analysis accounts for inclusive while/body spans without double
+ counting.16/17 traces pass strict checks; flat-JAX's5.957us module-clock
+ discrepancy is retained as a diagnostic rejection, not silently corrected.
+ XPlane files are retained but not decoded. Unprofiled timing is separate.
+- Exact variants preserve minimizing topK identities/order, masks and ties.
+ Legal inputs include duplicates; globaltopK is not distributed beam. Queued
+ eight-call diagnostics are not real128-chunk scan. No8-device scaling yet.
+
+Analysis and regression work ran inline without subagents. Reproducible raw-
+cell CSV validation, artifact hashing and profile checks accompany the report.
+Fresh full regression:295 passed in89.23s; deterministic analysis check passed.
+No inference-source, BN or production-default changes. Next proposed target is
+the exact hybrid's real caller/scaling; no new kernel is launched here. The
+completed execution-boundary monitor is retired after publication.

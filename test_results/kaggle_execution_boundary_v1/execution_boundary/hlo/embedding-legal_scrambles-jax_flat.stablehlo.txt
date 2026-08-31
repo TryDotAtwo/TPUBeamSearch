@@ -1,0 +1,89 @@
+module @jit_call attributes {mhlo.num_partitions = 1 : i32, mhlo.num_replicas = 1 : i32} {
+  func.func public @main(%arg0: tensor<4096x150xui8>, %arg1: tensor<150x24xf32>) -> (tensor<4096x3600xbf16> {jax.result_info = "result"}) {
+    %0 = stablehlo.convert %arg1 : (tensor<150x24xf32>) -> tensor<150x24xbf16>
+    %1 = stablehlo.iota dim = 0 : tensor<3600xi32>
+    %c = stablehlo.constant dense<24> : tensor<i32>
+    %2 = call @floor_divide(%1, %c) : (tensor<3600xi32>, tensor<i32>) -> tensor<3600xi32>
+    %c_0 = stablehlo.constant dense<0> : tensor<i32>
+    %3 = stablehlo.broadcast_in_dim %c_0, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %4 = stablehlo.compare LT, %2, %3, SIGNED : (tensor<3600xi32>, tensor<3600xi32>) -> tensor<3600xi1>
+    %c_1 = stablehlo.constant dense<150> : tensor<i32>
+    %5 = stablehlo.broadcast_in_dim %c_1, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %6 = stablehlo.add %2, %5 : tensor<3600xi32>
+    %7 = stablehlo.select %4, %6, %2 : tensor<3600xi1>, tensor<3600xi32>
+    %8 = stablehlo.broadcast_in_dim %7, dims = [0] : (tensor<3600xi32>) -> tensor<3600x1xi32>
+    %9 = "stablehlo.gather"(%arg0, %8) <{dimension_numbers = #stablehlo.gather<offset_dims = [0], collapsed_slice_dims = [1], start_index_map = [1], index_vector_dim = 1>, indices_are_sorted = false, slice_sizes = array<i64: 4096, 1>}> : (tensor<4096x150xui8>, tensor<3600x1xi32>) -> tensor<4096x3600xui8>
+    %10 = stablehlo.convert %9 : (tensor<4096x3600xui8>) -> tensor<4096x3600xi32>
+    %11 = stablehlo.reshape %0 : (tensor<150x24xbf16>) -> tensor<3600xbf16>
+    %c_2 = stablehlo.constant dense<24> : tensor<i32>
+    %12 = stablehlo.broadcast_in_dim %c_2, dims = [] : (tensor<i32>) -> tensor<4096x3600xi32>
+    %13 = stablehlo.multiply %10, %12 : tensor<4096x3600xi32>
+    %c_3 = stablehlo.constant dense<24> : tensor<i32>
+    %14 = call @remainder(%1, %c_3) : (tensor<3600xi32>, tensor<i32>) -> tensor<3600xi32>
+    %15 = stablehlo.broadcast_in_dim %14, dims = [1] : (tensor<3600xi32>) -> tensor<1x3600xi32>
+    %16 = stablehlo.broadcast_in_dim %15, dims = [0, 1] : (tensor<1x3600xi32>) -> tensor<4096x3600xi32>
+    %17 = stablehlo.add %13, %16 : tensor<4096x3600xi32>
+    %c_4 = stablehlo.constant dense<0> : tensor<i32>
+    %18 = stablehlo.broadcast_in_dim %c_4, dims = [] : (tensor<i32>) -> tensor<4096x3600xi32>
+    %19 = stablehlo.compare LT, %17, %18, SIGNED : (tensor<4096x3600xi32>, tensor<4096x3600xi32>) -> tensor<4096x3600xi1>
+    %c_5 = stablehlo.constant dense<3600> : tensor<i32>
+    %20 = stablehlo.broadcast_in_dim %c_5, dims = [] : (tensor<i32>) -> tensor<4096x3600xi32>
+    %21 = stablehlo.add %17, %20 : tensor<4096x3600xi32>
+    %22 = stablehlo.select %19, %21, %17 : tensor<4096x3600xi1>, tensor<4096x3600xi32>
+    %23 = stablehlo.broadcast_in_dim %22, dims = [0, 1] : (tensor<4096x3600xi32>) -> tensor<4096x3600x1xi32>
+    %24 = "stablehlo.gather"(%11, %23) <{dimension_numbers = #stablehlo.gather<collapsed_slice_dims = [0], start_index_map = [0], index_vector_dim = 2>, indices_are_sorted = false, slice_sizes = array<i64: 1>}> : (tensor<3600xbf16>, tensor<4096x3600x1xi32>) -> tensor<4096x3600xbf16>
+    return %24 : tensor<4096x3600xbf16>
+  }
+  func.func private @floor_divide(%arg0: tensor<3600xi32>, %arg1: tensor<i32>) -> tensor<3600xi32> {
+    %0 = stablehlo.convert %arg1 : tensor<i32>
+    %1 = stablehlo.broadcast_in_dim %0, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %2 = stablehlo.divide %arg0, %1 : tensor<3600xi32>
+    %3 = stablehlo.sign %arg0 : tensor<3600xi32>
+    %4 = stablehlo.sign %0 : tensor<i32>
+    %5 = stablehlo.broadcast_in_dim %4, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %6 = stablehlo.compare NE, %3, %5, SIGNED : (tensor<3600xi32>, tensor<3600xi32>) -> tensor<3600xi1>
+    %7 = stablehlo.broadcast_in_dim %0, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %8 = stablehlo.remainder %arg0, %7 : tensor<3600xi32>
+    %c = stablehlo.constant dense<0> : tensor<i32>
+    %9 = stablehlo.broadcast_in_dim %c, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %10 = stablehlo.compare NE, %8, %9, SIGNED : (tensor<3600xi32>, tensor<3600xi32>) -> tensor<3600xi1>
+    %11 = stablehlo.and %6, %10 : tensor<3600xi1>
+    %c_0 = stablehlo.constant dense<1> : tensor<i32>
+    %12 = stablehlo.broadcast_in_dim %c_0, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %13 = stablehlo.subtract %2, %12 : tensor<3600xi32>
+    %14 = call @_where(%11, %13, %2) : (tensor<3600xi1>, tensor<3600xi32>, tensor<3600xi32>) -> tensor<3600xi32>
+    return %14 : tensor<3600xi32>
+  }
+  func.func private @_where(%arg0: tensor<3600xi1>, %arg1: tensor<3600xi32>, %arg2: tensor<3600xi32>) -> tensor<3600xi32> {
+    %0 = stablehlo.select %arg0, %arg1, %arg2 : tensor<3600xi1>, tensor<3600xi32>
+    return %0 : tensor<3600xi32>
+  }
+  func.func private @remainder(%arg0: tensor<3600xi32>, %arg1: tensor<i32>) -> tensor<3600xi32> {
+    %0 = stablehlo.convert %arg1 : tensor<i32>
+    %c = stablehlo.constant dense<0> : tensor<i32>
+    %1 = stablehlo.compare EQ, %0, %c, SIGNED : (tensor<i32>, tensor<i32>) -> tensor<i1>
+    %c_0 = stablehlo.constant dense<1> : tensor<i32>
+    %2 = call @_where_0(%1, %c_0, %0) : (tensor<i1>, tensor<i32>, tensor<i32>) -> tensor<i32>
+    %3 = stablehlo.broadcast_in_dim %2, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %4 = stablehlo.remainder %arg0, %3 : tensor<3600xi32>
+    %c_1 = stablehlo.constant dense<0> : tensor<i32>
+    %5 = stablehlo.broadcast_in_dim %c_1, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %6 = stablehlo.compare NE, %4, %5, SIGNED : (tensor<3600xi32>, tensor<3600xi32>) -> tensor<3600xi1>
+    %c_2 = stablehlo.constant dense<0> : tensor<i32>
+    %7 = stablehlo.broadcast_in_dim %c_2, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %8 = stablehlo.compare LT, %4, %7, SIGNED : (tensor<3600xi32>, tensor<3600xi32>) -> tensor<3600xi1>
+    %c_3 = stablehlo.constant dense<0> : tensor<i32>
+    %9 = stablehlo.compare LT, %2, %c_3, SIGNED : (tensor<i32>, tensor<i32>) -> tensor<i1>
+    %10 = stablehlo.broadcast_in_dim %9, dims = [] : (tensor<i1>) -> tensor<3600xi1>
+    %11 = stablehlo.compare NE, %8, %10, UNSIGNED : (tensor<3600xi1>, tensor<3600xi1>) -> tensor<3600xi1>
+    %12 = stablehlo.and %11, %6 : tensor<3600xi1>
+    %13 = stablehlo.broadcast_in_dim %2, dims = [] : (tensor<i32>) -> tensor<3600xi32>
+    %14 = stablehlo.add %4, %13 : tensor<3600xi32>
+    %15 = stablehlo.select %12, %14, %4 : tensor<3600xi1>, tensor<3600xi32>
+    return %15 : tensor<3600xi32>
+  }
+  func.func private @_where_0(%arg0: tensor<i1>, %arg1: tensor<i32>, %arg2: tensor<i32>) -> tensor<i32> {
+    %0 = stablehlo.select %arg0, %arg1, %arg2 : tensor<i1>, tensor<i32>
+    return %0 : tensor<i32>
+  }
+}

@@ -1,0 +1,227 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788198329.462396      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: ===
+learning/45eac/tfrc/runtime/common_lib.cc:238
+{
+  "source_commit": "45062324d368f4849adb6d572d21d54f75854d79",
+  "runtime": {
+    "python": "3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]",
+    "platform": "Linux-6.6.143+-x86_64-with-glibc2.41",
+    "versions": {
+      "jax": "0.10.2",
+      "jaxlib": "0.10.2",
+      "libtpu": "0.0.42.1",
+      "numpy": "2.5.0",
+      "torch": "2.8.0+cpu"
+    },
+    "devices": [
+      {
+        "id": 0,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 1,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 2,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 3,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 4,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 5,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 6,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 7,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      }
+    ],
+    "process_count": 1,
+    "process_index": 0,
+    "local_device_count": 8,
+    "active_device_count": 1,
+    "default_matmul_precision": null,
+    "x64_enabled": false
+  },
+  "checkpoint_sha256": "2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2",
+  "original_source_sha256": "6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e",
+  "puzzle_sha256": "01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0",
+  "input_sha256": {
+    "legal_scrambles": "b7ff6754f3cfbd0c531d14e00b7f516adba8f412c3ee9d93ede5464cc0730fc1",
+    "categorical_stress": "610be0697c4a087f2a66dbcd5622bfdcc13e0fac9efc0106a3d62fa28989ea5d"
+  },
+  "seeds": {
+    "legal": 42,
+    "stress": 43
+  },
+  "move_names": [
+    "f0",
+    "-f0",
+    "f1",
+    "-f1",
+    "f2",
+    "-f2",
+    "f3",
+    "-f3",
+    "f4",
+    "-f4",
+    "r0",
+    "-r0",
+    "r1",
+    "-r1",
+    "r2",
+    "-r2",
+    "r3",
+    "-r3",
+    "r4",
+    "-r4",
+    "d0",
+    "-d0",
+    "d1",
+    "-d1",
+    "d2",
+    "-d2",
+    "d3",
+    "-d3",
+    "d4",
+    "-d4"
+  ],
+  "active_device_count": 1,
+  "input_method": "unchanged legal walks and categorical stress, not real frontiers"
+}
+START controls/separate-dense-ln-vs-composed-jax legal_scrambles 4096
+START dense/jax-none legal_scrambles 4096
+START dense/jax-pre legal_scrambles 4096
+START dense/jax-post legal_scrambles 4096
+START dense/jax-both legal_scrambles 4096
+START dense/late-m128-k256-n512 legal_scrambles 4096
+START dense/late-m256-k256-n512 legal_scrambles 4096
+START dense/late-m512-k256-n512 legal_scrambles 4096
+START dense/late-m128-k256-n1024 legal_scrambles 4096
+START dense/late-m128-k1024-n512 legal_scrambles 4096
+START dense_ln/jax-none legal_scrambles 4096
+START dense_ln/jax-pre legal_scrambles 4096
+START dense_ln/jax-post legal_scrambles 4096
+START dense_ln/jax-both legal_scrambles 4096
+START dense_ln/late-m128-k256-n512 legal_scrambles 4096
+START dense_ln/late-m256-k256-n512 legal_scrambles 4096
+START dense_ln/late-m512-k256-n512 legal_scrambles 4096
+START dense_ln/late-m128-k256-n1024 legal_scrambles 4096
+START dense_ln/late-m128-k1024-n512 legal_scrambles 4096
+START layernorm/reference legal_scrambles 4096
+START layernorm/legacy-unmasked legal_scrambles 4096
+START layernorm/mixed-unmasked legal_scrambles 4096
+START layernorm/mixed-direct2d legal_scrambles 4096
+START layernorm/mixed-masked legal_scrambles 4096
+START controls/mixed-direct2d-vs-unmasked legal_scrambles 4096
+START observations/ln legal_scrambles 4096
+START observations/dense-ln legal_scrambles 4096
+START embedding/reference legal_scrambles 4096
+START embedding/typed_reference legal_scrambles 4096
+START embedding/jax_flat legal_scrambles 4096
+START embedding/jax_tiled legal_scrambles 4096
+START embedding/pallas_banked legal_scrambles 4096
+START controls/separate-dense-ln-vs-composed-jax categorical_stress 4096
+START dense/jax-none categorical_stress 4096
+START dense/jax-pre categorical_stress 4096
+START dense/jax-post categorical_stress 4096
+START dense/jax-both categorical_stress 4096
+START dense/late-m128-k256-n512 categorical_stress 4096
+START dense/late-m256-k256-n512 categorical_stress 4096
+START dense/late-m512-k256-n512 categorical_stress 4096
+START dense/late-m128-k256-n1024 categorical_stress 4096
+START dense/late-m128-k1024-n512 categorical_stress 4096
+START dense_ln/jax-none categorical_stress 4096
+START dense_ln/jax-pre categorical_stress 4096
+START dense_ln/jax-post categorical_stress 4096
+START dense_ln/jax-both categorical_stress 4096
+START dense_ln/late-m128-k256-n512 categorical_stress 4096
+START dense_ln/late-m256-k256-n512 categorical_stress 4096
+START dense_ln/late-m512-k256-n512 categorical_stress 4096
+START dense_ln/late-m128-k256-n1024 categorical_stress 4096
+START dense_ln/late-m128-k1024-n512 categorical_stress 4096
+START layernorm/reference categorical_stress 4096
+START layernorm/legacy-unmasked categorical_stress 4096
+START layernorm/mixed-unmasked categorical_stress 4096
+START layernorm/mixed-direct2d categorical_stress 4096
+START layernorm/mixed-masked categorical_stress 4096
+START controls/mixed-direct2d-vs-unmasked categorical_stress 4096
+START observations/ln categorical_stress 4096
+START observations/dense-ln categorical_stress 4096
+START embedding/reference categorical_stress 4096
+START embedding/typed_reference categorical_stress 4096
+START embedding/jax_flat categorical_stress 4096
+START embedding/jax_tiled categorical_stress 4096
+START embedding/pallas_banked categorical_stress 4096
+START full_baselines/original_runtime legal_scrambles 16384
+START full_baselines/typed_runtime legal_scrambles 16384
+START full/jax-none legal_scrambles 16384
+START full/jax-pre legal_scrambles 16384
+START full/jax-post legal_scrambles 16384
+START full/jax-both legal_scrambles 16384
+START full/late-m128-k256-n512 legal_scrambles 16384
+START full/late-m256-k256-n512 legal_scrambles 16384
+START full/late-m512-k256-n512 legal_scrambles 16384
+START full/late-m128-k256-n1024 legal_scrambles 16384
+START full/late-m128-k1024-n512 legal_scrambles 16384
+START full/ln-legacy_bf16-none legal_scrambles 16384
+START full/ln-hlo_mixed-none legal_scrambles 16384
+START full/ln-hlo_mixed-direct_2d legal_scrambles 16384
+START full/embedding-jax_flat legal_scrambles 16384
+START full/embedding-jax_tiled legal_scrambles 16384
+START full/embedding-pallas_banked legal_scrambles 16384
+START full_baselines/original_runtime categorical_stress 16384
+START full_baselines/typed_runtime categorical_stress 16384
+START full/jax-none categorical_stress 16384
+START full/jax-pre categorical_stress 16384
+START full/jax-post categorical_stress 16384
+START full/jax-both categorical_stress 16384
+START full/late-m128-k256-n512 categorical_stress 16384
+START full/late-m256-k256-n512 categorical_stress 16384
+START full/late-m512-k256-n512 categorical_stress 16384
+START full/late-m128-k256-n1024 categorical_stress 16384
+START full/late-m128-k1024-n512 categorical_stress 16384
+START full/ln-legacy_bf16-none categorical_stress 16384
+START full/ln-hlo_mixed-none categorical_stress 16384
+START full/ln-hlo_mixed-direct_2d categorical_stress 16384
+START full/embedding-jax_flat categorical_stress 16384
+START full/embedding-jax_tiled categorical_stress 16384
+START full/embedding-pallas_banked categorical_stress 16384
+START full_baselines/original_runtime legal_scrambles 32768
+START full_baselines/typed_runtime legal_scrambles 32768
+START promotion/embedding-pallas_banked legal_scrambles 32768
+START promotion/embedding-jax_tiled legal_scrambles 32768
+START full_baselines/original_runtime categorical_stress 32768
+START full_baselines/typed_runtime categorical_stress 32768
+START promotion/embedding-pallas_banked categorical_stress 32768
+START promotion/embedding-jax_tiled categorical_stress 32768

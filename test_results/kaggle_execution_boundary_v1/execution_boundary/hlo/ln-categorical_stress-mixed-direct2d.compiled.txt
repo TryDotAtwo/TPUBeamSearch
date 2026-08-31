@@ -1,0 +1,58 @@
+HloModule jit_call, is_scheduled=true, entry_computation_layout={(bf16[4096,1024]{1,0:T(8,128)(2,1)}, bf16[1024]{0:T(1024)(128)(2,1)}, bf16[1024]{0:T(1024)(128)(2,1)})->bf16[4096,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_parameters={true,true,true}, allow_spmd_sharding_propagation_to_output={true}, frontend_attributes={arg_layout_modes="default;default;default",arg_memory_spaces="0;0;0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch/benchmarks/stream1_execution_boundary.py"
+3 "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_followup.py"
+4 "/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_layernorm_experimental.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "run_suite"
+6 "run_suite.<locals>.operators"
+7 "run_suite.<locals>.record"
+8 "run_suite.<locals>.operators.<locals>.action"
+9 "run_suite.<locals>.compile_into"
+10 "compile_case"
+11 "run_suite.<locals>.operators.<locals>.call"
+12 "experimental_layer_norm"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=199 column=11 end_column=42}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=27}
+3 {file_name_id=2 function_name_id=3 line=324 end_line=324 column=4 end_column=10}
+4 {file_name_id=2 function_name_id=4 line=318 end_line=320 column=8 end_column=57}
+5 {file_name_id=2 function_name_id=5 line=261 end_line=261 column=8 end_column=19}
+6 {file_name_id=2 function_name_id=6 line=194 end_line=194 column=28 end_column=93}
+7 {file_name_id=2 function_name_id=7 line=87 end_line=87 column=23 end_column=31}
+8 {file_name_id=2 function_name_id=8 line=192 end_line=192 column=39 end_column=126}
+9 {file_name_id=2 function_name_id=9 line=100 end_line=100 column=37 end_column=89}
+10 {file_name_id=3 function_name_id=10 line=99 end_line=99 column=14 end_column=45}
+11 {file_name_id=2 function_name_id=11 line=188 end_line=190 column=27 end_column=88}
+12 {file_name_id=4 function_name_id=12 line=143 end_line=143 column=11 end_column=27}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+8 {file_location_id=8 parent_frame_id=8}
+9 {file_location_id=9 parent_frame_id=9}
+10 {file_location_id=10 parent_frame_id=10}
+11 {file_location_id=11 parent_frame_id=11}
+12 {file_location_id=12 parent_frame_id=12}
+
+
+ENTRY %main.3 (x.1: bf16[4096,1024], n_scale.1: bf16[1024], n_bias.1: bf16[1024]) -> bf16[4096,1024] {
+  %n_bias.1 = bf16[1024]{0:T(1024)(128)(2,1)} parameter(2), metadata={op_name="n.bias"}
+  %n_scale.1 = bf16[1024]{0:T(1024)(128)(2,1)} parameter(1), metadata={op_name="n.scale"}
+  %x.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} parameter(0), metadata={op_name="x"}
+  ROOT %stream1_ln_experimental_hlo_mixed_direct_2d.1 = bf16[4096,1024]{1,0:T(8,128)(2,1)} custom-call(%x.1, %n_scale.1, %n_bias.1), custom_call_target="tpu_custom_call", operand_layout_constraints={bf16[4096,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(call)/stream1_ln_experimental_hlo_mixed_direct_2d/pallas_call" stack_frame_id=12}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"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DwkdEWJ1aWx0aW4Ac3RhYmxlX21vc2FpYwB0cHUAdmVjdG9yAGFyaXRoAG1vZHVsZQBhcml0aC5jb25zdGFudAB2ZWN0b3IuYnJvYWRjYXN0AGFyaXRoLmV4dGYAZnVuYy5mdW5jAGZ1bmMucmV0dXJuAHZlY3Rvci5sb2FkAHZlY3Rvci5zaGFwZV9jYXN0AGFyaXRoLnRydW5jZgB0cHUudHJhY2Vfc3RhcnQAYXJpdGguc2VsZWN0AHRwdS50cmFjZV9zdG9wAGFyaXRoLm11bGYAdmVjdG9yLm11bHRpX3JlZHVjdGlvbgBhcml0aC5kaXZmAGFyaXRoLmFkZGYAdHB1LmlvdGEAYXJpdGguY21waQBhcml0aC5zdWJmAG1hdGgucnNxcnQAdHB1LnZlY3Rvcl9zdG9yZQAvdG1wL1RQVUJlYW1TZWFyY2gvc3JjL3RwdV9iZWFtX3NlYXJjaC9zdHJlYW0xX2xheWVybm9ybV9leHBlcmltZW50YWwucHkAX2V4cGVyaW1lbnRhbF9sYXllcl9ub3JtX2tlcm5lbABjb252ZXJ0X2VsZW1lbnRfdHlwZToAY29udmVydF9lbGVtZW50X3R5cGUvY29udmVydF9lbGVtZW50X3R5cGUAdmFsdWUAZnVuY3Rpb25fdHlwZQBzeW1fbmFtZQBicm9hZGNhc3RfaW5fZGltOgBicm9hZGNhc3RfaW5fZGltL2Jyb2FkY2FzdF9pbl9kaW0AdHJhbnNmb3JtX2luZGljZXMAd2luZG93X2JvdW5kcwBtdWw6AGdldDoAZ2V0L2dldABqaXQ6AGxldmVsAG1lc3NhZ2UAcmVkdWNlX3N1bToAbXVsL211bAB0cmFuc2Zvcm1fMABwaXBlbGluZV9tb2RlAHRyYW5zZm9ybV8xAHRyYW5zZm9ybV8yAHRyYW5zZm9ybV8zAGx0OgByZWR1Y2Vfc3VtL3JlZHVjZV9zdW0AZGl2OgBkaXYAYWRkOgBhZGQAc3RhYmxlX21vc2FpYy52ZXJzaW9uAGRpbWVuc2lvbl9zZW1hbnRpY3MAaXRlcmF0aW9uX2JvdW5kcwBzY2FsYXJfcHJlZmV0Y2gAc2NyYXRjaF9vcGVyYW5kcwBzdHJlYW0xX2xuX2V4cGVyaW1lbnRhbF9obG9fbWl4ZWRfZGlyZWN0XzJkAHRwdS5jb3JlX3R5cGUAd2luZG93X3BhcmFtcwBkaW1lbnNpb25zAGlvdGE6AGlvdGEvaW90YQBfY29sdW1uX2luZGljZXMAbHQAbHQvbHQAcHJlZGljYXRlAG1hc2tfaW5wdXQvaml0AF9leHBlcmltZW50YWxfbGF5ZXJfbm9ybV9rZXJuZWwuPGxvY2Fscz4ubWFzawBtYXNrX2lucHV0AHNlbGVjdF9uOgBzZWxlY3Rfbi9zZWxlY3RfbgByZWR1Y2Vfc3VtAGtpbmQAcmVkdWN0aW9uX2RpbXMAZmFzdG1hdGgAc3ViOgBzdWIvc3ViAG1hc2tfY2VudGVyL2ppdABtYXNrX2NlbnRlcgBtdWwAcnNxcnQ6AHJzcXJ0L3JzcXJ0AGFkZC9hZGQAbWFza19vdXRwdXQvaml0AG1hc2tfb3V0cHV0AGNvbnZlcnRfZWxlbWVudF90eXBlAHN3YXA6AHN3YXAvc3dhcABvcGVyYW5kU2VnbWVudFNpemVzAHN0cmlkZXMA","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"1495040"}]}
+}
+

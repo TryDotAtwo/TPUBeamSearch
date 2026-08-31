@@ -1,5 +1,8 @@
 # Execution-boundary A/B v1: queued
 
+Historical launch record. Superseded by the [completed results](report.md):
+exact banked Pallas embedding confirmed at16K and32K on both corpora.
+
 On2026-08-31, the prepared private bundle was submitted **once**. Kaggle
 acknowledged version1; live status was **QUEUED at17:14:09 UTC**.
 [Notebook](https://www.kaggle.com/code/trydotatwo/tpu-execution-boundary-ab).

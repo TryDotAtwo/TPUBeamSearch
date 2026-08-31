@@ -1,0 +1,16 @@
+module @jit_call attributes {mhlo.num_partitions = 1 : i32, mhlo.num_replicas = 1 : i32} {
+  func.func public @main(%arg0: tensor<4096x150xui8>, %arg1: tensor<150x24xbf16>) -> (tensor<4096x3600xbf16> {jax.result_info = "result"}) {
+    %0 = stablehlo.convert %arg0 : (tensor<4096x150xui8>) -> tensor<4096x150xi32>
+    %c = stablehlo.constant dense<0> : tensor<i32>
+    %1 = stablehlo.broadcast_in_dim %c, dims = [] : (tensor<i32>) -> tensor<4096x150xi32>
+    %2 = stablehlo.compare LT, %0, %1, SIGNED : (tensor<4096x150xi32>, tensor<4096x150xi32>) -> tensor<4096x150xi1>
+    %c_0 = stablehlo.constant dense<150> : tensor<i32>
+    %3 = stablehlo.broadcast_in_dim %c_0, dims = [] : (tensor<i32>) -> tensor<4096x150xi32>
+    %4 = stablehlo.add %0, %3 : tensor<4096x150xi32>
+    %5 = stablehlo.select %2, %4, %0 : tensor<4096x150xi1>, tensor<4096x150xi32>
+    %6 = stablehlo.broadcast_in_dim %5, dims = [0, 1] : (tensor<4096x150xi32>) -> tensor<4096x150x1xi32>
+    %7 = "stablehlo.gather"(%arg1, %6) <{dimension_numbers = #stablehlo.gather<offset_dims = [2], collapsed_slice_dims = [0], start_index_map = [0], index_vector_dim = 2>, indices_are_sorted = false, slice_sizes = array<i64: 1, 24>}> : (tensor<150x24xbf16>, tensor<4096x150x1xi32>) -> tensor<4096x150x24xbf16>
+    %8 = stablehlo.reshape %7 : (tensor<4096x150x24xbf16>) -> tensor<4096x3600xbf16>
+    return %8 : tensor<4096x3600xbf16>
+  }
+}

@@ -1,0 +1,8 @@
+# Preserve downloaded raw bytes and deterministic generated hashes on Windows.
+execution_boundary/** -text -whitespace
+tpu-execution-boundary-ab.log -text -whitespace
+*.csv -text
+summary.json -text
+profile_summary.json -text
+download_manifest.json -text
+analyze.py text eol=lf
