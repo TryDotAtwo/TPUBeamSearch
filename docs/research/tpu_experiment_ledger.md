@@ -163,3 +163,27 @@ and raw result at source `2e9602829b8e4fa8498b64461f64c556e77ad4f4`.
 - Next proposed tests: isolate aligned-width redundant-mask lowering, match the
   observed JAX mixed-precision LN schedule, and test the still-missing full
   `late Dense + JAX LN` hybrid. No production arithmetic/BN default changed.
+
+## Arithmetic follow-up research: 2026-08-31
+
+[Source/HLO follow-up](2026-08-31-arithmetic-followup-research.md) records new
+diagnostic constraints, not a new TPU result:
+
+- The missing full late/JAX candidate changes twenty residual Dense operations;
+  input path and Q head remain JAX. Add a matching full cross-JAX/JAX control.
+- HLO suggests explicit BF16 mean/variance/invstd boundaries within FP32 vector
+  arithmetic; it is not machine-level proof. Three redundant aligned-width
+  mask sites are the concrete compiler-reproducer targets.
+- JAX 0.10.2 forces layout passes on the TensorCore custom-call route, so a
+  requested `needs_layout_passes=False` is not an effective bypass there.
+- Full inference is already one compiled host invocation. Microprobe spread
+  reaches 16–40% ordinarily, with one 238% range/median outlier; diagnostic
+  baseline/candidate profiles are needed independently of acceptance.
+- At least 22.04% duplicate rows are forced by zero/one-move strata at 16K.
+  This lower bound is not a measured count or permission to weaken the Q gate.
+- Pinned JAX maps actual `TPU v5 lite` to v5e; use that generation's hardware
+  model, separating physical VMEM from historical scoped allocation limits.
+
+Two project experts reviewed control/consumer questions. Their profile-only-
+accepted recommendation was rejected for diagnosis, while acceptance remains
+unchanged. No source, BN defaults, kernel launch or automation changed here.
