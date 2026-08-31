@@ -1,5 +1,5 @@
 {
-  "id": "trydotatwo/tpu-inference-8device",
+  "id": "trydotatwo/tpu-exact-inference-8-device",
   "title": "TPU Exact Inference 8 Device",
   "code_file": "run_inference_8device.py",
   "language": "python",

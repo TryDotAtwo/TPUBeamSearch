@@ -8,7 +8,7 @@ import re
 def test_inference_launcher_is_private_tpu_and_pins_the_public_repository():
     folder = Path(__file__).resolve().parents[1] / "kaggle_inference_8device"
     metadata = json.loads((folder / "kernel-metadata.json").read_text())
-    assert metadata["id"] == "trydotatwo/tpu-inference-8device"
+    assert metadata["id"] == "trydotatwo/tpu-exact-inference-8-device"
     assert metadata["is_private"] is True
     assert metadata["enable_tpu"] is True
     assert metadata["enable_gpu"] is False
