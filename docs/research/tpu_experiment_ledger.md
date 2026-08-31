@@ -133,3 +133,33 @@ modes, matched raw/typed runtime JAX baselines, same-suffix controls, real legal
 scrambles and minimizing global top-K diagnostics. Legacy defaults and the BN
 implementation remain unchanged. CPU regression tests pass; TPU results and
 any inference speedup remain pending.
+
+## Arithmetic A/B v1 completed: 2026-08-31
+
+The preceding pending status is superseded by the
+[completed report](../../test_results/kaggle_layernorm_arithmetic_v1/report.md)
+and raw result at source `2e9602829b8e4fa8498b64461f64c556e77ad4f4`.
+
+- Actual hardware is **TPU v5 lite**, eight visible devices, one active, despite
+  a `v3-8` CLI request. Runtime JAX/jaxlib0.10.2, libtpu0.0.42.1 is now recorded.
+- Source FP32-parameter JAX still executes BF16. Typed BF16-parameter JAX matches
+  it exactly on both corpora at4096/16384; captured source matches at4096.
+- JAX-only graph partitioning itself changes Q. At depth1, legal/stress mean
+  absolute errors versus monolithic are.148819/.168535 without Pallas. Same-suffix
+  self-controls and cross-JAX/JAX are exact. Old perturbation-amplification
+  attribution was confounded; this does not retroactively quantify the old run.
+- Dense `late` differs in only20/50 and31/59 of4,194,304 first/second Dense
+  elements (legal/stress). Explicit BF16-before-bias rounding changes22–26%:
+  the CPU expression-level hypothesis does not match the fused TPU execution.
+- 52 cases fail with Mosaic boolean-mask relayout errors (8 operators,32 block
+  screen,12 full-model); these are not VMEM rejections or measured latencies.
+  BF16-statistics LN remains target-unvalidated in this runtime.
+- Full JAX is about1.42M states/s at16384. Executed Pallas hybrid/per-block
+  cases give about1.00–1.01M/.56M and fail exact-Q acceptance. No32768 promotion,
+  scaling run, profile or demonstrated Pallas speedup results from this run.
+- Stable top-K is tie-sensitive: legal/stress16K references have5337/1337
+  candidates tied at K. Legal walks include duplicate solved states; these are
+  not real frontiers, and global top-K remains only a proxy for distributed beam.
+- Next proposed tests: isolate aligned-width redundant-mask lowering, match the
+  observed JAX mixed-precision LN schedule, and test the still-missing full
+  `late Dense + JAX LN` hybrid. No production arithmetic/BN default changed.

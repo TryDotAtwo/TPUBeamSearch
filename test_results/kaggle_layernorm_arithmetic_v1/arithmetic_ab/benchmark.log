@@ -1,0 +1,2945 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788141148.289012      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: === 
+learning/45eac/tfrc/runtime/common_lib.cc:238
+{
+  "python": "3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]",
+  "platform": "Linux-6.6.143+-x86_64-with-glibc2.41",
+  "versions": {
+    "jax": "0.10.2",
+    "jaxlib": "0.10.2",
+    "libtpu": "0.0.42.1",
+    "numpy": "2.5.0",
+    "torch": "2.8.0+cpu"
+  },
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "platform": "tpu",
+      "process_index": 0
+    }
+  ],
+  "process_count": 1,
+  "process_index": 0,
+  "local_device_count": 8,
+  "active_device_count": 1,
+  "default_matmul_precision": null,
+  "x64_enabled": false
+}
+{"stage": "baseline_controls", "id": "original_runtime", "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "baseline_controls", "id": "typed_runtime", "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "baseline_controls", "id": "captured_source", "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "baseline_controls", "id": "segmented_jax", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "first-dense-jax", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "first-dense-late", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "first-dense-bf16_before_bias", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "first-ln-jax_reference-fp320", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "first-ln-sum_div-fp320", "corpus": "legal_scrambles"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "first-ln-jax-fp320", "corpus": "legal_scrambles"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "first-ln-jax-fp321", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "second-dense-jax", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "second-dense-late", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "second-dense-bf16_before_bias", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "second-ln-jax_reference-fp320", "corpus": "legal_scrambles"}
+{"stage": "operators", "id": "second-ln-sum_div-fp320", "corpus": "legal_scrambles"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "second-ln-jax-fp320", "corpus": "legal_scrambles"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "second-ln-jax-fp321", "corpus": "legal_scrambles"}
+{"stage": "screen", "id": "cross-jax-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-jax-jax", "fusion": "cross", "dense": "jax", "norm": "jax"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-jax-sum_div", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-jax-sum_div", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-jax-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-jax-fp32", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": true, "id": "cross-jax-fp32", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-late-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-late-jax", "fusion": "cross", "dense": "pallas", "norm": "jax"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-late-sum_div", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-late-sum_div", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-late-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-late-mean_jax", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-late-fp32", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": true, "id": "cross-late-fp32", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax", "fusion": "cross", "dense": "pallas", "norm": "jax"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-sum_div", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-sum_div", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-bf16_before_bias-mean_jax", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-fp32", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": true, "id": "cross-bf16_before_bias-fp32", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-jax-mean_jax-first", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax-first", "fusion": "cross", "dense": "jax", "norm": "pallas", "replace": "first"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-jax-mean_jax-second", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax-second", "fusion": "cross", "dense": "jax", "norm": "pallas", "replace": "second"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-jax-first", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax-first", "fusion": "cross", "dense": "pallas", "norm": "jax", "replace": "first"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-jax-second", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax-second", "fusion": "cross", "dense": "pallas", "norm": "jax", "replace": "second"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-mean_jax-first", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-bf16_before_bias-mean_jax-first", "fusion": "cross", "dense": "pallas", "norm": "pallas", "replace": "first"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-mean_jax-second", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-bf16_before_bias-mean_jax-second", "fusion": "cross", "dense": "pallas", "norm": "pallas", "replace": "second"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm128-late-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm128-late-fp320", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_block-bm128-late-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "per_block-bm128-late-fp320", "fusion": "per_block"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm256-late-fp320", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm256-late-fp320", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm128-late-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm128-late-fp321", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "per_block-bm128-late-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": true, "id": "per_block-bm128-late-fp321", "fusion": "per_block"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "per_layer-bm256-late-fp321", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm256-late-fp321", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "per_layer-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm128-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_block-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_block-bm128-bf16_before_bias-fp320", "fusion": "per_block"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm256-bf16_before_bias-fp320", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm256-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm128-bf16_before_bias-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm128-bf16_before_bias-fp321", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "per_block-bm128-bf16_before_bias-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_block-bm128-bf16_before_bias-fp321", "fusion": "per_block"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "screen", "id": "per_layer-bm256-bf16_before_bias-fp321", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm256-bf16_before_bias-fp321", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 4096}
+{"stage": "baseline_controls", "id": "original_runtime", "corpus": "categorical_stress", "batch": 4096}
+{"stage": "baseline_controls", "id": "typed_runtime", "corpus": "categorical_stress", "batch": 4096}
+{"stage": "baseline_controls", "id": "captured_source", "corpus": "categorical_stress", "batch": 4096}
+{"stage": "baseline_controls", "id": "segmented_jax", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "first-dense-jax", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "first-dense-late", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "first-dense-bf16_before_bias", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "first-ln-jax_reference-fp320", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "first-ln-sum_div-fp320", "corpus": "categorical_stress"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "first-ln-jax-fp320", "corpus": "categorical_stress"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "first-ln-jax-fp321", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "second-dense-jax", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "second-dense-late", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "second-dense-bf16_before_bias", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "second-ln-jax_reference-fp320", "corpus": "categorical_stress"}
+{"stage": "operators", "id": "second-ln-sum_div-fp320", "corpus": "categorical_stress"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "second-ln-jax-fp320", "corpus": "categorical_stress"}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 484, in action
+    output, timing, _ = measure(call, expected_dense, layer.normalization,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "operators", "id": "second-ln-jax-fp321", "corpus": "categorical_stress"}
+{"stage": "screen", "id": "cross-jax-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-jax-jax", "fusion": "cross", "dense": "jax", "norm": "jax"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-jax-sum_div", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-jax-sum_div", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-jax-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-jax-fp32", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": true, "id": "cross-jax-fp32", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-late-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-late-jax", "fusion": "cross", "dense": "pallas", "norm": "jax"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-late-sum_div", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-late-sum_div", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-late-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-late-mean_jax", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-late-fp32", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": true, "id": "cross-late-fp32", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax", "fusion": "cross", "dense": "pallas", "norm": "jax"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-sum_div", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-sum_div", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-bf16_before_bias-mean_jax", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-fp32", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": true, "id": "cross-bf16_before_bias-fp32", "fusion": "cross", "dense": "pallas", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-jax-mean_jax-first", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax-first", "fusion": "cross", "dense": "jax", "norm": "pallas", "replace": "first"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-jax-mean_jax-second", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax-second", "fusion": "cross", "dense": "jax", "norm": "pallas", "replace": "second"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-jax-first", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax-first", "fusion": "cross", "dense": "pallas", "norm": "jax", "replace": "first"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-jax-second", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax-second", "fusion": "cross", "dense": "pallas", "norm": "jax", "replace": "second"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "cross-bf16_before_bias-mean_jax-first", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-bf16_before_bias-mean_jax-first", "fusion": "cross", "dense": "pallas", "norm": "pallas", "replace": "first"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "cross-bf16_before_bias-mean_jax-second", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-bf16_before_bias-mean_jax-second", "fusion": "cross", "dense": "pallas", "norm": "pallas", "replace": "second"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm128-late-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm128-late-fp320", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_block-bm128-late-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "per_block-bm128-late-fp320", "fusion": "per_block"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm256-late-fp320", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm256-late-fp320", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm128-late-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm128-late-fp321", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "per_block-bm128-late-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": true, "id": "per_block-bm128-late-fp321", "fusion": "per_block"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "per_layer-bm256-late-fp321", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm256-late-fp321", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "per_layer-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm128-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_block-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_block-bm128-bf16_before_bias-fp320", "fusion": "per_block"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm256-bf16_before_bias-fp320", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm256-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 368, in action
+    hidden, timing, _ = measure(block_call(c, epsilon, interpret=interpret),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "screen", "id": "per_layer-bm128-bf16_before_bias-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm128-bf16_before_bias-fp321", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "per_block-bm128-bf16_before_bias-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_block-bm128-bf16_before_bias-fp321", "fusion": "per_block"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "screen", "id": "per_layer-bm256-bf16_before_bias-fp321", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_layer-bm256-bf16_before_bias-fp321", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 4096}
+{"stage": "full_baselines", "id": "original_runtime", "corpus": "legal_scrambles", "batch": 16384}
+{"stage": "full_baselines", "id": "typed_runtime", "corpus": "legal_scrambles", "batch": 16384}
+{"stage": "full", "id": "legacy-separate", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "legacy-separate", "fusion": "separate"}, "corpus": "legal_scrambles", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "early-separate", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "early-separate", "fusion": "separate"}, "corpus": "legal_scrambles", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_layer-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm128-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_block-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_block-bm128-bf16_before_bias-fp320", "fusion": "per_block"}, "corpus": "legal_scrambles", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_layer-bm256-bf16_before_bias-fp320", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm256-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "legal_scrambles", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_block-bm128-bf16_before_bias-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_block-bm128-bf16_before_bias-fp321", "fusion": "per_block"}, "corpus": "legal_scrambles", "batch": 16384}
+{"stage": "full", "id": "cross-jax-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "legal_scrambles", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "cross-bf16_before_bias-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax", "fusion": "cross", "dense": "pallas", "norm": "jax"}, "corpus": "legal_scrambles", "batch": 16384}
+{"stage": "full_baselines", "id": "original_runtime", "corpus": "categorical_stress", "batch": 16384}
+{"stage": "full_baselines", "id": "typed_runtime", "corpus": "categorical_stress", "batch": 16384}
+{"stage": "full", "id": "legacy-separate", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "sum_div", "fp32_statistics": false, "id": "legacy-separate", "fusion": "separate"}, "corpus": "categorical_stress", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "early-separate", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "early-separate", "fusion": "separate"}, "corpus": "categorical_stress", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_layer-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm128-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_block-bm128-bf16_before_bias-fp320", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_block-bm128-bf16_before_bias-fp320", "fusion": "per_block"}, "corpus": "categorical_stress", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_layer-bm256-bf16_before_bias-fp320", "config": {"bm": 256, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": false, "id": "per_layer-bm256-bf16_before_bias-fp320", "fusion": "per_layer"}, "corpus": "categorical_stress", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<256x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "per_block-bm128-bf16_before_bias-fp321", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "jax", "fp32_statistics": true, "id": "per_block-bm128-bf16_before_bias-fp321", "fusion": "per_block"}, "corpus": "categorical_stress", "batch": 16384}
+{"stage": "full", "id": "cross-jax-mean_jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "late", "mean_mode": "jax", "fp32_statistics": false, "id": "cross-jax-mean_jax", "fusion": "cross", "dense": "jax", "norm": "pallas"}, "corpus": "categorical_stress", "batch": 16384}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+at location: loc("broadcast_in_dim:"("broadcast_in_dim/broadcast_in_dim"))
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 309, in record
+    entry.update(action())
+                 ^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 400, in action
+    out, measured, compiled = measure(full_call(c, architecture, interpret=interpret),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_layernorm_arithmetic.py", line 84, in measure
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid relayout: Non-singleton logical dimension is replicated in destination but not in source for 'vector<128x1024xi1>': "32,{*,0},(8,128),-2" -> "32,{*,0},(8,128)"
+
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+{"stage": "full", "id": "cross-bf16_before_bias-jax", "config": {"bm": 128, "bk": 256, "bn": 512, "dense_rounding": "bf16_before_bias", "mean_mode": "sum_div", "fp32_statistics": false, "id": "cross-bf16_before_bias-jax", "fusion": "cross", "dense": "pallas", "norm": "jax"}, "corpus": "categorical_stress", "batch": 16384}

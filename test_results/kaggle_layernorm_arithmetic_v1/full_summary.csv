@@ -1,0 +1,17 @@
+corpus,id,status,batch,ms,min_ms,max_ms,mstates_s,exact_oracle,finite,max_abs,mean_abs,rmse,cosine,exact_fraction,argmin,aux_argmax,topk_overlap,topk_order,masked_argmin,masked_topk,raw_baseline_ms,typed_baseline_ms,eligible_speedup,eligible_speedup_vs_typed,error_type
+"legal_scrambles","legacy-separate","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"legal_scrambles","early-separate","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"legal_scrambles","per_layer-bm128-bf16_before_bias-fp320","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"legal_scrambles","per_block-bm128-bf16_before_bias-fp320","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"legal_scrambles","per_layer-bm256-bf16_before_bias-fp320","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"legal_scrambles","per_block-bm128-bf16_before_bias-fp321","ok",16384,29.11755100001301,29.067760999964776,29.2430910000121,0.5626846845736676,false,true,3.5,0.28510195159663754,0.49331576664795207,0.9998294618520878,0.19471232096354166,0.76397705078125,0.50726318359375,0.60736083984375,0.00384521484375,0.65338134765625,0.53668212890625,11.549711000043317,11.666790000049332,,,
+"legal_scrambles","cross-jax-mean_jax","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"legal_scrambles","cross-bf16_before_bias-jax","ok",16384,16.32124900004328,16.18954000002759,16.444990999957554,1.0038447425167372,false,true,3.75,0.21774343022455772,0.38446488335001594,0.9998956620060822,0.20756022135416666,0.75994873046875,0.52911376953125,0.614501953125,0.00018310546875,0.6629638671875,0.55780029296875,11.62974999999733,11.59954000002017,,,
+"categorical_stress","legacy-separate","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"categorical_stress","early-separate","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"categorical_stress","per_layer-bm128-bf16_before_bias-fp320","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"categorical_stress","per_block-bm128-bf16_before_bias-fp320","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"categorical_stress","per_layer-bm256-bf16_before_bias-fp320","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"categorical_stress","per_block-bm128-bf16_before_bias-fp321","ok",16384,29.282780000016828,29.087149000019963,29.47888000005605,0.55950971868076,false,true,1.3125,0.1532021204630534,0.1960681336225549,0.9998767504544362,0.13428141276041666,0.81048583984375,0.70501708984375,0.904052734375,0.00054931640625,0.81048583984375,0.904052734375,11.543389999928877,11.637870000072326,,,
+"categorical_stress","cross-jax-mean_jax","error",16384,,,,,,,,,,,,,,,,,,,,,,"MosaicError"
+"categorical_stress","cross-bf16_before_bias-jax","ok",16384,16.202270000007957,16.113560000007965,16.3539300000366,1.0112163295632004,false,true,1.4375,0.18819313049316402,0.2396726248384753,0.9998159214137586,0.10869344075520833,0.7935791015625,0.69293212890625,0.88385009765625,0.00030517578125,0.7935791015625,0.88385009765625,11.559300000044459,11.683439999956136,,,

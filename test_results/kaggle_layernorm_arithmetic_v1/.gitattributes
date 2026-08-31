@@ -1,0 +1,3 @@
+# Raw runtime artifacts must remain byte-exact, including original whitespace.
+arithmetic_ab/** -text -whitespace
+tpu-layernorm-arithmetic-ab.log -text -whitespace

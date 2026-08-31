@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "kernel": "trydotatwo/tpu-layernorm-arithmetic-ab",
+  "kernel_version": 1,
+  "terminal_status": "COMPLETE",
+  "source_commit": "2e9602829b8e4fa8498b64461f64c556e77ad4f4",
+  "downloaded_on": "2026-08-31",
+  "files": [
+    {
+      "path": "arithmetic_ab/benchmark.log",
+      "bytes": 190731,
+      "sha256": "12596ad1550bdd23110d937482ab958f2ab7be292e85ee45b9be97bef734308a"
+    },
+    {
+      "path": "arithmetic_ab/stream1_layernorm_arithmetic.json",
+      "bytes": 801836,
+      "sha256": "ae66f91d87c2863c6010939cb838a52f4c49f8a5b69b60d100066d4e2df84787"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-first-dense-bf16_before_bias.txt",
+      "bytes": 7915,
+      "sha256": "82cfb50eccbf73c9f583ea5ca702d7d29ec548d327eace90287f2f8c7fc5af19"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-first-dense-jax.txt",
+      "bytes": 6038,
+      "sha256": "dc9ca17e5665f2e9c8f56d6552ee64d1e94670bcbd0e7fa29dda751de99d32e1"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-first-dense-late.txt",
+      "bytes": 7950,
+      "sha256": "c1e3ab9c1545384fc4d47fab56ede2ecaa22d0f3af0b00edce7d119d5bd69dd2"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-first-ln-jax_reference-False.txt",
+      "bytes": 19971,
+      "sha256": "9e7b84b1d7b32648474cd0ec1b8c69f5c47ec7e5a37608b9d13ffd32da6ab02d"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-first-ln-jax-True.txt",
+      "bytes": 8447,
+      "sha256": "f3660d338d01fb4523ff8a34bcb247f28cdac16464c9f5097e45dbfa752229c7"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-second-dense-bf16_before_bias.txt",
+      "bytes": 7915,
+      "sha256": "82cfb50eccbf73c9f583ea5ca702d7d29ec548d327eace90287f2f8c7fc5af19"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-second-dense-jax.txt",
+      "bytes": 6038,
+      "sha256": "dc9ca17e5665f2e9c8f56d6552ee64d1e94670bcbd0e7fa29dda751de99d32e1"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-second-dense-late.txt",
+      "bytes": 7950,
+      "sha256": "c1e3ab9c1545384fc4d47fab56ede2ecaa22d0f3af0b00edce7d119d5bd69dd2"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-second-ln-jax_reference-False.txt",
+      "bytes": 19971,
+      "sha256": "9e7b84b1d7b32648474cd0ec1b8c69f5c47ec7e5a37608b9d13ffd32da6ab02d"
+    },
+    {
+      "path": "arithmetic_ab/hlo/categorical_stress-second-ln-jax-True.txt",
+      "bytes": 8447,
+      "sha256": "f3660d338d01fb4523ff8a34bcb247f28cdac16464c9f5097e45dbfa752229c7"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-first-dense-bf16_before_bias.txt",
+      "bytes": 7915,
+      "sha256": "82cfb50eccbf73c9f583ea5ca702d7d29ec548d327eace90287f2f8c7fc5af19"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-first-dense-jax.txt",
+      "bytes": 6038,
+      "sha256": "dc9ca17e5665f2e9c8f56d6552ee64d1e94670bcbd0e7fa29dda751de99d32e1"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-first-dense-late.txt",
+      "bytes": 7950,
+      "sha256": "c1e3ab9c1545384fc4d47fab56ede2ecaa22d0f3af0b00edce7d119d5bd69dd2"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-first-ln-jax_reference-False.txt",
+      "bytes": 19971,
+      "sha256": "9e7b84b1d7b32648474cd0ec1b8c69f5c47ec7e5a37608b9d13ffd32da6ab02d"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-first-ln-jax-True.txt",
+      "bytes": 8447,
+      "sha256": "f3660d338d01fb4523ff8a34bcb247f28cdac16464c9f5097e45dbfa752229c7"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-second-dense-bf16_before_bias.txt",
+      "bytes": 7915,
+      "sha256": "82cfb50eccbf73c9f583ea5ca702d7d29ec548d327eace90287f2f8c7fc5af19"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-second-dense-jax.txt",
+      "bytes": 6038,
+      "sha256": "dc9ca17e5665f2e9c8f56d6552ee64d1e94670bcbd0e7fa29dda751de99d32e1"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-second-dense-late.txt",
+      "bytes": 7950,
+      "sha256": "c1e3ab9c1545384fc4d47fab56ede2ecaa22d0f3af0b00edce7d119d5bd69dd2"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-second-ln-jax_reference-False.txt",
+      "bytes": 19971,
+      "sha256": "9e7b84b1d7b32648474cd0ec1b8c69f5c47ec7e5a37608b9d13ffd32da6ab02d"
+    },
+    {
+      "path": "arithmetic_ab/hlo/legal_scrambles-second-ln-jax-True.txt",
+      "bytes": 8447,
+      "sha256": "f3660d338d01fb4523ff8a34bcb247f28cdac16464c9f5097e45dbfa752229c7"
+    },
+    {
+      "path": "tpu-layernorm-arithmetic-ab.log",
+      "bytes": 371908,
+      "sha256": "f28daa607d951e7cd884b449984cd2a88458ab4a742207605e0aed9ae48711ce"
+    }
+  ]
+}
