@@ -14,6 +14,9 @@ No inference implementation or Kaggle session was changed during this audit.
   The detailed project-data request was blocked by the safety reviewer. A second,
   generic methodology request without checkpoint or benchmark details succeeded.
   Their recommendations are peer advice, not TPU measurements or hardware authority.
+  Subsequently the maintainer explicitly confirmed public disclosure to these
+  experts. A detailed follow-up with the public audit and checkpoint context
+  succeeded; see [the consultation summary](2026-08-31-tpu-expert-followup.md).
 - Independently checked official JAX/Cloud TPU sources below. Documentation is
   a moving target: our historical runs recorded JAX 0.10.2; local CPU checks here
   used JAX 0.10.1. Current documentation also describes newer/unreleased APIs.

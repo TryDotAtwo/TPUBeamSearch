@@ -5,6 +5,23 @@ Pallas/JAX port and TPU validation of the MultiGPUBeamSearch pipeline.
 The implementation is developed here first. Kaggle launchers clone an exact
 Git commit and record its SHA in every result artifact.
 
+## Public collaboration
+
+TPUBeamSearch is a public open-source project. The maintainer explicitly
+authorizes publishing its code, benchmark results, useful technical logs,
+research and the planned `tpu-coding` plugin in this repository, and sharing
+relevant project material with the selected project experts. Public technical
+material does not need a separate confidentiality approval for each discussion.
+
+This authorization covers this project, not credentials, access tokens,
+unrelated private data or materials we do not have redistribution rights for.
+Existing third-party licenses and tool-level safety checks still apply.
+Publish scoped changes with sources and preserve the distinction between
+measurements, expert recommendations and hypotheses.
+
+See the [TPU coding research](docs/research/2026-08-31-tpu-coding-research.md)
+and [detailed expert follow-up](docs/research/2026-08-31-tpu-expert-followup.md).
+
 ## Stream1 inference contract
 
 `Stream1Architecture` is the immutable, compile-time model description.
