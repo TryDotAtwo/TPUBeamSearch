@@ -51,7 +51,7 @@ Files: `benchmarks/stream1_layernorm_followup.py`, `tests/test_layernorm_followu
 
 Files: `kaggle_layernorm_followup/`, `test_results/kaggle_layernorm_followup_v1/launch.md`, experiment ledger.
 
-- [ ] Validate launcher AST/metadata; publish scoped source commit main.
-- [ ] Pin the full published SHA in the launcher; publish that launcher commit.
-- [ ] Verify no active TPU session, push exactly one private kernel, and read actual status/version.
-- [ ] Record requested/effective runtime distinction, launch provenance, and monitoring instructions. Keep queued/running jobs intact.
+- [x] Validate launcher AST/metadata; publish scoped source commit main (`d58cf9f`).
+- [x] Pin the full published SHA in the launcher; publish that launcher commit (`d87fa2b`).
+- [x] Verify no active TPU session among inspected project runs, push exactly one private kernel, and read actual status/version (v1 RUNNING).
+- [x] Record requested/effective runtime distinction, launch provenance, and monitoring instructions. Keep queued/running jobs intact. Heartbeat `check-tpu-arithmetic-follow-up` active.

@@ -213,3 +213,13 @@ ineligible for promotion. Speedups stay null until exactness and comparable
 timing hold on both corpora for the same batch. Queued calls are explicitly
 not real128-chunk scans; profiles are diagnostic even for rejected candidates.
 Launch provenance and actual TPU results will be recorded separately.
+
+## Arithmetic follow-up v1 submitted: 2026-08-31
+
+Public source `d58cf9fd8e86ec145c6bbc4f6c7f5aff489d6e21` and launcher
+`d87fa2b16d5bc3489d914939db0ce4ba7766b397` were pushed before Kaggle submission.
+Private `trydotatwo/tpu-layernorm-arithmetic-followup` accepted version1 and
+reported RUNNING at06:22:37 MSK. Actual device/runtime and execution results
+are not yet verified. See [launch record](../../test_results/kaggle_layernorm_followup_v1/launch.md).
+Heartbeat `check-tpu-arithmetic-follow-up` checks every10minutes and removes
+itself after terminal analysis/publication. No previous kernel was restarted.
