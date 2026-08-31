@@ -13,6 +13,123 @@ from .stream1_architecture import InputEncodingKind, LayerNormStream1Weights, St
 from .stream1_pallas import pallas_dense_linear, pallas_folded_input_linear
 
 
+def _validate_arithmetic(dense_rounding: str = "late", mean_mode: str = "sum_div"):
+    if dense_rounding not in ("late", "bf16_before_bias"):
+        raise ValueError("dense_rounding must be 'late' or 'bf16_before_bias'")
+    if mean_mode not in ("sum_div", "jax"):
+        raise ValueError("mean_mode must be 'sum_div' or 'jax'")
+
+
+def _logical_mean(values, logical_width, mean_mode):
+    # jnp.mean(BF16) divides its FP32 sum before rounding, unlike sum / width.
+    if mean_mode == "jax":
+        return (
+            jnp.sum(values.astype(jnp.float32), axis=1, keepdims=True) / logical_width
+        ).astype(values.dtype)
+    return jnp.sum(values, axis=1, keepdims=True) / logical_width
+
+
+def _dense_bias(accumulator, bias, dense_rounding):
+    if dense_rounding == "bf16_before_bias":
+        accumulator = accumulator.astype(jnp.bfloat16).astype(jnp.float32)
+    return (accumulator + bias.astype(jnp.float32)).astype(jnp.bfloat16)
+
+
+def _layernorm_dense_kernel(
+    input_ref, weight_ref, bias_ref, output_ref, accumulator_ref,
+    *, nsteps: int, dense_rounding: str,
+):
+    kstep = pl.program_id(2)
+
+    @pl.when(kstep == 0)
+    def initialize():
+        accumulator_ref[...] = jnp.zeros_like(accumulator_ref[...])
+
+    accumulator_ref[...] += jnp.dot(
+        input_ref[...], weight_ref[...], preferred_element_type=jnp.float32
+    )
+
+    @pl.when(kstep == nsteps - 1)
+    def finish():
+        output_ref[...] = _dense_bias(
+            accumulator_ref[...], bias_ref[...][None, :], dense_rounding
+        )
+
+
+def pallas_layernorm_dense(
+    values,
+    weight,
+    bias,
+    *,
+    bm: int = 128,
+    bk: int = 256,
+    bn: int = 512,
+    dense_rounding: str = "late",
+    interpret: bool = False,
+):
+    """LN-only Dense experiment; legacy and dot-before-bias BF16 boundaries.
+
+    Both modes use BF16 operands and FP32 tiled dot accumulation. The early
+    mode rounds the *completed* reduction before bias, never each K tile.
+    Interpreter matching does not establish TPU lowering equivalence.
+    """
+    _validate_arithmetic(dense_rounding=dense_rounding)
+    if dense_rounding == "late":
+        return pallas_dense_linear(
+            values, weight, bias, bm=bm, bk=bk, bn=bn, relu=False, interpret=interpret
+        )
+    if values.ndim != 2 or weight.ndim != 2:
+        raise ValueError("values and weight must be matrices")
+    if min(bm, bk, bn) <= 0:
+        raise ValueError("bm, bk, and bn must be positive")
+    if not interpret:
+        validate_matrix_tile(bm=bm, bk=bk, bn=bn)
+    rows, input_width = values.shape
+    if weight.shape[0] != input_width:
+        raise ValueError("weight rows must equal input width")
+    output_width = weight.shape[1]
+    if bias.shape != (output_width,):
+        raise ValueError("bias shape must equal output width")
+    padded_rows = pad_to_multiple(rows, bm)
+    padded_input = pad_to_multiple(input_width, bk)
+    padded_output = pad_to_multiple(output_width, bn)
+    values_padded = jnp.pad(
+        values.astype(jnp.bfloat16),
+        ((0, padded_rows - rows), (0, padded_input - input_width)),
+    )
+    weight_padded = jnp.pad(
+        weight.astype(jnp.bfloat16),
+        ((0, padded_input - input_width), (0, padded_output - output_width)),
+    )
+    bias_padded = jnp.pad(
+        bias.astype(jnp.bfloat16), ((0, padded_output - output_width),)
+    )
+    nsteps = padded_input // bk
+    call = pl.pallas_call(
+        functools.partial(
+            _layernorm_dense_kernel, nsteps=nsteps, dense_rounding=dense_rounding
+        ),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[
+                pl.BlockSpec((bm, bk), lambda i, j, k: (i, k)),
+                pl.BlockSpec((bk, bn), lambda i, j, k: (k, j)),
+                pl.BlockSpec((bn,), lambda i, j, k: (j,)),
+            ],
+            out_specs=pl.BlockSpec((bm, bn), lambda i, j, k: (i, j)),
+            scratch_shapes=[pltpu.VMEM((bm, bn), jnp.float32)],
+            grid=(padded_rows // bm, padded_output // bn, nsteps),
+        ),
+        out_shape=jax.ShapeDtypeStruct((padded_rows, padded_output), jnp.bfloat16),
+        compiler_params=pltpu.CompilerParams(
+            dimension_semantics=("parallel", "parallel", "arbitrary")
+        ),
+        interpret=interpret,
+        name="stream1_layernorm_dense",
+    )
+    return call(values_padded, weight_padded, bias_padded)[:rows, :output_width]
+
+
 def _layer_norm_kernel(
     values_ref,
     scale_ref,
@@ -22,6 +139,7 @@ def _layer_norm_kernel(
     logical_width: int,
     epsilon: float,
     fp32_statistics: bool,
+    mean_mode: str,
 ):
     values = values_ref[...]
     if fp32_statistics:
@@ -29,9 +147,9 @@ def _layer_norm_kernel(
     columns = jnp.arange(values.shape[1], dtype=jnp.int32)
     valid = columns < logical_width
     masked_values = jnp.where(valid[None, :], values, 0.0)
-    mean = jnp.sum(masked_values, axis=1, keepdims=True) / logical_width
+    mean = _logical_mean(masked_values, logical_width, mean_mode)
     centered = jnp.where(valid[None, :], values - mean, 0.0)
-    variance = jnp.sum(jnp.square(centered), axis=1, keepdims=True) / logical_width
+    variance = _logical_mean(jnp.square(centered), logical_width, mean_mode)
     normalized = centered * jax.lax.rsqrt(variance + epsilon)
     scale = scale_ref[...][None, :]
     bias = bias_ref[...][None, :]
@@ -51,10 +169,18 @@ def pallas_layer_norm(
     width_alignment: int = 128,
     epsilon: float = 1e-5,
     fp32_statistics: bool = True,
+    mean_mode: str = "sum_div",
     interpret: bool = False,
 ):
-    """Per-row LayerNorm with FP32 reductions and aligned BF16 storage."""
+    """Per-row LayerNorm, logical-width statistics and aligned BF16 storage.
 
+    ``fp32_statistics`` selects statistic/affine computation dtype. For BF16
+    computation, ``mean_mode='jax'`` rounds means after FP32 division; the
+    legacy ``sum_div`` rounds the sum before division. Both mean and centered
+    variance use the selected boundary.
+    """
+
+    _validate_arithmetic(mean_mode=mean_mode)
     if values.ndim != 2:
         raise ValueError("values must be a matrix")
     rows, logical_width = values.shape
@@ -84,6 +210,7 @@ def pallas_layer_norm(
             logical_width=logical_width,
             epsilon=epsilon,
             fp32_statistics=fp32_statistics,
+            mean_mode=mean_mode,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
@@ -129,6 +256,8 @@ def _fused_dense_layer_norm_kernel(
     add_skip: bool,
     relu: bool,
     fp32_statistics: bool,
+    dense_rounding: str,
+    mean_mode: str,
 ):
     def dense_body(
         input_tile_ref,
@@ -153,10 +282,9 @@ def _fused_dense_layer_norm_kernel(
 
         @pl.when(kstep == ksteps - 1)
         def finish():
-            dense_tile_ref[...] = (
-                tile_accumulator_ref[...]
-                + bias_tile_ref[...][None, :].astype(jnp.float32)
-            ).astype(jnp.bfloat16)
+            dense_tile_ref[...] = _dense_bias(
+                tile_accumulator_ref[...], bias_tile_ref[...][None, :], dense_rounding
+            )
 
     dense_pipeline = pltpu.emit_pipeline(
         dense_body,
@@ -198,9 +326,9 @@ def _fused_dense_layer_norm_kernel(
     columns = jnp.arange(dense.shape[1], dtype=jnp.int32)
     valid = columns < logical_output_width
     masked = jnp.where(valid[None, :], dense, 0.0)
-    mean = jnp.sum(masked, axis=1, keepdims=True) / logical_output_width
+    mean = _logical_mean(masked, logical_output_width, mean_mode)
     centered = jnp.where(valid[None, :], dense - mean, 0.0)
-    variance = jnp.sum(jnp.square(centered), axis=1, keepdims=True) / logical_output_width
+    variance = _logical_mean(jnp.square(centered), logical_output_width, mean_mode)
     scale = scale_ref[...][None, :]
     beta = beta_ref[...][None, :]
     if fp32_statistics:
@@ -234,10 +362,13 @@ def pallas_fused_dense_layer_norm(
     bn: int = 512,
     epsilon: float = 1e-5,
     fp32_statistics: bool = True,
+    dense_rounding: str = "late",
+    mean_mode: str = "sum_div",
     interpret: bool = False,
 ):
-    """Fuse dense output, FP32 LayerNorm, optional skip, and ReLU in VMEM."""
+    """Fuse Dense, selected-statistics LayerNorm, optional skip and ReLU in VMEM."""
 
+    _validate_arithmetic(dense_rounding, mean_mode)
     rows, input_width = values.shape
     if weight.shape[0] != input_width:
         raise ValueError("weight rows must equal input width")
@@ -289,6 +420,8 @@ def pallas_fused_dense_layer_norm(
             add_skip=add_skip,
             relu=relu,
             fp32_statistics=fp32_statistics,
+            dense_rounding=dense_rounding,
+            mean_mode=mean_mode,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
@@ -352,6 +485,8 @@ def _fused_residual_block_kernel(
     output_blocks: int,
     epsilon: float,
     fp32_statistics: bool,
+    dense_rounding: str,
+    mean_mode: str,
 ):
     def run_dense(source_ref, weight_ref, bias_ref):
         def dense_body(
@@ -377,10 +512,9 @@ def _fused_residual_block_kernel(
 
             @pl.when(kstep == ksteps - 1)
             def finish():
-                dense_tile_ref[...] = (
-                    tile_accumulator_ref[...]
-                    + bias_tile_ref[...][None, :].astype(jnp.float32)
-                ).astype(jnp.bfloat16)
+                dense_tile_ref[...] = _dense_bias(
+                    tile_accumulator_ref[...], bias_tile_ref[...][None, :], dense_rounding
+                )
 
         pipeline = pltpu.emit_pipeline(
             dense_body,
@@ -422,11 +556,9 @@ def _fused_residual_block_kernel(
         columns = jnp.arange(dense.shape[1], dtype=jnp.int32)
         valid = columns < logical_width
         masked = jnp.where(valid[None, :], dense, 0.0)
-        mean = jnp.sum(masked, axis=1, keepdims=True) / logical_width
+        mean = _logical_mean(masked, logical_width, mean_mode)
         centered = jnp.where(valid[None, :], dense - mean, 0.0)
-        variance = (
-            jnp.sum(jnp.square(centered), axis=1, keepdims=True) / logical_width
-        )
+        variance = _logical_mean(jnp.square(centered), logical_width, mean_mode)
         scale = scale_ref[...][None, :]
         beta = beta_ref[...][None, :]
         if fp32_statistics:
@@ -462,10 +594,13 @@ def pallas_fused_residual_block(
     bn: int = 512,
     epsilon: float = 1e-5,
     fp32_statistics: bool = True,
+    dense_rounding: str = "late",
+    mean_mode: str = "sum_div",
     interpret: bool = False,
 ):
     """Execute a complete two-dense residual block in one Pallas kernel."""
 
+    _validate_arithmetic(dense_rounding, mean_mode)
     if values.ndim != 2:
         raise ValueError("values must be a matrix")
     rows, width = values.shape
@@ -521,6 +656,8 @@ def pallas_fused_residual_block(
             output_blocks=output_blocks,
             epsilon=epsilon,
             fp32_statistics=fp32_statistics,
+            dense_rounding=dense_rounding,
+            mean_mode=mean_mode,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
@@ -591,10 +728,18 @@ def pallas_layernorm_input_prefix(
     bn_dense: int | None = None,
     fuse_dense_layer_norm: bool = False,
     fp32_statistics: bool = True,
+    dense_rounding: str = "late",
+    mean_mode: str = "sum_div",
     interpret: bool = False,
 ):
-    """Execute encoding, first dense, FP32 LayerNorm, and ReLU."""
+    """Execute encoding, first Dense, selected-statistics LayerNorm and ReLU."""
 
+    _validate_arithmetic(dense_rounding, mean_mode)
+    if (
+        dense_rounding != "late"
+        and input_encoding is not InputEncodingKind.EMBEDDING_GATHER
+    ):
+        raise ValueError("nondefault dense_rounding currently requires embedding_gather")
     logical_states = states[:, : architecture.STATE_LEN]
     embedding_bk = bk if bk_embedding is None else bk_embedding
     embedding_bn = bn if bn_embedding is None else bn_embedding
@@ -617,16 +762,18 @@ def pallas_layernorm_input_prefix(
                 bn=dense_bn,
                 epsilon=architecture.LAYER_NORM_EPSILON,
                 fp32_statistics=fp32_statistics,
+                dense_rounding=dense_rounding,
+                mean_mode=mean_mode,
                 interpret=interpret,
             )
-        hidden = pallas_dense_linear(
+        hidden = pallas_layernorm_dense(
             encoded,
             weights.input.dense.weight,
             weights.input.dense.bias,
             bm=bm,
             bk=dense_bk,
             bn=dense_bn,
-            relu=False,
+            dense_rounding=dense_rounding,
             interpret=interpret,
         )
     elif input_encoding is InputEncodingKind.VIRTUAL_ONE_HOT_MXU:
@@ -661,6 +808,8 @@ def pallas_layernorm_input_prefix(
                 bn=dense_bn,
                 epsilon=architecture.LAYER_NORM_EPSILON,
                 fp32_statistics=fp32_statistics,
+                dense_rounding=dense_rounding,
+                mean_mode=mean_mode,
                 interpret=interpret,
             )
         hidden = pallas_dense_linear(
@@ -698,6 +847,7 @@ def pallas_layernorm_input_prefix(
         bm=bm,
         epsilon=architecture.LAYER_NORM_EPSILON,
         fp32_statistics=fp32_statistics,
+        mean_mode=mean_mode,
         interpret=interpret,
     )
     return jax.nn.relu(normalized).astype(jnp.bfloat16)
@@ -713,16 +863,18 @@ def _pallas_normalized_dense(
     bk: int,
     bn: int,
     fp32_statistics: bool,
+    dense_rounding: str,
+    mean_mode: str,
     interpret: bool,
 ):
-    dense = pallas_dense_linear(
+    dense = pallas_layernorm_dense(
         values,
         layer.dense.weight,
         layer.dense.bias,
         bm=bm,
         bk=bk,
         bn=bn,
-        relu=False,
+        dense_rounding=dense_rounding,
         interpret=interpret,
     )
     normalized = pallas_layer_norm(
@@ -732,6 +884,7 @@ def _pallas_normalized_dense(
         bm=bm,
         epsilon=epsilon,
         fp32_statistics=fp32_statistics,
+        mean_mode=mean_mode,
         interpret=interpret,
     )
     return jax.nn.relu(normalized).astype(jnp.bfloat16) if relu else normalized
@@ -753,10 +906,13 @@ def stream1_layernorm_pallas_inference(
     bn_output: int = 128,
     layernorm_fusion: str = "separate",
     fp32_statistics: bool = True,
+    dense_rounding: str = "late",
+    mean_mode: str = "sum_div",
     interpret: bool = False,
 ):
     """Complete correctness-first Pallas LayerNorm ResMLP inference."""
 
+    _validate_arithmetic(dense_rounding, mean_mode)
     encoding = input_encoding or architecture.INPUT_ENCODING
     if layernorm_fusion not in ("separate", "per_layer", "per_block"):
         raise ValueError(
@@ -776,6 +932,8 @@ def stream1_layernorm_pallas_inference(
             and encoding is not InputEncodingKind.FUSED_VIRTUAL_ONE_HOT
         ),
         fp32_statistics=fp32_statistics,
+        dense_rounding=dense_rounding,
+        mean_mode=mean_mode,
         interpret=interpret,
     )
     for block in weights.residuals:
@@ -789,6 +947,8 @@ def stream1_layernorm_pallas_inference(
                 bn=bn_hidden,
                 epsilon=architecture.LAYER_NORM_EPSILON,
                 fp32_statistics=fp32_statistics,
+                dense_rounding=dense_rounding,
+                mean_mode=mean_mode,
                 interpret=interpret,
             )
             continue
@@ -805,6 +965,8 @@ def stream1_layernorm_pallas_inference(
                 bn=bn_hidden,
                 epsilon=architecture.LAYER_NORM_EPSILON,
                 fp32_statistics=fp32_statistics,
+                dense_rounding=dense_rounding,
+                mean_mode=mean_mode,
                 interpret=interpret,
             )
             hidden = pallas_fused_dense_layer_norm(
@@ -821,6 +983,8 @@ def stream1_layernorm_pallas_inference(
                 bn=bn_hidden,
                 epsilon=architecture.LAYER_NORM_EPSILON,
                 fp32_statistics=fp32_statistics,
+                dense_rounding=dense_rounding,
+                mean_mode=mean_mode,
                 interpret=interpret,
             )
             continue
@@ -833,6 +997,8 @@ def stream1_layernorm_pallas_inference(
             bk=bk_hidden,
             bn=bn_hidden,
             fp32_statistics=fp32_statistics,
+            dense_rounding=dense_rounding,
+            mean_mode=mean_mode,
             interpret=interpret,
         )
         branch = _pallas_normalized_dense(
@@ -844,19 +1010,21 @@ def stream1_layernorm_pallas_inference(
             bk=bk_hidden,
             bn=bn_hidden,
             fp32_statistics=fp32_statistics,
+            dense_rounding=dense_rounding,
+            mean_mode=mean_mode,
             interpret=interpret,
         )
         if fp32_statistics:
             skip = skip.astype(jnp.float32)
             branch = branch.astype(jnp.float32)
         hidden = jax.nn.relu(skip + branch).astype(jnp.bfloat16)
-    return pallas_dense_linear(
+    return pallas_layernorm_dense(
         hidden,
         weights.output.weight,
         weights.output.bias,
         bm=bm,
         bk=bk_output,
         bn=bn_output,
-        relu=False,
+        dense_rounding=dense_rounding,
         interpret=interpret,
     )

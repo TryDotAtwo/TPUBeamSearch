@@ -118,3 +118,18 @@ the historical conclusions below. Raw timings and JSON have not been changed.
   0.14048, but argmax is still only 73.93%.
 - Next attribution experiment must independently cross JAX/Pallas Dense and
   JAX/Pallas LayerNorm for block 1, followed by the identical JAX suffix.
+
+## Controlled arithmetic follow-up: 2026-08-31
+
+The historical argmax gates and claims of suffix amplification above are
+superseded interpretations, not erased measurements. The consumer minimizes Q;
+the depth harness lacked its JAX-only same-suffix control. Matching aggregate
+error metrics did not establish tensor equality. See the public 2026-08-31
+research audit and expert follow-up for the corrected evidence boundaries.
+
+The [new bundled arithmetic experiment](2026-08-31-layernorm-arithmetic-ab.md)
+adds independently tested Dense-before-bias rounding and logical-mean rounding
+modes, matched raw/typed runtime JAX baselines, same-suffix controls, real legal
+scrambles and minimizing global top-K diagnostics. Legacy defaults and the BN
+implementation remain unchanged. CPU regression tests pass; TPU results and
+any inference speedup remain pending.
