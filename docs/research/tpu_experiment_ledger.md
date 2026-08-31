@@ -271,3 +271,33 @@ No BN or production inference default changed. Fresh local regression:
 252 tests passed; reproducible numerical and device-profile summaries are
 published alongside raw artifacts. The completed follow-up monitor is retired
 after publication, without submitting a new TPU job.
+
+## JAX/Pallas execution attribution: 2026-08-31
+
+[Detailed source/profile audit](2026-08-31-jax-pallas-execution-attribution.md)
+adds attribution from the existing follow-up v1, not a new TPU measurement:
+
+- Twenty JAX residual Dense-containing operations sum to3.8546ms, versus
+  8.3370ms for twenty late Pallas Dense calls. JAX fuses bias, following LN sum
+  and often preceding vector work; these are not matched isolated GEMM timings.
+  The device gap is not explained by Python dispatch.
+- Typed JAX outer HLO branches the FP32 biased result into the LN sum and a
+  separate BF16 output conversion; the Pallas boundary returns BF16 before the
+  sum. BF16 type-correction metadata prevents asserting final rounding behavior
+  from this alone. Matched JAX barriers and intermediate witnesses are proposed.
+- Current Dense tiles are128/256/512 with exactly aligned residual dimensions.
+  Different layouts and scoped VMEM windows are observed, not their individual
+  causal costs. Default Pallas pipelining already double-buffers; literal
+  HBM charging for all tile-window reads contradicts observed latency.
+- The centered-value predicate is the strongest isolated mixed-LN mask cost;
+  full mixed-direct2D remains unmeasured. Faster LN arms still fail exactness.
+- Correct the old "Pallas embedding gather" interpretation: it was ordinary
+  JAX gather followed by Pallas Dense/LN, not a custom gather kernel. Existing
+  compiled JAX already casts the embedding table before gather. A true flat
+  gather remains a proposed exact-value optimization, shared-input cost rather
+  than an explanation of the candidate gap.
+
+Three independent audits and two project experts informed the controls; raw
+source/HLO/traces determine claims. No BN/default changes, new kernel launch,
+accepted Pallas result or multi-device scaling are implied. The next bounded
+bundle awaits agreement on its proposed scope.
