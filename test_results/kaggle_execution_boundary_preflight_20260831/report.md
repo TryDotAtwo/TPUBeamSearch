@@ -1,5 +1,9 @@
 # Execution-boundary bundle: prepared, not submitted
 
+Historical preflight snapshot. The later
+[successful v1 submission](../kaggle_execution_boundary_v1/launch.md)
+supersedes the access blocker and not-submitted state below.
+
 Date:2026-08-31. **No new Kaggle kernel/session/version was created.**
 
 Public source commit:

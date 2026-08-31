@@ -99,3 +99,8 @@ Task4 publication is in progress. Live Kaggle status/list requests currently
 return HTTP403 via the configured proxy, outside the sandbox and in an isolated
 direct read. No new kernel has been submitted; unknown TPU occupancy is not
 treated as a free slot. No system proxy or VPN setting was changed.
+
+Task4 completed on2026-08-31 after access recovered: version1 submitted once,
+QUEUED confirmed17:14UTC, server source/private metadata checked, launch record
+in `test_results/kaggle_execution_boundary_v1/`. The existing heartbeat was
+updated to monitor the submitted version. Runtime results remain pending.

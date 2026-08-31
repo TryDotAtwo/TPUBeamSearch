@@ -324,3 +324,20 @@ failure artifacts and provenance. Full regression:281 passed in102.81s.
 Kaggle submission and runtime results are separate from these local checks.
 The launch record must state whether the free-slot check and actual submission
 succeeded; source publication alone is not a queued or running experiment.
+
+## Execution-boundary v1 submitted: 2026-08-31
+
+[Launch record](../../test_results/kaggle_execution_boundary_v1/launch.md)
+supersedes the earlier403/preflight blocker. Existing project TPU notebooks
+were terminal (19 COMPLETE,1 old ERROR); two additional recent owned jobs were
+also terminal. Transient TLS/proxy failures were resolved with read-only retries,
+without changing networking or credentials.
+
+Private `trydotatwo/tpu-execution-boundary-ab` version1 was submitted once from
+launcher `51c8b3a512e650df83939d322c78bd715cfd8221`, pinned to public source
+`45062324d368f4849adb6d572d21d54f75854d79`. Live QUEUED confirmed17:14:09 UTC.
+Downloaded server bootstrap matches the launcher after newline normalization;
+private/TPU/GPU metadata and source SHA were verified. Requested `v3-8` maps to
+server `TpuV5E8`; runtime inventory and numerical/performance results remain
+unverified. No BN/default or inference-source changes. The existing heartbeat
+now monitors this submitted version without resubmitting it.
