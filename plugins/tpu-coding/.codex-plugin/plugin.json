@@ -1,0 +1,32 @@
+{
+  "name": "tpu-coding",
+  "version": "0.1.0+codex.20260831010242",
+  "description": "Evidence-backed TPU coding with JAX and Pallas: layout, pipelines, numerical validation and benchmarking.",
+  "author": {
+    "name": "TPUBeamSearch contributors",
+    "url": "https://github.com/TryDotAtwo/TPUBeamSearch"
+  },
+  "homepage": "https://github.com/TryDotAtwo/TPUBeamSearch/tree/main/plugins/tpu-coding",
+  "repository": "https://github.com/TryDotAtwo/TPUBeamSearch",
+  "keywords": [
+    "tpu",
+    "jax",
+    "pallas",
+    "inference",
+    "benchmarking"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "TPU Coding",
+    "shortDescription": "Code and validate TPU kernels with evidence.",
+    "longDescription": "A maintained technical skill for Python, JAX and Pallas on TPU. Covers runtime-specific layouts, memory lifetimes, numerical controls, ranking-aware validation, fair benchmarks and scoped experiment evidence. Includes lessons from TPUBeamSearch without treating one workload as universal.",
+    "developerName": "TPUBeamSearch contributors",
+    "category": "Developer Tools",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Review this TPU kernel's layout and memory lifetimes.",
+      "Design a fair JAX versus Pallas inference benchmark.",
+      "Update our TPU coding evidence after this experiment."
+    ]
+  }
+}

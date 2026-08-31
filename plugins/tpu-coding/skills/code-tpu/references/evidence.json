@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "id": "D-HARDWARE",
+      "status": "documented",
+      "claim": "The JAX hardware table is per TensorCore: v3 has 16 MiB VMEM and 16 KiB SMEM. Capacities and core/chip mappings differ across generations.",
+      "scope": "Primary documentation checked 2026-08-31, not inventory of historical Kaggle jobs. JAX and Cloud peak/BW figures disagree; no merged utilization denominator is adopted.",
+      "source_urls": ["https://docs.jax.dev/en/latest/pallas/tpu/hardware.html", "https://docs.cloud.google.com/tpu/docs/v3"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "New generation, device_kind, physical/logical core mode or hardware documentation revision.",
+      "regression_case": "A requested v3-8 allocation and generic TFRT_TPU identifier must not become verified physical inventory or a universal scoped compiler budget."
+    },
+    {
+      "id": "D-API",
+      "status": "documented",
+      "claim": "Pallas APIs and defaults are version-sensitive; pallas_call, pl.kernel, TPU interpretation and GPU examples are not interchangeable interfaces.",
+      "scope": "Historical jobs JAX 0.10.2; local signatures inspected on CPU JAX 0.10.1. Latest changelog also contains newer and unreleased changes.",
+      "source_urls": ["https://docs.jax.dev/en/latest/pallas/CHANGELOG.html", "https://docs.jax.dev/en/latest/_autosummary/jax.experimental.pallas.tpu.InterpretParams.html"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "JAX/jaxlib/libtpu or compiler flags change, or a current tutorial is copied into a pinned older environment.",
+      "regression_case": "A plain interpret=True pass must not claim hardware compilation, VMEM fit, race freedom or TPU performance."
+    },
+    {
+      "id": "D-LAYOUT",
+      "status": "documented",
+      "claim": "Legacy TPU pallas_call block/layout restrictions include whole-array-dimension exceptions; optimal tile sizes cannot be read directly from native MXU dimensions.",
+      "scope": "TPU pallas_call documentation as checked, not a universal constraint for every Pallas backend or later API.",
+      "source_urls": ["https://docs.jax.dev/en/latest/pallas/tpu/details.html", "https://docs.jax.dev/en/latest/pallas/tpu/matmul.html"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "API, backend, dtype, layout or tile shape changes.",
+      "regression_case": "Distinguish logical width 130, storage 256 and reduction width; test whole-array exceptions rather than universally rejecting all nonmultiples."
+    },
+    {
+      "id": "D-DMA",
+      "status": "documented",
+      "claim": "pl.ANY leaves placement unconstrained. Buffer placement, DMA completion and source/destination lifetimes must be checked independently of intended pipelining.",
+      "scope": "TPU pipelining and remote DMA documentation; no measured overlap claim for TPUBeamSearch.",
+      "source_urls": ["https://docs.jax.dev/en/latest/pallas/tpu/pipelining.html", "https://docs.jax.dev/en/latest/pallas/tpu/distributed.html"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Buffer count, pipeline distance, tile lifetime or remote communication changes.",
+      "regression_case": "Two allocated buffers without a schedule/profile cannot establish hidden loads; sends and receives must complete before incompatible buffer reuse."
+    },
+    {
+      "id": "S-JIT",
+      "status": "superseded",
+      "claim": "The previous attribution of depth-1 output drift to amplified Pallas perturbations is unsupported without a same-suffix JAX-only control. Raw diagnostic measurements remain unchanged.",
+      "scope": "LayerNorm depth harness: individually jitted reference blocks versus jointly jitted suffix; TPU JAX 0.10.2, ten-block 1024-wide model. Control contribution remains unmeasured.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/benchmarks/stream1_layernorm_depth_diagnostic.py", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/docs/research/2026-08-31-tpu-coding-research.md", "https://docs.jax.dev/en/latest/faq.html#jit-changes-the-exact-numerics-of-outputs"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Matched JAX-only controls and same compiled suffix comparisons are actually measured on target TPU.",
+      "regression_case": "Compare suffix(h_ref) with segmented and monolithic JAX, then suffix(h_candidate) with suffix(h_ref), including zero replaced blocks."
+    },
+    {
+      "id": "S-RANK",
+      "status": "superseded",
+      "claim": "Published argmax agreement was described as chosen-move agreement; the inspected Q search instead minimizes flattened candidate scores, after invalid-move masking.",
+      "scope": "Artgor cube555 Q consumer; source notebook version 344319112. This correction does not validate any replacement model or establish a new universal acceptance threshold.",
+      "source_urls": ["https://www.kaggle.com/code/artgor/cayleypy-cube555-tpu-beam-q/notebook?scriptVersionId=344319112", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/docs/research/2026-08-31-tpu-coding-research.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Consumer score direction, candidate ordering, masks, deduplication or selection algorithm changes.",
+      "regression_case": "Opposite score direction, exact/near ties, inverse masks, fewer than K valid entries, and equal row minima with different global top-K."
+    },
+    {
+      "id": "H-ROUND",
+      "status": "hypothesis",
+      "claim": "Different Dense dot-result/bias rounding boundaries may contribute to full-model TPU drift; their causal contribution has not been isolated.",
+      "scope": "Reference BF16 dot result then BF16 bias add versus Pallas FP32 accumulator+bias then BF16 conversion. CPU JAX 0.10.1 witness max abs 0.03125; not a target-TPU attribution result.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/docs/research/2026-08-31-tpu-coding-research.md", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/src/tpu_beam_search/stream1_layernorm_pallas.py"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Target lowering and a controlled Dense-rounding by LN-statistics A/B are available.",
+      "regression_case": "Explicitly round dot output before bias versus after bias on identical inputs/weights; cross JAX/Pallas Dense and LN independently with fixed boundaries."
+    },
+    {
+      "id": "D-PAIR",
+      "status": "documented",
+      "claim": "Identical aggregate errors against a reference do not establish pairwise equality of two output tensors.",
+      "scope": "Audit of saved comprehensive/depth diagnostics; individual pairwise tensors were not saved by those summary metrics.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/docs/research/2026-08-31-tpu-coding-research.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "A report infers tensor identity from rounded or aggregate summaries.",
+      "regression_case": "Reference [0,0], candidates [1,0] and [0,1] have matching error summaries but differ pairwise."
+    },
+    {
+      "id": "D-INPUT",
+      "status": "documented",
+      "claim": "The hashed categorical-state generator enforces ID range but not permutation or puzzle reachability constraints.",
+      "scope": "make_valid_states in the LN benchmark; local 64x150 audit found zero permutations. Keep categorical stress and representative legal/frontier inputs as distinct datasets.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/benchmarks/stream1_layernorm_full_mlp.py", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/docs/research/2026-08-31-tpu-coding-research.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Input generator, puzzle or task-quality dataset changes.",
+      "regression_case": "Validate legal-move replay and dataset provenance, not only dtype/range or uniqueness. Repeated identity inputs are separately labeled."
+    },
+    {
+      "id": "M-BN-PREFIX",
+      "status": "measured",
+      "claim": "The full 24-output BN MLP measured 3.313M states/s at local batch 32768 with prefix BM1024/BK128/BN1536; the prefix-only fastest BK256 did not win the full-model median.",
+      "scope": "Kaggle prefix optimization v3, JAX 0.10.2, runtime weights. Hardware generation is inconsistently named in historical prose; explicit device_kind was not recorded.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_prefix_optimization_v3/stream1_prefix_optimization.json", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_prefix_optimization_2026-08-28.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Architecture, batch, generation, runtime or full caller changes.",
+      "regression_case": "Promote each prefix candidate to the actual full MLP; do not freeze a microbenchmark-only winner."
+    },
+    {
+      "id": "M-BN-FUSION",
+      "status": "measured",
+      "claim": "Matched-tile BN prefix fusion measured 1.0267x and 1.0221x speedups: separate/fused 0.443571/0.432040 ms in v2 and 0.465870/0.455791 ms in v3. Same-tiling paired outputs matched exactly; the earlier 1.55x comparison confounded different tiles.",
+      "scope": "Kaggle versions 2/3 on source commit 06dd7ea5b53bf52d3166acb7f7d7ef11a823c9b0; 256 reachable Megaminx states, virtual one-hot 14400-to-1536-to-512 ReLU prefix, not full model. BF16 inputs/weights/boundaries, FP32 accumulation; BM256/BK_input128/BN_input512/BK_hidden256/BN_hidden512; 10 warmups, median of 31 synchronized samples. Report does not record JAX/jaxlib/libtpu versions or verified device_kind/generation.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_fused_hidden_ab_2026-08-28.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Batch, tiles, model, runtime, target device or composed caller changes.",
+      "regression_case": "Compare fused/separate at identical tiles for attribution, then independently tuned valid candidates for engineering selection; prefix gains do not establish full-model gains."
+    },
+    {
+      "id": "M-BN-RESIDUAL",
+      "status": "measured",
+      "claim": "Full BN model separate/per-block/pair fusion measured 0.475380/0.473960/0.474811 ms in v2 and 0.463060/0.464011/0.464170 ms in v3; the winner reversed. Fused outputs had max abs BF16 drift 0.125, mean drift 0.0104726 and diagnostic argmax agreement 95.3125% versus separate.",
+      "scope": "Kaggle versions 2/3 on source commit a47e490c56ae12269de9df58d01f2b8eb6254027; complete aligned-state-to-24-logit model, two width-512 residual blocks, batch 256, 10 warmups and 31 samples with rotating A/B/C order. Report does not record runtime versions, verified device_kind/generation or reachable-input provenance. Argmax is not actual minimizing-task quality; the report's MXU accumulation-order explanation was not established by a controlled target A/B.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_residual_fusion_ab_2026-08-28.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Wider/deeper residual stack, batch, runtime or target changes, or controlled numerical/task-quality results become available.",
+      "regression_case": "Preserve separate as this experiment's simpler choice, not a universal fusion ban; measure matched boundaries and actual masked selection before attributing drift or claiming task equivalence."
+    },
+    {
+      "id": "M-BUFFER",
+      "status": "measured",
+      "claim": "At the old prefix tiling, default and explicit one/two/lookahead pipelines measured 2.799, 2.774, 2.840 and 2.961 ms; manual buffering did not demonstrate a useful win.",
+      "scope": "BN prefix optimization v3, JAX 0.10.2, batch 4096, old BM256/BK128/BN512. No profiler trace establishes the causal overlap mechanism.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_prefix_optimization_v3/stream1_prefix_optimization.json", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/docs/research/2026-08-31-tpu-coding-research.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "A new tile, transfer pattern, caller or profiler result suggests a different schedule.",
+      "regression_case": "Matched default/explicit pipeline A/B with live-memory accounting and target profiling; no claim that extra buffers must be faster."
+    },
+    {
+      "id": "M-BN-SCALE",
+      "status": "measured",
+      "claim": "Eight independently sharded devices measured 25.482M states/s and 96.04% weak-scaling efficiency for the full BN MLP.",
+      "scope": "JAX 0.10.2, replicated weights, local batch 32768, no collectives or beam-search stages in the timing. Device-kind inventory missing from historical JSON.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_optimized_scaling_v1/stream1_optimized_scaling.json", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_optimized_scaling_2026-08-28.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Global selection, communication, complete search or a fixed global batch enters the timer.",
+      "regression_case": "Distinguish weak independent-inference scaling from strong or full-search scaling; report scores per parent separately from child forwards."
+    },
+    {
+      "id": "M-LN-INPUT",
+      "status": "measured",
+      "claim": "The LN input-prefix A/B measured JAX gather 7.021ms, Pallas gather 8.369ms and virtual one-hot 11.166ms; the folded candidate was compile-rejected.",
+      "scope": "JAX 0.10.2, B16384, embedding 150x24, Dense 3600-to-1024 plus LN/ReLU, Pallas BM256. Report labels v3-8; device_kind not recorded. Not a BN input result or full-model timing.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_layernorm_input_ab_v2/stream1_layernorm_input_ab.json"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Encoding, embedding dimension, model architecture, batch, runtime or target device changes.",
+      "regression_case": "Do not replace embedding with one-hot on the strength of a different model's win; do not assign latency to a compile rejection."
+    },
+    {
+      "id": "M-LN-FULL",
+      "status": "measured",
+      "claim": "Full LN B16384 measured original JAX 1.386M versus Pallas separate/per-layer/per-block 0.577/0.547/0.565M states/s; no full-model Pallas winner was established.",
+      "scope": "JAX 0.10.2, ten-block 1024-wide 30-output Q path; fixed BM128/BK256/BN512 FP32-statistics candidates. Synthetic categorical inputs; historical argmax gate is not actual minimizing-search quality.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_layernorm_comprehensive_v1/stream1_layernorm_comprehensive.json", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/docs/research/2026-08-31-tpu-coding-research.md"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Controlled arithmetic, corrected task metrics, valid per-boundary tuning or representative input measurements become available.",
+      "regression_case": "A fast isolated residual block cannot promote a slower or task-invalid full model. Retain JAX baseline without declaring Pallas inherently slower."
+    },
+    {
+      "id": "M-LN-VMEM",
+      "status": "measured",
+      "claim": "Eight of 32 block-screen candidates were rejected at 16.06-16.36 MiB requested scoped VMEM versus a 16.00 MiB compiler limit.",
+      "scope": "Comprehensive LN sweep, JAX 0.10.2, per-block BM256 candidates; this is an allocation diagnostic, not physical inventory or latency.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_layernorm_comprehensive_v1/stream1_layernorm_comprehensive.json"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Scratch layout, buffers, compiler allocation strategy or tile sizes change.",
+      "regression_case": "Budget concurrent live allocations, padding and spills; distinguish compile rejection from slow execution."
+    },
+    {
+      "id": "M-CAPTURE",
+      "status": "measured",
+      "claim": "One BN benchmark captured about 44 MiB of weights and failed scoped allocation; the runtime-array version completed. This is not a universal constant-size limit.",
+      "scope": "Prefix optimization versions 1/2 versus fixed version 3, source commit 976072d1ff1564d320d4f916998e78b3f7f9b296, JAX 0.10.2. Both sides of later LN full-model A/B capture weights.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/f17eedff869f2cb23535c99b63ae024c6aa602cc/test_results/kaggle_stream1_prefix_optimization_2026-08-28.md", "https://docs.jax.dev/en/latest/internals/constants.html"],
+      "checked_on": "2026-08-31",
+      "recheck_when": "Parameter delivery, constant-handling flags, JAX version or production wrapper changes.",
+      "regression_case": "Compare runtime/captured parameters on both implementations with device-resident arrays and inspect target lowering; never diagnose one-sided capture when both sides capture."
+    }
+  ]
+}
