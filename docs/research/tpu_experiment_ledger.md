@@ -301,3 +301,26 @@ Three independent audits and two project experts informed the controls; raw
 source/HLO/traces determine claims. No BN/default changes, new kernel launch,
 accepted Pallas result or multi-device scaling are implied. The next bounded
 bundle awaits agreement on its proposed scope.
+
+## Execution-boundary bundle implementation: 2026-08-31
+
+The user approved the proposed bundle, then explicitly requested no subagents.
+The approval-pending sentence above is superseded by this
+[frozen protocol](2026-08-31-execution-boundary-bundle.md).
+
+New opt-in code implements nine matched Dense/boundary arms, five LN arms,
+five embedding arms, direct numerical witnesses and observed JAX statistics;
+15 full configurations preserve the original checkpoint and exact-Q gate.
+Only eligible non-controls advance from both16K corpora to actual32K.
+No BN/default path changes. No target speedup is claimed by implementation.
+
+Local TDD found and removed unsupported general/CLIP gathers in the new banked
+embedding. The replacement matches the pinned Mosaic gather source contract;
+target TPU layout and compilation still need measurement. Added tests cover
+classes128..149, output/state tails, runtime parameter sensitivity, direct
+comparison witnesses, strict JSON, genuine larger-batch promotion, partial
+failure artifacts and provenance. Full regression:281 passed in102.81s.
+
+Kaggle submission and runtime results are separate from these local checks.
+The launch record must state whether the free-slot check and actual submission
+succeeded; source publication alone is not a queued or running experiment.
