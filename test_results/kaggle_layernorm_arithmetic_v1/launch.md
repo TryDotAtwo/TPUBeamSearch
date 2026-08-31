@@ -28,3 +28,13 @@ Expected kernel output: `arithmetic_ab/stream1_layernorm_arithmetic.json`,
 output into this directory without touching unrelated existing artifacts. Inspect
 case errors even if Kaggle itself reports COMPLETE. Preserve raw results before
 writing the measured report; this file is only a launch record.
+
+## Monitoring authorization follow-up
+
+On 2026-08-31 the maintainer explicitly authorized project publication and
+automations. The app then created `check-tpu-arithmetic-a-b` with status `ACTIVE`,
+checking this experiment every ten minutes. It may publish scoped results to
+the existing public `main`, diagnose/fix/retry this failed experiment, and must
+remove itself after the final report. It must not restart QUEUED/RUNNING work,
+change the BN path, publish secrets, or touch unrelated artifacts. The earlier
+creation rejection above is historical; monitoring is now enabled.
