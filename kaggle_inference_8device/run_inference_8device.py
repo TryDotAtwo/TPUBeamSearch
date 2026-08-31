@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "95e9fa039267be8fe586705900db84a23fddae00"
+COMMIT_SHA = "d2159cb230ef77deeb5a4a2b6a42181a62dc027c"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch")
 OUTPUT = Path("/kaggle/working/inference_8device")
