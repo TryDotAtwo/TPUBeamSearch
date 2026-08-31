@@ -3,6 +3,27 @@
 This file separates measured facts from hypotheses so benchmark conclusions do
 not silently turn into architecture assumptions.
 
+## Audit correction: 2026-08-31
+
+Read [the source/code audit](2026-08-31-tpu-coding-research.md) before reusing
+the historical conclusions below. Raw timings and JSON have not been changed.
+
+- The depth oracle uses separately jitted JAX blocks, while its hybrid suffix
+  uses one JIT. A JAX-only same-suffix control is missing; network amplification
+  is a hypothesis, not an established cause of the observed final error.
+- The inspected Artgor Q beam minimizes scores. Existing `argmax_agreement`
+  is not best-action agreement. Add argmin and actual masked candidate top-K
+  comparisons before making search-quality claims.
+- Identical saved aggregate error metrics do not prove pairwise-identical
+  tensors across fusion boundaries; direct comparisons were not recorded.
+- Generated categorical-domain stress inputs are not necessarily reachable
+  puzzle states. Both test classes are needed and must be named separately.
+- A source-level Dense bias-rounding difference has a CPU witness; its impact
+  on compiled TPU results still needs a controlled hardware A/B.
+- Hardware generation, physical VMEM, compiler scoped-allocation limits,
+  shape-derived FLOP/state and timing-derived dense-equivalent FLOP/s must
+  be recorded separately.
+
 ## Fixed model contracts
 
 - Artgor checkpoint: `q555_2k_BEST.pt`, 24,757,807 parameters.

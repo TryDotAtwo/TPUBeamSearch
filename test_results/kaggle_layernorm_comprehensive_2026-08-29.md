@@ -1,5 +1,11 @@
 # Comprehensive Pallas LayerNorm sweep
 
+> Audit note (2026-08-31): historical timings and metrics below are unchanged.
+> The saved argmax metric is not the original Q-beam's minimizing action
+> selector; equal aggregate errors do not prove pairwise tensor equality.
+> The cause of numerical divergence is unresolved. See the
+> [source/code audit](../docs/research/2026-08-31-tpu-coding-research.md).
+
 Private Kaggle TPU v3-8 kernel
 `trydotatwo/tpu-layernorm-comprehensive-sweep`, version 1, evaluated 32
 residual-block configurations and promoted the three fastest correctness-valid

@@ -1,5 +1,11 @@
 # Per-depth LayerNorm arithmetic diagnostic
 
+> Audit note (2026-08-31): the measurements below are retained, but the causal
+> interpretation is not established. The segmented-JAX oracle and fused-JAX
+> suffix lack a JAX-only boundary control. `argmax` is also not this Q-beam's
+> minimizing action selector, and equal summaries do not prove identical
+> tensors. See the [audit and required controls](../docs/research/2026-08-31-tpu-coding-research.md).
+
 Private Kaggle TPU v3-8 kernel `trydotatwo/tpu-layernorm-depth-diagnostic`,
 version 1, measured four arithmetic/layout configurations on 8,192 valid
 states. Every depth used the same original JAX input prefix.
