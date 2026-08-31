@@ -53,13 +53,20 @@ def candidate_dense(x, w, b, config, *, interpret=False):
 
 def candidate_full(config, architecture, *, interpret=False):
     def call(states, weights):
-        from tpu_beam_search.stream1_embedding_experimental import flat_embedding
+        from tpu_beam_search.stream1_embedding_experimental import (
+            flat_embedding, flat_embedding_prepacked,
+        )
         from tpu_beam_search.stream1_layernorm_experimental import experimental_layer_norm
         epsilon = architecture.LAYER_NORM_EPSILON
         states = states[:, :architecture.STATE_LEN]
         encoding = config.get("embedding", "reference")
         if encoding == "reference":
             encoded = weights.embedding.astype(jnp.bfloat16)[states.astype(jnp.int32)].reshape(states.shape[0], -1)
+        elif encoding == "pallas_banked_prepacked":
+            encoded = flat_embedding_prepacked(
+                states, weights.embedding, embed_dim=architecture.EMBED_DIM,
+                bm=config.get("bm", 128), interpret=interpret,
+            )
         else:
             encoded = flat_embedding(states, weights.embedding, implementation=encoding,
                                       bm=config.get("bm", 128), interpret=interpret)

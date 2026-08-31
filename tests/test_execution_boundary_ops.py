@@ -86,6 +86,18 @@ def test_every_full_embedding_variant_uses_runtime_table():
         assert not np.array_equal(first, second)
 
 
+@pytest.mark.parametrize("storage_dtype", [jnp.bfloat16, jnp.float32])
+def test_prepacked_full_candidate_keeps_the_entire_resmlp_exact(storage_dtype):
+    params, states, arch, weights = model_fixture()
+    embedding = importlib.import_module("tpu_beam_search.stream1_embedding_experimental")
+    banks = embedding.prepare_banked_embedding(params["embed"], storage_dtype=storage_dtype)
+    packed_weights = weights._replace(embedding=banks)
+    config = dict(dense="jax", norm="jax", embedding="pallas_banked_prepacked", bm=8)
+    actual = jax.jit(module().candidate_full(config, arch, interpret=True))(states, packed_weights)
+    expected = jax.jit(lambda s: artgor_reference_apply(params, s, dtype=jnp.bfloat16))(states)
+    np.testing.assert_array_equal(actual, expected)
+
+
 def test_late_dense_full_builder_preserves_existing_arithmetic_path():
     from benchmarks.stream1_layernorm_followup import full_call
     _, states, arch, weights = model_fixture()

@@ -23,6 +23,67 @@ def test_position_major_lookup_and_runtime_table(implementation):
     np.testing.assert_array_equal(call(states, table + 8), np.asarray(got, np.float32) + 8)
 
 
+@pytest.mark.parametrize("storage_dtype", [jnp.bfloat16, jnp.float32])
+def test_prepacked_banks_preserve_bf16_conversion_order_and_hand_layout(storage_dtype):
+    # Non-BF16 values make the conversion boundary observable.  The expected
+    # bank formula is independent of the implementation under test.
+    table = (np.arange(150 * 24, dtype=np.float32).reshape(150, 24) / 17) + 0.0013
+    banks = module().prepare_banked_embedding(jnp.asarray(table), storage_dtype=storage_dtype)
+    rounded = np.asarray(jnp.asarray(table, jnp.bfloat16), np.float32)
+
+    assert banks.low.shape == banks.high.shape == (3, 128, 128)
+    assert banks.low.dtype == banks.high.dtype == storage_dtype
+    for phase, lane, category in ((0, 0, 0), (1, 17, 127), (2, 127, 149)):
+        feature = (phase * 128 + lane) % 24
+        bank, local_category = (banks.low, category) if category < 128 else (banks.high, category - 128)
+        assert float(bank[phase, lane, local_category]) == float(
+            jnp.asarray(rounded[category, feature], storage_dtype))
+    # Padding is semantic zero, not an uninitialized or repeated category.
+    assert float(banks.high[0, 0, 127]) == 0.0
+
+
+@pytest.mark.parametrize("storage_dtype", [jnp.bfloat16, jnp.float32])
+def test_prepacked_lookup_is_exact_and_does_not_receive_runtime_embedding(storage_dtype):
+    states = np.tile(np.arange(150, dtype=np.uint8), (9, 1))
+    table = (np.arange(150 * 24).reshape(150, 24) / 17).astype(np.float32)
+    banks = module().prepare_banked_embedding(jnp.asarray(table), storage_dtype=storage_dtype)
+    call = jax.jit(lambda s, b: module().flat_embedding_prepacked(
+        s, b, embed_dim=24, bm=8, interpret=True))
+    got = call(jnp.asarray(states), banks)
+    expected = np.asarray(jnp.asarray(table, jnp.bfloat16))[states].reshape(9, 3600)
+
+    assert got.shape == (9, 3600)
+    np.testing.assert_array_equal(got, expected)
+
+
+def test_runtime_and_prepacked_banked_paths_are_exactly_equivalent():
+    table = jnp.arange(150 * 24, dtype=jnp.float32).reshape(150, 24) / 13
+    states = jnp.asarray(np.random.default_rng(5).integers(0, 150, (11, 150), dtype=np.uint8))
+    runtime = module().flat_embedding(states, table, implementation="pallas_banked", bm=8, interpret=True)
+    banks = module().prepare_banked_embedding(table, storage_dtype=jnp.float32)
+    prepacked = module().flat_embedding_prepacked(states, banks, embed_dim=24, bm=8, interpret=True)
+    np.testing.assert_array_equal(prepacked, runtime)
+
+
+@pytest.mark.parametrize("change", ["dtype", "shape", "phases", "embed_dim", "bank_type"])
+def test_invalid_prepacked_contract_is_rejected(change):
+    states = jnp.zeros((2, 150), jnp.uint8)
+    banks = module().prepare_banked_embedding(jnp.zeros((150, 24), jnp.float32))
+    embed_dim = 24
+    if change == "dtype":
+        banks = type(banks)(banks.low, banks.high.astype(jnp.int32))
+    elif change == "shape":
+        banks = type(banks)(banks.low, banks.high[:, :, :-1])
+    elif change == "phases":
+        banks = type(banks)(banks.low[:2], banks.high[:2])
+    elif change == "embed_dim":
+        embed_dim = 0
+    else:
+        banks = (banks.low, banks.high)
+    with pytest.raises((TypeError, ValueError)):
+        module().flat_embedding_prepacked(states, banks, embed_dim=embed_dim, bm=8, interpret=True)
+
+
 @pytest.mark.parametrize("implementation", ["jax_flat", "jax_tiled", "pallas_banked"])
 def test_checkpoint_shape_class149_state_bank_and_tail(implementation):
     states = np.tile(np.arange(150, dtype=np.uint8), (9, 1))
