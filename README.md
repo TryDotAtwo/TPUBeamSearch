@@ -54,3 +54,39 @@ logits = infer(states, weights)  # [batch, MOVE_COUNT]
 The current Pallas path fuses virtual-one-hot input and the first dense hidden
 layer. Residual matrices and the output head use reusable aligned dense Pallas
 kernels. This is the correctness baseline for later residual fusion experiments.
+
+## Exact eight-TPU LayerNorm inference
+
+For the Artgor-family embedding + LayerNorm ResMLP, the validated fast path is
+the opt-in two-dispatch API in `stream1_layernorm_exact`.  It uses a prepacked
+Pallas banked embedding, keeps the unchanged JAX residual body, materializes the
+final hidden matrix on TPU, and compiles the 1024x30 head separately.
+
+```python
+import jax
+import numpy as np
+from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
+
+from tpu_beam_search.stream1_layernorm_exact import (
+    make_sharded_exact_layernorm_inference,
+    prepare_exact_layernorm_inference_weights,
+)
+
+mesh = Mesh(np.asarray(jax.devices()[:8]), ("core",))
+prepared = prepare_exact_layernorm_inference_weights(weights, architecture)
+infer = make_sharded_exact_layernorm_inference(
+    architecture, mesh=mesh, weights_example=prepared,
+)
+states = jax.device_put(host_states, NamedSharding(mesh, P("core", None)))
+prepared = jax.tree.map(
+    lambda value: jax.device_put(value, NamedSharding(mesh, P())), prepared,
+)
+q_values = infer(states, prepared)
+```
+
+Call `infer` directly from Python.  Do not wrap the composed call in another
+`jax.jit`: the device-resident dispatch boundary is part of the measured
+compiled program.  On eight Kaggle TPU v5 lite devices this path is exact versus
+the original BF16 model and reaches 1.58-1.63x speedup at local batches 16K and
+32K.  See the [terminal A/B report](test_results/kaggle_final_residual_ab_v1/report.md)
+for the frozen gate, full matrix, HLO attribution and runtime pins.

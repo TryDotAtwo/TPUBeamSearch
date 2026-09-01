@@ -1,0 +1,156 @@
+[{"stream_name":"stderr","time":15.142483878,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":15.260735365,"data":"\n"}
+,{"stream_name":"stderr","time":15.260750856,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":15.260755645,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":15.393330491,"data":"Cloning into '/tmp/TPUBeamSearch'...\n"}
+,{"stream_name":"stderr","time":24.057860182,"data":"HEAD is now at 267df37 Target final residual schedule on eight TPU devices\n"}
+,{"stream_name":"stdout","time":24.061348062,"data":"SOURCE_COMMIT=267df37cd3a35b19ad6250d43768bfd5b536b67c\n"}
+,{"stream_name":"stdout","time":28.229069076,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":28.229104186,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":33.483596215,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":33.483628446,"data":"E0000 00:00:1788224838.433246      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":33.483634486,"data":"=== Source Location Trace: === \n"}
+,{"stream_name":"stdout","time":33.483638855,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":58.151636798,"data":"{\n"}
+,{"stream_name":"stdout","time":58.151685728,"data":"  \"source_commit\": \"267df37cd3a35b19ad6250d43768bfd5b536b67c\",\n"}
+,{"stream_name":"stdout","time":58.151693378,"data":"  \"runtime\": {\n"}
+,{"stream_name":"stdout","time":58.151697938,"data":"    \"python\": \"3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]\",\n"}
+,{"stream_name":"stdout","time":58.151703038,"data":"    \"platform\": \"Linux-6.6.153+-x86_64-with-glibc2.41\",\n"}
+,{"stream_name":"stdout","time":58.151707788,"data":"    \"versions\": {\n"}
+,{"stream_name":"stdout","time":58.151711838,"data":"      \"jax\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":58.151716038,"data":"      \"jaxlib\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":58.151720008,"data":"      \"libtpu\": \"0.0.42.1\",\n"}
+,{"stream_name":"stdout","time":58.151724038,"data":"      \"numpy\": \"2.5.0\",\n"}
+,{"stream_name":"stdout","time":58.151728278,"data":"      \"torch\": \"2.8.0+cpu\"\n"}
+,{"stream_name":"stdout","time":58.151732368,"data":"    },\n"}
+,{"stream_name":"stdout","time":58.151736248,"data":"    \"devices\": [\n"}
+,{"stream_name":"stdout","time":58.151740258,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.151744108,"data":"        \"id\": 0,\n"}
+,{"stream_name":"stdout","time":58.151748188,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.151752248,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.151756288,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.151760258,"data":"      },\n"}
+,{"stream_name":"stdout","time":58.151778088,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.151785208,"data":"        \"id\": 1,\n"}
+,{"stream_name":"stdout","time":58.151788238,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.151791028,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.151793918,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.151796648,"data":"      },\n"}
+,{"stream_name":"stdout","time":58.151799328,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.151802008,"data":"        \"id\": 2,\n"}
+,{"stream_name":"stdout","time":58.151852828,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.151862108,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.151866298,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.151869688,"data":"      },\n"}
+,{"stream_name":"stdout","time":58.151872568,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.151875358,"data":"        \"id\": 3,\n"}
+,{"stream_name":"stdout","time":58.151878168,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.151881178,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.151883958,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.151886678,"data":"      },\n"}
+,{"stream_name":"stdout","time":58.151889318,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.151892448,"data":"        \"id\": 4,\n"}
+,{"stream_name":"stdout","time":58.151895708,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.151899028,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.151903698,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.151907268,"data":"      },\n"}
+,{"stream_name":"stdout","time":58.151910568,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.151913668,"data":"        \"id\": 5,\n"}
+,{"stream_name":"stdout","time":58.151917238,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.151920708,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.151943238,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.151951038,"data":"      },\n"}
+,{"stream_name":"stdout","time":58.151954358,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.151957508,"data":"        \"id\": 6,\n"}
+,{"stream_name":"stdout","time":58.151986988,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.151991018,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.151995568,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.151999358,"data":"      },\n"}
+,{"stream_name":"stdout","time":58.152004028,"data":"      {\n"}
+,{"stream_name":"stdout","time":58.152007678,"data":"        \"id\": 7,\n"}
+,{"stream_name":"stdout","time":58.152023568,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":58.152041818,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":58.152048208,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":58.152051248,"data":"      }\n"}
+,{"stream_name":"stdout","time":58.152076318,"data":"    ],\n"}
+,{"stream_name":"stdout","time":58.152079008,"data":"    \"process_count\": 1,\n"}
+,{"stream_name":"stdout","time":58.152081838,"data":"    \"process_index\": 0,\n"}
+,{"stream_name":"stdout","time":58.152097258,"data":"    \"local_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":58.152118978,"data":"    \"active_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":58.152126508,"data":"    \"default_matmul_precision\": null,\n"}
+,{"stream_name":"stdout","time":58.152129708,"data":"    \"x64_enabled\": false\n"}
+,{"stream_name":"stdout","time":58.152196228,"data":"  },\n"}
+,{"stream_name":"stdout","time":58.152203178,"data":"  \"checkpoint_sha256\": \"2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2\",\n"}
+,{"stream_name":"stdout","time":58.152206718,"data":"  \"original_source_sha256\": \"6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e\",\n"}
+,{"stream_name":"stdout","time":58.152210198,"data":"  \"puzzle_sha256\": \"01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0\",\n"}
+,{"stream_name":"stdout","time":58.152214868,"data":"  \"input_sha256\": {\n"}
+,{"stream_name":"stdout","time":58.152220328,"data":"    \"legal_scrambles\": \"340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743\",\n"}
+,{"stream_name":"stdout","time":58.152225318,"data":"    \"categorical_stress\": \"8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955\"\n"}
+,{"stream_name":"stdout","time":58.152230368,"data":"  },\n"}
+,{"stream_name":"stdout","time":58.152235008,"data":"  \"seeds\": {\n"}
+,{"stream_name":"stdout","time":58.152240308,"data":"    \"legal\": 42,\n"}
+,{"stream_name":"stdout","time":58.152244528,"data":"    \"stress\": 43\n"}
+,{"stream_name":"stdout","time":58.152252028,"data":"  },\n"}
+,{"stream_name":"stdout","time":58.152257878,"data":"  \"execution_ab_source_commit\": \"88d6e42c4100578aa9478d3faf6b4f5d30adc01f\",\n"}
+,{"stream_name":"stdout","time":58.152262578,"data":"  \"execution_ab_result\": \"Pallas values are exact; graph context changes the sole final residual Dense schedule and rare Q bits\"\n"}
+,{"stream_name":"stdout","time":58.152268078,"data":"}\n"}
+,{"stream_name":"stdout","time":58.677448542,"data":"START target corpus=legal_scrambles id=original_shard_map devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":65.05115794,"data":"START target corpus=legal_scrambles id=typed_monolithic devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":71.355929351,"data":"START target corpus=legal_scrambles id=pallas_monolithic devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":73.677564298,"data":"START target corpus=legal_scrambles id=pallas_barrier_before_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":76.02856524,"data":"START target corpus=legal_scrambles id=pallas_barrier_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":78.320668262,"data":"START target corpus=legal_scrambles id=pallas_barrier_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":80.622842262,"data":"START target corpus=legal_scrambles id=pallas_barrier_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":82.896915858,"data":"START target corpus=legal_scrambles id=pallas_barrier_before_and_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":85.125911011,"data":"START target corpus=legal_scrambles id=typed_tap_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":91.482783123,"data":"START target corpus=legal_scrambles id=pallas_tap_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":93.793298522,"data":"START target corpus=legal_scrambles id=typed_tap_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":100.197082275,"data":"START target corpus=legal_scrambles id=pallas_tap_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":102.411239511,"data":"START target corpus=legal_scrambles id=typed_tap_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":108.776137871,"data":"START target corpus=legal_scrambles id=pallas_tap_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":110.971932481,"data":"START target corpus=legal_scrambles id=typed_split_before_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":118.304835088,"data":"START target corpus=legal_scrambles id=pallas_split_before_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":121.479655101,"data":"START target corpus=legal_scrambles id=typed_split_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":129.419260824,"data":"START target corpus=legal_scrambles id=pallas_split_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":132.379853382,"data":"START target corpus=legal_scrambles id=typed_split_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":139.778104593,"data":"START target corpus=legal_scrambles id=pallas_split_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":142.408336875,"data":"START target corpus=legal_scrambles id=typed_split_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":149.427920514,"data":"START target corpus=legal_scrambles id=pallas_split_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":156.001050269,"data":"START target corpus=categorical_stress id=original_shard_map devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":162.43160376,"data":"START target corpus=categorical_stress id=typed_monolithic devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":168.925826346,"data":"START target corpus=categorical_stress id=pallas_monolithic devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":171.204864343,"data":"START target corpus=categorical_stress id=pallas_barrier_before_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":173.435849723,"data":"START target corpus=categorical_stress id=pallas_barrier_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":175.796407924,"data":"START target corpus=categorical_stress id=pallas_barrier_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":178.122618265,"data":"START target corpus=categorical_stress id=pallas_barrier_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":180.406841208,"data":"START target corpus=categorical_stress id=pallas_barrier_before_and_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":182.752432502,"data":"START target corpus=categorical_stress id=typed_tap_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":189.342656931,"data":"START target corpus=categorical_stress id=pallas_tap_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":191.616549269,"data":"START target corpus=categorical_stress id=typed_tap_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":199.271490351,"data":"START target corpus=categorical_stress id=pallas_tap_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":201.635732485,"data":"START target corpus=categorical_stress id=typed_tap_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":207.963494492,"data":"START target corpus=categorical_stress id=pallas_tap_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":210.234193298,"data":"START target corpus=categorical_stress id=typed_split_before_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":217.572108182,"data":"START target corpus=categorical_stress id=pallas_split_before_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":220.867279741,"data":"START target corpus=categorical_stress id=typed_split_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":228.101572012,"data":"START target corpus=categorical_stress id=pallas_split_before_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":231.108342037,"data":"START target corpus=categorical_stress id=typed_split_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":238.342331628,"data":"START target corpus=categorical_stress id=pallas_split_after_final_dense2 devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":240.951206624,"data":"START target corpus=categorical_stress id=typed_split_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":247.872271744,"data":"START target corpus=categorical_stress id=pallas_split_after_final_block devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":254.581198882,"data":"START confirmation corpus=legal_scrambles id=original_shard_map devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":268.761316069,"data":"START confirmation corpus=legal_scrambles id=typed_monolithic devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":283.067916541,"data":"START confirmation corpus=legal_scrambles id=typed_split_before_final_block devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":298.686065689,"data":"START confirmation corpus=legal_scrambles id=typed_split_after_final_block devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":314.304623737,"data":"START confirmation corpus=legal_scrambles id=pallas_split_after_final_block devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":320.481722707,"data":"START confirmation corpus=categorical_stress id=original_shard_map devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":334.822400873,"data":"START confirmation corpus=categorical_stress id=typed_monolithic devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":349.530184431,"data":"START confirmation corpus=categorical_stress id=typed_split_before_final_block devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":365.026407826,"data":"START confirmation corpus=categorical_stress id=typed_split_after_final_block devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":379.962344614,"data":"START confirmation corpus=categorical_stress id=pallas_split_after_final_block devices=8 local_batch=32768\n"}
+,{"stream_name":"stdout","time":386.271127675,"data":"RESULT {\"winner_id\": \"pallas_split_after_final_block\", \"target_achieved\": true, \"jax_baseline_id\": {\"legal_scrambles\": \"typed_split_before_final_block\", \"categorical_stress\": \"typed_monolithic\"}, \"per_corpus_speedup\": {\"legal_scrambles\": 1.6282786160972549, \"categorical_stress\": 1.6312882017673642}}\n"}
+,{"stream_name":"stdout","time":386.271179395,"data":"CONFIRMATION {\"winner_id\": \"pallas_split_after_final_block\", \"target_achieved\": true, \"jax_baseline_id\": {\"legal_scrambles\": \"typed_monolithic\", \"categorical_stress\": \"typed_monolithic\"}, \"per_corpus_speedup\": {\"legal_scrambles\": 1.5829553462785848, \"categorical_stress\": 1.5889678136933698}, \"same_winner_as_target\": true}\n"}
+,{"stream_name":"stdout","time":386.271186165,"data":"RESULT_PATH /kaggle/working/final_residual_ab/stream1_final_residual_ab.json\n"}
+,{"stream_name":"stderr","time":395.510555131,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":397.693741123,"data":"[NbConvertApp] Writing 283214 bytes to __results__.html\n"}
+]

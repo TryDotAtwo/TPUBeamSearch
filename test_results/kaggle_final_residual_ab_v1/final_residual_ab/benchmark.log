@@ -1,0 +1,146 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788224838.433246      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: === 
+learning/45eac/tfrc/runtime/common_lib.cc:238
+{
+  "source_commit": "267df37cd3a35b19ad6250d43768bfd5b536b67c",
+  "runtime": {
+    "python": "3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]",
+    "platform": "Linux-6.6.153+-x86_64-with-glibc2.41",
+    "versions": {
+      "jax": "0.10.2",
+      "jaxlib": "0.10.2",
+      "libtpu": "0.0.42.1",
+      "numpy": "2.5.0",
+      "torch": "2.8.0+cpu"
+    },
+    "devices": [
+      {
+        "id": 0,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 1,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 2,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 3,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 4,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 5,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 6,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 7,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      }
+    ],
+    "process_count": 1,
+    "process_index": 0,
+    "local_device_count": 8,
+    "active_device_count": 8,
+    "default_matmul_precision": null,
+    "x64_enabled": false
+  },
+  "checkpoint_sha256": "2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2",
+  "original_source_sha256": "6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e",
+  "puzzle_sha256": "01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0",
+  "input_sha256": {
+    "legal_scrambles": "340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743",
+    "categorical_stress": "8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955"
+  },
+  "seeds": {
+    "legal": 42,
+    "stress": 43
+  },
+  "execution_ab_source_commit": "88d6e42c4100578aa9478d3faf6b4f5d30adc01f",
+  "execution_ab_result": "Pallas values are exact; graph context changes the sole final residual Dense schedule and rare Q bits"
+}
+START target corpus=legal_scrambles id=original_shard_map devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_monolithic devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_monolithic devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_barrier_before_final_block devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_barrier_before_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_barrier_after_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_barrier_after_final_block devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_barrier_before_and_after_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_tap_before_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_tap_before_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_tap_after_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_tap_after_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_tap_after_final_block devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_tap_after_final_block devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_split_before_final_block devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_split_before_final_block devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_split_before_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_split_before_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_split_after_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_split_after_final_dense2 devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_split_after_final_block devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_split_after_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=original_shard_map devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_monolithic devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_monolithic devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_barrier_before_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_barrier_before_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_barrier_after_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_barrier_after_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_barrier_before_and_after_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_tap_before_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_tap_before_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_tap_after_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_tap_after_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_tap_after_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_tap_after_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_split_before_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_split_before_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_split_before_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_split_before_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_split_after_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_split_after_final_dense2 devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_split_after_final_block devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_split_after_final_block devices=8 local_batch=16384
+START confirmation corpus=legal_scrambles id=original_shard_map devices=8 local_batch=32768
+START confirmation corpus=legal_scrambles id=typed_monolithic devices=8 local_batch=32768
+START confirmation corpus=legal_scrambles id=typed_split_before_final_block devices=8 local_batch=32768
+START confirmation corpus=legal_scrambles id=typed_split_after_final_block devices=8 local_batch=32768
+START confirmation corpus=legal_scrambles id=pallas_split_after_final_block devices=8 local_batch=32768
+START confirmation corpus=categorical_stress id=original_shard_map devices=8 local_batch=32768
+START confirmation corpus=categorical_stress id=typed_monolithic devices=8 local_batch=32768
+START confirmation corpus=categorical_stress id=typed_split_before_final_block devices=8 local_batch=32768
+START confirmation corpus=categorical_stress id=typed_split_after_final_block devices=8 local_batch=32768
+START confirmation corpus=categorical_stress id=pallas_split_after_final_block devices=8 local_batch=32768
+RESULT {"winner_id": "pallas_split_after_final_block", "target_achieved": true, "jax_baseline_id": {"legal_scrambles": "typed_split_before_final_block", "categorical_stress": "typed_monolithic"}, "per_corpus_speedup": {"legal_scrambles": 1.6282786160972549, "categorical_stress": 1.6312882017673642}}
+CONFIRMATION {"winner_id": "pallas_split_after_final_block", "target_achieved": true, "jax_baseline_id": {"legal_scrambles": "typed_monolithic", "categorical_stress": "typed_monolithic"}, "per_corpus_speedup": {"legal_scrambles": 1.5829553462785848, "categorical_stress": 1.5889678136933698}, "same_winner_as_target": true}
+RESULT_PATH /kaggle/working/final_residual_ab/stream1_final_residual_ab.json

@@ -467,3 +467,40 @@ before/after the final block's second Dense.  Every tap and split has a
 structurally matched typed-JAX control.  Promotion remains exact full BF16 Q on
 both corpora and a speed win over the fastest exact JAX at real local batches
 16K and 32K across eight devices.  No BN/default or beam-search path changes.
+
+## Exact eight-device inference target achieved: 2026-09-01
+
+[Terminal report](../../test_results/kaggle_final_residual_ab_v1/report.md)
+records private `trydotatwo/tpu-final-residual-ab` v1 at public benchmark source
+`267df37cd3a35b19ad6250d43768bfd5b536b67c`.  The runtime is Python3.12.13,
+JAX/jaxlib0.10.2, libtpu0.0.42.1 and eight active TPUv5lite devices in one
+process.  All checkpoint/model/puzzle/input hashes match the preceding
+execution A/B; all54 measurements complete and `error_count=0`.
+
+- **`pallas_split_after_final_block` passes the frozen goal.**  It performs the
+  prepacked banked Pallas embedding and unchanged JAX ResMLP through block9 in
+  one dispatch, keeps the BF16 hidden matrix device-resident, then applies the
+  JAX head in a second dispatch.
+- At real local batch16,384 it takes7.321/7.312ms on legal/stress versus
+  11.921/11.929ms for the fastest exact JAX controls:1.628/1.631x and
+  17.904/17.925M global states/s.  At real local batch32,768 it confirms at
+  15.647/15.653ms versus24.769/24.872ms:1.583/1.589x and16.753/16.747M/s.
+- Full BF16 Q is finite and elementwise exact on all four runs: zero mismatches,
+  zero max/mean/RMSE and argmin agreement1.0.  The same winner is selected at
+  32K; no threshold is weakened.
+- Of22 monolithic MXU Dense schedules, only final residual Dense2 differed:
+  exact typed JAX used2x16x1 while the fast inexact Pallas monolith used1x22x1.
+  All five barrier arms retain1x22x1 and fail.  A tap or real split after the
+  complete final block restores2x16x1 and exact Q; the separate head compiles as
+  one1x3x1 MXU operation.  Cuts inside the block change BF16 materialization
+  and are rejected.
+- Compiler static temporary estimates are758,779,904B for typed monolithic and
+  129,827,840B for the winner prefix; the latter materializes a33,554,432B
+  local hidden output and its head reports zero temporary bytes.  These are
+  allocation estimates, not memory-traffic counters.
+
+The measured formulas are promoted as the opt-in reusable
+`tpu_beam_search.stream1_layernorm_exact` two-stage API.  Its host-level call
+must not be enclosed in another outer `jax.jit`, because the dispatch boundary
+is part of the validated compiled program.  No BN/default path or beam-search
+stage changes.  Fresh local regression:337 tests passed in131.44s.
