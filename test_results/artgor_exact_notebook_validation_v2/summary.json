@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "publishable": true,
+  "kaggle_kernel": {
+    "slug": "trydotatwo/tpu-artgor-exact-notebook-validation",
+    "version": 2,
+    "status": "COMPLETE"
+  },
+  "source": {
+    "validated_commit": "2b99bdf5116f828a21d35b2c5910467f6ab039c2",
+    "launcher_commit": "5522b23",
+    "artgor_script_version": 344319112,
+    "checkpoint_sha256": "2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2",
+    "model_source_sha256": "6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e",
+    "beam_source_sha256": "aaa0dbe16fd82a0f2bc08f1216f4e87c8a2a63c855f5d7012b6c18d8b57d42cb",
+    "puzzle_sha256": "01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0"
+  },
+  "runtime": {
+    "python": "3.12.13",
+    "jax": "0.10.2",
+    "jaxlib": "0.10.2",
+    "libtpu": "0.0.42.1",
+    "device_kind": "TPU v5 lite",
+    "device_count": 8,
+    "x64_enabled": true
+  },
+  "inference": {
+    "global_batch": 262144,
+    "local_batch_per_device": 32768,
+    "legal_scrambles": {
+      "bitwise_exact": true,
+      "mismatch_count": 0,
+      "original_jax_median_ms": 24.6359540000185,
+      "exact_split_median_ms": 15.514861999975,
+      "original_jax_mstates_per_s": 10.6407082916214,
+      "exact_split_mstates_per_s": 16.8963152879106,
+      "speedup": 1.58789385300741
+    },
+    "categorical_stress": {
+      "bitwise_exact": true,
+      "mismatch_count": 0,
+      "original_jax_median_ms": 24.7869339999625,
+      "exact_split_median_ms": 15.2890329999877,
+      "original_jax_mstates_per_s": 10.5758945418742,
+      "exact_split_mstates_per_s": 17.1458848967237,
+      "speedup": 1.62122313425462
+    },
+    "minimum_speedup": 1.58789385300741
+  },
+  "beam_parity": {
+    "one_depth_global_beam": 1048576,
+    "one_depth_tensor_records": 13,
+    "one_depth_all_exact": true,
+    "short_depths": 3,
+    "short_tensor_records": 39,
+    "short_all_exact": true,
+    "steady_depth_speedup": 1.10336339830107
+  },
+  "real_solve": {
+    "pid": 1034,
+    "global_beam": 16777216,
+    "found": true,
+    "found_step": 110,
+    "path_len": 116,
+    "host_replay_valid": true,
+    "solver_wall_s": 2955.746433719,
+    "gate_wall_s": 3032.653738476,
+    "compile_s": 43.320512821,
+    "lower_s": 1.00839458500002
+  },
+  "independent_download_verification": {
+    "comparison_records_checked": 54,
+    "all_reference_candidate_hashes_equal": true,
+    "all_mismatch_counts_zero": true,
+    "private_input_hashes_matched": true,
+    "path_replayed_from_private_competition_input": true,
+    "derived_gates_match_reported_gates": true
+  },
+  "publication": {
+    "competition_test_rows_included": false,
+    "competition_solution_path_included": false,
+    "raw_private_log_included": false,
+    "whole_solver_speedup_claimed": false
+  }
+}

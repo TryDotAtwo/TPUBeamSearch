@@ -547,3 +547,26 @@ blocks are JAX/XLA-lowered. An all-Pallas replacement still needs exact
 per-boundary arithmetic and a full32K/device win before promotion. No BN,
 default or beam-search path changes. Post-download verification: six focused
 artifact tests, twenty plugin-package tests and345 full-project tests pass.
+
+## Exact Artgor notebook publication gate passed: 2026-09-01
+
+[Terminal report](../../test_results/artgor_exact_notebook_validation_v2/report.md)
+records private `trydotatwo/tpu-artgor-exact-notebook-validation` v2 at source
+`2b99bdf5116f828a21d35b2c5910467f6ab039c2`.  Runtime is Python3.12.13,
+JAX/jaxlib0.10.2, libtpu0.0.42.1 and eight TPUv5lite devices with x64 enabled.
+
+- Full-Q inference at32,768 states/device is bitwise exact on legal and stress
+  corpora.  It takes15.515/15.289ms versus24.636/24.787ms original JAX:
+  1.588/1.621x and16.896/17.146M global states/s.
+- One depth has all13 output tensors hash exact.  Three consecutive depths have
+  all39 tensors, frontiers and backpointers exact; their steady paired depth
+  speedup is1.103x at the smaller1,048,576 global parity beam.
+- The real16,777,216-beam gate finds pid1034 at depth110; its116-move path
+  independently replays to solved.  Solver wall time is2,955.75s.  There is no
+  paired original full solve, so this does not establish a full-solver speedup.
+- Independent download validation re-derived all nine gates, checked54 primitive
+  comparison records, matched private input hashes and replayed the path.  The
+  public report omits competition rows, states and the solution itself.
+- V1 failed because x64 promoted Python zero literals in the banked Pallas LUT
+  `BlockSpec`, yielding illegal `(i32,i64,i64)` Mosaic indices.  Commit
+  `2b99bdf` fixes all LUT indices to int32;371 local tests pass before v2.
