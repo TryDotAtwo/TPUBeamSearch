@@ -1,0 +1,8 @@
+{
+  "artgor_script_version": 344319112,
+  "builder_sha256": "2cd3d984fe9d3a2993a0b700257a85a40f6514f10a5ab89eea0dcbb000f7a600",
+  "generated_notebook_sha256": "6939bb057beee07e7df7d501b2e99e8f04c300ae2167a7edafa8e5ebdb77ddbb",
+  "source_commit": "b65a02d5bdf5dae1c1143a3245087cf707d9892b",
+  "source_notebook_sha256": "c74613a9fa400b391aca49bb128a2f6d3b0465e8e7cb933abc9b126a317e0e0b",
+  "source_url": "https://www.kaggle.com/code/artgor/cayleypy-cube555-tpu-beam-q/notebook?scriptVersionId=344319112"
+}
