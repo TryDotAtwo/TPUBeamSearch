@@ -180,6 +180,26 @@
       "checked_on": "2026-08-31",
       "recheck_when": "Parameter delivery, constant-handling flags, JAX version or production wrapper changes.",
       "regression_case": "Compare runtime/captured parameters on both implementations with device-resident arrays and inspect target lowering; never diagnose one-sided capture when both sides capture."
+    },
+    {
+      "id": "M-LN-EXACT-FRONTIER",
+      "status": "measured",
+      "claim": "An exact hybrid BM4096 prefix plus Pallas BM256/BK1024/BN128 late-rounding head measured 15.363/15.364 ms at local batch 32768 across eight TPU v5 lite devices, versus 24.865/24.852 ms for original JAX and 15.566/15.541 ms for the accepted BM2048+JAX-head control.",
+      "scope": "Artgor 150x24 embedding, ten-block width-1024 LayerNorm ResMLP and 30-output Q head; JAX/jaxlib 0.10.2 and libtpu 0.0.42.1; eight active TPU v5 lite devices; legal-scramble and categorical-stress corpora. The residual trunk remains JAX/XLA-lowered, so this is not an all-Pallas result. Four selected comparisons are elementwise/hash exact. Only one of sixteen declared diagnostic profile pairs was downloadable after a Kaggle API incident; acceptance uses unprofiled synchronized timing.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/main/test_results/kaggle_exact_inference_frontier_v1/report.md", "https://github.com/TryDotAtwo/TPUBeamSearch/blob/fc5c87ae5c49c0a92d4ccd634831e8980a7f44e8/benchmarks/stream1_exact_inference_frontier.py"],
+      "checked_on": "2026-09-01",
+      "recheck_when": "Checkpoint, model graph, corpus, batch, runtime, TPU target, rounding boundary or execution split changes, or an all-Pallas residual trunk is proposed.",
+      "regression_case": "Require exact full BF16 Q and identical hashes on both corpora at 16K/device and actual 32K/device. Reject materialized identity cuts, BK256/BK512 late heads, pre-bias rounding and VMEM compile failures even when a microbenchmark is faster. Attribute the small head delta separately from the dominant split/prefix gain."
+    },
+    {
+      "id": "M-KAGGLE-READ-403",
+      "status": "measured",
+      "claim": "Kaggle CLI 2.2.2 returned a misleading kernels.get 403 for a completed newest private kernel while quota, owner listing and terminal event logs proved valid authentication and completion; bounded output retries recovered JSON/log/HLO but not every declared profile.",
+      "scope": "One 2026-09-01 private-kernel incident. The CLI's session-output path maps any 401/403 to the same wrong-slug/private message. This is not proof that every Kaggle 403 is transient or harmless, and it does not authorize changing system proxy or VPN state.",
+      "source_urls": ["https://github.com/TryDotAtwo/TPUBeamSearch/blob/main/test_results/kaggle_exact_inference_frontier_v1/report.md"],
+      "checked_on": "2026-09-01",
+      "recheck_when": "Kaggle CLI/API version, authentication method, visibility, owner, slug or output endpoint changes.",
+      "regression_case": "Before resubmitting, verify quota/authentication, exact owner/slug, owner kernel list and event/log endpoints; use maximum-page bounded read-only output retries. Preserve partial terminal artifacts and never infer RUNNING or ERROR solely from this generic 403."
     }
   ]
 }

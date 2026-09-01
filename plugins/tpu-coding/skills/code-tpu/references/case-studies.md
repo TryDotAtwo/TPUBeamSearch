@@ -1,6 +1,6 @@
 # TPUBeamSearch: scoped evidence, not defaults
 
-Audited 2026-08-31. Historical runs used JAX 0.10.2; local arithmetic witnesses
+Audited 2026-08-31 and updated 2026-09-01. Historical runs used JAX 0.10.2; local arithmetic witnesses
 used CPU JAX 0.10.1. Some old reports inconsistently name TPU generations and
 JSON lacks `device_kind`. Keep that uncertainty; do not derive a hardware peak
 from the prose label. Evidence IDs below refer to [evidence.json](evidence.json).
@@ -30,6 +30,7 @@ has an auxiliary value head that Q-only inference does not execute.
 | M-LN-INPUT | B16384: JAX embedding prefix 7.021ms; Pallas gather 8.369ms; virtual one-hot 11.166ms | BN's one-hot preference did not transfer. Folded variant was compile-rejected, not slow. |
 | M-LN-FULL | B16384: original 1.386M; Pallas separate/per-layer/per-block .577/.547/.565M states/s | Full-model Pallas did not win; fixed BM128 comparison is not best-per-boundary tuning. |
 | M-LN-VMEM | 8/32 screened candidates requested 16.06–16.36MiB against 16.00MiB scoped limit | Per-block BM256 rejection; not a physical-memory inventory. |
+| M-LN-EXACT-FRONTIER | Eight TPU v5 lite, local B32768: exact hybrid 15.363/15.364ms legal/stress versus original JAX 24.865/24.852ms | Exact split after the final residual block; residual trunk remains JAX/XLA. Head-only attribution is much smaller than total gain. |
 
 Exact runs, JSON and source pins are linked in the evidence records.
 **M-BN-FUSION:** BN prefix fusion gained about 2.2–2.7% in matched-tile
@@ -37,6 +38,14 @@ comparisons. **M-BN-RESIDUAL:** near-tied full-model residual fusion variants
 favored simpler separate kernels; 95.3125% argmax agreement was diagnostic,
 not minimizing-task quality, and accumulation-order causality was unproven.
 These observations justify controlled A/B, not a universal fusion or encoding ban.
+
+The exact frontier result changes the earlier engineering conclusion without
+rewriting the old failed all-block Pallas sweep. Preserving the JAX residual
+arithmetic while changing the execution boundary and Pallas embedding tile
+produced the robust gain. A Pallas head then passed the unchanged exact gate,
+but its composed delta over the same BM4096 prefix with a JAX head was only
+about 0.14–0.33%, and its standalone 32K timing was slower. Promote the full
+two-stage configuration; do not generalize that every replaced operator wins.
 
 ## Corrected interpretations
 

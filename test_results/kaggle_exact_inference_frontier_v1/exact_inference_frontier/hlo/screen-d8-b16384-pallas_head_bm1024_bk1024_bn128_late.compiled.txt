@@ -1,0 +1,63 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(bf16[16384,1024]{1,0:T(8,128)(2,1)}, bf16[1024,30]{0,1:T(8,128)(2,1)}, bf16[30]{0:T(256)(128)(2,1)})->bf16[16384,30]{0,1:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_parameters={false,false,false}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default;default;default",arg_memory_spaces="0;0;0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch/benchmarks/stream1_exact_inference_frontier.py"
+3 "/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py"
+4 "/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_layernorm_pallas.py"
+5 "/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_pallas.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "run_suite"
+6 "_execute_batch"
+7 "_compile"
+8 "head_call.<locals>.<lambda>"
+9 "pallas_layernorm_dense"
+10 "pallas_dense_linear"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=1113 end_line=1113 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=1096 end_line=1096 column=17 end_column=17}
+5 {file_name_id=2 function_name_id=5 line=951 end_line=951 column=17 end_column=17}
+6 {file_name_id=2 function_name_id=6 line=487 end_line=487 column=37 end_column=37}
+7 {file_name_id=3 function_name_id=7 line=206 end_line=206 column=14 end_column=14}
+8 {file_name_id=2 function_name_id=8 line=304 end_line=304 column=35 end_column=35}
+9 {file_name_id=4 function_name_id=9 line=78 end_line=78 column=15 end_column=15}
+10 {file_name_id=5 function_name_id=10 line=342 end_line=342 column=20 end_column=20}
+11 {file_name_id=5 function_name_id=10 line=346 end_line=346 column=18 end_column=18}
+12 {file_name_id=5 function_name_id=10 line=373 end_line=373 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+8 {file_location_id=8 parent_frame_id=8}
+9 {file_location_id=9 parent_frame_id=9}
+10 {file_location_id=10 parent_frame_id=10}
+11 {file_location_id=11 parent_frame_id=10}
+12 {file_location_id=12 parent_frame_id=10}
+
+
+ENTRY %main.2_spmd (param.3: bf16[16384,1024], param.4: bf16[1024,30], param.5: bf16[30]) -> bf16[16384,30] {
+  %constant.2.clone.1 = bf16[]{:T(256)} constant(0), metadata={op_name="jit(<lambda>)/shard_map" stack_frame_id=7}
+  %param.5 = bf16[30]{0:T(256)(128)(2,1)} parameter(2), sharding={replicated}, metadata={op_name="weights.output.bias"}
+  %param.4 = bf16[1024,30]{0,1:T(8,128)(2,1)} parameter(1), sharding={replicated}, metadata={op_name="weights.output.weight"}
+  %param.3 = bf16[16384,1024]{1,0:T(8,128)(2,1)} parameter(0), sharding={devices=[8,1]<=[8]}, metadata={op_name="hidden"}
+  %pad.9 = bf16[128]{0:T(256)(128)(2,1)S(1)} pad(%param.5, %constant.2.clone.1), padding=0_98, metadata={op_name="jit(<lambda>)/shard_map/jit(_pad)/pad" stack_frame_id=11}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"1024"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"1825","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["1"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+  %copy.4 = bf16[1024,30]{1,0:T(8,128)(2,1)S(1)} copy(%param.4), sharding={replicated}, metadata={op_name="weights.output.weight"}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"524288"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"2166","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":["4","8"],"is_mask":false,"iteration_bounds":["1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["128","1"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+  %pad.8 = bf16[1024,128]{1,0:T(8,128)(2,1)S(1)} pad(%copy.4, %constant.2.clone.1), padding=0_0x0_98, metadata={op_name="jit(<lambda>)/shard_map/jit(_pad)/pad" stack_frame_id=10}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"0"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"3511","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["128","1"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+  %stream1_dense_linear.1 = bf16[16384,128]{1,0:T(8,128)(2,1)S(1)} custom-call(%param.3, %pad.8, %pad.9), custom_call_target="tpu_custom_call", operand_layout_constraints={bf16[16384,1024]{1,0}, bf16[1024,128]{1,0}, bf16[128]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(<lambda>)/shard_map/stream1_dense_linear/pallas_call" stack_frame_id=12}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"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A0MDAxsJAwENBxtnAw0FRUcVFBsDSQkDHUEDA0UFAwMDA0UFAwMFBkUDBQcPS00DA0cFAwMFBkcDGwULUQcGRwMbA1MHBrICAyMDVR0GwgIDJQNXGQaHAwUDWRcHh3EDBQVPWx8G3gIDEQNdAwM1BQMDAwM1BQMDBQY1AxEHDWFjEQU1QwlfDWFjDwAbAwEFDwAbCwABCREBwwcDCQsHAQEBAQEBAwMBCQMBCwQBBQEFCREBxQcDCQsHAQEBAQEBAwMBCQMBCwQBBQUDCREBxwcDCQsHAQEBAQEBAwMBCQMBCwQBAwMJEQHLBwMJCwcBAQEBAQEDAwEJAwELBAEFAQMGAwEFAQB2EIkjESkJEx0nHSUxGx0dKyMhIyktRVMRCwsNDRUHGRkZGSUVDVUtCQ0dJRELEx1LK3MbFxcjFw8ZIxUXGRUlGR8PDQkdEWJ1aWx0aW4Ac3RhYmxlX21vc2FpYwB0cHUAYXJpdGgAbW9kdWxlAGFyaXRoLmNvbnN0YW50AHZlY3Rvci5sb2FkAHZlY3Rvci5zaGFwZV9jYXN0AGZ1bmMuZnVuYwBmdW5jLnJldHVybgBhcml0aC5jbXBpAHNjZi55aWVsZAB0cHUudmVjdG9yX3N0b3JlAGFyaXRoLmV4dHVpAHNjZi5pZgBhcml0aC5hZGRmAHZlY3Rvci5icm9hZGNhc3QAdHB1Lm1hdG11bABhcml0aC5leHRmAGFyaXRoLnRydW5jZgAvdG1wL1RQVUJlYW1TZWFyY2gvc3JjL3RwdV9iZWFtX3NlYXJjaC9zdHJlYW0xX3BhbGxhcy5weQBfZGVuc2VfbGluZWFyX2tlcm5lbABfZGVuc2VfbGluZWFyX2tlcm5lbC48bG9jYWxzPi5maW5pc2gAZnVuY3Rpb25fdHlwZQBzeW1fbmFtZQBnZXQ6AGdldC9nZXQAdHJhbnNmb3JtX2luZGljZXMAd2luZG93X2JvdW5kcwB2YWx1ZQBlcToAY29udmVydF9lbGVtZW50X3R5cGU6AGNvbnZlcnRfZWxlbWVudF90eXBlL2NvbnZlcnRfZWxlbWVudF90eXBlAHN3YXA6AHN3YXAvc3dhcABicm9hZGNhc3RfaW5fZGltOgB0cmFuc2Zvcm1fMAB0cmFuc2Zvcm1fMQB0cmFuc2Zvcm1fMgB0cmFuc2Zvcm1fMwBlcQBwcmVkaWNhdGUAZXEvZXEAY29uZDoAY29uZABhZGQ6AGFkZC9hZGQAX2RlbnNlX2xpbmVhcl9rZXJuZWwuPGxvY2Fscz4uaW5pdGlhbGl6ZQBicm9hZGNhc3RfaW5fZGltL2Jyb2FkY2FzdF9pbl9kaW0Ac3RhYmxlX21vc2FpYy52ZXJzaW9uAGRpbWVuc2lvbl9zZW1hbnRpY3MAaXRlcmF0aW9uX2JvdW5kcwBzY2FsYXJfcHJlZmV0Y2gAc2NyYXRjaF9vcGVyYW5kcwBzdHJlYW0xX2RlbnNlX2xpbmVhcgB0cHUuY29yZV90eXBlAHdpbmRvd19wYXJhbXMAZG90X2dlbmVyYWw6AGRvdF9nZW5lcmFsL2RvdF9nZW5lcmFsAGRpbWVuc2lvbl9udW1iZXJzAHRyYW5zcG9zZV9saHMAdHJhbnNwb3NlX2xoc19oaW50AHRyYW5zcG9zZV9yaHMAZmFzdG1hdGgAYWRkAG9wZXJhbmRTZWdtZW50U2l6ZXMAc3RyaWRlcwBicm9hZGNhc3RfaW5fZGltAA==","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"4554752"}]}
+  %bitcast.1 = bf16[16384,30]{1,0:T(8,128)(2,1)S(1)} bitcast(%stream1_dense_linear.1)
+  ROOT %copy.5 = bf16[16384,30]{0,1:T(8,128)(2,1)} copy(%bitcast.1), metadata={op_name="jit(<lambda>)/shard_map/slice" stack_frame_id=12}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"3211264"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"11864","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":["512","1"],"is_mask":false,"iteration_bounds":["1","4"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["4","32"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+}
+

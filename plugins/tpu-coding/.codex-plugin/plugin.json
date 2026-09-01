@@ -1,6 +1,6 @@
 {
   "name": "tpu-coding",
-  "version": "0.1.0+codex.20260831010242",
+  "version": "0.1.1+codex.20260901195306",
   "description": "Evidence-backed TPU coding with JAX and Pallas: layout, pipelines, numerical validation and benchmarking.",
   "author": {
     "name": "TPUBeamSearch contributors",

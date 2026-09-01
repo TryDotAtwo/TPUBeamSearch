@@ -74,3 +74,12 @@ at a time. Do not restart QUEUED/RUNNING jobs to poll them. Preserve full logs,
 partial JSON and terminal status; fix a failed job only after identifying its
 reproducible cause. Use configured networking without silently changing VPN or
 proxy state. Retain privacy/redistribution review before publishing artifacts.
+
+Treat a generic private-kernel `kernels.get` 403 as an ambiguous read failure,
+not as terminal state. In Kaggle CLI 2.2.2 the session-output wrapper maps every
+401/403 to the same wrong-slug/private explanation. First verify account quota,
+exact owner/slug, the owner's kernel list and independent event/log endpoints.
+Request the maximum supported output page, apply bounded read-only retries and
+preserve any partial JSON/log/HLO/profile set. Never resubmit a kernel merely
+because one status or output endpoint fails; disclose unrecovered diagnostics
+instead of reconstructing them or changing system proxy/VPN state.

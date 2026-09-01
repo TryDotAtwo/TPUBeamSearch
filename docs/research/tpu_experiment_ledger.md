@@ -504,3 +504,46 @@ The measured formulas are promoted as the opt-in reusable
 must not be enclosed in another outer `jax.jit`, because the dispatch boundary
 is part of the validated compiled program.  No BN/default path or beam-search
 stage changes.  Fresh local regression:337 tests passed in131.44s.
+
+## Exact inference frontier v1 completed: 2026-09-01
+
+[Terminal report](../../test_results/kaggle_exact_inference_frontier_v1/report.md)
+records private `trydotatwo/tpu-exact-inference-frontier` v1 at benchmark
+source `fc5c87ae5c49c0a92d4ccd634831e8980a7f44e8`. Runtime is Python3.12.13,
+JAX/jaxlib0.10.2, libtpu0.0.42.1 and eight active TPUv5lite devices in one
+process. Checkpoint/model/puzzle/input hashes match the frozen protocol.
+
+- The confirmed winner is
+  `exact_split_bm4096_pallas_head_bm256_bk1024_bn128_late`: exact Pallas
+  banked embedding plus unchanged JAX/XLA residual prefix at BM4096, followed
+  by a device-resident Pallas head at BM256/BK1024/BN128 with late rounding.
+- At local batch16,384 it takes7.133/7.146ms legal/stress versus11.983/11.903ms
+  original JAX and7.284/7.230ms accepted BM2048+JAX-head control. At local
+  batch32,768 it confirms at15.363/15.364ms versus24.865/24.852ms original and
+  15.566/15.541ms accepted control. This is17.063M global states/s and
+  1.618/1.618x versus original at confirmation.
+- All four selected outputs are finite, elementwise and hash exact: zero
+  max/mean/RMSE and mismatch witnesses. The screen winner remains the 32K
+  winner under the unchanged gate.
+- Exact head arithmetic is boundary-sensitive. Late BK128/BK1024 are exact;
+  late BK256/BK512 and every pre-bias-rounding arm are rejected. Three
+  materialized-identity arms also produce427/663 legal/stress mismatches.
+- Prefix BM8192/BM16384 are compile rejections at19.84/24.25MiB against the
+ 16MiB scoped VMEM limit. At32K, compiler static temp estimates fall from
+  about1.510GB monolithic to251,946,496B for the prefix; these are allocations,
+  not traffic counters.
+- The Pallas head's marginal composed improvement over the same BM4096 prefix
+  with a JAX head is only about0.14/0.33%, while standalone Pallas head is
+  slower. Do not attribute the robust full-model gain to the head alone; the
+  exact split and prefix tiling dominate.
+- Full JSON/log and110 HLO files are retained. A Kaggle backend inconsistency
+  returned `kernels.get`403 for the completed newest private kernel despite
+  valid quota, owner listing and terminal logs. One of16 diagnostic
+  trace/XPlane pairs was recovered; its two-dispatch accepted control passes
+  strict TPU0 analysis. Missing winner traces are disclosed, not reconstructed.
+
+This advances the inference frontier but remains a hybrid: the ten residual
+blocks are JAX/XLA-lowered. An all-Pallas replacement still needs exact
+per-boundary arithmetic and a full32K/device win before promotion. No BN,
+default or beam-search path changes. Post-download verification: six focused
+artifact tests, twenty plugin-package tests and345 full-project tests pass.

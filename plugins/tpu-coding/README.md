@@ -1,6 +1,6 @@
 # TPU Coding for Codex
 
-Version 0.1.0. A maintained Python/JAX/Pallas technical skill built from primary
+Version 0.1.1. A maintained Python/JAX/Pallas technical skill built from primary
 TPU documentation, TPUBeamSearch experiments and project-expert review.
 
 Start with [code-tpu](skills/code-tpu/SKILL.md). It routes to hardware/runtime,

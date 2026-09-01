@@ -1,0 +1,102 @@
+[{"stream_name":"stderr","time":27.132667539,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":27.602331413,"data":"\n"}
+,{"stream_name":"stderr","time":27.602355633,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":27.602361543,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":27.740159342,"data":"Cloning into '/tmp/TPUBeamSearch'...\n"}
+,{"stream_name":"stderr","time":34.577099038,"data":"HEAD is now at fc5c87a Add exact TPU inference frontier benchmark\n"}
+,{"stream_name":"stdout","time":34.580000449,"data":"SOURCE_COMMIT=fc5c87ae5c49c0a92d4ccd634831e8980a7f44e8\n"}
+,{"stream_name":"stdout","time":38.727926351,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":38.727975322,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":44.013605208,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":44.013647718,"data":"E0000 00:00:1788256124.982239      44 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":44.013655338,"data":"=== Source Location Trace: === \n"}
+,{"stream_name":"stdout","time":44.013660368,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":69.40872006,"data":"{\n"}
+,{"stream_name":"stdout","time":69.40877294,"data":"  \"source_commit\": \"fc5c87ae5c49c0a92d4ccd634831e8980a7f44e8\",\n"}
+,{"stream_name":"stdout","time":69.40877973,"data":"  \"runtime\": {\n"}
+,{"stream_name":"stdout","time":69.4087844,"data":"    \"python\": \"3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]\",\n"}
+,{"stream_name":"stdout","time":69.40878869,"data":"    \"platform\": \"Linux-6.6.153+-x86_64-with-glibc2.41\",\n"}
+,{"stream_name":"stdout","time":69.40879301,"data":"    \"versions\": {\n"}
+,{"stream_name":"stdout","time":69.40879736,"data":"      \"jax\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":69.4088017,"data":"      \"jaxlib\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":69.4088058,"data":"      \"libtpu\": \"0.0.42.1\",\n"}
+,{"stream_name":"stdout","time":69.40881005,"data":"      \"numpy\": \"2.5.0\",\n"}
+,{"stream_name":"stdout","time":69.40881452,"data":"      \"torch\": \"2.8.0+cpu\"\n"}
+,{"stream_name":"stdout","time":69.40881882,"data":"    },\n"}
+,{"stream_name":"stdout","time":69.40882285,"data":"    \"devices\": [\n"}
+,{"stream_name":"stdout","time":69.40882689,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.40883079,"data":"        \"id\": 0,\n"}
+,{"stream_name":"stdout","time":69.40883493,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.40883899,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.40884302,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.40884749,"data":"      },\n"}
+,{"stream_name":"stdout","time":69.40886445,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.4088673,"data":"        \"id\": 1,\n"}
+,{"stream_name":"stdout","time":69.40887002,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.4088728,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.40887594,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.40887894,"data":"      },\n"}
+,{"stream_name":"stdout","time":69.40888159,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.40888423,"data":"        \"id\": 2,\n"}
+,{"stream_name":"stdout","time":69.40888717,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.40889007,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.40889729,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.4089002,"data":"      },\n"}
+,{"stream_name":"stdout","time":69.40890284,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.40890551,"data":"        \"id\": 3,\n"}
+,{"stream_name":"stdout","time":69.40890819,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.40891094,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.40891403,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.40891684,"data":"      },\n"}
+,{"stream_name":"stdout","time":69.40891948,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.40892293,"data":"        \"id\": 4,\n"}
+,{"stream_name":"stdout","time":69.40892594,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.40892864,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.40893133,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.40893399,"data":"      },\n"}
+,{"stream_name":"stdout","time":69.40893685,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.40893947,"data":"        \"id\": 5,\n"}
+,{"stream_name":"stdout","time":69.40894214,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.40894484,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.40894758,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.40895026,"data":"      },\n"}
+,{"stream_name":"stdout","time":69.40895305,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.40895567,"data":"        \"id\": 6,\n"}
+,{"stream_name":"stdout","time":69.40895842,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.4089622,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.40896503,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.40896774,"data":"      },\n"}
+,{"stream_name":"stdout","time":69.40897037,"data":"      {\n"}
+,{"stream_name":"stdout","time":69.40897315,"data":"        \"id\": 7,\n"}
+,{"stream_name":"stdout","time":69.4089759,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":69.40897866,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":69.4089817,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":69.40898443,"data":"      }\n"}
+,{"stream_name":"stdout","time":69.40898746,"data":"    ],\n"}
+,{"stream_name":"stdout","time":69.40899015,"data":"    \"process_count\": 1,\n"}
+,{"stream_name":"stdout","time":69.4089962,"data":"    \"process_index\": 0,\n"}
+,{"stream_name":"stdout","time":69.4090136,"data":"    \"local_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":69.40901675,"data":"    \"active_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":69.40901965,"data":"    \"default_matmul_precision\": null,\n"}
+,{"stream_name":"stdout","time":69.40903522,"data":"    \"x64_enabled\": false\n"}
+,{"stream_name":"stdout","time":69.40904613,"data":"  },\n"}
+,{"stream_name":"stdout","time":69.40905031,"data":"  \"checkpoint_sha256\": \"2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2\",\n"}
+,{"stream_name":"stdout","time":69.40906068,"data":"  \"original_source_sha256\": \"6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e\",\n"}
+,{"stream_name":"stdout","time":69.40906405,"data":"  \"puzzle_sha256\": \"01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0\",\n"}
+,{"stream_name":"stdout","time":69.40907239,"data":"  \"input_sha256\": {\n"}
+,{"stream_name":"stdout","time":69.40907537,"data":"    \"legal_scrambles\": \"340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743\",\n"}
+,{"stream_name":"stdout","time":69.40911525,"data":"    \"categorical_stress\": \"8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955\"\n"}
+,{"stream_name":"stdout","time":69.40912481,"data":"  },\n"}
+,{"stream_name":"stdout","time":69.40913268,"data":"  \"seeds\": {\n"}
+,{"stream_name":"stdout","time":69.40923612,"data":"    \"legal\": 42,\n"}
+,{"stream_name":"stdout","time":69.40924194,"data":"    \"stress\": 43\n"}
+,{"stream_name":"stdout","time":69.40924471,"data":"  },\n"}
+,{"stream_name":"stdout","time":69.40924758,"data":"  \"accepted_source_commit\": \"7865ac455b0d4dfbb3d6e8b68430164790fc076c\",\n"}
+,{"stream_name":"stdout","time":69.4092508,"data":"  \"accepted_result\": \"exact split after final residual block; prepacked Pallas embedding prefix and separate device-resident JAX head\"\n"}
+,{"stream_name":"stdout","time":69.40925386,"data":"}\n"}
+,{"stream_name":"stdout","time":240.42824087,"data":"SCREEN {\"accepted_control_id\": \"exact_split_bm2048_jax_head\", \"selected_id\": \"exact_split_bm4096_pallas_head_bm256_bk1024_bn128_late\", \"improvement_achieved\": true, \"per_corpus_speedup\": {\"legal_scrambles\": 1.0211576619364995, \"categorical_stress\": 1.0117246090338747}}\n"}
+,{"stream_name":"stdout","time":240.42828166,"data":"CONFIRMATION {\"accepted_control_id\": \"exact_split_bm2048_jax_head\", \"selected_id\": \"exact_split_bm4096_pallas_head_bm256_bk1024_bn128_late\", \"improvement_achieved\": true, \"per_corpus_speedup\": {\"legal_scrambles\": 1.013229099861285, \"categorical_stress\": 1.0114947327817232}, \"screen_selected_id\": \"exact_split_bm4096_pallas_head_bm256_bk1024_bn128_late\", \"confirmed\": true}\n"}
+,{"stream_name":"stdout","time":240.42828946,"data":"RESULT_PATH /kaggle/working/exact_inference_frontier/stream1_exact_inference_frontier.json\n"}
+,{"stream_name":"stderr","time":249.635457882,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":251.917426636,"data":"[NbConvertApp] Writing 283216 bytes to __results__.html\n"}
+]

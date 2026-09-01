@@ -1,0 +1,13 @@
+module @jit__lambda attributes {mhlo.num_partitions = 8 : i32, mhlo.num_replicas = 1 : i32} {
+  sdy.mesh @mesh = <["core"=8]> {stablehlo.mesh = {axes = [{name = "core", size = 8 : i64}]}}
+  func.func public @main(%arg0: tensor<262144x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{"core"}, {}]>}, %arg1: tensor<1024x30xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg2: tensor<30xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}) -> (tensor<262144x30xbf16> {jax.result_info = "result"}) {
+    %0 = sdy.manual_computation(%arg0, %arg1, %arg2) in_shardings=[<@mesh, [{"core"}, {}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>] out_shardings=[<@mesh, [{"core"}, {}]>] manual_axes={"core"} (%arg3: tensor<32768x1024xbf16>, %arg4: tensor<1024x30xbf16>, %arg5: tensor<30xbf16>) {
+      %1 = stablehlo.dot_general %arg3, %arg4, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<32768x1024xbf16>, tensor<1024x30xbf16>) -> tensor<32768x30xbf16>
+      %2 = stablehlo.broadcast_in_dim %arg5, dims = [1] : (tensor<30xbf16>) -> tensor<1x30xbf16>
+      %3 = stablehlo.broadcast_in_dim %2, dims = [0, 1] : (tensor<1x30xbf16>) -> tensor<32768x30xbf16>
+      %4 = stablehlo.add %1, %3 : tensor<32768x30xbf16>
+      sdy.return %4 : tensor<32768x30xbf16>
+    } : (tensor<262144x1024xbf16>, tensor<1024x30xbf16>, tensor<30xbf16>) -> tensor<262144x30xbf16>
+    return %0 : tensor<262144x30xbf16>
+  }
+}
