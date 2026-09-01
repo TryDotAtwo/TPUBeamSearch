@@ -28,6 +28,8 @@ from .artgor_exact_inference import (
     ArtgorExactInference,
     prepare_artgor_exact_inference,
 )
+from .stream1_layernorm_exact import stream1_layernorm_exact_prefix
+from .stream1_layernorm_pallas import pallas_layernorm_dense
 
 
 PACK_SIZE = 160
@@ -125,6 +127,8 @@ class ArtgorExactBeamRuntime:
     inference: ArtgorExactInference
     weights: Any
     hidden_size: int
+    prefix_local: Callable | None = None
+    head_local: Callable | None = None
 
 
 def prepare_artgor_exact_beam_runtime(
@@ -142,10 +146,34 @@ def prepare_artgor_exact_beam_runtime(
         state_storage_len=state_storage_len,
         interpret=interpret,
     )
+
+    def prefix_local(states, runtime_weights):
+        return stream1_layernorm_exact_prefix(
+            states,
+            runtime_weights,
+            architecture,
+            bm=exact_config.prefix_bm,
+            interpret=interpret,
+        )
+
+    def head_local(hidden, runtime_weights):
+        return pallas_layernorm_dense(
+            hidden,
+            runtime_weights.output.weight,
+            runtime_weights.output.bias,
+            bm=exact_config.head_bm,
+            bk=exact_config.head_bk,
+            bn=exact_config.head_bn,
+            dense_rounding=exact_config.dense_rounding,
+            interpret=interpret,
+        )
+
     return ArtgorExactBeamRuntime(
         inference=inference,
         weights=weights,
         hidden_size=architecture.HIDDEN2,
+        prefix_local=prefix_local,
+        head_local=head_local,
     )
 
 
@@ -216,6 +244,8 @@ def build_staged_depth_executables(
     eg_hashes=None,
     eg_ztab=None,
     inv_move_tbl=None,
+    prefix_local: Callable | None = None,
+    head_local: Callable | None = None,
     donate_search_carry: bool = True,
     require_published_geometry: bool = True,
 ) -> StagedDepthExecutables:
@@ -231,20 +261,57 @@ def build_staged_depth_executables(
     if int(mesh.size) != config.world_size:
         raise ValueError("mesh size must equal staged world_size")
 
-    # The dynamic slice is deliberately part of the prefix dispatch.  The
-    # separately compiled head call below is never enclosed by this JIT.
-    @jax.jit
-    def prefix_from_beam(states, weights, parent_start):
-        chunk = jax.lax.dynamic_slice(
-            states,
-            (jnp.int32(0), parent_start, jnp.int32(0)),
-            (
-                config.world_size,
-                config.inference_chunk,
-                config.state_size,
-            ),
+    if (prefix_local is None) != (head_local is None):
+        raise ValueError("prefix_local and head_local must be supplied together")
+    if prefix_local is not None:
+        weight_specs = jax.tree.map(lambda _: P(), weights_example)
+
+        def prefix_from_beam_local(states, weights, parent_start):
+            local_states = states[0]
+            chunk = jax.lax.dynamic_slice(
+                local_states,
+                (parent_start, jnp.int32(0)),
+                (config.inference_chunk, config.state_size),
+            )
+            return prefix_local(chunk, weights)[None, :, :]
+
+        def head_local_explicit(hidden, weights):
+            return head_local(hidden[0], weights)[None, :, :]
+
+        prefix_from_beam = jax.jit(
+            jax.shard_map(
+                prefix_from_beam_local,
+                mesh=mesh,
+                in_specs=(P(axis_name), weight_specs, P()),
+                out_specs=P(axis_name),
+                check_vma=False,
+            )
         )
-        return exact_inference.prefix(chunk, weights)
+        head = jax.jit(
+            jax.shard_map(
+                head_local_explicit,
+                mesh=mesh,
+                in_specs=(P(axis_name), weight_specs),
+                out_specs=P(axis_name),
+                check_vma=False,
+            )
+        )
+    else:
+        # Interpreter fixtures may inject a global explicit-axis callable.
+        @jax.jit
+        def prefix_from_beam(states, weights, parent_start):
+            chunk = jax.lax.dynamic_slice(
+                states,
+                (jnp.int32(0), parent_start, jnp.int32(0)),
+                (
+                    config.world_size,
+                    config.inference_chunk,
+                    config.state_size,
+                ),
+            )
+            return exact_inference.prefix(chunk, weights)
+
+        head = exact_inference.head
 
     @jax.jit
     def assemble_q(chunks):
@@ -286,13 +353,10 @@ def build_staged_depth_executables(
     else:
         search_depth = jax.jit(mapped_search)
 
-    # Keep weights_example in the public contract: constructing this object
-    # must happen only after the prepared replicated weight pytree exists.
-    jax.tree.map(lambda _: P(), weights_example)
     return StagedDepthExecutables(
         config=config,
         prefix_from_beam=prefix_from_beam,
-        head=exact_inference.head,
+        head=head,
         assemble_q=assemble_q,
         search_depth=search_depth,
     )
@@ -882,21 +946,22 @@ def beam_solve_v_only_spmd_packed_exact(
         exact_runtime.weights,
     )
     sharding = NamedSharding(mesh, P("core"))
+    flat_state_sharding = NamedSharding(mesh, P("core", None))
 
     # The seed uses the same exact prefix/head executables and their production
     # 32K shape.  Only row zero is observed; the remaining rows are padding.
     seed_local = np.zeros(
-        (1, exact_config.inference_chunk, state_size), dtype=STATE_DTYPE_NP
+        (exact_config.inference_chunk, state_size), dtype=STATE_DTYPE_NP
     )
-    seed_local[0, 0] = init_state
+    seed_local[0] = init_state
     seed_states = jax.make_array_from_callback(
-        (world_size, exact_config.inference_chunk, state_size),
-        sharding,
+        (world_size * exact_config.inference_chunk, state_size),
+        flat_state_sharding,
         lambda _index: seed_local,
     )
     seed_start = time.perf_counter()
     seed_q = exact_runtime.inference(seed_states, weights_d)
-    values0 = np.asarray(seed_q[0, 0], dtype=np.float32)
+    values0 = np.asarray(seed_q[0], dtype=np.float32)
     seed_inference_s = time.perf_counter() - seed_start
 
     all_moves_np = np.asarray(all_moves, dtype=np.int32)
@@ -995,6 +1060,8 @@ def beam_solve_v_only_spmd_packed_exact(
         eg_hashes=eg_hashes,
         eg_ztab=eg_ztab,
         inv_move_tbl=inv_move_tbl,
+        prefix_local=exact_runtime.prefix_local,
+        head_local=exact_runtime.head_local,
         donate_search_carry=True,
         require_published_geometry=_require_published_geometry,
     )

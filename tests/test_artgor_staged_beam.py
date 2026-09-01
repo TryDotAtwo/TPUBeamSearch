@@ -321,15 +321,19 @@ def test_tiny_high_level_solver_keeps_original_result_contract(tmp_path):
         parent_chunk=4,
     )
     inference = ArtgorExactInference(
-        prefix=lambda states, _weights: states,
+        prefix=lambda states, _weights: states.astype(jnp.bfloat16),
         head=lambda hidden, _weights: _oracle_q(
-            None, hidden[0], dtype=jnp.bfloat16
-        )[None],
+            None, hidden, dtype=jnp.bfloat16
+        ),
     )
     runtime = ArtgorExactBeamRuntime(
         inference=inference,
         weights=None,
         hidden_size=4,
+        prefix_local=lambda states, _weights: states.astype(jnp.bfloat16),
+        head_local=lambda hidden, _weights: _oracle_q(
+            None, hidden, dtype=jnp.bfloat16
+        ),
     )
     tree_path = tmp_path / "tiny-tree.u32"
     result = beam_solve_v_only_spmd_packed_exact(
