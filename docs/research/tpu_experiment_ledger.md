@@ -424,3 +424,46 @@ It replays exact witness-owner shards on one device and compares input
 boundaries, split dispatch, direct sharded jit, pmap and independent one-core
 executables.  Inference only; BN/defaults and beam-search stages remain
 unchanged.
+
+## Exact eight-device execution A/B v1: 2026-09-01
+
+[Terminal report](../../test_results/kaggle_inference_execution_ab_v1/report.md)
+records private `trydotatwo/tpu-inference-execution-ab` v1 at source
+`88d6e42c4100578aa9478d3faf6b4f5d30adc01f`.  The runtime again exposes eight
+active TPU v5 lite devices; all checkpoint/model/input hashes match the previous
+run.
+
+- No arm passes exact-Q promotion.  Fastest exact typed JAX takes
+  11.881/11.968 ms on legal/stress at local batch 16K.  Pallas banked encoding
+  takes 7.181/7.312 ms, a rejected 1.654/1.637x opportunity with 12/55 Q
+  mismatches.  No 32K confirmation runs.
+- Exact witness-owner 16K shards replay the same drift on one TPU.  Eight-device
+  count is therefore not causal; the earlier one-device prefix omitted the
+  witnesses.
+- Original `shard_map`, explicit sharded `jit`, `pmap` and eight independent
+  executables share exact output hashes.  Pallas under `shard_map`, `pmap` and
+  independent executables also shares one common rejected hash.  Launch API and
+  host orchestration do not explain the arithmetic.
+- JAX and Pallas two-dispatch encoding splits share an identical rejected hash
+  (93/427 mismatches).  Hence the Pallas encoded BF16 tensor is exact and the
+  downstream executable schedule changes when the graph is cut.
+- Returning every internal boundary makes typed JAX and Pallas elementwise
+  identical through all ten blocks and Q on every witness.  Observability
+  perturbs fusion; the unobserved full replay remains the correctness evidence.
+- Input pre-barriers do nothing; post-input-Dense barriers cause large drift.
+  The next experiment targets the already identified final residual Dense
+  schedule with block-9/Dense2 barriers and materialized execution cuts.
+
+Raw JSON, full logs and 146 StableHLO/compiled-HLO files are retained.  Two
+expected direct-Pallas compile failures are recorded, not hidden.  No BN or
+production-default path changes.
+
+## Final-residual A/B prepared: 2026-09-01
+
+The next [frozen protocol](2026-09-01-final-residual-ab.md) follows directly
+from execution A/B v1.  New opt-in builders preserve all model formulas while
+testing final-block barriers, one-dispatch output taps and device-resident cuts
+before/after the final block's second Dense.  Every tap and split has a
+structurally matched typed-JAX control.  Promotion remains exact full BF16 Q on
+both corpora and a speed win over the fastest exact JAX at real local batches
+16K and 32K across eight devices.  No BN/default or beam-search path changes.

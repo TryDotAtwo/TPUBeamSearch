@@ -1,0 +1,20 @@
+module @jit_call attributes {mhlo.num_partitions = 8 : i32, mhlo.num_replicas = 1 : i32} {
+  sdy.mesh @mesh = <["core"=8]> {stablehlo.mesh = {axes = [{name = "core", size = 8 : i64}]}}
+  func.func public @main(%arg0: tensor<131072x150xui8> {sdy.sharding = #sdy.sharding<@mesh, [{"core"}, {}]>}, %arg1: tensor<150x24xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}) -> (tensor<131072x3600xbf16> {jax.result_info = "result"}) {
+    %0 = sdy.manual_computation(%arg0, %arg1) in_shardings=[<@mesh, [{"core"}, {}]>, <@mesh, [{}, {}]>] out_shardings=[<@mesh, [{"core"}, {}]>] manual_axes={"core"} (%arg2: tensor<16384x150xui8>, %arg3: tensor<150x24xbf16>) {
+      %1 = stablehlo.convert %arg2 : (tensor<16384x150xui8>) -> tensor<16384x150xi32>
+      %c = stablehlo.constant dense<0> : tensor<i32>
+      %2 = stablehlo.broadcast_in_dim %c, dims = [] : (tensor<i32>) -> tensor<16384x150xi32>
+      %3 = stablehlo.compare LT, %1, %2, SIGNED : (tensor<16384x150xi32>, tensor<16384x150xi32>) -> tensor<16384x150xi1>
+      %c_0 = stablehlo.constant dense<150> : tensor<i32>
+      %4 = stablehlo.broadcast_in_dim %c_0, dims = [] : (tensor<i32>) -> tensor<16384x150xi32>
+      %5 = stablehlo.add %1, %4 : tensor<16384x150xi32>
+      %6 = stablehlo.select %3, %5, %1 : tensor<16384x150xi1>, tensor<16384x150xi32>
+      %7 = stablehlo.broadcast_in_dim %6, dims = [0, 1] : (tensor<16384x150xi32>) -> tensor<16384x150x1xi32>
+      %8 = "stablehlo.gather"(%arg3, %7) <{dimension_numbers = #stablehlo.gather<offset_dims = [2], collapsed_slice_dims = [0], start_index_map = [0], index_vector_dim = 2>, indices_are_sorted = false, slice_sizes = array<i64: 1, 24>}> : (tensor<150x24xbf16>, tensor<16384x150x1xi32>) -> tensor<16384x150x24xbf16>
+      %9 = stablehlo.reshape %8 : (tensor<16384x150x24xbf16>) -> tensor<16384x3600xbf16>
+      sdy.return %9 : tensor<16384x3600xbf16>
+    } : (tensor<131072x150xui8>, tensor<150x24xbf16>) -> tensor<131072x3600xbf16>
+    return %0 : tensor<131072x3600xbf16>
+  }
+}

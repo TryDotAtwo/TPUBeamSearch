@@ -1,0 +1,3 @@
+# Generated TPU traces are immutable raw evidence, not source text to normalize.
+test_results/**/*.log -text -diff
+test_results/**/hlo/*.txt -text -diff

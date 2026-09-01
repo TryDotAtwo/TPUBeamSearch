@@ -1,0 +1,220 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788222847.770860      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: === 
+learning/45eac/tfrc/runtime/common_lib.cc:238
+{
+  "source_commit": "88d6e42c4100578aa9478d3faf6b4f5d30adc01f",
+  "runtime": {
+    "python": "3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]",
+    "platform": "Linux-6.6.153+-x86_64-with-glibc2.41",
+    "versions": {
+      "jax": "0.10.2",
+      "jaxlib": "0.10.2",
+      "libtpu": "0.0.42.1",
+      "numpy": "2.5.0",
+      "torch": "2.8.0+cpu"
+    },
+    "devices": [
+      {
+        "id": 0,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 1,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 2,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 3,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 4,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 5,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 6,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 7,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      }
+    ],
+    "process_count": 1,
+    "process_index": 0,
+    "local_device_count": 8,
+    "active_device_count": 8,
+    "default_matmul_precision": null,
+    "x64_enabled": false
+  },
+  "checkpoint_sha256": "2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2",
+  "original_source_sha256": "6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e",
+  "puzzle_sha256": "01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0",
+  "input_sha256": {
+    "legal_scrambles": "340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743",
+    "categorical_stress": "8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955"
+  },
+  "seeds": {
+    "legal": 42,
+    "stress": 43
+  },
+  "v1_witnesses": {
+    "legal_scrambles": [
+      29807,
+      50224
+    ],
+    "categorical_stress": [
+      29369
+    ]
+  },
+  "v1_source_commit": "d2159cb230ef77deeb5a4a2b6a42181a62dc027c"
+}
+START target corpus=legal_scrambles id=original_shard_map devices=8 local_batch=16384
+START target corpus=legal_scrambles id=typed_shard_map devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_shard_none devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_shard_pre devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_shard_post devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_shard_both devices=8 local_batch=16384
+START target corpus=legal_scrambles id=jax_split devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_split devices=8 local_batch=16384
+START target corpus=legal_scrambles id=original_direct_jit devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_direct_jit devices=8 local_batch=16384
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py", line 171, in call
+    return tail(encode(states, weights), weights)
+  File "/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py", line 68, in call
+    return flat_embedding_prepacked(
+  File "/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_embedding_experimental.py", line 130, in flat_embedding_prepacked
+    return call(padded_states, banks.low, banks.high)[:rows, :width]
+jax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.
+
+The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+
+--------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py", line 533, in _execute_section
+    case = _build_case(
+           ^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py", line 373, in _build_case
+    compiled, output, compilation = _compile(
+                                    ^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py", line 206, in _compile
+    lowered = mapped.lower(*arguments)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 974, in _pallas_call_lowering
+    return mlir.lower_per_platform(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 899, in tpu_lowering
+    return rule(ctx, *in_nodes, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py", line 422, in pallas_call_tpu_lowering_rule
+    return _lower_to_custom_call(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py", line 324, in _lower_to_custom_call
+    out_nodes = mosaic.lower_module_to_custom_call(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py", line 787, in lower_module_to_custom_call
+    return _tpu_custom_call_lowering(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py", line 400, in _tpu_custom_call_lowering
+    raise NotImplementedError(
+NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+
+START target corpus=legal_scrambles id=original_pmap devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_pmap devices=8 local_batch=16384
+START target corpus=legal_scrambles id=original_independent devices=8 local_batch=16384
+START target corpus=legal_scrambles id=pallas_independent devices=8 local_batch=16384
+START target corpus=categorical_stress id=original_shard_map devices=8 local_batch=16384
+START target corpus=categorical_stress id=typed_shard_map devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_shard_none devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_shard_pre devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_shard_post devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_shard_both devices=8 local_batch=16384
+START target corpus=categorical_stress id=jax_split devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_split devices=8 local_batch=16384
+START target corpus=categorical_stress id=original_direct_jit devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_direct_jit devices=8 local_batch=16384
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py", line 171, in call
+    return tail(encode(states, weights), weights)
+  File "/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py", line 68, in call
+    return flat_embedding_prepacked(
+  File "/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_embedding_experimental.py", line 130, in flat_embedding_prepacked
+    return call(padded_states, banks.low, banks.high)[:rows, :width]
+jax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.
+
+The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+
+--------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py", line 533, in _execute_section
+    case = _build_case(
+           ^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py", line 373, in _build_case
+    compiled, output, compilation = _compile(
+                                    ^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py", line 206, in _compile
+    lowered = mapped.lower(*arguments)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 974, in _pallas_call_lowering
+    return mlir.lower_per_platform(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 899, in tpu_lowering
+    return rule(ctx, *in_nodes, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py", line 422, in pallas_call_tpu_lowering_rule
+    return _lower_to_custom_call(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py", line 324, in _lower_to_custom_call
+    out_nodes = mosaic.lower_module_to_custom_call(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py", line 787, in lower_module_to_custom_call
+    return _tpu_custom_call_lowering(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py", line 400, in _tpu_custom_call_lowering
+    raise NotImplementedError(
+NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+
+START target corpus=categorical_stress id=original_pmap devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_pmap devices=8 local_batch=16384
+START target corpus=categorical_stress id=original_independent devices=8 local_batch=16384
+START target corpus=categorical_stress id=pallas_independent devices=8 local_batch=16384
+RESULT {"winner_id": null, "target_achieved": false, "jax_baseline_id": {"legal_scrambles": "typed_shard_map", "categorical_stress": "typed_shard_map"}, "per_corpus_speedup": {}}
+CONFIRMATION null
+RESULT_PATH /kaggle/working/inference_execution_ab/stream1_inference_execution_ab.json

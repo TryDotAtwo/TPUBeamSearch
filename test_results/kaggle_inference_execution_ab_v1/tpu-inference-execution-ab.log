@@ -1,0 +1,230 @@
+[{"stream_name":"stderr","time":15.529860577,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":15.665424929,"data":"\n"}
+,{"stream_name":"stderr","time":15.665445009,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":15.665449909,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":15.823399299,"data":"Cloning into '/tmp/TPUBeamSearch'...\n"}
+,{"stream_name":"stderr","time":25.190516293,"data":"HEAD is now at 88d6e42 Add exact eight-TPU inference execution sweep\n"}
+,{"stream_name":"stdout","time":25.194047183,"data":"SOURCE_COMMIT=88d6e42c4100578aa9478d3faf6b4f5d30adc01f\n"}
+,{"stream_name":"stdout","time":29.299375621,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":29.299409711,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":34.481984873,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":34.482023683,"data":"E0000 00:00:1788222847.770860      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":34.482030413,"data":"=== Source Location Trace: === \n"}
+,{"stream_name":"stdout","time":34.482035163,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":59.918502894,"data":"{\n"}
+,{"stream_name":"stdout","time":59.918538404,"data":"  \"source_commit\": \"88d6e42c4100578aa9478d3faf6b4f5d30adc01f\",\n"}
+,{"stream_name":"stdout","time":59.918544244,"data":"  \"runtime\": {\n"}
+,{"stream_name":"stdout","time":59.918548954,"data":"    \"python\": \"3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]\",\n"}
+,{"stream_name":"stdout","time":59.918553564,"data":"    \"platform\": \"Linux-6.6.153+-x86_64-with-glibc2.41\",\n"}
+,{"stream_name":"stdout","time":59.918557864,"data":"    \"versions\": {\n"}
+,{"stream_name":"stdout","time":59.918561884,"data":"      \"jax\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":59.918566294,"data":"      \"jaxlib\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":59.918570534,"data":"      \"libtpu\": \"0.0.42.1\",\n"}
+,{"stream_name":"stdout","time":59.918574534,"data":"      \"numpy\": \"2.5.0\",\n"}
+,{"stream_name":"stdout","time":59.918578474,"data":"      \"torch\": \"2.8.0+cpu\"\n"}
+,{"stream_name":"stdout","time":59.918583094,"data":"    },\n"}
+,{"stream_name":"stdout","time":59.918587154,"data":"    \"devices\": [\n"}
+,{"stream_name":"stdout","time":59.918591204,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918595064,"data":"        \"id\": 0,\n"}
+,{"stream_name":"stdout","time":59.918599014,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918603454,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918607914,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918612274,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.918635714,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918639194,"data":"        \"id\": 1,\n"}
+,{"stream_name":"stdout","time":59.918642574,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918645394,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918654884,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918658044,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.918660654,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918663354,"data":"        \"id\": 2,\n"}
+,{"stream_name":"stdout","time":59.918665984,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918668734,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918671884,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918674484,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.918677774,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918681124,"data":"        \"id\": 3,\n"}
+,{"stream_name":"stdout","time":59.918683774,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918686994,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918689724000004,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918692424,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.918695124,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918697724,"data":"        \"id\": 4,\n"}
+,{"stream_name":"stdout","time":59.918700694,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918704114,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918708954,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918711754,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.918714984,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918717864,"data":"        \"id\": 5,\n"}
+,{"stream_name":"stdout","time":59.918720494,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918723184,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918725864,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918728964,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.918731624,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918735994,"data":"        \"id\": 6,\n"}
+,{"stream_name":"stdout","time":59.918738664,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918741394,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918744194,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918748464,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.918751414,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.918769424,"data":"        \"id\": 7,\n"}
+,{"stream_name":"stdout","time":59.918772294,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.918776684,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.918779424,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.918782084,"data":"      }\n"}
+,{"stream_name":"stdout","time":59.918786184,"data":"    ],\n"}
+,{"stream_name":"stdout","time":59.918790434,"data":"    \"process_count\": 1,\n"}
+,{"stream_name":"stdout","time":59.918796824,"data":"    \"process_index\": 0,\n"}
+,{"stream_name":"stdout","time":59.918815144,"data":"    \"local_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":59.918831214,"data":"    \"active_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":59.918836094,"data":"    \"default_matmul_precision\": null,\n"}
+,{"stream_name":"stdout","time":59.918839854,"data":"    \"x64_enabled\": false\n"}
+,{"stream_name":"stdout","time":59.918859474,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.918863164,"data":"  \"checkpoint_sha256\": \"2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2\",\n"}
+,{"stream_name":"stdout","time":59.918866954,"data":"  \"original_source_sha256\": \"6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e\",\n"}
+,{"stream_name":"stdout","time":59.918870384,"data":"  \"puzzle_sha256\": \"01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0\",\n"}
+,{"stream_name":"stdout","time":59.918873694,"data":"  \"input_sha256\": {\n"}
+,{"stream_name":"stdout","time":59.918876994,"data":"    \"legal_scrambles\": \"340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743\",\n"}
+,{"stream_name":"stdout","time":59.918880534,"data":"    \"categorical_stress\": \"8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955\"\n"}
+,{"stream_name":"stdout","time":59.918904594,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.918912984,"data":"  \"seeds\": {\n"}
+,{"stream_name":"stdout","time":59.918916314,"data":"    \"legal\": 42,\n"}
+,{"stream_name":"stdout","time":59.918919554,"data":"    \"stress\": 43\n"}
+,{"stream_name":"stdout","time":59.918923544,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.918926714,"data":"  \"v1_witnesses\": {\n"}
+,{"stream_name":"stdout","time":59.918929584,"data":"    \"legal_scrambles\": [\n"}
+,{"stream_name":"stdout","time":59.918934124,"data":"      29807,\n"}
+,{"stream_name":"stdout","time":59.918936944,"data":"      50224\n"}
+,{"stream_name":"stdout","time":59.919037844,"data":"    ],\n"}
+,{"stream_name":"stdout","time":59.919047114,"data":"    \"categorical_stress\": [\n"}
+,{"stream_name":"stdout","time":59.919051554,"data":"      29369\n"}
+,{"stream_name":"stdout","time":59.919054594,"data":"    ]\n"}
+,{"stream_name":"stdout","time":59.919057294,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.919059934,"data":"  \"v1_source_commit\": \"d2159cb230ef77deeb5a4a2b6a42181a62dc027c\"\n"}
+,{"stream_name":"stdout","time":59.919063044,"data":"}\n"}
+,{"stream_name":"stdout","time":128.529849699,"data":"START target corpus=legal_scrambles id=original_shard_map devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":134.953219513,"data":"START target corpus=legal_scrambles id=typed_shard_map devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":141.30635003,"data":"START target corpus=legal_scrambles id=pallas_shard_none devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":143.598072052,"data":"START target corpus=legal_scrambles id=pallas_shard_pre devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":145.815965956,"data":"START target corpus=legal_scrambles id=pallas_shard_post devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":147.847926849,"data":"START target corpus=legal_scrambles id=pallas_shard_both devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":149.901096751,"data":"START target corpus=legal_scrambles id=jax_split devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":157.798330282,"data":"START target corpus=legal_scrambles id=pallas_split devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":160.309032714,"data":"START target corpus=legal_scrambles id=original_direct_jit devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":166.848587524,"data":"START target corpus=legal_scrambles id=pallas_direct_jit devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":166.93496749,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":166.93499468,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py\", line 171, in call\n"}
+,{"stream_name":"stdout","time":166.93500308,"data":"    return tail(encode(states, weights), weights)\n"}
+,{"stream_name":"stdout","time":166.93501043,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py\", line 68, in call\n"}
+,{"stream_name":"stdout","time":166.93501778,"data":"    return flat_embedding_prepacked(\n"}
+,{"stream_name":"stdout","time":166.93502469,"data":"  File \"/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_embedding_experimental.py\", line 130, in flat_embedding_prepacked\n"}
+,{"stream_name":"stdout","time":166.9350318,"data":"    return call(padded_states, banks.low, banks.high)[:rows, :width]\n"}
+,{"stream_name":"stdout","time":166.9350386,"data":"jax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.\n"}
+,{"stream_name":"stdout","time":166.93504582,"data":"\n"}
+,{"stream_name":"stdout","time":166.93505243,"data":"The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n"}
+,{"stream_name":"stdout","time":166.93505982,"data":"\n"}
+,{"stream_name":"stdout","time":166.9350668,"data":"--------------------\n"}
+,{"stream_name":"stdout","time":166.93507353,"data":"\n"}
+,{"stream_name":"stdout","time":166.93508011,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":166.93508703,"data":"\n"}
+,{"stream_name":"stdout","time":166.93510088,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":166.93510763,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py\", line 533, in _execute_section\n"}
+,{"stream_name":"stdout","time":166.93511473,"data":"    case = _build_case(\n"}
+,{"stream_name":"stdout","time":166.93512151,"data":"           ^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93512844,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py\", line 373, in _build_case\n"}
+,{"stream_name":"stdout","time":166.93513917,"data":"    compiled, output, compilation = _compile(\n"}
+,{"stream_name":"stdout","time":166.93514579,"data":"                                    ^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93515255,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py\", line 206, in _compile\n"}
+,{"stream_name":"stdout","time":166.93515879,"data":"    lowered = mapped.lower(*arguments)\n"}
+,{"stream_name":"stdout","time":166.93516557,"data":"              ^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93517233,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n"}
+,{"stream_name":"stdout","time":166.93517914,"data":"    return mlir.lower_per_platform(\n"}
+,{"stream_name":"stdout","time":166.93518895,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93519547,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 899, in tpu_lowering\n"}
+,{"stream_name":"stdout","time":166.93521443,"data":"    return rule(ctx, *in_nodes, **params)\n"}
+,{"stream_name":"stdout","time":166.93521969,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93522433,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 422, in pallas_call_tpu_lowering_rule\n"}
+,{"stream_name":"stdout","time":166.93522934,"data":"    return _lower_to_custom_call(\n"}
+,{"stream_name":"stdout","time":166.93523424,"data":"           ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93523867,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 324, in _lower_to_custom_call\n"}
+,{"stream_name":"stdout","time":166.93524533,"data":"    out_nodes = mosaic.lower_module_to_custom_call(\n"}
+,{"stream_name":"stdout","time":166.93525042,"data":"                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93525502,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py\", line 787, in lower_module_to_custom_call\n"}
+,{"stream_name":"stdout","time":166.93530216,"data":"    return _tpu_custom_call_lowering(\n"}
+,{"stream_name":"stdout","time":166.93531083,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":166.93531673,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py\", line 400, in _tpu_custom_call_lowering\n"}
+,{"stream_name":"stdout","time":166.93532141,"data":"    raise NotImplementedError(\n"}
+,{"stream_name":"stdout","time":166.93537117,"data":"NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.\n"}
+,{"stream_name":"stdout","time":166.9353808,"data":"--------------------\n"}
+,{"stream_name":"stdout","time":166.9353921,"data":"For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.\n"}
+,{"stream_name":"stdout","time":166.93539565,"data":"\n"}
+,{"stream_name":"stdout","time":166.94537346,"data":"START target corpus=legal_scrambles id=original_pmap devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":173.472778039,"data":"START target corpus=legal_scrambles id=pallas_pmap devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":175.899544495,"data":"START target corpus=legal_scrambles id=original_independent devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":226.521427488,"data":"START target corpus=legal_scrambles id=pallas_independent devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":243.720247871,"data":"START target corpus=categorical_stress id=original_shard_map devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":250.236632438,"data":"START target corpus=categorical_stress id=typed_shard_map devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":256.642716668,"data":"START target corpus=categorical_stress id=pallas_shard_none devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":258.865799589,"data":"START target corpus=categorical_stress id=pallas_shard_pre devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":261.010954272,"data":"START target corpus=categorical_stress id=pallas_shard_post devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":263.089103527,"data":"START target corpus=categorical_stress id=pallas_shard_both devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":265.043124375,"data":"START target corpus=categorical_stress id=jax_split devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":272.76802949,"data":"START target corpus=categorical_stress id=pallas_split devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":275.208036105,"data":"START target corpus=categorical_stress id=original_direct_jit devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":275.429772609,"data":"START target corpus=categorical_stress id=pallas_direct_jit devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":275.508474527,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":275.508498007,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py\", line 171, in call\n"}
+,{"stream_name":"stdout","time":275.508504307,"data":"    return tail(encode(states, weights), weights)\n"}
+,{"stream_name":"stdout","time":275.508510817,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/execution_boundary_ops.py\", line 68, in call\n"}
+,{"stream_name":"stdout","time":275.508516637,"data":"    return flat_embedding_prepacked(\n"}
+,{"stream_name":"stdout","time":275.508522087,"data":"  File \"/tmp/TPUBeamSearch/src/tpu_beam_search/stream1_embedding_experimental.py\", line 130, in flat_embedding_prepacked\n"}
+,{"stream_name":"stdout","time":275.508528667,"data":"    return call(padded_states, banks.low, banks.high)[:rows, :width]\n"}
+,{"stream_name":"stdout","time":275.508534877,"data":"jax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.\n"}
+,{"stream_name":"stdout","time":275.508540567,"data":"\n"}
+,{"stream_name":"stdout","time":275.508546017,"data":"The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n"}
+,{"stream_name":"stdout","time":275.508551537,"data":"\n"}
+,{"stream_name":"stdout","time":275.508556927,"data":"--------------------\n"}
+,{"stream_name":"stdout","time":275.508562497,"data":"\n"}
+,{"stream_name":"stdout","time":275.508567747,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":275.508573597,"data":"\n"}
+,{"stream_name":"stdout","time":275.508578797,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":275.508583637,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py\", line 533, in _execute_section\n"}
+,{"stream_name":"stdout","time":275.508589477,"data":"    case = _build_case(\n"}
+,{"stream_name":"stdout","time":275.508594987,"data":"           ^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508601147,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py\", line 373, in _build_case\n"}
+,{"stream_name":"stdout","time":275.508606727,"data":"    compiled, output, compilation = _compile(\n"}
+,{"stream_name":"stdout","time":275.508612307,"data":"                                    ^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508618087,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_execution_ab.py\", line 206, in _compile\n"}
+,{"stream_name":"stdout","time":275.508623867,"data":"    lowered = mapped.lower(*arguments)\n"}
+,{"stream_name":"stdout","time":275.508639517,"data":"              ^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508645287,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n"}
+,{"stream_name":"stdout","time":275.508650867,"data":"    return mlir.lower_per_platform(\n"}
+,{"stream_name":"stdout","time":275.508656127,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508661747,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 899, in tpu_lowering\n"}
+,{"stream_name":"stdout","time":275.508681957,"data":"    return rule(ctx, *in_nodes, **params)\n"}
+,{"stream_name":"stdout","time":275.508686907,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508691027,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 422, in pallas_call_tpu_lowering_rule\n"}
+,{"stream_name":"stdout","time":275.508695257,"data":"    return _lower_to_custom_call(\n"}
+,{"stream_name":"stdout","time":275.508699257,"data":"           ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508701777,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 324, in _lower_to_custom_call\n"}
+,{"stream_name":"stdout","time":275.508705017,"data":"    out_nodes = mosaic.lower_module_to_custom_call(\n"}
+,{"stream_name":"stdout","time":275.508707377,"data":"                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508709717,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py\", line 787, in lower_module_to_custom_call\n"}
+,{"stream_name":"stdout","time":275.508712397,"data":"    return _tpu_custom_call_lowering(\n"}
+,{"stream_name":"stdout","time":275.508714677,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":275.508716987,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/tpu_custom_call.py\", line 400, in _tpu_custom_call_lowering\n"}
+,{"stream_name":"stdout","time":275.508722147,"data":"    raise NotImplementedError(\n"}
+,{"stream_name":"stdout","time":275.508724507,"data":"NotImplementedError: Mosaic kernels cannot be automatically partitioned. Please wrap the call in a shard_map.\n"}
+,{"stream_name":"stdout","time":275.508726927,"data":"--------------------\n"}
+,{"stream_name":"stdout","time":275.508729227,"data":"For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.\n"}
+,{"stream_name":"stdout","time":275.508731727,"data":"\n"}
+,{"stream_name":"stdout","time":275.524372017,"data":"START target corpus=categorical_stress id=original_pmap devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":275.745955131,"data":"START target corpus=categorical_stress id=pallas_pmap devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":277.920521743,"data":"START target corpus=categorical_stress id=original_independent devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":278.468130319,"data":"START target corpus=categorical_stress id=pallas_independent devices=8 local_batch=16384\n"}
+,{"stream_name":"stdout","time":296.224875828,"data":"RESULT {\"winner_id\": null, \"target_achieved\": false, \"jax_baseline_id\": {\"legal_scrambles\": \"typed_shard_map\", \"categorical_stress\": \"typed_shard_map\"}, \"per_corpus_speedup\": {}}\n"}
+,{"stream_name":"stdout","time":296.224930298,"data":"CONFIRMATION null\n"}
+,{"stream_name":"stdout","time":296.224938528,"data":"RESULT_PATH /kaggle/working/inference_execution_ab/stream1_inference_execution_ab.json\n"}
+,{"stream_name":"stderr","time":305.762208055,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":308.004041406,"data":"[NbConvertApp] Writing 283195 bytes to __results__.html\n"}
+]
