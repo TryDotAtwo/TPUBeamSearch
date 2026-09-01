@@ -405,7 +405,10 @@ libtpu0.0.42.1 and eight real TPU v5 lite devices in one process.
 - Tiled JAX, runtime-bank Pallas and all successful FP32 prepacked tile sizes
   share the same candidate output hash.  Typed JAX exactly matches original.
   First-Dense HLO layouts/emitter/window configuration also match between typed
-  and tiled JAX, so attribution requires addressable intermediate evidence.
+  and tiled JAX.  Of22 MXU convolutions, only the final residual Dense changes
+  schedule: typed JAX uses iteration bounds2x16x1 while every fast encoding
+  graph uses1x22x1.  This appears on both1-device and8-device HLO; it is a
+  strong state-sensitive rounding hypothesis, not yet causal proof.
 - The old one-device screen did not contain global witness rows29,807,50,224
   or29,369.  The result therefore does not yet prove an eight-core cause.
 - BF16 physical banks fail all12 compile attempts because Mosaic does not

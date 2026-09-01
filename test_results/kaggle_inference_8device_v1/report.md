@@ -88,6 +88,17 @@ use the same BF16 operand layouts for the first3600x1024 Dense, the same
 same window configuration.  That evidence rules out a simple tile/emitter
 explanation but does not establish equal producer bits or equal later fusion.
 
+Across all22 MXU convolutions, exactly one later schedule differs.  Convolution
+index20 (the second Dense of residual block9 after the input Dense and the first
+19 residual Dense operations) uses `iteration_bounds=[2,16,1]` in typed JAX but
+`[1,22,1]` in tiled JAX and prepacked Pallas.  The distribution therefore moves
+from16 versus4 residual instances of these two schedules to15 versus5.  The
+same difference exists in one-device and eight-device HLO, so the device count
+is not required to create it; the original one-device prefix simply contains
+no Q value that crosses a BF16 rounding boundary.  This is a strong attribution
+candidate, not proof until boundary witnesses or a schedule-restoring split
+produce exact Q.
+
 ## Storage and failed arms
 
 The original runtime model passes99.03MB of dynamic arguments; typed BF16 uses
