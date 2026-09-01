@@ -20,6 +20,7 @@ SOURCE = (
 OUTPUT = FOLDER / "cayleypy-cube555-tpu-beam-q-exact.ipynb"
 BUILD_MANIFEST = FOLDER / "build_manifest.json"
 METADATA = FOLDER / "kernel-metadata.json"
+RUNTIME_COMMIT_FILE = FOLDER / "runtime-source-commit.txt"
 
 SOURCE_VERSION = 344319112
 SOURCE_URL = (
@@ -50,6 +51,12 @@ def _current_commit() -> str:
     return subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
     ).strip()
+
+
+def _configured_commit() -> str:
+    if RUNTIME_COMMIT_FILE.is_file():
+        return RUNTIME_COMMIT_FILE.read_text(encoding="utf-8").strip()
+    return _current_commit()
 
 
 def _validate_commit(source_commit: str) -> str:
@@ -314,7 +321,9 @@ def main() -> None:
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--source-commit")
     args = parser.parse_args()
-    source_commit = _validate_commit(args.source_commit or _current_commit())
+    source_commit = _validate_commit(
+        args.source_commit or _configured_commit()
+    )
     notebook_bytes = build_notebook(source_commit)
     _write_or_check(OUTPUT, notebook_bytes, check=args.check)
     _write_or_check(METADATA, _metadata_bytes(), check=args.check)

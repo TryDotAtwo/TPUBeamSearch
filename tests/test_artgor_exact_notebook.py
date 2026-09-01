@@ -53,6 +53,9 @@ def test_generated_notebook_records_its_frozen_source_and_builder_hash():
     assert manifest["generated_notebook_sha256"] == hashlib.sha256(
         NOTEBOOK.read_bytes()
     ).hexdigest()
+    assert manifest["source_commit"] == (
+        FOLDER / "runtime-source-commit.txt"
+    ).read_text(encoding="utf-8").strip()
 
 
 def test_kaggle_metadata_is_private_tpu_only_and_attaches_both_sources():
