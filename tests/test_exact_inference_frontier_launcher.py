@@ -24,6 +24,7 @@ def test_exact_frontier_launcher_contract():
         and isinstance(node.targets[0], ast.Name)
         and isinstance(node.value, ast.Constant)
     }
+    assert assignments["COMMIT_SHA"] == "fc5c87ae5c49c0a92d4ccd634831e8980a7f44e8"
     assert re.fullmatch(r"[0-9a-f]{40}", assignments["COMMIT_SHA"])
     assert assignments["REPOSITORY"] == "https://github.com/TryDotAtwo/TPUBeamSearch.git"
     strings = {
