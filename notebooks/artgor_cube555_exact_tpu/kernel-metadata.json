@@ -1,6 +1,6 @@
 {
   "id": "trydotatwo/cayleypy-cube555-tpu-beam-q-exact",
-  "title": "CayleyPy Cube555 TPU Beam Q - Exact 1.6x Inference",
+  "title": "CayleyPy Cube555 TPU Beam Q - Exact 1.59x Inference",
   "code_file": "cayleypy-cube555-tpu-beam-q-exact.ipynb",
   "language": "python",
   "kernel_type": "notebook",

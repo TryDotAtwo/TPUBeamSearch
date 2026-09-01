@@ -89,11 +89,11 @@ This notebook is an attributed derivative of Andrey Lukyanenko/Artgor's
 [immutable Kaggle notebook]({SOURCE_URL}).  Its puzzle logic, move order,
 routing, deduplication, history, endgame, and packed backpointers are preserved.
 
-The selected split Q forward measured about **1.618x inference speedup** against
-the original JAX forward at 32,768 states per TPU core on the same v5e-8 runtime.
-That is an inference result, **not a claimed whole-solver speedup**.  This notebook
-prints separate depth/solve timings so the wider claim is made only from a paired
-end-to-end run.
+The publication gate measured **1.588x inference speedup** on legal scrambles
+and **1.621x** on categorical stress against the original JAX forward at 32,768
+states per TPU core on the same v5e-8 runtime.  That is an inference result,
+**not a claimed whole-solver speedup**.  This notebook prints separate
+depth/solve timings so the wider claim is made only from a paired end-to-end run.
 
 Source: scriptVersionId=344319112.  TPUBeamSearch code commit:
 `{source_commit}`.
@@ -302,7 +302,7 @@ else:
 def _metadata_bytes() -> bytes:
     metadata = {
         "id": PUBLIC_SLUG,
-        "title": "CayleyPy Cube555 TPU Beam Q - Exact 1.6x Inference",
+        "title": "CayleyPy Cube555 TPU Beam Q - Exact 1.59x Inference",
         "code_file": OUTPUT.name,
         "language": "python",
         "kernel_type": "notebook",
