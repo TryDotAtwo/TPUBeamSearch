@@ -112,28 +112,29 @@ ordering unchanged.
 
 For the default `B_LOCAL=2,097,152` and `PARENT_CHUNK=131,072`:
 
-1. Slice one 131,072-parent window from each core's state shard.
-2. Evaluate its four ordered 32,768-parent inference chunks through the exact
-   prefix and head dispatches.
-3. Assemble the four exact Q chunks in original flat parent/move order.
-4. Generate the same child states, inverse-move mask, hashes, and owner IDs as
-   the original streaming body for the entire 131,072-parent window.
-5. Merge candidates into the existing per-destination running top-K state.
-6. Repeat for all sixteen parent windows without host-materializing scores,
-   children, or selection state.
-7. Run the original `all_to_all`, receive-side history/dedup, final selection,
-   solved/endgame checks, and packed-backpointer production.
+1. Slice each of the 64 ordered 32,768-parent inference chunks directly from
+   every core's state shard inside a prefix dispatch.
+2. Run the separate Pallas head dispatch immediately after each prefix and
+   retain only its BF16 Q output; no chunk hidden tensor is retained.
+3. Assemble the ordered Q chunks into one device-resident
+   `[8, B_LOCAL, 30]` tensor. This costs about 120 MiB per core, versus roughly
+   4 GiB per core for a full-beam hidden tensor.
+4. Invoke one search dispatch containing the original 131,072-parent
+   `lax.scan`. Each scan iteration slices its Q values instead of calling the
+   model, then performs the unchanged child generation, inverse mask,
+   hash/owner routing, per-destination running top-K, `all_to_all`, history and
+   dedup, final selection, solved/endgame checks, and packed backpointers.
 
-Parent-window size remains 131,072 even though inference uses smaller chunks.
-This preserves the existing streaming-selection boundary and reduces the risk
-that tie handling changes through a different sequence of partial top-K
-operations. The selected states, scores, owners, incoming moves, and packed
+Parent-window size and scan order remain 131,072 even though inference uses
+smaller chunks. This preserves the existing streaming-selection and tie
+boundaries. Q, selected states, owners, incoming moves, and packed
 backpointers remain on TPU between stages. Only the existing per-depth
 backpointer copy and progress metadata cross to the host.
 
-The first production implementation does not attempt cross-dispatch overlap or
-larger chunks. Those are later optimizations and must independently pass the
-same exactness gates.
+The first production implementation queues only the natural prefix-to-head
+dependencies and does not add a second host/device streaming protocol, custom
+overlap, or larger chunks. Those are later optimizations and must independently
+pass the same exactness gates.
 
 ## Numerical and search exactness gates
 

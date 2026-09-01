@@ -4,7 +4,7 @@
 
 **Goal:** Publish and validate a copy-and-run Kaggle TPU notebook based on Artgor script version `344319112`, preserving its search behavior while using the bitwise-exact split inference engine measured at approximately `1.6x` the original JAX forward.
 
-**Architecture:** Freeze and hash the upstream six-cell notebook and its two Python modules, expose the selected prefix/Pallas-head pair as a stable two-dispatch API, and add a staged beam-depth executor that evaluates four 32K inference chunks before each unchanged 131,072-parent selection window. Build the public notebook and code dataset deterministically from the Git checkout, then use one source-pinned private Kaggle TPU job to gate exact inference, exact one-depth search, a short A/B, and a real-width replay-valid solve before publication.
+**Architecture:** Freeze and hash the upstream six-cell notebook and its two Python modules, expose the selected prefix/Pallas-head pair as a stable two-dispatch API, and add a staged beam-depth executor that assembles 64 exact 32K Q chunks into a device-resident 120 MiB-per-core Q tensor before one unchanged 131,072-parent streaming search scan. Build the public notebook and code dataset deterministically from the Git checkout, then use one source-pinned private Kaggle TPU job to gate exact inference, exact one-depth search, a short A/B, and a real-width replay-valid solve before publication.
 
 **Tech Stack:** Python 3.12, JAX/jaxlib 0.10.2, Pallas/Mosaic TPU, libtpu 0.0.42.1, NumPy, pytest, Kaggle CLI/API, GitHub.
 
@@ -265,26 +265,28 @@ import numpy as np
 
 from tpu_beam_search.artgor_staged_beam import (
     StagedDepthConfig,
-    parent_window_ranges,
-    concatenate_q_parts,
+    inference_chunk_starts,
+    parent_window_starts,
+    concatenate_q_chunks,
 )
 
 
-def test_default_depth_geometry_is_four_inference_parts_per_window():
+def test_default_depth_geometry_has_64_inference_chunks_and_16_search_windows():
     config = StagedDepthConfig(
         world_size=8, b_local=2_097_152, inference_chunk=32_768,
         parent_chunk=131_072, n_gen=30, state_size=150,
     )
     config.validate()
-    windows = parent_window_ranges(config)
-    assert len(windows) == 16
-    assert windows[0].inference_starts == (0, 32768, 65536, 98304)
-    assert windows[-1].parent_start == 1_966_080
+    assert len(inference_chunk_starts(config)) == 64
+    assert inference_chunk_starts(config)[:4] == (0, 32768, 65536, 98304)
+    assert inference_chunk_starts(config)[-1] == 2_064_384
+    assert len(parent_window_starts(config)) == 16
+    assert parent_window_starts(config)[-1] == 1_966_080
 
 
 def test_q_parts_preserve_parent_then_move_order():
     parts = [np.full((1, 2, 3), value, np.float32) for value in range(4)]
-    actual = concatenate_q_parts(parts)
+    actual = concatenate_q_chunks(parts)
     assert actual.shape == (1, 8, 3)
     np.testing.assert_array_equal(actual[0, :, 0], [0, 0, 1, 1, 2, 2, 3, 3])
 ```
@@ -298,12 +300,6 @@ Expected: FAIL with `ModuleNotFoundError: tpu_beam_search.artgor_staged_beam`.
 - [ ] **Step 3: Implement validated static geometry**
 
 ```python
-@dataclass(frozen=True)
-class ParentWindow:
-    parent_start: int
-    inference_starts: tuple[int, ...]
-
-
 @dataclass(frozen=True)
 class StagedDepthConfig:
     world_size: int
@@ -324,7 +320,7 @@ class StagedDepthConfig:
             raise ValueError("published Artgor exact geometry is 8 cores, 30 moves, 150 bytes")
 ```
 
-Implement `concatenate_q_parts(parts)` as `jnp.concatenate(tuple(parts), axis=1)` for tensors shaped `[world_size, inference_chunk, MOVE_COUNT]`.
+Implement `inference_chunk_starts(config)` and `parent_window_starts(config)` as immutable tuples over `range(0, B_local, chunk_size)`. Implement `concatenate_q_chunks(parts)` as `jnp.concatenate(tuple(parts), axis=1)` for tensors shaped `[world_size, inference_chunk, MOVE_COUNT]`.
 
 - [ ] **Step 4: Write the failing one-depth exactness test with an injected oracle engine**
 
@@ -347,7 +343,7 @@ Run: `python -m pytest tests/test_artgor_staged_beam.py::test_staged_depth_match
 
 Expected: FAIL because `build_staged_depth_executables` and `run_staged_depth` are not implemented.
 
-- [ ] **Step 6: Implement four-prefix/four-head/one-selection-window execution**
+- [ ] **Step 6: Implement full-depth Q assembly and one unchanged search dispatch**
 
 Define the compiled boundary object:
 
@@ -356,13 +352,13 @@ Define the compiled boundary object:
 class StagedDepthExecutables:
     prefix_from_beam: Callable
     head: Callable
-    select_window: Callable
-    finish_depth: Callable
+    assemble_q: Callable
+    search_depth: Callable
 ```
 
 `prefix_from_beam` receives the full `[world_size, B_local, 150]` sharded state tensor and a static parent offset, slices exactly 32,768 local rows inside its own prefix dispatch, and returns `[world_size, 32768, 1024]`. `head` is the separate selected Pallas dispatch and returns `[world_size, 32768, 30]`.
 
-For each `ParentWindow`, queue four `prefix_from_beam` calls and four dependent `head` calls, then call `select_window` once with the four Q tensors. Inside `select_window`, concatenate on axis 1, generate children for the unchanged 131,072-parent window, derive `(parent_local, move)` from original flat IDs, apply the original inverse mask, hash/route to owners, and merge into the existing per-destination top-K carry. `finish_depth` contains the original post-streaming `all_to_all`, history/dedup, final top-K, solved/endgame checks, and packed-backpointer logic.
+For each depth, queue all 64 ordered `prefix_from_beam` calls and their dependent `head` calls. `assemble_q` concatenates the BF16 outputs on the per-core parent axis into `[world_size, B_local, 30]`; no hidden tensors are stored. `search_depth` uses the original 131,072-parent `lax.scan`, slicing the corresponding Q window instead of calling `model_apply`. It retains the original child generation, `(parent_local, move)` flat IDs, inverse mask, hash/owner routing, per-destination top-K carry, `all_to_all`, history/dedup, final top-K, solved/endgame checks, and packed-backpointer logic.
 
 No stage may call `np.asarray`, `jax.device_get`, or wrap `prefix_from_beam` and `head` in one compiled function.
 
