@@ -1,0 +1,881 @@
+module @jit_call attributes {mhlo.num_partitions = 8 : i32, mhlo.num_replicas = 1 : i32} {
+  sdy.mesh @mesh = <["core"=8]> {stablehlo.mesh = {axes = [{name = "core", size = 8 : i64}]}}
+  func.func public @main(%arg0: tensor<131072x150xui8> {sdy.sharding = #sdy.sharding<@mesh, [{"core"}, {}]>}, %arg1: tensor<150x24xf32> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg2: tensor<3600x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg3: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg4: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg5: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg6: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg7: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg8: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg9: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg10: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg11: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg12: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg13: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg14: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg15: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg16: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg17: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg18: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg19: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg20: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg21: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg22: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg23: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg24: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg25: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg26: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg27: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg28: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg29: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg30: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg31: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg32: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg33: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg34: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg35: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg36: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg37: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg38: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg39: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg40: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg41: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg42: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg43: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg44: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg45: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg46: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg47: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg48: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg49: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg50: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg51: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg52: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg53: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg54: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg55: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg56: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg57: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg58: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg59: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg60: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg61: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg62: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg63: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg64: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg65: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg66: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg67: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg68: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg69: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg70: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg71: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg72: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg73: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg74: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg75: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg76: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg77: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg78: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg79: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg80: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg81: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg82: tensor<1024x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg83: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg84: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg85: tensor<1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}, %arg86: tensor<1024x30xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {}]>}, %arg87: tensor<30xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}]>}) -> (tensor<131072x30xbf16> {jax.result_info = "result"}) {
+    %0 = sdy.manual_computation(%arg0, %arg1, %arg2, %arg3, %arg4, %arg5, %arg6, %arg7, %arg8, %arg9, %arg10, %arg11, %arg12, %arg13, %arg14, %arg15, %arg16, %arg17, %arg18, %arg19, %arg20, %arg21, %arg22, %arg23, %arg24, %arg25, %arg26, %arg27, %arg28, %arg29, %arg30, %arg31, %arg32, %arg33, %arg34, %arg35, %arg36, %arg37, %arg38, %arg39, %arg40, %arg41, %arg42, %arg43, %arg44, %arg45, %arg46, %arg47, %arg48, %arg49, %arg50, %arg51, %arg52, %arg53, %arg54, %arg55, %arg56, %arg57, %arg58, %arg59, %arg60, %arg61, %arg62, %arg63, %arg64, %arg65, %arg66, %arg67, %arg68, %arg69, %arg70, %arg71, %arg72, %arg73, %arg74, %arg75, %arg76, %arg77, %arg78, %arg79, %arg80, %arg81, %arg82, %arg83, %arg84, %arg85, %arg86, %arg87) in_shardings=[<@mesh, [{"core"}, {}]>, <@mesh, [{}, {}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}]>, <@mesh, [{}, {}]>, <@mesh, [{}]>] out_shardings=[<@mesh, [{"core"}, {}]>] manual_axes={"core"} (%arg88: tensor<16384x150xui8>, %arg89: tensor<150x24xf32>, %arg90: tensor<3600x1024xbf16>, %arg91: tensor<1024xbf16>, %arg92: tensor<1024xbf16>, %arg93: tensor<1024xbf16>, %arg94: tensor<1024x1024xbf16>, %arg95: tensor<1024xbf16>, %arg96: tensor<1024xbf16>, %arg97: tensor<1024xbf16>, %arg98: tensor<1024x1024xbf16>, %arg99: tensor<1024xbf16>, %arg100: tensor<1024xbf16>, %arg101: tensor<1024xbf16>, %arg102: tensor<1024x1024xbf16>, %arg103: tensor<1024xbf16>, %arg104: tensor<1024xbf16>, %arg105: tensor<1024xbf16>, %arg106: tensor<1024x1024xbf16>, %arg107: tensor<1024xbf16>, %arg108: tensor<1024xbf16>, %arg109: tensor<1024xbf16>, %arg110: tensor<1024x1024xbf16>, %arg111: tensor<1024xbf16>, %arg112: tensor<1024xbf16>, %arg113: tensor<1024xbf16>, %arg114: tensor<1024x1024xbf16>, %arg115: tensor<1024xbf16>, %arg116: tensor<1024xbf16>, %arg117: tensor<1024xbf16>, %arg118: tensor<1024x1024xbf16>, %arg119: tensor<1024xbf16>, %arg120: tensor<1024xbf16>, %arg121: tensor<1024xbf16>, %arg122: tensor<1024x1024xbf16>, %arg123: tensor<1024xbf16>, %arg124: tensor<1024xbf16>, %arg125: tensor<1024xbf16>, %arg126: tensor<1024x1024xbf16>, %arg127: tensor<1024xbf16>, %arg128: tensor<1024xbf16>, %arg129: tensor<1024xbf16>, %arg130: tensor<1024x1024xbf16>, %arg131: tensor<1024xbf16>, %arg132: tensor<1024xbf16>, %arg133: tensor<1024xbf16>, %arg134: tensor<1024x1024xbf16>, %arg135: tensor<1024xbf16>, %arg136: tensor<1024xbf16>, %arg137: tensor<1024xbf16>, %arg138: tensor<1024x1024xbf16>, %arg139: tensor<1024xbf16>, %arg140: tensor<1024xbf16>, %arg141: tensor<1024xbf16>, %arg142: tensor<1024x1024xbf16>, %arg143: tensor<1024xbf16>, %arg144: tensor<1024xbf16>, %arg145: tensor<1024xbf16>, %arg146: tensor<1024x1024xbf16>, %arg147: tensor<1024xbf16>, %arg148: tensor<1024xbf16>, %arg149: tensor<1024xbf16>, %arg150: tensor<1024x1024xbf16>, %arg151: tensor<1024xbf16>, %arg152: tensor<1024xbf16>, %arg153: tensor<1024xbf16>, %arg154: tensor<1024x1024xbf16>, %arg155: tensor<1024xbf16>, %arg156: tensor<1024xbf16>, %arg157: tensor<1024xbf16>, %arg158: tensor<1024x1024xbf16>, %arg159: tensor<1024xbf16>, %arg160: tensor<1024xbf16>, %arg161: tensor<1024xbf16>, %arg162: tensor<1024x1024xbf16>, %arg163: tensor<1024xbf16>, %arg164: tensor<1024xbf16>, %arg165: tensor<1024xbf16>, %arg166: tensor<1024x1024xbf16>, %arg167: tensor<1024xbf16>, %arg168: tensor<1024xbf16>, %arg169: tensor<1024xbf16>, %arg170: tensor<1024x1024xbf16>, %arg171: tensor<1024xbf16>, %arg172: tensor<1024xbf16>, %arg173: tensor<1024xbf16>, %arg174: tensor<1024x30xbf16>, %arg175: tensor<30xbf16>) {
+      %1 = stablehlo.convert %arg89 : (tensor<150x24xf32>) -> tensor<150x24xbf16>
+      %c = stablehlo.constant dense<0> : tensor<i32>
+      %2 = func.call @_pad(%arg88, %c) : (tensor<16384x150xui8>, tensor<i32>) -> tensor<16384x150xui8>
+      %3 = stablehlo.reshape %2 : (tensor<16384x150xui8>) -> tensor<128x128x150xui8>
+      %cst = stablehlo.constant dense<0.000000e+00> : tensor<bf16>
+      %4 = stablehlo.broadcast_in_dim %cst, dims = [] : (tensor<bf16>) -> tensor<128x128x3600xbf16>
+      %c_0 = stablehlo.constant dense<0> : tensor<i32>
+      %5:4 = stablehlo.while(%iterArg = %3, %iterArg_106 = %1, %iterArg_107 = %c_0, %iterArg_108 = %4) : tensor<128x128x150xui8>, tensor<150x24xbf16>, tensor<i32>, tensor<128x128x3600xbf16>
+      cond {
+        %c_109 = stablehlo.constant dense<128> : tensor<i32>
+        %714 = stablehlo.compare LT, %iterArg_107, %c_109, SIGNED : (tensor<i32>, tensor<i32>) -> tensor<i1>
+        stablehlo.return %714 : tensor<i1>
+      } do {
+        %714 = func.call @dynamic_index_in_dim(%iterArg, %iterArg_107) : (tensor<128x128x150xui8>, tensor<i32>) -> tensor<128x150xui8>
+        %715 = func.call @closed_call(%iterArg_106, %714) : (tensor<150x24xbf16>, tensor<128x150xui8>) -> tensor<128x3600xbf16>
+        %716 = func.call @dynamic_update_index_in_dim(%iterArg_108, %715, %iterArg_107) : (tensor<128x128x3600xbf16>, tensor<128x3600xbf16>, tensor<i32>) -> tensor<128x128x3600xbf16>
+        %c_109 = stablehlo.constant dense<1> : tensor<i32>
+        %717 = stablehlo.add %iterArg_107, %c_109 : tensor<i32>
+        stablehlo.return %iterArg, %iterArg_106, %717, %716 : tensor<128x128x150xui8>, tensor<150x24xbf16>, tensor<i32>, tensor<128x128x3600xbf16>
+      }
+      %6 = stablehlo.reshape %5#3 : (tensor<128x128x3600xbf16>) -> tensor<16384x3600xbf16>
+      %7 = stablehlo.dot_general %6, %arg90, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x3600xbf16>, tensor<3600x1024xbf16>) -> tensor<16384x1024xbf16>
+      %8 = stablehlo.broadcast_in_dim %arg91, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %9 = stablehlo.broadcast_in_dim %8, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %10 = stablehlo.add %7, %9 : tensor<16384x1024xbf16>
+      %11 = stablehlo.convert %10 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_1 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %12 = stablehlo.reduce(%11 init: %cst_1) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %13 = stablehlo.broadcast_in_dim %12, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_2 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %14 = stablehlo.broadcast_in_dim %cst_2, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %15 = stablehlo.divide %13, %14 : tensor<16384x1xf32>
+      %16 = stablehlo.convert %15 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %17 = stablehlo.broadcast_in_dim %16, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %18 = stablehlo.subtract %10, %17 : tensor<16384x1024xbf16>
+      %19 = chlo.square %18 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %20 = stablehlo.convert %19 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_3 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %21 = stablehlo.reduce(%20 init: %cst_3) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %22 = stablehlo.broadcast_in_dim %21, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_4 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %23 = stablehlo.broadcast_in_dim %cst_4, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %24 = stablehlo.divide %22, %23 : tensor<16384x1xf32>
+      %25 = stablehlo.convert %24 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %26 = stablehlo.broadcast_in_dim %16, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %27 = stablehlo.subtract %10, %26 : tensor<16384x1024xbf16>
+      %cst_5 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %28 = stablehlo.broadcast_in_dim %cst_5, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %29 = stablehlo.add %25, %28 : tensor<16384x1xbf16>
+      %30 = stablehlo.rsqrt %29 : tensor<16384x1xbf16>
+      %31 = stablehlo.broadcast_in_dim %30, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %32 = stablehlo.multiply %27, %31 : tensor<16384x1024xbf16>
+      %33 = stablehlo.broadcast_in_dim %arg92, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %34 = stablehlo.broadcast_in_dim %33, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %35 = stablehlo.multiply %32, %34 : tensor<16384x1024xbf16>
+      %36 = stablehlo.broadcast_in_dim %arg93, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %37 = stablehlo.broadcast_in_dim %36, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %38 = stablehlo.add %35, %37 : tensor<16384x1024xbf16>
+      %39 = func.call @relu(%38) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %40 = stablehlo.dot_general %39, %arg94, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %41 = stablehlo.broadcast_in_dim %arg95, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %42 = stablehlo.broadcast_in_dim %41, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %43 = stablehlo.add %40, %42 : tensor<16384x1024xbf16>
+      %44 = stablehlo.convert %43 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_6 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %45 = stablehlo.reduce(%44 init: %cst_6) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %46 = stablehlo.broadcast_in_dim %45, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_7 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %47 = stablehlo.broadcast_in_dim %cst_7, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %48 = stablehlo.divide %46, %47 : tensor<16384x1xf32>
+      %49 = stablehlo.convert %48 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %50 = stablehlo.broadcast_in_dim %49, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %51 = stablehlo.subtract %43, %50 : tensor<16384x1024xbf16>
+      %52 = chlo.square %51 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %53 = stablehlo.convert %52 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_8 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %54 = stablehlo.reduce(%53 init: %cst_8) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %55 = stablehlo.broadcast_in_dim %54, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_9 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %56 = stablehlo.broadcast_in_dim %cst_9, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %57 = stablehlo.divide %55, %56 : tensor<16384x1xf32>
+      %58 = stablehlo.convert %57 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %59 = stablehlo.broadcast_in_dim %49, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %60 = stablehlo.subtract %43, %59 : tensor<16384x1024xbf16>
+      %cst_10 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %61 = stablehlo.broadcast_in_dim %cst_10, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %62 = stablehlo.add %58, %61 : tensor<16384x1xbf16>
+      %63 = stablehlo.rsqrt %62 : tensor<16384x1xbf16>
+      %64 = stablehlo.broadcast_in_dim %63, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %65 = stablehlo.multiply %60, %64 : tensor<16384x1024xbf16>
+      %66 = stablehlo.broadcast_in_dim %arg96, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %67 = stablehlo.broadcast_in_dim %66, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %68 = stablehlo.multiply %65, %67 : tensor<16384x1024xbf16>
+      %69 = stablehlo.broadcast_in_dim %arg97, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %70 = stablehlo.broadcast_in_dim %69, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %71 = stablehlo.add %68, %70 : tensor<16384x1024xbf16>
+      %72 = func.call @relu(%71) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %73 = stablehlo.dot_general %72, %arg98, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %74 = stablehlo.broadcast_in_dim %arg99, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %75 = stablehlo.broadcast_in_dim %74, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %76 = stablehlo.add %73, %75 : tensor<16384x1024xbf16>
+      %77 = stablehlo.convert %76 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_11 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %78 = stablehlo.reduce(%77 init: %cst_11) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %79 = stablehlo.broadcast_in_dim %78, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_12 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %80 = stablehlo.broadcast_in_dim %cst_12, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %81 = stablehlo.divide %79, %80 : tensor<16384x1xf32>
+      %82 = stablehlo.convert %81 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %83 = stablehlo.broadcast_in_dim %82, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %84 = stablehlo.subtract %76, %83 : tensor<16384x1024xbf16>
+      %85 = chlo.square %84 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %86 = stablehlo.convert %85 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_13 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %87 = stablehlo.reduce(%86 init: %cst_13) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %88 = stablehlo.broadcast_in_dim %87, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_14 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %89 = stablehlo.broadcast_in_dim %cst_14, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %90 = stablehlo.divide %88, %89 : tensor<16384x1xf32>
+      %91 = stablehlo.convert %90 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %92 = stablehlo.broadcast_in_dim %82, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %93 = stablehlo.subtract %76, %92 : tensor<16384x1024xbf16>
+      %cst_15 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %94 = stablehlo.broadcast_in_dim %cst_15, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %95 = stablehlo.add %91, %94 : tensor<16384x1xbf16>
+      %96 = stablehlo.rsqrt %95 : tensor<16384x1xbf16>
+      %97 = stablehlo.broadcast_in_dim %96, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %98 = stablehlo.multiply %93, %97 : tensor<16384x1024xbf16>
+      %99 = stablehlo.broadcast_in_dim %arg100, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %100 = stablehlo.broadcast_in_dim %99, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %101 = stablehlo.multiply %98, %100 : tensor<16384x1024xbf16>
+      %102 = stablehlo.broadcast_in_dim %arg101, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %103 = stablehlo.broadcast_in_dim %102, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %104 = stablehlo.add %101, %103 : tensor<16384x1024xbf16>
+      %105 = stablehlo.add %39, %104 : tensor<16384x1024xbf16>
+      %106 = func.call @relu(%105) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %107 = stablehlo.dot_general %106, %arg102, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %108 = stablehlo.broadcast_in_dim %arg103, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %109 = stablehlo.broadcast_in_dim %108, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %110 = stablehlo.add %107, %109 : tensor<16384x1024xbf16>
+      %111 = stablehlo.convert %110 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_16 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %112 = stablehlo.reduce(%111 init: %cst_16) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %113 = stablehlo.broadcast_in_dim %112, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_17 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %114 = stablehlo.broadcast_in_dim %cst_17, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %115 = stablehlo.divide %113, %114 : tensor<16384x1xf32>
+      %116 = stablehlo.convert %115 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %117 = stablehlo.broadcast_in_dim %116, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %118 = stablehlo.subtract %110, %117 : tensor<16384x1024xbf16>
+      %119 = chlo.square %118 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %120 = stablehlo.convert %119 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_18 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %121 = stablehlo.reduce(%120 init: %cst_18) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %122 = stablehlo.broadcast_in_dim %121, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_19 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %123 = stablehlo.broadcast_in_dim %cst_19, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %124 = stablehlo.divide %122, %123 : tensor<16384x1xf32>
+      %125 = stablehlo.convert %124 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %126 = stablehlo.broadcast_in_dim %116, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %127 = stablehlo.subtract %110, %126 : tensor<16384x1024xbf16>
+      %cst_20 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %128 = stablehlo.broadcast_in_dim %cst_20, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %129 = stablehlo.add %125, %128 : tensor<16384x1xbf16>
+      %130 = stablehlo.rsqrt %129 : tensor<16384x1xbf16>
+      %131 = stablehlo.broadcast_in_dim %130, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %132 = stablehlo.multiply %127, %131 : tensor<16384x1024xbf16>
+      %133 = stablehlo.broadcast_in_dim %arg104, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %134 = stablehlo.broadcast_in_dim %133, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %135 = stablehlo.multiply %132, %134 : tensor<16384x1024xbf16>
+      %136 = stablehlo.broadcast_in_dim %arg105, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %137 = stablehlo.broadcast_in_dim %136, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %138 = stablehlo.add %135, %137 : tensor<16384x1024xbf16>
+      %139 = func.call @relu(%138) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %140 = stablehlo.dot_general %139, %arg106, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %141 = stablehlo.broadcast_in_dim %arg107, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %142 = stablehlo.broadcast_in_dim %141, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %143 = stablehlo.add %140, %142 : tensor<16384x1024xbf16>
+      %144 = stablehlo.convert %143 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_21 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %145 = stablehlo.reduce(%144 init: %cst_21) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %146 = stablehlo.broadcast_in_dim %145, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_22 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %147 = stablehlo.broadcast_in_dim %cst_22, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %148 = stablehlo.divide %146, %147 : tensor<16384x1xf32>
+      %149 = stablehlo.convert %148 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %150 = stablehlo.broadcast_in_dim %149, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %151 = stablehlo.subtract %143, %150 : tensor<16384x1024xbf16>
+      %152 = chlo.square %151 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %153 = stablehlo.convert %152 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_23 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %154 = stablehlo.reduce(%153 init: %cst_23) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %155 = stablehlo.broadcast_in_dim %154, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_24 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %156 = stablehlo.broadcast_in_dim %cst_24, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %157 = stablehlo.divide %155, %156 : tensor<16384x1xf32>
+      %158 = stablehlo.convert %157 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %159 = stablehlo.broadcast_in_dim %149, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %160 = stablehlo.subtract %143, %159 : tensor<16384x1024xbf16>
+      %cst_25 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %161 = stablehlo.broadcast_in_dim %cst_25, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %162 = stablehlo.add %158, %161 : tensor<16384x1xbf16>
+      %163 = stablehlo.rsqrt %162 : tensor<16384x1xbf16>
+      %164 = stablehlo.broadcast_in_dim %163, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %165 = stablehlo.multiply %160, %164 : tensor<16384x1024xbf16>
+      %166 = stablehlo.broadcast_in_dim %arg108, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %167 = stablehlo.broadcast_in_dim %166, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %168 = stablehlo.multiply %165, %167 : tensor<16384x1024xbf16>
+      %169 = stablehlo.broadcast_in_dim %arg109, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %170 = stablehlo.broadcast_in_dim %169, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %171 = stablehlo.add %168, %170 : tensor<16384x1024xbf16>
+      %172 = stablehlo.add %106, %171 : tensor<16384x1024xbf16>
+      %173 = func.call @relu(%172) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %174 = stablehlo.dot_general %173, %arg110, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %175 = stablehlo.broadcast_in_dim %arg111, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %176 = stablehlo.broadcast_in_dim %175, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %177 = stablehlo.add %174, %176 : tensor<16384x1024xbf16>
+      %178 = stablehlo.convert %177 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_26 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %179 = stablehlo.reduce(%178 init: %cst_26) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %180 = stablehlo.broadcast_in_dim %179, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_27 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %181 = stablehlo.broadcast_in_dim %cst_27, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %182 = stablehlo.divide %180, %181 : tensor<16384x1xf32>
+      %183 = stablehlo.convert %182 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %184 = stablehlo.broadcast_in_dim %183, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %185 = stablehlo.subtract %177, %184 : tensor<16384x1024xbf16>
+      %186 = chlo.square %185 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %187 = stablehlo.convert %186 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_28 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %188 = stablehlo.reduce(%187 init: %cst_28) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %189 = stablehlo.broadcast_in_dim %188, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_29 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %190 = stablehlo.broadcast_in_dim %cst_29, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %191 = stablehlo.divide %189, %190 : tensor<16384x1xf32>
+      %192 = stablehlo.convert %191 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %193 = stablehlo.broadcast_in_dim %183, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %194 = stablehlo.subtract %177, %193 : tensor<16384x1024xbf16>
+      %cst_30 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %195 = stablehlo.broadcast_in_dim %cst_30, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %196 = stablehlo.add %192, %195 : tensor<16384x1xbf16>
+      %197 = stablehlo.rsqrt %196 : tensor<16384x1xbf16>
+      %198 = stablehlo.broadcast_in_dim %197, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %199 = stablehlo.multiply %194, %198 : tensor<16384x1024xbf16>
+      %200 = stablehlo.broadcast_in_dim %arg112, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %201 = stablehlo.broadcast_in_dim %200, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %202 = stablehlo.multiply %199, %201 : tensor<16384x1024xbf16>
+      %203 = stablehlo.broadcast_in_dim %arg113, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %204 = stablehlo.broadcast_in_dim %203, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %205 = stablehlo.add %202, %204 : tensor<16384x1024xbf16>
+      %206 = func.call @relu(%205) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %207 = stablehlo.dot_general %206, %arg114, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %208 = stablehlo.broadcast_in_dim %arg115, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %209 = stablehlo.broadcast_in_dim %208, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %210 = stablehlo.add %207, %209 : tensor<16384x1024xbf16>
+      %211 = stablehlo.convert %210 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_31 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %212 = stablehlo.reduce(%211 init: %cst_31) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %213 = stablehlo.broadcast_in_dim %212, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_32 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %214 = stablehlo.broadcast_in_dim %cst_32, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %215 = stablehlo.divide %213, %214 : tensor<16384x1xf32>
+      %216 = stablehlo.convert %215 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %217 = stablehlo.broadcast_in_dim %216, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %218 = stablehlo.subtract %210, %217 : tensor<16384x1024xbf16>
+      %219 = chlo.square %218 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %220 = stablehlo.convert %219 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_33 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %221 = stablehlo.reduce(%220 init: %cst_33) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %222 = stablehlo.broadcast_in_dim %221, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_34 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %223 = stablehlo.broadcast_in_dim %cst_34, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %224 = stablehlo.divide %222, %223 : tensor<16384x1xf32>
+      %225 = stablehlo.convert %224 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %226 = stablehlo.broadcast_in_dim %216, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %227 = stablehlo.subtract %210, %226 : tensor<16384x1024xbf16>
+      %cst_35 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %228 = stablehlo.broadcast_in_dim %cst_35, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %229 = stablehlo.add %225, %228 : tensor<16384x1xbf16>
+      %230 = stablehlo.rsqrt %229 : tensor<16384x1xbf16>
+      %231 = stablehlo.broadcast_in_dim %230, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %232 = stablehlo.multiply %227, %231 : tensor<16384x1024xbf16>
+      %233 = stablehlo.broadcast_in_dim %arg116, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %234 = stablehlo.broadcast_in_dim %233, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %235 = stablehlo.multiply %232, %234 : tensor<16384x1024xbf16>
+      %236 = stablehlo.broadcast_in_dim %arg117, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %237 = stablehlo.broadcast_in_dim %236, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %238 = stablehlo.add %235, %237 : tensor<16384x1024xbf16>
+      %239 = stablehlo.add %173, %238 : tensor<16384x1024xbf16>
+      %240 = func.call @relu(%239) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %241 = stablehlo.dot_general %240, %arg118, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %242 = stablehlo.broadcast_in_dim %arg119, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %243 = stablehlo.broadcast_in_dim %242, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %244 = stablehlo.add %241, %243 : tensor<16384x1024xbf16>
+      %245 = stablehlo.convert %244 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_36 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %246 = stablehlo.reduce(%245 init: %cst_36) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %247 = stablehlo.broadcast_in_dim %246, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_37 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %248 = stablehlo.broadcast_in_dim %cst_37, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %249 = stablehlo.divide %247, %248 : tensor<16384x1xf32>
+      %250 = stablehlo.convert %249 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %251 = stablehlo.broadcast_in_dim %250, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %252 = stablehlo.subtract %244, %251 : tensor<16384x1024xbf16>
+      %253 = chlo.square %252 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %254 = stablehlo.convert %253 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_38 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %255 = stablehlo.reduce(%254 init: %cst_38) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %256 = stablehlo.broadcast_in_dim %255, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_39 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %257 = stablehlo.broadcast_in_dim %cst_39, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %258 = stablehlo.divide %256, %257 : tensor<16384x1xf32>
+      %259 = stablehlo.convert %258 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %260 = stablehlo.broadcast_in_dim %250, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %261 = stablehlo.subtract %244, %260 : tensor<16384x1024xbf16>
+      %cst_40 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %262 = stablehlo.broadcast_in_dim %cst_40, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %263 = stablehlo.add %259, %262 : tensor<16384x1xbf16>
+      %264 = stablehlo.rsqrt %263 : tensor<16384x1xbf16>
+      %265 = stablehlo.broadcast_in_dim %264, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %266 = stablehlo.multiply %261, %265 : tensor<16384x1024xbf16>
+      %267 = stablehlo.broadcast_in_dim %arg120, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %268 = stablehlo.broadcast_in_dim %267, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %269 = stablehlo.multiply %266, %268 : tensor<16384x1024xbf16>
+      %270 = stablehlo.broadcast_in_dim %arg121, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %271 = stablehlo.broadcast_in_dim %270, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %272 = stablehlo.add %269, %271 : tensor<16384x1024xbf16>
+      %273 = func.call @relu(%272) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %274 = stablehlo.dot_general %273, %arg122, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %275 = stablehlo.broadcast_in_dim %arg123, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %276 = stablehlo.broadcast_in_dim %275, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %277 = stablehlo.add %274, %276 : tensor<16384x1024xbf16>
+      %278 = stablehlo.convert %277 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_41 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %279 = stablehlo.reduce(%278 init: %cst_41) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %280 = stablehlo.broadcast_in_dim %279, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_42 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %281 = stablehlo.broadcast_in_dim %cst_42, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %282 = stablehlo.divide %280, %281 : tensor<16384x1xf32>
+      %283 = stablehlo.convert %282 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %284 = stablehlo.broadcast_in_dim %283, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %285 = stablehlo.subtract %277, %284 : tensor<16384x1024xbf16>
+      %286 = chlo.square %285 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %287 = stablehlo.convert %286 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_43 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %288 = stablehlo.reduce(%287 init: %cst_43) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %289 = stablehlo.broadcast_in_dim %288, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_44 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %290 = stablehlo.broadcast_in_dim %cst_44, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %291 = stablehlo.divide %289, %290 : tensor<16384x1xf32>
+      %292 = stablehlo.convert %291 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %293 = stablehlo.broadcast_in_dim %283, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %294 = stablehlo.subtract %277, %293 : tensor<16384x1024xbf16>
+      %cst_45 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %295 = stablehlo.broadcast_in_dim %cst_45, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %296 = stablehlo.add %292, %295 : tensor<16384x1xbf16>
+      %297 = stablehlo.rsqrt %296 : tensor<16384x1xbf16>
+      %298 = stablehlo.broadcast_in_dim %297, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %299 = stablehlo.multiply %294, %298 : tensor<16384x1024xbf16>
+      %300 = stablehlo.broadcast_in_dim %arg124, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %301 = stablehlo.broadcast_in_dim %300, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %302 = stablehlo.multiply %299, %301 : tensor<16384x1024xbf16>
+      %303 = stablehlo.broadcast_in_dim %arg125, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %304 = stablehlo.broadcast_in_dim %303, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %305 = stablehlo.add %302, %304 : tensor<16384x1024xbf16>
+      %306 = stablehlo.add %240, %305 : tensor<16384x1024xbf16>
+      %307 = func.call @relu(%306) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %308 = stablehlo.dot_general %307, %arg126, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %309 = stablehlo.broadcast_in_dim %arg127, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %310 = stablehlo.broadcast_in_dim %309, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %311 = stablehlo.add %308, %310 : tensor<16384x1024xbf16>
+      %312 = stablehlo.convert %311 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_46 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %313 = stablehlo.reduce(%312 init: %cst_46) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %314 = stablehlo.broadcast_in_dim %313, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_47 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %315 = stablehlo.broadcast_in_dim %cst_47, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %316 = stablehlo.divide %314, %315 : tensor<16384x1xf32>
+      %317 = stablehlo.convert %316 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %318 = stablehlo.broadcast_in_dim %317, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %319 = stablehlo.subtract %311, %318 : tensor<16384x1024xbf16>
+      %320 = chlo.square %319 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %321 = stablehlo.convert %320 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_48 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %322 = stablehlo.reduce(%321 init: %cst_48) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %323 = stablehlo.broadcast_in_dim %322, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_49 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %324 = stablehlo.broadcast_in_dim %cst_49, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %325 = stablehlo.divide %323, %324 : tensor<16384x1xf32>
+      %326 = stablehlo.convert %325 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %327 = stablehlo.broadcast_in_dim %317, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %328 = stablehlo.subtract %311, %327 : tensor<16384x1024xbf16>
+      %cst_50 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %329 = stablehlo.broadcast_in_dim %cst_50, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %330 = stablehlo.add %326, %329 : tensor<16384x1xbf16>
+      %331 = stablehlo.rsqrt %330 : tensor<16384x1xbf16>
+      %332 = stablehlo.broadcast_in_dim %331, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %333 = stablehlo.multiply %328, %332 : tensor<16384x1024xbf16>
+      %334 = stablehlo.broadcast_in_dim %arg128, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %335 = stablehlo.broadcast_in_dim %334, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %336 = stablehlo.multiply %333, %335 : tensor<16384x1024xbf16>
+      %337 = stablehlo.broadcast_in_dim %arg129, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %338 = stablehlo.broadcast_in_dim %337, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %339 = stablehlo.add %336, %338 : tensor<16384x1024xbf16>
+      %340 = func.call @relu(%339) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %341 = stablehlo.dot_general %340, %arg130, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %342 = stablehlo.broadcast_in_dim %arg131, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %343 = stablehlo.broadcast_in_dim %342, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %344 = stablehlo.add %341, %343 : tensor<16384x1024xbf16>
+      %345 = stablehlo.convert %344 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_51 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %346 = stablehlo.reduce(%345 init: %cst_51) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %347 = stablehlo.broadcast_in_dim %346, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_52 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %348 = stablehlo.broadcast_in_dim %cst_52, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %349 = stablehlo.divide %347, %348 : tensor<16384x1xf32>
+      %350 = stablehlo.convert %349 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %351 = stablehlo.broadcast_in_dim %350, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %352 = stablehlo.subtract %344, %351 : tensor<16384x1024xbf16>
+      %353 = chlo.square %352 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %354 = stablehlo.convert %353 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_53 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %355 = stablehlo.reduce(%354 init: %cst_53) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %356 = stablehlo.broadcast_in_dim %355, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_54 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %357 = stablehlo.broadcast_in_dim %cst_54, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %358 = stablehlo.divide %356, %357 : tensor<16384x1xf32>
+      %359 = stablehlo.convert %358 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %360 = stablehlo.broadcast_in_dim %350, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %361 = stablehlo.subtract %344, %360 : tensor<16384x1024xbf16>
+      %cst_55 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %362 = stablehlo.broadcast_in_dim %cst_55, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %363 = stablehlo.add %359, %362 : tensor<16384x1xbf16>
+      %364 = stablehlo.rsqrt %363 : tensor<16384x1xbf16>
+      %365 = stablehlo.broadcast_in_dim %364, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %366 = stablehlo.multiply %361, %365 : tensor<16384x1024xbf16>
+      %367 = stablehlo.broadcast_in_dim %arg132, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %368 = stablehlo.broadcast_in_dim %367, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %369 = stablehlo.multiply %366, %368 : tensor<16384x1024xbf16>
+      %370 = stablehlo.broadcast_in_dim %arg133, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %371 = stablehlo.broadcast_in_dim %370, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %372 = stablehlo.add %369, %371 : tensor<16384x1024xbf16>
+      %373 = stablehlo.add %307, %372 : tensor<16384x1024xbf16>
+      %374 = func.call @relu(%373) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %375 = stablehlo.dot_general %374, %arg134, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %376 = stablehlo.broadcast_in_dim %arg135, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %377 = stablehlo.broadcast_in_dim %376, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %378 = stablehlo.add %375, %377 : tensor<16384x1024xbf16>
+      %379 = stablehlo.convert %378 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_56 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %380 = stablehlo.reduce(%379 init: %cst_56) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %381 = stablehlo.broadcast_in_dim %380, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_57 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %382 = stablehlo.broadcast_in_dim %cst_57, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %383 = stablehlo.divide %381, %382 : tensor<16384x1xf32>
+      %384 = stablehlo.convert %383 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %385 = stablehlo.broadcast_in_dim %384, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %386 = stablehlo.subtract %378, %385 : tensor<16384x1024xbf16>
+      %387 = chlo.square %386 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %388 = stablehlo.convert %387 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_58 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %389 = stablehlo.reduce(%388 init: %cst_58) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %390 = stablehlo.broadcast_in_dim %389, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_59 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %391 = stablehlo.broadcast_in_dim %cst_59, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %392 = stablehlo.divide %390, %391 : tensor<16384x1xf32>
+      %393 = stablehlo.convert %392 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %394 = stablehlo.broadcast_in_dim %384, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %395 = stablehlo.subtract %378, %394 : tensor<16384x1024xbf16>
+      %cst_60 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %396 = stablehlo.broadcast_in_dim %cst_60, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %397 = stablehlo.add %393, %396 : tensor<16384x1xbf16>
+      %398 = stablehlo.rsqrt %397 : tensor<16384x1xbf16>
+      %399 = stablehlo.broadcast_in_dim %398, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %400 = stablehlo.multiply %395, %399 : tensor<16384x1024xbf16>
+      %401 = stablehlo.broadcast_in_dim %arg136, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %402 = stablehlo.broadcast_in_dim %401, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %403 = stablehlo.multiply %400, %402 : tensor<16384x1024xbf16>
+      %404 = stablehlo.broadcast_in_dim %arg137, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %405 = stablehlo.broadcast_in_dim %404, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %406 = stablehlo.add %403, %405 : tensor<16384x1024xbf16>
+      %407 = func.call @relu(%406) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %408 = stablehlo.dot_general %407, %arg138, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %409 = stablehlo.broadcast_in_dim %arg139, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %410 = stablehlo.broadcast_in_dim %409, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %411 = stablehlo.add %408, %410 : tensor<16384x1024xbf16>
+      %412 = stablehlo.convert %411 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_61 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %413 = stablehlo.reduce(%412 init: %cst_61) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %414 = stablehlo.broadcast_in_dim %413, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_62 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %415 = stablehlo.broadcast_in_dim %cst_62, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %416 = stablehlo.divide %414, %415 : tensor<16384x1xf32>
+      %417 = stablehlo.convert %416 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %418 = stablehlo.broadcast_in_dim %417, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %419 = stablehlo.subtract %411, %418 : tensor<16384x1024xbf16>
+      %420 = chlo.square %419 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %421 = stablehlo.convert %420 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_63 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %422 = stablehlo.reduce(%421 init: %cst_63) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %423 = stablehlo.broadcast_in_dim %422, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_64 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %424 = stablehlo.broadcast_in_dim %cst_64, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %425 = stablehlo.divide %423, %424 : tensor<16384x1xf32>
+      %426 = stablehlo.convert %425 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %427 = stablehlo.broadcast_in_dim %417, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %428 = stablehlo.subtract %411, %427 : tensor<16384x1024xbf16>
+      %cst_65 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %429 = stablehlo.broadcast_in_dim %cst_65, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %430 = stablehlo.add %426, %429 : tensor<16384x1xbf16>
+      %431 = stablehlo.rsqrt %430 : tensor<16384x1xbf16>
+      %432 = stablehlo.broadcast_in_dim %431, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %433 = stablehlo.multiply %428, %432 : tensor<16384x1024xbf16>
+      %434 = stablehlo.broadcast_in_dim %arg140, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %435 = stablehlo.broadcast_in_dim %434, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %436 = stablehlo.multiply %433, %435 : tensor<16384x1024xbf16>
+      %437 = stablehlo.broadcast_in_dim %arg141, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %438 = stablehlo.broadcast_in_dim %437, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %439 = stablehlo.add %436, %438 : tensor<16384x1024xbf16>
+      %440 = stablehlo.add %374, %439 : tensor<16384x1024xbf16>
+      %441 = func.call @relu(%440) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %442 = stablehlo.dot_general %441, %arg142, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %443 = stablehlo.broadcast_in_dim %arg143, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %444 = stablehlo.broadcast_in_dim %443, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %445 = stablehlo.add %442, %444 : tensor<16384x1024xbf16>
+      %446 = stablehlo.convert %445 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_66 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %447 = stablehlo.reduce(%446 init: %cst_66) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %448 = stablehlo.broadcast_in_dim %447, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_67 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %449 = stablehlo.broadcast_in_dim %cst_67, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %450 = stablehlo.divide %448, %449 : tensor<16384x1xf32>
+      %451 = stablehlo.convert %450 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %452 = stablehlo.broadcast_in_dim %451, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %453 = stablehlo.subtract %445, %452 : tensor<16384x1024xbf16>
+      %454 = chlo.square %453 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %455 = stablehlo.convert %454 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_68 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %456 = stablehlo.reduce(%455 init: %cst_68) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %457 = stablehlo.broadcast_in_dim %456, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_69 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %458 = stablehlo.broadcast_in_dim %cst_69, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %459 = stablehlo.divide %457, %458 : tensor<16384x1xf32>
+      %460 = stablehlo.convert %459 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %461 = stablehlo.broadcast_in_dim %451, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %462 = stablehlo.subtract %445, %461 : tensor<16384x1024xbf16>
+      %cst_70 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %463 = stablehlo.broadcast_in_dim %cst_70, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %464 = stablehlo.add %460, %463 : tensor<16384x1xbf16>
+      %465 = stablehlo.rsqrt %464 : tensor<16384x1xbf16>
+      %466 = stablehlo.broadcast_in_dim %465, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %467 = stablehlo.multiply %462, %466 : tensor<16384x1024xbf16>
+      %468 = stablehlo.broadcast_in_dim %arg144, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %469 = stablehlo.broadcast_in_dim %468, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %470 = stablehlo.multiply %467, %469 : tensor<16384x1024xbf16>
+      %471 = stablehlo.broadcast_in_dim %arg145, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %472 = stablehlo.broadcast_in_dim %471, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %473 = stablehlo.add %470, %472 : tensor<16384x1024xbf16>
+      %474 = func.call @relu(%473) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %475 = stablehlo.dot_general %474, %arg146, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %476 = stablehlo.broadcast_in_dim %arg147, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %477 = stablehlo.broadcast_in_dim %476, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %478 = stablehlo.add %475, %477 : tensor<16384x1024xbf16>
+      %479 = stablehlo.convert %478 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_71 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %480 = stablehlo.reduce(%479 init: %cst_71) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %481 = stablehlo.broadcast_in_dim %480, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_72 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %482 = stablehlo.broadcast_in_dim %cst_72, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %483 = stablehlo.divide %481, %482 : tensor<16384x1xf32>
+      %484 = stablehlo.convert %483 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %485 = stablehlo.broadcast_in_dim %484, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %486 = stablehlo.subtract %478, %485 : tensor<16384x1024xbf16>
+      %487 = chlo.square %486 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %488 = stablehlo.convert %487 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_73 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %489 = stablehlo.reduce(%488 init: %cst_73) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %490 = stablehlo.broadcast_in_dim %489, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_74 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %491 = stablehlo.broadcast_in_dim %cst_74, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %492 = stablehlo.divide %490, %491 : tensor<16384x1xf32>
+      %493 = stablehlo.convert %492 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %494 = stablehlo.broadcast_in_dim %484, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %495 = stablehlo.subtract %478, %494 : tensor<16384x1024xbf16>
+      %cst_75 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %496 = stablehlo.broadcast_in_dim %cst_75, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %497 = stablehlo.add %493, %496 : tensor<16384x1xbf16>
+      %498 = stablehlo.rsqrt %497 : tensor<16384x1xbf16>
+      %499 = stablehlo.broadcast_in_dim %498, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %500 = stablehlo.multiply %495, %499 : tensor<16384x1024xbf16>
+      %501 = stablehlo.broadcast_in_dim %arg148, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %502 = stablehlo.broadcast_in_dim %501, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %503 = stablehlo.multiply %500, %502 : tensor<16384x1024xbf16>
+      %504 = stablehlo.broadcast_in_dim %arg149, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %505 = stablehlo.broadcast_in_dim %504, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %506 = stablehlo.add %503, %505 : tensor<16384x1024xbf16>
+      %507 = stablehlo.add %441, %506 : tensor<16384x1024xbf16>
+      %508 = func.call @relu(%507) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %509 = stablehlo.dot_general %508, %arg150, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %510 = stablehlo.broadcast_in_dim %arg151, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %511 = stablehlo.broadcast_in_dim %510, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %512 = stablehlo.add %509, %511 : tensor<16384x1024xbf16>
+      %513 = stablehlo.convert %512 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_76 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %514 = stablehlo.reduce(%513 init: %cst_76) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %515 = stablehlo.broadcast_in_dim %514, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_77 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %516 = stablehlo.broadcast_in_dim %cst_77, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %517 = stablehlo.divide %515, %516 : tensor<16384x1xf32>
+      %518 = stablehlo.convert %517 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %519 = stablehlo.broadcast_in_dim %518, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %520 = stablehlo.subtract %512, %519 : tensor<16384x1024xbf16>
+      %521 = chlo.square %520 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %522 = stablehlo.convert %521 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_78 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %523 = stablehlo.reduce(%522 init: %cst_78) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %524 = stablehlo.broadcast_in_dim %523, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_79 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %525 = stablehlo.broadcast_in_dim %cst_79, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %526 = stablehlo.divide %524, %525 : tensor<16384x1xf32>
+      %527 = stablehlo.convert %526 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %528 = stablehlo.broadcast_in_dim %518, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %529 = stablehlo.subtract %512, %528 : tensor<16384x1024xbf16>
+      %cst_80 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %530 = stablehlo.broadcast_in_dim %cst_80, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %531 = stablehlo.add %527, %530 : tensor<16384x1xbf16>
+      %532 = stablehlo.rsqrt %531 : tensor<16384x1xbf16>
+      %533 = stablehlo.broadcast_in_dim %532, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %534 = stablehlo.multiply %529, %533 : tensor<16384x1024xbf16>
+      %535 = stablehlo.broadcast_in_dim %arg152, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %536 = stablehlo.broadcast_in_dim %535, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %537 = stablehlo.multiply %534, %536 : tensor<16384x1024xbf16>
+      %538 = stablehlo.broadcast_in_dim %arg153, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %539 = stablehlo.broadcast_in_dim %538, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %540 = stablehlo.add %537, %539 : tensor<16384x1024xbf16>
+      %541 = func.call @relu(%540) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %542 = stablehlo.dot_general %541, %arg154, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %543 = stablehlo.broadcast_in_dim %arg155, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %544 = stablehlo.broadcast_in_dim %543, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %545 = stablehlo.add %542, %544 : tensor<16384x1024xbf16>
+      %546 = stablehlo.convert %545 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_81 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %547 = stablehlo.reduce(%546 init: %cst_81) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %548 = stablehlo.broadcast_in_dim %547, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_82 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %549 = stablehlo.broadcast_in_dim %cst_82, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %550 = stablehlo.divide %548, %549 : tensor<16384x1xf32>
+      %551 = stablehlo.convert %550 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %552 = stablehlo.broadcast_in_dim %551, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %553 = stablehlo.subtract %545, %552 : tensor<16384x1024xbf16>
+      %554 = chlo.square %553 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %555 = stablehlo.convert %554 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_83 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %556 = stablehlo.reduce(%555 init: %cst_83) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %557 = stablehlo.broadcast_in_dim %556, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_84 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %558 = stablehlo.broadcast_in_dim %cst_84, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %559 = stablehlo.divide %557, %558 : tensor<16384x1xf32>
+      %560 = stablehlo.convert %559 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %561 = stablehlo.broadcast_in_dim %551, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %562 = stablehlo.subtract %545, %561 : tensor<16384x1024xbf16>
+      %cst_85 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %563 = stablehlo.broadcast_in_dim %cst_85, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %564 = stablehlo.add %560, %563 : tensor<16384x1xbf16>
+      %565 = stablehlo.rsqrt %564 : tensor<16384x1xbf16>
+      %566 = stablehlo.broadcast_in_dim %565, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %567 = stablehlo.multiply %562, %566 : tensor<16384x1024xbf16>
+      %568 = stablehlo.broadcast_in_dim %arg156, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %569 = stablehlo.broadcast_in_dim %568, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %570 = stablehlo.multiply %567, %569 : tensor<16384x1024xbf16>
+      %571 = stablehlo.broadcast_in_dim %arg157, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %572 = stablehlo.broadcast_in_dim %571, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %573 = stablehlo.add %570, %572 : tensor<16384x1024xbf16>
+      %574 = stablehlo.add %508, %573 : tensor<16384x1024xbf16>
+      %575 = func.call @relu(%574) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %576 = stablehlo.dot_general %575, %arg158, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %577 = stablehlo.broadcast_in_dim %arg159, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %578 = stablehlo.broadcast_in_dim %577, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %579 = stablehlo.add %576, %578 : tensor<16384x1024xbf16>
+      %580 = stablehlo.convert %579 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_86 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %581 = stablehlo.reduce(%580 init: %cst_86) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %582 = stablehlo.broadcast_in_dim %581, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_87 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %583 = stablehlo.broadcast_in_dim %cst_87, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %584 = stablehlo.divide %582, %583 : tensor<16384x1xf32>
+      %585 = stablehlo.convert %584 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %586 = stablehlo.broadcast_in_dim %585, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %587 = stablehlo.subtract %579, %586 : tensor<16384x1024xbf16>
+      %588 = chlo.square %587 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %589 = stablehlo.convert %588 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_88 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %590 = stablehlo.reduce(%589 init: %cst_88) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %591 = stablehlo.broadcast_in_dim %590, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_89 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %592 = stablehlo.broadcast_in_dim %cst_89, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %593 = stablehlo.divide %591, %592 : tensor<16384x1xf32>
+      %594 = stablehlo.convert %593 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %595 = stablehlo.broadcast_in_dim %585, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %596 = stablehlo.subtract %579, %595 : tensor<16384x1024xbf16>
+      %cst_90 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %597 = stablehlo.broadcast_in_dim %cst_90, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %598 = stablehlo.add %594, %597 : tensor<16384x1xbf16>
+      %599 = stablehlo.rsqrt %598 : tensor<16384x1xbf16>
+      %600 = stablehlo.broadcast_in_dim %599, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %601 = stablehlo.multiply %596, %600 : tensor<16384x1024xbf16>
+      %602 = stablehlo.broadcast_in_dim %arg160, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %603 = stablehlo.broadcast_in_dim %602, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %604 = stablehlo.multiply %601, %603 : tensor<16384x1024xbf16>
+      %605 = stablehlo.broadcast_in_dim %arg161, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %606 = stablehlo.broadcast_in_dim %605, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %607 = stablehlo.add %604, %606 : tensor<16384x1024xbf16>
+      %608 = func.call @relu(%607) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %609 = stablehlo.dot_general %608, %arg162, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %610 = stablehlo.broadcast_in_dim %arg163, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %611 = stablehlo.broadcast_in_dim %610, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %612 = stablehlo.add %609, %611 : tensor<16384x1024xbf16>
+      %613 = stablehlo.convert %612 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_91 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %614 = stablehlo.reduce(%613 init: %cst_91) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %615 = stablehlo.broadcast_in_dim %614, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_92 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %616 = stablehlo.broadcast_in_dim %cst_92, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %617 = stablehlo.divide %615, %616 : tensor<16384x1xf32>
+      %618 = stablehlo.convert %617 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %619 = stablehlo.broadcast_in_dim %618, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %620 = stablehlo.subtract %612, %619 : tensor<16384x1024xbf16>
+      %621 = chlo.square %620 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %622 = stablehlo.convert %621 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_93 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %623 = stablehlo.reduce(%622 init: %cst_93) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %624 = stablehlo.broadcast_in_dim %623, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_94 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %625 = stablehlo.broadcast_in_dim %cst_94, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %626 = stablehlo.divide %624, %625 : tensor<16384x1xf32>
+      %627 = stablehlo.convert %626 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %628 = stablehlo.broadcast_in_dim %618, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %629 = stablehlo.subtract %612, %628 : tensor<16384x1024xbf16>
+      %cst_95 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %630 = stablehlo.broadcast_in_dim %cst_95, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %631 = stablehlo.add %627, %630 : tensor<16384x1xbf16>
+      %632 = stablehlo.rsqrt %631 : tensor<16384x1xbf16>
+      %633 = stablehlo.broadcast_in_dim %632, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %634 = stablehlo.multiply %629, %633 : tensor<16384x1024xbf16>
+      %635 = stablehlo.broadcast_in_dim %arg164, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %636 = stablehlo.broadcast_in_dim %635, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %637 = stablehlo.multiply %634, %636 : tensor<16384x1024xbf16>
+      %638 = stablehlo.broadcast_in_dim %arg165, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %639 = stablehlo.broadcast_in_dim %638, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %640 = stablehlo.add %637, %639 : tensor<16384x1024xbf16>
+      %641 = stablehlo.add %575, %640 : tensor<16384x1024xbf16>
+      %642 = func.call @relu(%641) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %643 = stablehlo.dot_general %642, %arg166, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %644 = stablehlo.broadcast_in_dim %arg167, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %645 = stablehlo.broadcast_in_dim %644, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %646 = stablehlo.add %643, %645 : tensor<16384x1024xbf16>
+      %647 = stablehlo.convert %646 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_96 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %648 = stablehlo.reduce(%647 init: %cst_96) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %649 = stablehlo.broadcast_in_dim %648, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_97 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %650 = stablehlo.broadcast_in_dim %cst_97, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %651 = stablehlo.divide %649, %650 : tensor<16384x1xf32>
+      %652 = stablehlo.convert %651 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %653 = stablehlo.broadcast_in_dim %652, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %654 = stablehlo.subtract %646, %653 : tensor<16384x1024xbf16>
+      %655 = chlo.square %654 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %656 = stablehlo.convert %655 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_98 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %657 = stablehlo.reduce(%656 init: %cst_98) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %658 = stablehlo.broadcast_in_dim %657, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_99 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %659 = stablehlo.broadcast_in_dim %cst_99, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %660 = stablehlo.divide %658, %659 : tensor<16384x1xf32>
+      %661 = stablehlo.convert %660 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %662 = stablehlo.broadcast_in_dim %652, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %663 = stablehlo.subtract %646, %662 : tensor<16384x1024xbf16>
+      %cst_100 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %664 = stablehlo.broadcast_in_dim %cst_100, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %665 = stablehlo.add %661, %664 : tensor<16384x1xbf16>
+      %666 = stablehlo.rsqrt %665 : tensor<16384x1xbf16>
+      %667 = stablehlo.broadcast_in_dim %666, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %668 = stablehlo.multiply %663, %667 : tensor<16384x1024xbf16>
+      %669 = stablehlo.broadcast_in_dim %arg168, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %670 = stablehlo.broadcast_in_dim %669, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %671 = stablehlo.multiply %668, %670 : tensor<16384x1024xbf16>
+      %672 = stablehlo.broadcast_in_dim %arg169, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %673 = stablehlo.broadcast_in_dim %672, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %674 = stablehlo.add %671, %673 : tensor<16384x1024xbf16>
+      %675 = func.call @relu(%674) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %676 = stablehlo.dot_general %675, %arg170, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x1024xbf16>) -> tensor<16384x1024xbf16>
+      %677 = stablehlo.broadcast_in_dim %arg171, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %678 = stablehlo.broadcast_in_dim %677, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %679 = stablehlo.add %676, %678 : tensor<16384x1024xbf16>
+      %680 = stablehlo.convert %679 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_101 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %681 = stablehlo.reduce(%680 init: %cst_101) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %682 = stablehlo.broadcast_in_dim %681, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_102 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %683 = stablehlo.broadcast_in_dim %cst_102, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %684 = stablehlo.divide %682, %683 : tensor<16384x1xf32>
+      %685 = stablehlo.convert %684 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %686 = stablehlo.broadcast_in_dim %685, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %687 = stablehlo.subtract %679, %686 : tensor<16384x1024xbf16>
+      %688 = chlo.square %687 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      %689 = stablehlo.convert %688 : (tensor<16384x1024xbf16>) -> tensor<16384x1024xf32>
+      %cst_103 = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %690 = stablehlo.reduce(%689 init: %cst_103) applies stablehlo.add across dimensions = [1] : (tensor<16384x1024xf32>, tensor<f32>) -> tensor<16384xf32>
+      %691 = stablehlo.broadcast_in_dim %690, dims = [0] : (tensor<16384xf32>) -> tensor<16384x1xf32>
+      %cst_104 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %692 = stablehlo.broadcast_in_dim %cst_104, dims = [] : (tensor<f32>) -> tensor<16384x1xf32>
+      %693 = stablehlo.divide %691, %692 : tensor<16384x1xf32>
+      %694 = stablehlo.convert %693 : (tensor<16384x1xf32>) -> tensor<16384x1xbf16>
+      %695 = stablehlo.broadcast_in_dim %685, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %696 = stablehlo.subtract %679, %695 : tensor<16384x1024xbf16>
+      %cst_105 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %697 = stablehlo.broadcast_in_dim %cst_105, dims = [] : (tensor<bf16>) -> tensor<16384x1xbf16>
+      %698 = stablehlo.add %694, %697 : tensor<16384x1xbf16>
+      %699 = stablehlo.rsqrt %698 : tensor<16384x1xbf16>
+      %700 = stablehlo.broadcast_in_dim %699, dims = [0, 1] : (tensor<16384x1xbf16>) -> tensor<16384x1024xbf16>
+      %701 = stablehlo.multiply %696, %700 : tensor<16384x1024xbf16>
+      %702 = stablehlo.broadcast_in_dim %arg172, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %703 = stablehlo.broadcast_in_dim %702, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %704 = stablehlo.multiply %701, %703 : tensor<16384x1024xbf16>
+      %705 = stablehlo.broadcast_in_dim %arg173, dims = [1] : (tensor<1024xbf16>) -> tensor<1x1024xbf16>
+      %706 = stablehlo.broadcast_in_dim %705, dims = [0, 1] : (tensor<1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %707 = stablehlo.add %704, %706 : tensor<16384x1024xbf16>
+      %708 = stablehlo.add %642, %707 : tensor<16384x1024xbf16>
+      %709 = func.call @relu(%708) : (tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16>
+      %710 = stablehlo.dot_general %709, %arg174, contracting_dims = [1] x [0], precision = [DEFAULT, DEFAULT] : (tensor<16384x1024xbf16>, tensor<1024x30xbf16>) -> tensor<16384x30xbf16>
+      %711 = stablehlo.broadcast_in_dim %arg175, dims = [1] : (tensor<30xbf16>) -> tensor<1x30xbf16>
+      %712 = stablehlo.broadcast_in_dim %711, dims = [0, 1] : (tensor<1x30xbf16>) -> tensor<16384x30xbf16>
+      %713 = stablehlo.add %710, %712 : tensor<16384x30xbf16>
+      sdy.return %713 : tensor<16384x30xbf16>
+    } : (tensor<131072x150xui8>, tensor<150x24xf32>, tensor<3600x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024xbf16>, tensor<1024x30xbf16>, tensor<30xbf16>) -> tensor<131072x30xbf16>
+    return %0 : tensor<131072x30xbf16>
+  }
+  func.func private @_pad(%arg0: tensor<16384x150xui8>, %arg1: tensor<i32>) -> tensor<16384x150xui8> {
+    %0 = stablehlo.convert %arg1 : (tensor<i32>) -> tensor<ui8>
+    %1 = stablehlo.pad %arg0, %0, low = [0, 0], high = [0, 0], interior = [0, 0] : (tensor<16384x150xui8>, tensor<ui8>) -> tensor<16384x150xui8>
+    return %1 : tensor<16384x150xui8>
+  }
+  func.func private @dynamic_index_in_dim(%arg0: tensor<128x128x150xui8>, %arg1: tensor<i32>) -> tensor<128x150xui8> {
+    %c = stablehlo.constant dense<0> : tensor<i32>
+    %c_0 = stablehlo.constant dense<0> : tensor<i32>
+    %0 = stablehlo.dynamic_slice %arg0, %arg1, %c, %c_0, sizes = [1, 128, 150] : (tensor<128x128x150xui8>, tensor<i32>, tensor<i32>, tensor<i32>) -> tensor<1x128x150xui8>
+    %1 = stablehlo.reshape %0 : (tensor<1x128x150xui8>) -> tensor<128x150xui8>
+    return %1 : tensor<128x150xui8>
+  }
+  func.func private @closed_call(%arg0: tensor<150x24xbf16>, %arg1: tensor<128x150xui8>) -> tensor<128x3600xbf16> {
+    %0 = stablehlo.convert %arg1 : (tensor<128x150xui8>) -> tensor<128x150xi32>
+    %c = stablehlo.constant dense<0> : tensor<i32>
+    %1 = stablehlo.broadcast_in_dim %c, dims = [] : (tensor<i32>) -> tensor<128x150xi32>
+    %2 = stablehlo.compare LT, %0, %1, SIGNED : (tensor<128x150xi32>, tensor<128x150xi32>) -> tensor<128x150xi1>
+    %c_0 = stablehlo.constant dense<150> : tensor<i32>
+    %3 = stablehlo.broadcast_in_dim %c_0, dims = [] : (tensor<i32>) -> tensor<128x150xi32>
+    %4 = stablehlo.add %0, %3 : tensor<128x150xi32>
+    %5 = stablehlo.select %2, %4, %0 : tensor<128x150xi1>, tensor<128x150xi32>
+    %6 = stablehlo.broadcast_in_dim %5, dims = [0, 1] : (tensor<128x150xi32>) -> tensor<128x150x1xi32>
+    %7 = "stablehlo.gather"(%arg0, %6) <{dimension_numbers = #stablehlo.gather<offset_dims = [2], collapsed_slice_dims = [0], start_index_map = [0], index_vector_dim = 2>, indices_are_sorted = false, slice_sizes = array<i64: 1, 24>}> : (tensor<150x24xbf16>, tensor<128x150x1xi32>) -> tensor<128x150x24xbf16>
+    %8 = stablehlo.reshape %7 : (tensor<128x150x24xbf16>) -> tensor<128x3600xbf16>
+    return %8 : tensor<128x3600xbf16>
+  }
+  func.func private @dynamic_update_index_in_dim(%arg0: tensor<128x128x3600xbf16>, %arg1: tensor<128x3600xbf16>, %arg2: tensor<i32>) -> tensor<128x128x3600xbf16> {
+    %0 = stablehlo.broadcast_in_dim %arg1, dims = [1, 2] : (tensor<128x3600xbf16>) -> tensor<1x128x3600xbf16>
+    %c = stablehlo.constant dense<0> : tensor<i32>
+    %c_0 = stablehlo.constant dense<0> : tensor<i32>
+    %1 = stablehlo.dynamic_update_slice %arg0, %0, %arg2, %c, %c_0 : (tensor<128x128x3600xbf16>, tensor<1x128x3600xbf16>, tensor<i32>, tensor<i32>, tensor<i32>) -> tensor<128x128x3600xbf16>
+    return %1 : tensor<128x128x3600xbf16>
+  }
+  func.func private @relu(%arg0: tensor<16384x1024xbf16>) -> tensor<16384x1024xbf16> {
+    %cst = stablehlo.constant dense<0.000000e+00> : tensor<bf16>
+    %0 = stablehlo.broadcast_in_dim %cst, dims = [] : (tensor<bf16>) -> tensor<16384x1024xbf16>
+    %1 = stablehlo.maximum %arg0, %0 : tensor<16384x1024xbf16>
+    return %1 : tensor<16384x1024xbf16>
+  }
+}

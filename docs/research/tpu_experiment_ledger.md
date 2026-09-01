@@ -387,3 +387,37 @@ Fresh full regression:295 passed in89.23s; deterministic analysis check passed.
 No inference-source, BN or production-default changes. Next proposed target is
 the exact hybrid's real caller/scaling; no new kernel is launched here. The
 completed execution-boundary monitor is retired after publication.
+
+## Exact eight-device inference v1: 2026-09-01
+
+[Terminal report](../../test_results/kaggle_inference_8device_v1/report.md)
+records private kernel `trydotatwo/tpu-exact-inference-8-device` v1 from public
+source `d2159cb230ef77deeb5a4a2b6a42181a62dc027c`: JAX/jaxlib0.10.2,
+libtpu0.0.42.1 and eight real TPU v5 lite devices in one process.
+
+- Prepacked FP32-bank Pallas BM2048 reaches17.413/17.921M states/s at fixed
+  local batch16,384, versus10.771/10.737M for original JAX:1.617/1.669x.
+  On the first one-device16K prefix it reaches2.459/2.454M states/s and is
+  elementwise exact.
+- Promotion is rejected.  At global batch131,072 it differs in12 legal and55
+  stress Q values; stress changes one argmin.  No32K confirmation or profiles
+  run after that frozen gate failure.
+- Tiled JAX, runtime-bank Pallas and all successful FP32 prepacked tile sizes
+  share the same candidate output hash.  Typed JAX exactly matches original.
+  First-Dense HLO layouts/emitter/window configuration also match between typed
+  and tiled JAX, so attribution requires addressable intermediate evidence.
+- The old one-device screen did not contain global witness rows29,807,50,224
+  or29,369.  The result therefore does not yet prove an eight-core cause.
+- BF16 physical banks fail all12 compile attempts because Mosaic does not
+  implement the observed different-bitwidth dynamic gather.  FP32 banks compile
+  after the same logical BF16 rounding.
+- Static temp estimates fall from about723.66MiB original to123.88MiB banked;
+  these values are not hardware counters.
+
+The next frozen execution bundle is documented in
+[Exact eight-TPU inference execution A/B](2026-09-01-inference-execution-ab.md)
+and published at source `88d6e42c4100578aa9478d3faf6b4f5d30adc01f`.
+It replays exact witness-owner shards on one device and compares input
+boundaries, split dispatch, direct sharded jit, pmap and independent one-core
+executables.  Inference only; BN/defaults and beam-search stages remain
+unchanged.

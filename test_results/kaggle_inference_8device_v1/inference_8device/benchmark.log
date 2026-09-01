@@ -1,0 +1,798 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788220184.777126      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: === 
+learning/45eac/tfrc/runtime/common_lib.cc:238
+{
+  "source_commit": "d2159cb230ef77deeb5a4a2b6a42181a62dc027c",
+  "runtime": {
+    "python": "3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]",
+    "platform": "Linux-6.6.153+-x86_64-with-glibc2.41",
+    "versions": {
+      "jax": "0.10.2",
+      "jaxlib": "0.10.2",
+      "libtpu": "0.0.42.1",
+      "numpy": "2.5.0",
+      "torch": "2.8.0+cpu"
+    },
+    "devices": [
+      {
+        "id": 0,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 1,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 2,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 3,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 4,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 5,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 6,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      },
+      {
+        "id": 7,
+        "kind": "TPU v5 lite",
+        "platform": "tpu",
+        "process_index": 0
+      }
+    ],
+    "process_count": 1,
+    "process_index": 0,
+    "local_device_count": 8,
+    "active_device_count": 8,
+    "default_matmul_precision": null,
+    "x64_enabled": false,
+    "experiment_active_device_counts": [
+      1,
+      8
+    ]
+  },
+  "checkpoint_sha256": "2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2",
+  "original_source_sha256": "6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e",
+  "puzzle_sha256": "01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0",
+  "input_sha256": {
+    "legal_scrambles": "340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743",
+    "categorical_stress": "8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955"
+  },
+  "input_prefix_32768_sha256": {
+    "legal_scrambles": "b7ff6754f3cfbd0c531d14e00b7f516adba8f412c3ee9d93ede5464cc0730fc1",
+    "categorical_stress": "610be0697c4a087f2a66dbcd5622bfdcc13e0fac9efc0106a3d62fa28989ea5d"
+  },
+  "seeds": {
+    "legal": 42,
+    "stress": 43
+  },
+  "input_method": "independent fixed local shards from legal random walks and categorical stress; not beam frontiers"
+}
+START screen devices=1 batch=16384 corpus=legal_scrambles id=original_runtime_jax
+START screen devices=1 batch=16384 corpus=legal_scrambles id=typed_runtime_jax
+START screen devices=1 batch=16384 corpus=legal_scrambles id=jax_tiled
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_runtime_bm128
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm64_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x64xi32>) -> vector<128x64xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x64xi32>) -> vector<128x64xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm64_float32
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm128_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %47 = "tpu.dynamic_gather"(%46, %44) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x128xi32>) -> vector<128x128xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %47 = "tpu.dynamic_gather"(%46, %44) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x128xi32>) -> vector<128x128xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm128_float32
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm256_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x256xi32>) -> vector<128x256xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x256xi32>) -> vector<128x256xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm256_float32
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm512_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x512xi32>) -> vector<128x512xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x512xi32>) -> vector<128x512xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm512_float32
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm1024_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x1024xi32>) -> vector<128x1024xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x1024xi32>) -> vector<128x1024xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm1024_float32
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm2048_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x2048xi32>) -> vector<128x2048xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x2048xi32>) -> vector<128x2048xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm2048_float32
+START screen devices=1 batch=16384 corpus=categorical_stress id=original_runtime_jax
+START screen devices=1 batch=16384 corpus=categorical_stress id=typed_runtime_jax
+START screen devices=1 batch=16384 corpus=categorical_stress id=jax_tiled
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_runtime_bm128
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm64_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x64xi32>) -> vector<128x64xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x64xi32>) -> vector<128x64xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm64_float32
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm128_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %47 = "tpu.dynamic_gather"(%46, %44) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x128xi32>) -> vector<128x128xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %47 = "tpu.dynamic_gather"(%46, %44) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x128xi32>) -> vector<128x128xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm128_float32
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm256_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x256xi32>) -> vector<128x256xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x256xi32>) -> vector<128x256xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm256_float32
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm512_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x512xi32>) -> vector<128x512xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x512xi32>) -> vector<128x512xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm512_float32
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm1024_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x1024xi32>) -> vector<128x1024xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x1024xi32>) -> vector<128x1024xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm1024_float32
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm2048_bfloat16
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+at location: loc("gather:"("gather/gather"))
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x2048xi32>) -> vector<128x2048xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 413, in execute
+    output, compiled, compilation = _compiled_call(
+                                    ^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py", line 173, in _compiled_call
+    compiled = lowered.compile()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths
+
+The MLIR operation involved:
+  %48 = "tpu.dynamic_gather"(%47, %45) <{dimensions = array<i32: 1>}> : (vector<128x128xbf16>, vector<128x2048xi32>) -> vector<128x2048xbf16>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm2048_float32
+START target devices=8 batch=16384 corpus=legal_scrambles id=original_runtime_jax
+START target devices=8 batch=16384 corpus=legal_scrambles id=typed_runtime_jax
+START target devices=8 batch=16384 corpus=legal_scrambles id=jax_tiled
+START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_runtime_bm128
+START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm64_float32
+START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm128_float32
+START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm256_float32
+START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm512_float32
+START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm1024_float32
+START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm2048_float32
+START target devices=8 batch=16384 corpus=categorical_stress id=original_runtime_jax
+START target devices=8 batch=16384 corpus=categorical_stress id=typed_runtime_jax
+START target devices=8 batch=16384 corpus=categorical_stress id=jax_tiled
+START target devices=8 batch=16384 corpus=categorical_stress id=pallas_runtime_bm128
+START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm64_float32
+START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm128_float32
+START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm256_float32
+START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm512_float32
+START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm1024_float32
+START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm2048_float32
+RESULT {"winner_id": null, "target_achieved": false, "per_corpus_speedup": {}}
+RESULT_PATH /kaggle/working/inference_8device/stream1_inference_8device.json

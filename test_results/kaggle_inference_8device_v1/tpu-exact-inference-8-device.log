@@ -1,0 +1,808 @@
+[{"stream_name":"stderr","time":16.580089112,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":16.689117134,"data":"\n"}
+,{"stream_name":"stderr","time":16.689140744,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":16.689145424,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":16.833805337,"data":"Cloning into '/tmp/TPUBeamSearch'...\n"}
+,{"stream_name":"stderr","time":25.655064094,"data":"HEAD is now at d2159cb Add exact prepacked Pallas 8-device inference sweep\n"}
+,{"stream_name":"stdout","time":25.658520034,"data":"SOURCE_COMMIT=d2159cb230ef77deeb5a4a2b6a42181a62dc027c\n"}
+,{"stream_name":"stdout","time":29.652346939,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":29.652400868,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":34.907741727,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":34.910368027,"data":"E0000 00:00:1788220184.777126      40 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":34.910379987,"data":"=== Source Location Trace: === \n"}
+,{"stream_name":"stdout","time":34.910384647,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":59.676641943999996,"data":"{\n"}
+,{"stream_name":"stdout","time":59.676674614,"data":"  \"source_commit\": \"d2159cb230ef77deeb5a4a2b6a42181a62dc027c\",\n"}
+,{"stream_name":"stdout","time":59.676680974,"data":"  \"runtime\": {\n"}
+,{"stream_name":"stdout","time":59.676685444,"data":"    \"python\": \"3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]\",\n"}
+,{"stream_name":"stdout","time":59.676690034,"data":"    \"platform\": \"Linux-6.6.153+-x86_64-with-glibc2.41\",\n"}
+,{"stream_name":"stdout","time":59.676694354,"data":"    \"versions\": {\n"}
+,{"stream_name":"stdout","time":59.676698464,"data":"      \"jax\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":59.676702454,"data":"      \"jaxlib\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":59.676706574,"data":"      \"libtpu\": \"0.0.42.1\",\n"}
+,{"stream_name":"stdout","time":59.676710584,"data":"      \"numpy\": \"2.5.0\",\n"}
+,{"stream_name":"stdout","time":59.676714854,"data":"      \"torch\": \"2.8.0+cpu\"\n"}
+,{"stream_name":"stdout","time":59.676718864,"data":"    },\n"}
+,{"stream_name":"stdout","time":59.676723144,"data":"    \"devices\": [\n"}
+,{"stream_name":"stdout","time":59.676727124,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676731154,"data":"        \"id\": 0,\n"}
+,{"stream_name":"stdout","time":59.676735124,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676739584,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676743714,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676763654,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.676766974,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676769844,"data":"        \"id\": 1,\n"}
+,{"stream_name":"stdout","time":59.676776344,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676779664,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676782504,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676785234,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.676787854,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676790574,"data":"        \"id\": 2,\n"}
+,{"stream_name":"stdout","time":59.676793714,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676796384,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676799074,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676801774,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.676804604,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676807224,"data":"        \"id\": 3,\n"}
+,{"stream_name":"stdout","time":59.676809894,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676812784,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676815844000004,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676818504,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.676821704,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676824394,"data":"        \"id\": 4,\n"}
+,{"stream_name":"stdout","time":59.676828514,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676832284,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676834984,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676837834,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.676881094,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676888714,"data":"        \"id\": 5,\n"}
+,{"stream_name":"stdout","time":59.676892044,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676894554,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676896864,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676899184,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.676901374,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676903484,"data":"        \"id\": 6,\n"}
+,{"stream_name":"stdout","time":59.676905694,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676907974,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676910174,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676913354,"data":"      },\n"}
+,{"stream_name":"stdout","time":59.676915504,"data":"      {\n"}
+,{"stream_name":"stdout","time":59.676917594,"data":"        \"id\": 7,\n"}
+,{"stream_name":"stdout","time":59.676920304,"data":"        \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":59.676922514,"data":"        \"platform\": \"tpu\",\n"}
+,{"stream_name":"stdout","time":59.676924934,"data":"        \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":59.676927594,"data":"      }\n"}
+,{"stream_name":"stdout","time":59.676929714,"data":"    ],\n"}
+,{"stream_name":"stdout","time":59.676988794,"data":"    \"process_count\": 1,\n"}
+,{"stream_name":"stdout","time":59.677006264,"data":"    \"process_index\": 0,\n"}
+,{"stream_name":"stdout","time":59.677009714,"data":"    \"local_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":59.677012154,"data":"    \"active_device_count\": 8,\n"}
+,{"stream_name":"stdout","time":59.677014364,"data":"    \"default_matmul_precision\": null,\n"}
+,{"stream_name":"stdout","time":59.677017084,"data":"    \"x64_enabled\": false,\n"}
+,{"stream_name":"stdout","time":59.677019504,"data":"    \"experiment_active_device_counts\": [\n"}
+,{"stream_name":"stdout","time":59.677021874,"data":"      1,\n"}
+,{"stream_name":"stdout","time":59.677024134,"data":"      8\n"}
+,{"stream_name":"stdout","time":59.677026544,"data":"    ]\n"}
+,{"stream_name":"stdout","time":59.677029974,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.677032184,"data":"  \"checkpoint_sha256\": \"2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2\",\n"}
+,{"stream_name":"stdout","time":59.677034604,"data":"  \"original_source_sha256\": \"6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e\",\n"}
+,{"stream_name":"stdout","time":59.677036904,"data":"  \"puzzle_sha256\": \"01c616cb943d574d1b63109f350b30c7710656e53e2a5eaebb5d50ed0e495ff0\",\n"}
+,{"stream_name":"stdout","time":59.677039174,"data":"  \"input_sha256\": {\n"}
+,{"stream_name":"stdout","time":59.677041344,"data":"    \"legal_scrambles\": \"340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743\",\n"}
+,{"stream_name":"stdout","time":59.677043594,"data":"    \"categorical_stress\": \"8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955\"\n"}
+,{"stream_name":"stdout","time":59.677046254,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.677048414,"data":"  \"input_prefix_32768_sha256\": {\n"}
+,{"stream_name":"stdout","time":59.677050674,"data":"    \"legal_scrambles\": \"b7ff6754f3cfbd0c531d14e00b7f516adba8f412c3ee9d93ede5464cc0730fc1\",\n"}
+,{"stream_name":"stdout","time":59.677053454,"data":"    \"categorical_stress\": \"610be0697c4a087f2a66dbcd5622bfdcc13e0fac9efc0106a3d62fa28989ea5d\"\n"}
+,{"stream_name":"stdout","time":59.677056004,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.677069934,"data":"  \"seeds\": {\n"}
+,{"stream_name":"stdout","time":59.677072404,"data":"    \"legal\": 42,\n"}
+,{"stream_name":"stdout","time":59.677075664,"data":"    \"stress\": 43\n"}
+,{"stream_name":"stdout","time":59.677082424,"data":"  },\n"}
+,{"stream_name":"stdout","time":59.677103434,"data":"  \"input_method\": \"independent fixed local shards from legal random walks and categorical stress; not beam frontiers\"\n"}
+,{"stream_name":"stdout","time":59.677109474,"data":"}\n"}
+,{"stream_name":"stdout","time":60.30313944,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=original_runtime_jax\n"}
+,{"stream_name":"stdout","time":66.616086094,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=typed_runtime_jax\n"}
+,{"stream_name":"stdout","time":72.757560166,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=jax_tiled\n"}
+,{"stream_name":"stdout","time":74.770613676,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_runtime_bm128\n"}
+,{"stream_name":"stdout","time":76.973333359,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm64_bfloat16\n"}
+,{"stream_name":"stdout","time":78.546075775,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":78.546107784,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":78.546113475,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":78.546126355,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546129475,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":78.546132655,"data":"\n"}
+,{"stream_name":"stdout","time":78.546135435,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":78.546138375,"data":"\n"}
+,{"stream_name":"stdout","time":78.546141095,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":78.546143895,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x64xi32\u003e) -\u003e vector\u003c128x64xbf16\u003e\n"}
+,{"stream_name":"stdout","time":78.546147824,"data":"\n"}
+,{"stream_name":"stdout","time":78.546150595,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":78.546156464,"data":"\n"}
+,{"stream_name":"stdout","time":78.546159255,"data":"\n"}
+,{"stream_name":"stdout","time":78.546161904,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":78.546164704,"data":"\n"}
+,{"stream_name":"stdout","time":78.546189435,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":78.546192224,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":78.546195115,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":78.546197835,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546200555,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":78.546203444,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":78.546206284,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546209704,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":78.546212644,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":78.546215544,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546229855,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":78.546232964,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":78.546243255,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546252815,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":78.546259335,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":78.546286884,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546292835,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":78.546296835,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":78.546302735,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546314664,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":78.546319355,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":78.546322955,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546326404,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":78.546359824,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":78.546368575,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546372535,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":78.546375735,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":78.546381764,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":78.546384624,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":78.546391695,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":78.546394604,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":78.546397904,"data":"\n"}
+,{"stream_name":"stdout","time":78.546424295,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":78.546430724,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x64xi32\u003e) -\u003e vector\u003c128x64xbf16\u003e\n"}
+,{"stream_name":"stdout","time":78.546434644,"data":"\n"}
+,{"stream_name":"stdout","time":78.546443415,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":78.546446304,"data":"\n"}
+,{"stream_name":"stdout","time":78.546449064,"data":"\n"}
+,{"stream_name":"stdout","time":78.548071075,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm64_float32\n"}
+,{"stream_name":"stdout","time":80.585023965,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm128_bfloat16\n"}
+,{"stream_name":"stdout","time":82.255259072,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":82.255287452,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":82.255293442,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":82.255297812,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255301962,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":82.255306072,"data":"\n"}
+,{"stream_name":"stdout","time":82.255310062,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":82.255314352,"data":"\n"}
+,{"stream_name":"stdout","time":82.255401832,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":82.255409462,"data":"  %47 = \"tpu.dynamic_gather\"(%46, %44) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x128xi32\u003e) -\u003e vector\u003c128x128xbf16\u003e\n"}
+,{"stream_name":"stdout","time":82.255423272,"data":"\n"}
+,{"stream_name":"stdout","time":82.255426342,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":82.255429362,"data":"\n"}
+,{"stream_name":"stdout","time":82.255431982,"data":"\n"}
+,{"stream_name":"stdout","time":82.255434742,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":82.255437482,"data":"\n"}
+,{"stream_name":"stdout","time":82.255440152,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":82.255451152,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":82.255454372,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":82.255457152,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255459952,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":82.255463252,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":82.255466322,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255469382,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":82.255472352,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":82.255475122,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255509782,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":82.255526612,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":82.255533132,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255537912,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":82.255542892,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":82.255564072,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255568782,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":82.255574042,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":82.255578542,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255582952,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":82.255587902,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":82.255592592,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255601522,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":82.255606382,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":82.255610972,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255615242,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":82.255693592,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":82.255698912,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":82.255703582,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":82.255708512,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":82.255712822,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":82.255717342,"data":"\n"}
+,{"stream_name":"stdout","time":82.255721482,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":82.255725982,"data":"  %47 = \"tpu.dynamic_gather\"(%46, %44) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x128xi32\u003e) -\u003e vector\u003c128x128xbf16\u003e\n"}
+,{"stream_name":"stdout","time":82.255733312,"data":"\n"}
+,{"stream_name":"stdout","time":82.255737842,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":82.255744422,"data":"\n"}
+,{"stream_name":"stdout","time":82.255748622,"data":"\n"}
+,{"stream_name":"stdout","time":82.257306462,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm128_float32\n"}
+,{"stream_name":"stdout","time":84.289341753,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm256_bfloat16\n"}
+,{"stream_name":"stdout","time":85.927340359,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":85.927366599,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":85.927372599,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":85.927376909,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927381149,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":85.927385859,"data":"\n"}
+,{"stream_name":"stdout","time":85.927390069,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":85.927394239,"data":"\n"}
+,{"stream_name":"stdout","time":85.927398049,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":85.927401999,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x256xi32\u003e) -\u003e vector\u003c128x256xbf16\u003e\n"}
+,{"stream_name":"stdout","time":85.927407279,"data":"\n"}
+,{"stream_name":"stdout","time":85.927411369,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":85.927415649,"data":"\n"}
+,{"stream_name":"stdout","time":85.927419599,"data":"\n"}
+,{"stream_name":"stdout","time":85.927423439,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":85.927427829,"data":"\n"}
+,{"stream_name":"stdout","time":85.927431629,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":85.927435559,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":85.927439699,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":85.927461429,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927472129,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":85.927475499,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":85.927478299,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927481129,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":85.927483969,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":85.927486749,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927489459,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":85.927492279,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":85.927494979,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927497699,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":85.927501149,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":85.927504009,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927506669,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":85.927509499,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":85.927515469,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927518329,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":85.927521239,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":85.927524429,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927529769,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":85.927533239,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":85.927536419,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927618589,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":85.927623599,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":85.927626329,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":85.927629019,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":85.927631899,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":85.927634679,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":85.927637609,"data":"\n"}
+,{"stream_name":"stdout","time":85.927640249,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":85.927647909,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x256xi32\u003e) -\u003e vector\u003c128x256xbf16\u003e\n"}
+,{"stream_name":"stdout","time":85.927651679,"data":"\n"}
+,{"stream_name":"stdout","time":85.927661769,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":85.927664739,"data":"\n"}
+,{"stream_name":"stdout","time":85.927667289,"data":"\n"}
+,{"stream_name":"stdout","time":85.929593189,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm256_float32\n"}
+,{"stream_name":"stdout","time":88.01845802,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm512_bfloat16\n"}
+,{"stream_name":"stdout","time":89.570929896,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":89.570963256,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":89.570969216,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":89.570973696,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.570977886,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":89.570982206,"data":"\n"}
+,{"stream_name":"stdout","time":89.570986306,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":89.570990626,"data":"\n"}
+,{"stream_name":"stdout","time":89.570994466,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":89.570998476,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x512xi32\u003e) -\u003e vector\u003c128x512xbf16\u003e\n"}
+,{"stream_name":"stdout","time":89.571005486,"data":"\n"}
+,{"stream_name":"stdout","time":89.571009516,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":89.571013686,"data":"\n"}
+,{"stream_name":"stdout","time":89.571017486,"data":"\n"}
+,{"stream_name":"stdout","time":89.571021326,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":89.571025496,"data":"\n"}
+,{"stream_name":"stdout","time":89.571029976,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":89.571034256,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":89.571038566,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":89.571043156,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571047166,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":89.571051266,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":89.571055196,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571059146,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":89.571063426,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":89.571074126,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571096786,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":89.571100196,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":89.571103036,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571105706,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":89.571108646,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":89.571111856,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571115176,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":89.571118176,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":89.571120986,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571123726,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":89.571126166,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":89.571128276,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571130436,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":89.571132706,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":89.571134996,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571137546,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":89.571139946,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":89.571145716,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":89.571148186,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":89.571150456,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":89.571152636,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":89.571154966,"data":"\n"}
+,{"stream_name":"stdout","time":89.571157046,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":89.571159336,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x512xi32\u003e) -\u003e vector\u003c128x512xbf16\u003e\n"}
+,{"stream_name":"stdout","time":89.571162116,"data":"\n"}
+,{"stream_name":"stdout","time":89.571164406,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":89.571186616,"data":"\n"}
+,{"stream_name":"stdout","time":89.571188776,"data":"\n"}
+,{"stream_name":"stdout","time":89.573265786,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm512_float32\n"}
+,{"stream_name":"stdout","time":91.509626155,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm1024_bfloat16\n"}
+,{"stream_name":"stdout","time":93.139763652,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":93.139798252,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":93.139805772,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":93.139811962,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.139818272,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":93.139824192,"data":"\n"}
+,{"stream_name":"stdout","time":93.139829552,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":93.139835222,"data":"\n"}
+,{"stream_name":"stdout","time":93.139840152,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":93.139845782,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x1024xi32\u003e) -\u003e vector\u003c128x1024xbf16\u003e\n"}
+,{"stream_name":"stdout","time":93.139852322,"data":"\n"}
+,{"stream_name":"stdout","time":93.139857782,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":93.139863502,"data":"\n"}
+,{"stream_name":"stdout","time":93.139868652,"data":"\n"}
+,{"stream_name":"stdout","time":93.139879552,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":93.139885262,"data":"\n"}
+,{"stream_name":"stdout","time":93.139890762,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":93.139896652,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":93.139902722,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":93.139908192,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.139915072,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":93.139920942,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":93.139926682,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.139931962,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":93.139937462,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":93.139942872,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.139948532,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":93.139954142,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":93.139959882,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.139964982,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":93.139971842,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":93.139977142,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.139982722,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":93.139998122,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":93.140003022,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.140006992,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":93.140010992,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":93.140014762,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.140018852,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":93.140022972,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":93.140028312,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.140033172,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":93.140080952,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":93.140086712,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":93.140090552,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":93.140094102,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":93.140097622,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":93.140101212,"data":"\n"}
+,{"stream_name":"stdout","time":93.140104522,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":93.140108532,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x1024xi32\u003e) -\u003e vector\u003c128x1024xbf16\u003e\n"}
+,{"stream_name":"stdout","time":93.140112562,"data":"\n"}
+,{"stream_name":"stdout","time":93.140115932,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":93.140119432,"data":"\n"}
+,{"stream_name":"stdout","time":93.140122752,"data":"\n"}
+,{"stream_name":"stdout","time":93.142697692,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm1024_float32\n"}
+,{"stream_name":"stdout","time":95.214012883,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm2048_bfloat16\n"}
+,{"stream_name":"stdout","time":96.90576346,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":96.90579772,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":96.90580371,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":96.9058082,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90581256,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":96.9058171,"data":"\n"}
+,{"stream_name":"stdout","time":96.90582121,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":96.90582555,"data":"\n"}
+,{"stream_name":"stdout","time":96.90584,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":96.90584326,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x2048xi32\u003e) -\u003e vector\u003c128x2048xbf16\u003e\n"}
+,{"stream_name":"stdout","time":96.90584736,"data":"\n"}
+,{"stream_name":"stdout","time":96.90585055,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":96.90585349,"data":"\n"}
+,{"stream_name":"stdout","time":96.90585611,"data":"\n"}
+,{"stream_name":"stdout","time":96.90585949,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":96.90586235,"data":"\n"}
+,{"stream_name":"stdout","time":96.90586495,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":96.90586771,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":96.90587073,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":96.90587361,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90587753,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":96.9058805,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":96.90588317,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90588685,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":96.90589063,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":96.90590237,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90590571,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":96.90590923,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":96.90591192,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90591502,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":96.90591843,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":96.90592109,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90592379,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":96.90592661,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":96.90592927,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90593201,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":96.90593488,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":96.90593752,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90594017,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":96.90594639,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":96.9059494,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.9059524,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":96.90595535,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":96.90595861,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":96.90596131,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":96.90596416,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":96.90596692,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":96.90596984,"data":"\n"}
+,{"stream_name":"stdout","time":96.90597245,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":96.90597518,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x2048xi32\u003e) -\u003e vector\u003c128x2048xbf16\u003e\n"}
+,{"stream_name":"stdout","time":96.90597862,"data":"\n"}
+,{"stream_name":"stdout","time":96.90598131,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":96.90598646,"data":"\n"}
+,{"stream_name":"stdout","time":96.90598905,"data":"\n"}
+,{"stream_name":"stdout","time":96.90848081,"data":"START screen devices=1 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm2048_float32\n"}
+,{"stream_name":"stdout","time":100.501677217,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=original_runtime_jax\n"}
+,{"stream_name":"stdout","time":106.729903229,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=typed_runtime_jax\n"}
+,{"stream_name":"stdout","time":112.922942222,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=jax_tiled\n"}
+,{"stream_name":"stdout","time":115.108423864,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_runtime_bm128\n"}
+,{"stream_name":"stdout","time":117.245949396,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm64_bfloat16\n"}
+,{"stream_name":"stdout","time":118.808824772,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":118.808845752,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":118.808850522,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":118.808854102,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.808857342,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":118.808860712,"data":"\n"}
+,{"stream_name":"stdout","time":118.808863822,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":118.808867112,"data":"\n"}
+,{"stream_name":"stdout","time":118.808870632,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":118.808874202,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x64xi32\u003e) -\u003e vector\u003c128x64xbf16\u003e\n"}
+,{"stream_name":"stdout","time":118.808886972,"data":"\n"}
+,{"stream_name":"stdout","time":118.808889512,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":118.808891822,"data":"\n"}
+,{"stream_name":"stdout","time":118.808893942,"data":"\n"}
+,{"stream_name":"stdout","time":118.808947222,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":118.808951772,"data":"\n"}
+,{"stream_name":"stdout","time":118.808953982,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":118.808956162,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":118.808958782,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":118.808961322,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.808963502,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":118.808965872,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":118.808968002,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.808970302,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":118.808972562,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":118.808974732,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.808976912,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":118.809021952,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":118.809030232,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.809034342,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":118.809037832,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":118.809040612,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.809043282,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":118.809046182,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":118.809048882,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.809051842,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":118.809054802,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":118.809112992,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.809116572,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":118.809118932,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":118.809121322,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.809123502,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":118.809129722,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":118.809131942,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.809134352,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":118.809136982,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":118.809139172,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":118.809141472,"data":"\n"}
+,{"stream_name":"stdout","time":118.809143532,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":118.809145762,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x64xi32\u003e) -\u003e vector\u003c128x64xbf16\u003e\n"}
+,{"stream_name":"stdout","time":118.809148602,"data":"\n"}
+,{"stream_name":"stdout","time":118.809151622,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":118.809153892,"data":"\n"}
+,{"stream_name":"stdout","time":118.809156012,"data":"\n"}
+,{"stream_name":"stdout","time":118.813462322,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm64_float32\n"}
+,{"stream_name":"stdout","time":120.812395592,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm128_bfloat16\n"}
+,{"stream_name":"stdout","time":122.410102198,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":122.410119588,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":122.410123698,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":122.410126248,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410128958,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":122.410131498,"data":"\n"}
+,{"stream_name":"stdout","time":122.410133998,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":122.410136538,"data":"\n"}
+,{"stream_name":"stdout","time":122.410138788,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":122.410141278,"data":"  %47 = \"tpu.dynamic_gather\"(%46, %44) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x128xi32\u003e) -\u003e vector\u003c128x128xbf16\u003e\n"}
+,{"stream_name":"stdout","time":122.410145128,"data":"\n"}
+,{"stream_name":"stdout","time":122.410149868,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":122.410152458,"data":"\n"}
+,{"stream_name":"stdout","time":122.410154718,"data":"\n"}
+,{"stream_name":"stdout","time":122.410196238,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":122.410205988,"data":"\n"}
+,{"stream_name":"stdout","time":122.410209328,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":122.410212188,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":122.410214728,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":122.410225448,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410228128,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":122.410230758,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":122.410233578,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410267848,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":122.410276328,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":122.410279858,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410282358,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":122.410284988,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":122.410287458,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410289818,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":122.410292478,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":122.410295028,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410307248,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":122.410315388,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":122.410318978,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410321478,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":122.410324048,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":122.410327368,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410329738,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":122.410332248,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":122.410334628,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410386598,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":122.410391688,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":122.410394548,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":122.410397318,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":122.410400258,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":122.410403138,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":122.410406258,"data":"\n"}
+,{"stream_name":"stdout","time":122.410409028,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":122.410412548,"data":"  %47 = \"tpu.dynamic_gather\"(%46, %44) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x128xi32\u003e) -\u003e vector\u003c128x128xbf16\u003e\n"}
+,{"stream_name":"stdout","time":122.410424338,"data":"\n"}
+,{"stream_name":"stdout","time":122.410430598,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":122.410433528,"data":"\n"}
+,{"stream_name":"stdout","time":122.410436178,"data":"\n"}
+,{"stream_name":"stdout","time":122.415338938,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm128_float32\n"}
+,{"stream_name":"stdout","time":124.443346229,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm256_bfloat16\n"}
+,{"stream_name":"stdout","time":125.983224944,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":125.983245284,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":125.983250304,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":125.983253864,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983257284,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":125.983260934,"data":"\n"}
+,{"stream_name":"stdout","time":125.983264054,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":125.983267354,"data":"\n"}
+,{"stream_name":"stdout","time":125.983270634,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":125.983273944,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x256xi32\u003e) -\u003e vector\u003c128x256xbf16\u003e\n"}
+,{"stream_name":"stdout","time":125.983279304,"data":"\n"}
+,{"stream_name":"stdout","time":125.983291524,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":125.983296914,"data":"\n"}
+,{"stream_name":"stdout","time":125.983301244,"data":"\n"}
+,{"stream_name":"stdout","time":125.983304334,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":125.983307544,"data":"\n"}
+,{"stream_name":"stdout","time":125.983316594,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":125.983319844,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":125.983323164,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":125.983326874,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983330234,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":125.983335074,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":125.983338724,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983343474,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":125.983346844,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":125.983350434,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983365724,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":125.983384934,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":125.983403694,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983407864,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":125.983411494,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":125.983420404,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983423394,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":125.983426344,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":125.983432834,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983436144,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":125.983439274,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":125.983443014,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983468074,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":125.983471374,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":125.983474084,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983477114,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":125.983495314,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":125.983503044,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":125.983507054,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":125.983512654,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":125.983519184,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":125.983522534,"data":"\n"}
+,{"stream_name":"stdout","time":125.983567274,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":125.983592404,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x256xi32\u003e) -\u003e vector\u003c128x256xbf16\u003e\n"}
+,{"stream_name":"stdout","time":125.983600824,"data":"\n"}
+,{"stream_name":"stdout","time":125.983605694,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":125.983610364,"data":"\n"}
+,{"stream_name":"stdout","time":125.983614424,"data":"\n"}
+,{"stream_name":"stdout","time":125.988070714,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm256_float32\n"}
+,{"stream_name":"stdout","time":127.920428034,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm512_bfloat16\n"}
+,{"stream_name":"stdout","time":129.51632895,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":129.51635758,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":129.51636357,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":129.51636788,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51637223,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":129.51637656,"data":"\n"}
+,{"stream_name":"stdout","time":129.51638042,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":129.51638451,"data":"\n"}
+,{"stream_name":"stdout","time":129.51638851,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":129.51639259,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x512xi32\u003e) -\u003e vector\u003c128x512xbf16\u003e\n"}
+,{"stream_name":"stdout","time":129.51640013,"data":"\n"}
+,{"stream_name":"stdout","time":129.51640429,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":129.51641319,"data":"\n"}
+,{"stream_name":"stdout","time":129.51641739,"data":"\n"}
+,{"stream_name":"stdout","time":129.51642141,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":129.5164257,"data":"\n"}
+,{"stream_name":"stdout","time":129.51643002,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":129.51643446,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":129.51643877,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":129.51644329,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.5164476,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":129.51645212,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":129.51645653,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51646043,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":129.51646447,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":129.51646845,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51647255,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":129.5164802,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":129.51648464,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51648871,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":129.51649281,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":129.51649698,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51650144,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":129.51651548,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":129.51651908,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51652218,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":129.51653528,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":129.51653845,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51654107,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":129.51654394,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":129.51654674,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51654951,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":129.51655224,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":129.51655488,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":129.51655771,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":129.51656056,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":129.51656582,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":129.51656912,"data":"\n"}
+,{"stream_name":"stdout","time":129.51657172,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":129.51657449,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x512xi32\u003e) -\u003e vector\u003c128x512xbf16\u003e\n"}
+,{"stream_name":"stdout","time":129.51657832,"data":"\n"}
+,{"stream_name":"stdout","time":129.51658275,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":129.51658556,"data":"\n"}
+,{"stream_name":"stdout","time":129.51666116,"data":"\n"}
+,{"stream_name":"stdout","time":129.52181055,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm512_float32\n"}
+,{"stream_name":"stdout","time":131.48638264,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm1024_bfloat16\n"}
+,{"stream_name":"stdout","time":133.064043556,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":133.064072866,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":133.064078796,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":133.064083256,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064087816,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":133.064092236,"data":"\n"}
+,{"stream_name":"stdout","time":133.064096116,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":133.064110296,"data":"\n"}
+,{"stream_name":"stdout","time":133.064113526,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":133.064116496,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x1024xi32\u003e) -\u003e vector\u003c128x1024xbf16\u003e\n"}
+,{"stream_name":"stdout","time":133.064120736,"data":"\n"}
+,{"stream_name":"stdout","time":133.064123466,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":133.064126536,"data":"\n"}
+,{"stream_name":"stdout","time":133.064129466,"data":"\n"}
+,{"stream_name":"stdout","time":133.064132056,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":133.064134896,"data":"\n"}
+,{"stream_name":"stdout","time":133.064137566,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":133.064140866,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":133.064152936,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":133.064156436,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064159426,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":133.064162646,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":133.064200476,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064205996,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":133.064209076,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":133.064211906,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064214606,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":133.064217966,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":133.064221056,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064223746,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":133.064226576,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":133.064229246,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064231976,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":133.064234836,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":133.064240366,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064243116,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":133.064245896,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":133.064248536,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064251226,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":133.064289466,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":133.064292866,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064295586,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":133.064298416,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":133.064301056,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":133.064303726,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":133.064306556,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":133.064309296,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":133.064312266,"data":"\n"}
+,{"stream_name":"stdout","time":133.064314926,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":133.064317666,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x1024xi32\u003e) -\u003e vector\u003c128x1024xbf16\u003e\n"}
+,{"stream_name":"stdout","time":133.064321156,"data":"\n"}
+,{"stream_name":"stdout","time":133.064325296,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":133.064328326,"data":"\n"}
+,{"stream_name":"stdout","time":133.064330876,"data":"\n"}
+,{"stream_name":"stdout","time":133.069152616,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm1024_float32\n"}
+,{"stream_name":"stdout","time":135.047393006,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm2048_bfloat16\n"}
+,{"stream_name":"stdout","time":136.586758762,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":136.586787922,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":136.586793022,"data":"    return backend.compile_and_load(\n"}
+,{"stream_name":"stdout","time":136.586796551,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586800211,"data":"jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":136.586803691,"data":"\n"}
+,{"stream_name":"stdout","time":136.586806751,"data":"at location: loc(\"gather:\"(\"gather/gather\"))\n"}
+,{"stream_name":"stdout","time":136.586810202,"data":"\n"}
+,{"stream_name":"stdout","time":136.586813602,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":136.586816902,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x2048xi32\u003e) -\u003e vector\u003c128x2048xbf16\u003e\n"}
+,{"stream_name":"stdout","time":136.586821791,"data":"\n"}
+,{"stream_name":"stdout","time":136.586825111,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":136.586828751,"data":"\n"}
+,{"stream_name":"stdout","time":136.586831822,"data":"\n"}
+,{"stream_name":"stdout","time":136.586834871,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":136.586846642,"data":"\n"}
+,{"stream_name":"stdout","time":136.586849062,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":136.586851511,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 413, in execute\n"}
+,{"stream_name":"stdout","time":136.586853851,"data":"    output, compiled, compilation = _compiled_call(\n"}
+,{"stream_name":"stdout","time":136.586856311,"data":"                                    ^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586858991,"data":"  File \"/tmp/TPUBeamSearch/benchmarks/stream1_inference_8device.py\", line 173, in _compiled_call\n"}
+,{"stream_name":"stdout","time":136.586861311,"data":"    compiled = lowered.compile()\n"}
+,{"stream_name":"stdout","time":136.586863671,"data":"               ^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586865862,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n"}
+,{"stream_name":"stdout","time":136.586868162,"data":"    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n"}
+,{"stream_name":"stdout","time":136.586876171,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586881462,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n"}
+,{"stream_name":"stdout","time":136.586883811,"data":"    executable = UnloadedMeshExecutable.from_hlo(\n"}
+,{"stream_name":"stdout","time":136.586886171,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586888342,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n"}
+,{"stream_name":"stdout","time":136.586891051,"data":"    xla_executable = _cached_compilation(\n"}
+,{"stream_name":"stdout","time":136.586893182,"data":"                     ^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586895342,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n"}
+,{"stream_name":"stdout","time":136.586897591,"data":"    xla_executable = compiler.compile_or_get_cached(\n"}
+,{"stream_name":"stdout","time":136.586899731,"data":"                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586901902,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n"}
+,{"stream_name":"stdout","time":136.586904631,"data":"    return _compile_and_write_cache(\n"}
+,{"stream_name":"stdout","time":136.586910042,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586912382,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n"}
+,{"stream_name":"stdout","time":136.586915531,"data":"    executable = backend_compile_and_load(\n"}
+,{"stream_name":"stdout","time":136.586918331,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586920642,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n"}
+,{"stream_name":"stdout","time":136.586922891,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":136.586925011,"data":"           ^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":136.586930831,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n"}
+,{"stream_name":"stdout","time":136.586933142,"data":"    raise handler_result from e\n"}
+,{"stream_name":"stdout","time":136.586942131,"data":"jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Not implemented: Gather indices and result have different bitwidths\n"}
+,{"stream_name":"stdout","time":136.586944862,"data":"\n"}
+,{"stream_name":"stdout","time":136.586989822,"data":"The MLIR operation involved:\n"}
+,{"stream_name":"stdout","time":136.586994062,"data":"  %48 = \"tpu.dynamic_gather\"(%47, %45) \u003c{dimensions = array\u003ci32: 1\u003e}\u003e : (vector\u003c128x128xbf16\u003e, vector\u003c128x2048xi32\u003e) -\u003e vector\u003c128x2048xbf16\u003e\n"}
+,{"stream_name":"stdout","time":136.586998482,"data":"\n"}
+,{"stream_name":"stdout","time":136.587000951,"data":"Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n"}
+,{"stream_name":"stdout","time":136.587004822,"data":"\n"}
+,{"stream_name":"stdout","time":136.587006922,"data":"\n"}
+,{"stream_name":"stdout","time":136.591971292,"data":"START screen devices=1 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm2048_float32\n"}
+,{"stream_name":"stdout","time":140.40479719,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=original_runtime_jax\n"}
+,{"stream_name":"stdout","time":146.969369587,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=typed_runtime_jax\n"}
+,{"stream_name":"stdout","time":153.377606172,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=jax_tiled\n"}
+,{"stream_name":"stdout","time":155.614121844,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_runtime_bm128\n"}
+,{"stream_name":"stdout","time":157.875067557,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm64_float32\n"}
+,{"stream_name":"stdout","time":160.053986709,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm128_float32\n"}
+,{"stream_name":"stdout","time":162.191459471,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm256_float32\n"}
+,{"stream_name":"stdout","time":164.283372162,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm512_float32\n"}
+,{"stream_name":"stdout","time":166.399123333,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm1024_float32\n"}
+,{"stream_name":"stdout","time":168.642759226,"data":"START target devices=8 batch=16384 corpus=legal_scrambles id=pallas_prepacked_bm2048_float32\n"}
+,{"stream_name":"stdout","time":172.578973673,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=original_runtime_jax\n"}
+,{"stream_name":"stdout","time":179.027379528,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=typed_runtime_jax\n"}
+,{"stream_name":"stdout","time":185.577671363,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=jax_tiled\n"}
+,{"stream_name":"stdout","time":187.679214275,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=pallas_runtime_bm128\n"}
+,{"stream_name":"stdout","time":189.979961346,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm64_float32\n"}
+,{"stream_name":"stdout","time":192.005569949,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm128_float32\n"}
+,{"stream_name":"stdout","time":194.092104341,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm256_float32\n"}
+,{"stream_name":"stdout","time":196.221614953,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm512_float32\n"}
+,{"stream_name":"stdout","time":198.409005334,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm1024_float32\n"}
+,{"stream_name":"stdout","time":200.550535296,"data":"START target devices=8 batch=16384 corpus=categorical_stress id=pallas_prepacked_bm2048_float32\n"}
+,{"stream_name":"stdout","time":204.51528248,"data":"RESULT {\"winner_id\": null, \"target_achieved\": false, \"per_corpus_speedup\": {}}\n"}
+,{"stream_name":"stdout","time":204.51531521,"data":"RESULT_PATH /kaggle/working/inference_8device/stream1_inference_8device.json\n"}
+,{"stream_name":"stderr","time":213.486864636,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":215.932988977,"data":"[NbConvertApp] Writing 283189 bytes to __results__.html\n"}
+]

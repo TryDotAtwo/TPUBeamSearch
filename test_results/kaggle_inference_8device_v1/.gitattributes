@@ -1,0 +1,2 @@
+*.log binary
+inference_8device/hlo/*.txt binary
