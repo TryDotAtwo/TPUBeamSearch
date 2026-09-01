@@ -51,43 +51,125 @@ def candidate_dense(x, w, b, config, *, interpret=False):
     return result
 
 
-def candidate_full(config, architecture, *, interpret=False):
+def candidate_encode(config, architecture, *, interpret=False):
+    """Build only the unchanged model's categorical embedding stage."""
     def call(states, weights):
         from tpu_beam_search.stream1_embedding_experimental import (
             flat_embedding, flat_embedding_prepacked,
         )
-        from tpu_beam_search.stream1_layernorm_experimental import experimental_layer_norm
-        epsilon = architecture.LAYER_NORM_EPSILON
+
         states = states[:, :architecture.STATE_LEN]
         encoding = config.get("embedding", "reference")
         if encoding == "reference":
-            encoded = weights.embedding.astype(jnp.bfloat16)[states.astype(jnp.int32)].reshape(states.shape[0], -1)
-        elif encoding == "pallas_banked_prepacked":
-            encoded = flat_embedding_prepacked(
+            return weights.embedding.astype(jnp.bfloat16)[
+                states.astype(jnp.int32)
+            ].reshape(states.shape[0], -1)
+        if encoding == "pallas_banked_prepacked":
+            return flat_embedding_prepacked(
                 states, weights.embedding, embed_dim=architecture.EMBED_DIM,
                 bm=config.get("bm", 128), interpret=interpret,
             )
-        else:
-            encoded = flat_embedding(states, weights.embedding, implementation=encoding,
-                                      bm=config.get("bm", 128), interpret=interpret)
-        input_dense = encoded @ weights.input.dense.weight + weights.input.dense.bias
-        hidden = jax.nn.relu(layer_norm_reference(input_dense, weights.input.normalization, epsilon=epsilon))
+        return flat_embedding(
+            states, weights.embedding, implementation=encoding,
+            bm=config.get("bm", 128), interpret=interpret,
+        )
 
-        def layer(x, params):
-            dense = candidate_dense(x, params.dense.weight, params.dense.bias, config, interpret=interpret)
-            if config.get("norm", "jax") == "jax":
-                return layer_norm_reference(dense, params.normalization, epsilon=epsilon)
-            if config["norm"] != "experimental":
-                raise ValueError("unknown LN implementation")
-            return experimental_layer_norm(dense, params.normalization.scale, params.normalization.bias,
-                epsilon=epsilon, bm=config.get("bm", 128), arithmetic=config["arithmetic"],
-                mask_mode=config["mask_mode"], interpret=interpret)
+    return call
 
-        for block in weights.residuals:
-            branch = jax.nn.relu(layer(hidden, block.first))
-            branch = layer(branch, block.second)
-            hidden = jax.nn.relu(hidden + branch)
-        return hidden @ weights.output.weight + weights.output.bias
+
+def _tail_values(encoded, weights, config, architecture, *, interpret=False,
+                 sample_rows=None):
+    from tpu_beam_search.stream1_layernorm_experimental import experimental_layer_norm
+
+    epsilon = architecture.LAYER_NORM_EPSILON
+    input_boundary = config.get("input_boundary", "none")
+    if input_boundary not in ("none", "pre", "post", "both"):
+        raise ValueError("unknown input Dense boundary")
+    nodes = {}
+    if sample_rows is not None:
+        nodes["encoded"] = encoded[sample_rows]
+    if input_boundary in ("pre", "both"):
+        encoded = jax.lax.optimization_barrier(encoded)
+    input_dense = encoded @ weights.input.dense.weight + weights.input.dense.bias
+    if input_boundary in ("post", "both"):
+        input_dense = jax.lax.optimization_barrier(input_dense)
+    if sample_rows is not None:
+        nodes["input_dense"] = input_dense[sample_rows]
+    hidden = jax.nn.relu(layer_norm_reference(
+        input_dense, weights.input.normalization, epsilon=epsilon
+    ))
+    if sample_rows is not None:
+        nodes["input_hidden"] = hidden[sample_rows]
+
+    def layer(x, params):
+        dense = candidate_dense(
+            x, params.dense.weight, params.dense.bias, config,
+            interpret=interpret,
+        )
+        if config.get("norm", "jax") == "jax":
+            return layer_norm_reference(
+                dense, params.normalization, epsilon=epsilon
+            )
+        if config["norm"] != "experimental":
+            raise ValueError("unknown LN implementation")
+        return experimental_layer_norm(
+            dense, params.normalization.scale, params.normalization.bias,
+            epsilon=epsilon, bm=config.get("bm", 128),
+            arithmetic=config["arithmetic"], mask_mode=config["mask_mode"],
+            interpret=interpret,
+        )
+
+    for index, block in enumerate(weights.residuals):
+        branch = jax.nn.relu(layer(hidden, block.first))
+        branch = layer(branch, block.second)
+        hidden = jax.nn.relu(hidden + branch)
+        if sample_rows is not None:
+            nodes[f"block_{index}"] = hidden[sample_rows]
+    q = hidden @ weights.output.weight + weights.output.bias
+    if sample_rows is None:
+        return q
+    nodes["q"] = q[sample_rows]
+    return nodes
+
+
+def candidate_tail(config, architecture, *, interpret=False):
+    """Build Dense/LN/ResMLP/head from a materialized BF16 input."""
+    def call(encoded, weights):
+        return _tail_values(
+            encoded, weights, config, architecture, interpret=interpret,
+        )
+
+    return call
+
+
+def candidate_nodes(config, architecture, *, sample_rows, interpret=False):
+    """Observe selected rows at every inference boundary for localization."""
+    sample_rows = tuple(sample_rows)
+    if not sample_rows or any(
+        not isinstance(value, int) or isinstance(value, bool) or value < 0
+        for value in sample_rows
+    ):
+        raise ValueError("sample_rows must contain nonnegative integers")
+    indices = jnp.asarray(sample_rows, jnp.int32)
+    encode = candidate_encode(config, architecture, interpret=interpret)
+
+    def call(states, weights):
+        encoded = encode(states, weights)
+        return _tail_values(
+            encoded, weights, config, architecture, interpret=interpret,
+            sample_rows=indices,
+        )
+
+    return call
+
+
+def candidate_full(config, architecture, *, interpret=False):
+    encode = candidate_encode(config, architecture, interpret=interpret)
+    tail = candidate_tail(config, architecture, interpret=interpret)
+
+    def call(states, weights):
+        return tail(encode(states, weights), weights)
+
     return call
 
 
