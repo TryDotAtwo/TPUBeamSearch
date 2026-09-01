@@ -77,6 +77,13 @@ def _flat_kernel(states_ref, low_ref, high_ref, out_ref, *, embed_dim, width):
     out_ref[...] = jnp.where(valid, values, 0.).astype(jnp.bfloat16)
 
 
+def _bank_lut_index(row_block, tile, *, phases):
+    """Return Mosaic LUT indices without x64-promoted Python zero literals."""
+    del row_block
+    zero = jnp.int32(0)
+    return tile % jnp.int32(phases), zero, zero
+
+
 def flat_embedding_prepacked(states, banks, *, embed_dim, bm=128, interpret=False):
     """Exact position-major lookup using banks prepared once per checkpoint."""
     if states.ndim != 2 or min(states.shape) <= 0 or states.dtype != jnp.uint8:
@@ -107,7 +114,7 @@ def flat_embedding_prepacked(states, banks, *, embed_dim, bm=128, interpret=Fals
         ((0, padded_rows - rows), (0, pad_to_multiple(length, 128) - length)),
     )
     lut_spec = pl.BlockSpec(
-        (None, 128, 128), lambda i, j: (j % phases, 0, 0)
+        (None, 128, 128), functools.partial(_bank_lut_index, phases=phases)
     )
     call = pl.pallas_call(
         functools.partial(_flat_kernel, embed_dim=embed_dim, width=width),

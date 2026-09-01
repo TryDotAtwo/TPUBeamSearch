@@ -65,6 +65,22 @@ def test_runtime_and_prepacked_banked_paths_are_exactly_equivalent():
     np.testing.assert_array_equal(prepacked, runtime)
 
 
+def test_banked_lut_index_map_stays_int32_when_x64_is_enabled():
+    """Mosaic rejects mixed i32/i64 BlockSpec return indices."""
+    with jax.enable_x64():
+        closed = jax.make_jaxpr(
+            lambda row_block, tile: module()._bank_lut_index(
+                row_block, tile, phases=3,
+            )
+        )(jnp.int32(0), jnp.int32(1))
+
+    assert [value.aval.dtype for value in closed.jaxpr.outvars] == [
+        jnp.dtype(jnp.int32),
+        jnp.dtype(jnp.int32),
+        jnp.dtype(jnp.int32),
+    ]
+
+
 @pytest.mark.parametrize("change", ["dtype", "shape", "phases", "embed_dim", "bank_type"])
 def test_invalid_prepacked_contract_is_rejected(change):
     states = jnp.zeros((2, 150), jnp.uint8)
