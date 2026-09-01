@@ -1,0 +1,9 @@
+{
+  "title": "TPUBeamSearch exact Artgor inference code",
+  "id": "trydotatwo/tpu-beam-search-exact-artgor-code",
+  "licenses": [
+    {
+      "name": "MIT"
+    }
+  ]
+}
