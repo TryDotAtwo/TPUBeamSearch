@@ -1,12 +1,33 @@
 import ast
 import hashlib
 import json
+import os
 from pathlib import Path
+import sys
+import zipfile
+
+import pytest
+
+from kaggle_artgor_exact_code.build_release import build_release
 
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / "notebooks" / "artgor_cube555_exact_tpu"
 NOTEBOOK = FOLDER / "cayleypy-cube555-tpu-beam-q-exact.ipynb"
+
+
+def _mount_preamble() -> str:
+    notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+    source = "".join(notebook["cells"][3]["source"])
+    start = source.index("# ---------------- exact TPUBeamSearch code mount")
+    stop = source.index("from tpu_beam_search import")
+    return source[start:stop]
+
+
+def _runtime_commit() -> str:
+    return (FOLDER / "runtime-source-commit.txt").read_text(
+        encoding="utf-8"
+    ).strip()
 
 
 def test_generated_notebook_preserves_six_cell_flow_and_exact_engine():
@@ -76,3 +97,70 @@ def test_kaggle_metadata_is_private_tpu_only_and_attaches_both_sources():
         "trydotatwo/tpu-beam-search-exact-artgor-code",
     }
     assert metadata["competition_sources"] == ["cayley-py-555-cube"]
+
+
+def test_generated_notebook_mounts_verified_flat_runtime_zip(tmp_path, monkeypatch):
+    release = build_release(
+        tmp_path / "release", source_commit=_runtime_commit()
+    )
+    monkeypatch.setenv("TPU_BEAM_SEARCH_CODE_ROOT", str(release))
+    old_path = list(sys.path)
+    scope = {
+        "Path": Path,
+        "TPU_BEAM_SEARCH_SOURCE_COMMIT": _runtime_commit(),
+        "json": json,
+        "os": os,
+        "sys": sys,
+    }
+    try:
+        exec(_mount_preamble(), scope)
+        archive = release / "tpu_beam_search_runtime.zip"
+        assert scope["runtime_archive"] == archive
+        assert sys.path[0] == str(archive)
+    finally:
+        sys.path[:] = old_path
+
+
+def test_generated_notebook_rejects_tampered_runtime_zip(tmp_path, monkeypatch):
+    release = build_release(
+        tmp_path / "release", source_commit=_runtime_commit()
+    )
+    archive = release / "tpu_beam_search_runtime.zip"
+    archive.write_bytes(archive.read_bytes() + b"tampered")
+    monkeypatch.setenv("TPU_BEAM_SEARCH_CODE_ROOT", str(release))
+    scope = {
+        "Path": Path,
+        "TPU_BEAM_SEARCH_SOURCE_COMMIT": _runtime_commit(),
+        "json": json,
+        "os": os,
+        "sys": sys,
+    }
+    with pytest.raises(SystemExit, match="archive sha256 mismatch"):
+        exec(_mount_preamble(), scope)
+
+
+def test_generated_notebook_mounts_kaggle_extracted_runtime(tmp_path, monkeypatch):
+    release = build_release(
+        tmp_path / "release", source_commit=_runtime_commit()
+    )
+    archive = release / "tpu_beam_search_runtime.zip"
+    extracted = release / archive.stem
+    with zipfile.ZipFile(archive) as runtime_zip:
+        runtime_zip.extractall(extracted)
+    archive.unlink()
+
+    monkeypatch.setenv("TPU_BEAM_SEARCH_CODE_ROOT", str(release))
+    old_path = list(sys.path)
+    scope = {
+        "Path": Path,
+        "TPU_BEAM_SEARCH_SOURCE_COMMIT": _runtime_commit(),
+        "json": json,
+        "os": os,
+        "sys": sys,
+    }
+    try:
+        exec(_mount_preamble(), scope)
+        assert scope["runtime_import_root"] == extracted
+        assert sys.path[0] == str(extracted)
+    finally:
+        sys.path[:] = old_path

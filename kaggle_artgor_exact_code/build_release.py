@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +26,7 @@ RUNTIME_FILES = (
     "tpu_beam_search/stream1_pallas.py",
     "tpu_beam_search/tpu_layout.py",
 )
+RUNTIME_ARCHIVE = "tpu_beam_search_runtime.zip"
 TARGET_RUNTIME = {
     "python": "3.12",
     "jax": "0.10.2",
@@ -68,6 +70,7 @@ def build_release(output: Path | str, *, source_commit: str) -> Path:
     output.mkdir(parents=True, exist_ok=True)
 
     hashes: dict[str, str] = {}
+    payloads: dict[str, bytes] = {}
     for relative in RUNTIME_FILES:
         source_path = f"src/{relative}"
         try:
@@ -76,8 +79,21 @@ def build_release(output: Path | str, *, source_commit: str) -> Path:
             raise ValueError(
                 f"allowlisted file is absent from source commit: {source_path}"
             ) from error
-        _write(output / relative, payload)
+        payloads[relative] = payload
         hashes[relative] = _sha256(payload)
+
+    archive_path = output / RUNTIME_ARCHIVE
+    with zipfile.ZipFile(archive_path, mode="w") as runtime_zip:
+        for relative in RUNTIME_FILES:
+            info = zipfile.ZipInfo(relative, date_time=(1980, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o644 << 16
+            runtime_zip.writestr(
+                info,
+                payloads[relative],
+                compress_type=zipfile.ZIP_DEFLATED,
+                compresslevel=9,
+            )
 
     metadata_source = Path(__file__).with_name("dataset-metadata.json")
     metadata = json.loads(metadata_source.read_text(encoding="utf-8"))
@@ -93,6 +109,10 @@ def build_release(output: Path | str, *, source_commit: str) -> Path:
         "artgor_script_version": ARTGOR_SCRIPT_VERSION,
         "target_runtime": TARGET_RUNTIME,
         "dataset_metadata_sha256": _sha256(metadata_bytes),
+        "runtime_archive": {
+            "name": RUNTIME_ARCHIVE,
+            "sha256": _sha256(archive_path.read_bytes()),
+        },
         "files": hashes,
     }
     manifest_bytes = (

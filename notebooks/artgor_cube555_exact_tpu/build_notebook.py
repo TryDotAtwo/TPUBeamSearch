@@ -148,9 +148,17 @@ INFERENCE_CHUNK = 32768
 
     code_mount = f"""
 # ---------------- exact TPUBeamSearch code mount ----------------
+import hashlib, zipfile
+
 code_root = None
-for cand in [Path("/kaggle/input/tpu-beam-search-exact-artgor-code"),
-             Path("/kaggle/input/datasets/trydotatwo/tpu-beam-search-exact-artgor-code")]:
+code_candidates = []
+if os.environ.get("TPU_BEAM_SEARCH_CODE_ROOT"):
+    code_candidates.append(Path(os.environ["TPU_BEAM_SEARCH_CODE_ROOT"]))
+code_candidates.extend([
+    Path("/kaggle/input/tpu-beam-search-exact-artgor-code"),
+    Path("/kaggle/input/datasets/trydotatwo/tpu-beam-search-exact-artgor-code"),
+])
+for cand in code_candidates:
     if cand.exists():
         code_root = cand
         break
@@ -165,12 +173,37 @@ if release_manifest["source_commit"] != TPU_BEAM_SEARCH_SOURCE_COMMIT:
         "code dataset commit mismatch: "
         f"{{release_manifest['source_commit']}} != {{TPU_BEAM_SEARCH_SOURCE_COMMIT}}"
     )
-for relative, expected in release_manifest["files"].items():
-    payload = (code_root / relative).read_bytes()
-    actual = hashlib.sha256(payload).hexdigest()
-    if actual != expected:
-        raise SystemExit(f"code dataset sha256 mismatch: {{relative}}")
-sys.path.insert(0, str(code_root))
+archive_info = release_manifest["runtime_archive"]
+runtime_archive = code_root / archive_info["name"]
+runtime_extracted = code_root / Path(archive_info["name"]).stem
+if runtime_archive.is_file():
+    archive_sha256 = hashlib.sha256(runtime_archive.read_bytes()).hexdigest()
+    if archive_sha256 != archive_info["sha256"]:
+        raise SystemExit("code dataset archive sha256 mismatch")
+    with zipfile.ZipFile(runtime_archive) as runtime_zip:
+        if set(runtime_zip.namelist()) != set(release_manifest["files"]):
+            raise SystemExit("code dataset archive file list mismatch")
+        for relative, expected in release_manifest["files"].items():
+            actual = hashlib.sha256(runtime_zip.read(relative)).hexdigest()
+            if actual != expected:
+                raise SystemExit(f"code dataset sha256 mismatch: {{relative}}")
+    runtime_import_root = runtime_archive
+elif runtime_extracted.is_dir():
+    extracted_files = {{
+        path.relative_to(runtime_extracted).as_posix()
+        for path in runtime_extracted.rglob("*")
+        if path.is_file()
+    }}
+    if extracted_files != set(release_manifest["files"]):
+        raise SystemExit("code dataset extracted file list mismatch")
+    for relative, expected in release_manifest["files"].items():
+        actual = hashlib.sha256((runtime_extracted / relative).read_bytes()).hexdigest()
+        if actual != expected:
+            raise SystemExit(f"code dataset sha256 mismatch: {{relative}}")
+    runtime_import_root = runtime_extracted
+else:
+    raise SystemExit("code dataset runtime archive/extracted directory missing")
+sys.path.insert(0, str(runtime_import_root))
 
 from tpu_beam_search import (
     ArtgorExactConfig,
