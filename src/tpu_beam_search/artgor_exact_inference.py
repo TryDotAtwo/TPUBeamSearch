@@ -21,6 +21,12 @@ from .stream1_layernorm_exact import (
     stream1_layernorm_exact_prefix,
 )
 from .stream1_layernorm_pallas import pallas_layernorm_dense
+from .stream1_layernorm_pallas_exact import (
+    PallasExactConfig,
+    PallasExactWeights,
+    make_sharded_pallas_exact_inference,
+    prepare_pallas_exact_weights,
+)
 from .stream1_layernorm_reference import (
     layernorm_stream1_weights_from_artgor_params,
 )
@@ -93,9 +99,10 @@ def choose_artgor_inference_engine(
 ) -> EngineDecision:
     """Choose the exact engine or an explicit original-JAX fallback."""
 
-    if requested not in ("exact_split", "original_jax"):
+    if requested not in ("exact_split", "pallas_exact", "original_jax"):
         raise ValueError(
-            "INFERENCE_ENGINE must be 'exact_split' or 'original_jax'"
+            "INFERENCE_ENGINE must be 'exact_split', 'pallas_exact', "
+            "or 'original_jax'"
         )
     qv = float(qv_consistency)
     if not math.isfinite(qv):
@@ -126,9 +133,33 @@ def choose_artgor_inference_engine(
         )
     return EngineDecision(
         requested=requested,
-        selected="exact_split",
-        reason="single-checkpoint Q-only configuration is exact-split eligible",
+        selected=requested,
+        reason=(
+            "single-checkpoint Q-only configuration is eligible for the "
+            f"requested {requested} engine"
+        ),
     )
+
+
+def prepare_artgor_pallas_exact_inference_from_weights(
+    weights: LayerNormStream1Weights,
+    architecture: Stream1Architecture,
+    *,
+    mesh,
+    config: PallasExactConfig = PallasExactConfig(),
+    interpret: bool = False,
+) -> tuple[Callable, PallasExactWeights]:
+    """Prepare the diagnostic all-Pallas engine with runtime weight arguments."""
+
+    prepared = prepare_pallas_exact_weights(weights, architecture)
+    engine = make_sharded_pallas_exact_inference(
+        architecture,
+        mesh=mesh,
+        weights_example=prepared,
+        config=config,
+        interpret=interpret,
+    )
+    return engine, prepared
 
 
 def prepare_artgor_exact_inference_from_weights(

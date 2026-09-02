@@ -1,5 +1,6 @@
 import jax
 import numpy as np
+import tpu_beam_search
 from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
 
 from benchmarks import stream1_exact_inference_frontier as frontier
@@ -8,9 +9,14 @@ from tpu_beam_search.artgor_exact_inference import (
     ArtgorExactConfig,
     choose_artgor_inference_engine,
     prepare_artgor_exact_inference_from_weights,
+    prepare_artgor_pallas_exact_inference_from_weights,
 )
 from tpu_beam_search.stream1_layernorm_exact import (
     stream1_layernorm_exact_prefix,
+)
+from tpu_beam_search.stream1_layernorm_pallas_exact import (
+    PallasExactConfig,
+    stream1_layernorm_pallas_exact_inference,
 )
 
 
@@ -28,6 +34,14 @@ def test_selected_config_is_frozen_and_invalid_overrides_fail():
         ArtgorExactConfig(inference_chunk=24576).validate()
 
 
+def test_all_pallas_engine_is_exported_from_the_package_api():
+    assert tpu_beam_search.PallasExactConfig is PallasExactConfig
+    assert (
+        tpu_beam_search.prepare_artgor_pallas_exact_inference_from_weights
+        is prepare_artgor_pallas_exact_inference_from_weights
+    )
+
+
 def test_unsupported_modes_choose_explicit_jax_fallback():
     assert (
         choose_artgor_inference_engine("exact_split", None, 0.0).selected
@@ -40,6 +54,20 @@ def test_unsupported_modes_choose_explicit_jax_fallback():
     assert "BLEND_CHECKPOINTS" in decision.reason
 
     decision = choose_artgor_inference_engine("exact_split", None, 0.25)
+    assert decision.selected == "original_jax"
+    assert "QV_CONSISTENCY" in decision.reason
+
+    assert (
+        choose_artgor_inference_engine("pallas_exact", None, 0.0).selected
+        == "pallas_exact"
+    )
+    decision = choose_artgor_inference_engine(
+        "pallas_exact", ["q555_6k.pt"], 0.0
+    )
+    assert decision.selected == "original_jax"
+    assert "BLEND_CHECKPOINTS" in decision.reason
+
+    decision = choose_artgor_inference_engine("pallas_exact", None, 0.25)
     assert decision.selected == "original_jax"
     assert "QV_CONSISTENCY" in decision.reason
 
@@ -103,3 +131,43 @@ def test_interpreted_engine_matches_selected_prefix_and_head_formulas():
     np.testing.assert_array_equal(hidden, expected_hidden)
     np.testing.assert_array_equal(actual, expected)
     np.testing.assert_array_equal(engine(states_d, prepared_d), actual)
+
+
+def test_interpreted_artgor_pallas_exact_engine_matches_direct_all_pallas_call():
+    _, states, architecture, weights = model_fixture()
+    mesh = Mesh(np.asarray(jax.devices()[:1]), ("core",))
+    config = PallasExactConfig(
+        embedding_bm=2,
+        input_bm=2,
+        input_bk=8,
+        input_bn=8,
+        residual_bm=2,
+        residual_bk=8,
+        residual_bn=8,
+        head_bm=2,
+        head_bk=8,
+        head_bn=8,
+        layernorm_arithmetic="legacy_bf16",
+    )
+    engine, prepared = prepare_artgor_pallas_exact_inference_from_weights(
+        weights,
+        architecture,
+        mesh=mesh,
+        config=config,
+        interpret=True,
+    )
+    states_d = jax.device_put(states, NamedSharding(mesh, P("core", None)))
+    prepared_d = jax.tree.map(
+        lambda value: jax.device_put(value, NamedSharding(mesh, P())), prepared,
+    )
+
+    actual = engine(states_d, prepared_d)
+    expected = stream1_layernorm_pallas_exact_inference(
+        states,
+        prepared,
+        architecture,
+        config=config,
+        interpret=True,
+    )
+
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
