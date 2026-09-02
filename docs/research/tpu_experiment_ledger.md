@@ -668,3 +668,16 @@ subtraction inside the larger LayerNorm Pallas kernel, not by an unavoidable
 Pallas FP32 subtraction precision limit.  The next correctness baseline splits
 LayerNorm at the mean materialization boundary; dispatch reduction or an
 in-kernel VMEM barrier is deferred until full-model exactness is recovered.
+
+## Split-mean all-Pallas diagnostic v4: 2026-09-02
+
+[Terminal report](../../test_results/artgor_pallas_exact_diagnostic_v4/report.md)
+records private all-Pallas diagnostic v4 at source `8d9ce0a` on eight TPUv5lite
+devices.  Explicit BF16 mean materialization does not change the final
+LayerNorm result: all six `input.layernorm_relu` mismatch counts and errors are
+identical to unsplit v3 (154,177--194,400 mismatches, max abs0.015625--0.03125).
+
+Together with the exact subtraction-only result, this shows centered FP32 drift
+is rounded away at BF16 variance.  The causal investigation advances to the
+exact variance feeding epsilon/add/rsqrt/BF16 invstd and then affine.  No timing
+or fusion result is claimed.
