@@ -44,6 +44,7 @@ from .tpu_layout import pad_to_multiple
 _LAYER_NORM_ARITHMETICS = (
     "legacy_bf16",
     "hlo_mixed",
+    "monolithic_fp32_variance",
     "split_mean_hlo_mixed",
     "fully_materialized_hlo_mixed",
 )
@@ -178,16 +179,18 @@ def _layer_norm_activation_kernel(
     values_bf16 = values_ref[...].astype(jnp.bfloat16)
     columns = jax.lax.broadcasted_iota(jnp.int32, values_bf16.shape, 1)
     valid = columns < logical_width
-    if arithmetic == "hlo_mixed":
+    if arithmetic in ("hlo_mixed", "monolithic_fp32_variance"):
         values = values_bf16.astype(jnp.float32)
         masked = jnp.where(valid, values, 0.0)
         mean = (jnp.sum(masked, axis=1, keepdims=True) / logical_width).astype(
             jnp.bfloat16
         )
         centered = jnp.where(valid, values - mean.astype(jnp.float32), 0.0)
-        variance = (
-            jnp.sum(centered * centered, axis=1, keepdims=True) / logical_width
-        ).astype(jnp.bfloat16)
+        variance = jnp.sum(
+            centered * centered, axis=1, keepdims=True,
+        ) / logical_width
+        if arithmetic == "hlo_mixed":
+            variance = variance.astype(jnp.bfloat16)
         eps = jnp.asarray(epsilon, jnp.bfloat16).astype(jnp.float32)
         invstd = jax.lax.rsqrt(variance.astype(jnp.float32) + eps).astype(
             jnp.bfloat16

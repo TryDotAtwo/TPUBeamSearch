@@ -7,6 +7,10 @@ import pytest
 from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
 
 import tpu_beam_search.stream1_layernorm_pallas_exact as pallas_exact_module
+from tpu_beam_search.stream1_layernorm_pallas_attribution import (
+    PallasLayerNormArithmetic,
+    pallas_layernorm_probe,
+)
 from test_layernorm_followup import model_fixture
 from tpu_beam_search.stream1_layernorm_pallas_exact import (
     PallasExactConfig,
@@ -167,6 +171,29 @@ def test_fully_materialized_contract_uses_five_calls_per_layernorm():
     semantic = len(pallas_exact_stage_names(architecture))
     layernorms = 1 + 2 * architecture.RESIDUAL_COUNT
     assert pallas_exact_custom_call_count(architecture, config) == semantic + 4 * layernorms
+
+
+def test_monolithic_fp32_variance_matches_attribution_winner_in_interpret():
+    values = jnp.arange(256, dtype=jnp.float32).reshape(2, 128).astype(jnp.bfloat16)
+    scale = jnp.linspace(0.5, 1.5, 128).astype(jnp.bfloat16)
+    bias = jnp.linspace(-0.25, 0.25, 128).astype(jnp.bfloat16)
+    expected = pallas_layernorm_probe(
+        values, scale, bias, checkpoint="relu", bm=2, interpret=True,
+        arithmetic=PallasLayerNormArithmetic(variance_bf16=False),
+    )
+    actual = pallas_exact_layer_norm_activation(
+        values, scale, bias, relu=True, bm=2,
+        arithmetic="monolithic_fp32_variance", interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
+def test_monolithic_fp32_variance_keeps_one_call_per_semantic_stage():
+    _, _, architecture, _ = model_fixture()
+    config = _tiny_config(layernorm_arithmetic="monolithic_fp32_variance")
+    assert pallas_exact_custom_call_count(architecture, config) == len(
+        pallas_exact_stage_names(architecture)
+    )
 
 
 def test_fully_materialized_checkpoints_expose_the_executed_boundaries():

@@ -86,10 +86,10 @@ def candidate_configs() -> dict[str, PallasExactConfig]:
         head_bk=1024,
         head_bn=128,
         dense_rounding="late",
-        layernorm_arithmetic="fully_materialized_hlo_mixed",
+        layernorm_arithmetic="monolithic_fp32_variance",
     )
     return {
-        "pallas_exact_fully_materialized_bk128": PallasExactConfig(
+        "pallas_exact_monolithic_fp32_variance_bk128": PallasExactConfig(
             input_bk=128, residual_bk=128, **common,
         ),
     }

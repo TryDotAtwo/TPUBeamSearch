@@ -732,3 +732,22 @@ Thus the remaining target is the effective arithmetic of the unmaterialized
 monolithic JAX lowering, not an isolated Pallas primitive. The next one-factor
 ladder compares final hashes directly against that oracle before any timing or
 fusion optimization.
+
+## Monolithic LayerNorm arithmetic match v1: 2026-09-02
+
+[Terminal report](../../test_results/artgor_layernorm_monolithic_match_v1/report.md)
+records private arithmetic match v1 at source
+`a50f6490abc6e65428d73a86ab9ae1122ace28d3` on eight TPUv5lite devices.
+
+- The real one-kernel Pallas `fp32_variance` arm is hash exact against the
+  unchanged monolithic Artgor JAX LayerNorm on all six frozen corpora: zero
+  BF16 mismatches in every case.
+- All other Pallas arms fail. The materialized-style baseline differs by
+  132,523--175,840 elements.
+- No explicit JAX one-factor arm is exact because its separate JIT boundary
+  changes the effective lowering. The direct Pallas-versus-monolithic equality
+  is the promotion evidence.
+
+The promoted one-call contract uses BF16-rounded mean, FP32 centered values and
+variance, BF16-rounded invstd, FP32 affine, final BF16 rounding, optional skip
+and ReLU. It advances to the full44-stage all-Pallas gate before timing.
