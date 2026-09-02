@@ -212,6 +212,27 @@ def test_aligned_monolithic_math_has_no_predicate_or_select_in_jaxpr():
     assert "select_n" not in primitives
 
 
+def test_no_skip_monolithic_mode_reuses_the_tpu_proven_exact_probe(monkeypatch):
+    values = jnp.ones((2, 128), jnp.bfloat16)
+    scale = jnp.ones((128,), jnp.bfloat16)
+    bias = jnp.zeros((128,), jnp.bfloat16)
+    sentinel = jnp.full_like(values, 7)
+    calls = []
+
+    def exact_probe(*args, **kwargs):
+        calls.append(kwargs)
+        return sentinel
+
+    monkeypatch.setattr(pallas_exact_module, "pallas_layernorm_probe", exact_probe)
+    actual = pallas_exact_layer_norm_activation(
+        values, scale, bias, relu=True,
+        arithmetic="monolithic_fp32_variance", interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(sentinel))
+    assert calls[0]["checkpoint"] == "relu"
+    assert calls[0]["arithmetic"].variance_bf16 is False
+
+
 def test_fully_materialized_checkpoints_expose_the_executed_boundaries():
     values = jnp.arange(256, dtype=jnp.float32).reshape(2, 128).astype(jnp.bfloat16)
     scale = jnp.linspace(0.5, 1.5, 128).astype(jnp.bfloat16)

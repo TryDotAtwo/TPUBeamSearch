@@ -31,6 +31,10 @@ from .stream1_embedding_experimental import (
 )
 from .stream1_layernorm_exact import prepare_exact_layernorm_inference_weights
 from .stream1_layernorm_pallas import pallas_layernorm_dense
+from .stream1_layernorm_pallas_attribution import (
+    PallasLayerNormArithmetic,
+    pallas_layernorm_probe,
+)
 from .stream1_layernorm_subtraction import pallas_centered_subtraction
 from .stream1_layernorm_invstd import (
     pallas_invstd,
@@ -498,6 +502,18 @@ def pallas_exact_layer_norm_activation(
         raise ValueError("bm and width_alignment must be positive integers")
     if not math.isfinite(epsilon) or epsilon < 0:
         raise ValueError("epsilon must be finite and non-negative")
+    if arithmetic == "monolithic_fp32_variance" and not add_skip and relu:
+        return pallas_layernorm_probe(
+            values,
+            scale,
+            bias,
+            checkpoint="relu",
+            epsilon=epsilon,
+            bm=bm,
+            width_alignment=width_alignment,
+            arithmetic=PallasLayerNormArithmetic(variance_bf16=False),
+            interpret=interpret,
+        )
     if arithmetic == "split_mean_hlo_mixed":
         return _pallas_split_mean_layer_norm_activation(
             values,

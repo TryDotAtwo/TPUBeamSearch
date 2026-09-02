@@ -768,3 +768,16 @@ records private full-model diagnostic v6 at source
 V7 removes masking for aligned widths, preserving it only for real padding.
 This simultaneously removes avoidable vector work and tests whether the
 predicate changed Mosaic arithmetic lowering. Timing remains correctness-gated.
+
+## Unmasked all-Pallas diagnostic v7: 2026-09-02
+
+[Terminal report](../../test_results/artgor_pallas_exact_diagnostic_v7/report.md)
+records private diagnostic v7 at source
+`1f43f79414e54fdc3cce14a92b154e4d3048d0bd` on eight TPUv5lite devices.
+
+The result is bit-for-bit unchanged from v6: 21,165--25,312 mismatches at every
+`input.layernorm_relu`, with identical max/mean error. Hence the aligned mask
+was avoidable vector work but not the numerical cause. V8 directly reuses the
+TPU-proven exact three-input `fp32_variance` probe for no-skip LayerNorm+ReLU,
+removing the production-only fourth ref/wrapper. Skip LayerNorm remains
+separate so the next first mismatch distinguishes core LN from residual add.
