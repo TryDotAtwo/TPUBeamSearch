@@ -10,6 +10,7 @@ from benchmarks.artgor_layernorm_attribution import (
 )
 from tpu_beam_search.stream1_layernorm_pallas_attribution import (
     PallasLayerNormArithmetic,
+    _logical_width_requires_mask,
     pallas_layernorm_probe,
 )
 
@@ -134,3 +135,8 @@ def test_interpreted_pallas_probe_matches_each_one_factor_jax_arm():
             interpret=True,
         )
         np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
+def test_aligned_production_width_elides_compiler_sensitive_predicate():
+    assert _logical_width_requires_mask(1024, 1024) is False
+    assert _logical_width_requires_mask(130, 256) is True

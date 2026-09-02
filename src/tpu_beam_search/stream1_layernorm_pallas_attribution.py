@@ -33,6 +33,12 @@ class PallasLayerNormArithmetic:
     affine_fp32: bool = True
 
 
+def _logical_width_requires_mask(logical_width: int, padded_width: int) -> bool:
+    """Avoid Mosaic's replicated-predicate relayout when no padding exists."""
+
+    return logical_width != padded_width
+
+
 def _matrix_index(row_block):
     return row_block.astype(jnp.int32), jnp.asarray(0, jnp.int32)
 
@@ -51,19 +57,24 @@ def _probe_kernel(
     logical_width: int,
     epsilon: float,
     arithmetic: PallasLayerNormArithmetic,
+    mask_padding: bool,
 ):
     values_bf16 = values_ref[...].astype(jnp.bfloat16)
-    columns = jax.lax.broadcasted_iota(jnp.int32, values_bf16.shape, 1)
-    valid = columns < logical_width
     values_fp32 = values_bf16.astype(jnp.float32)
-    masked = jnp.where(valid, values_fp32, jnp.float32(0))
+    if mask_padding:
+        columns = jax.lax.broadcasted_iota(jnp.int32, values_bf16.shape, 1)
+        valid = columns < logical_width
+        masked = jnp.where(valid, values_fp32, jnp.float32(0))
+    else:
+        valid = None
+        masked = values_fp32
     mean_fp32 = jnp.sum(masked, axis=1, keepdims=True) / logical_width
     mean = (
         mean_fp32.astype(jnp.bfloat16) if arithmetic.mean_bf16 else mean_fp32
     )
-    centered = jnp.where(
-        valid, values_fp32 - mean.astype(jnp.float32), jnp.float32(0)
-    )
+    centered = values_fp32 - mean.astype(jnp.float32)
+    if mask_padding:
+        centered = jnp.where(valid, centered, jnp.float32(0))
     variance_fp32 = (
         jnp.sum(centered * centered, axis=1, keepdims=True) / logical_width
     )
@@ -106,9 +117,11 @@ def _probe_kernel(
         "affine_bf16": affine_bf16,
         "relu": relu,
     }[checkpoint]
-    output_ref[...] = jnp.where(
-        valid, selected, jnp.asarray(0, CHECKPOINT_DTYPES[checkpoint])
-    )
+    if mask_padding:
+        selected = jnp.where(
+            valid, selected, jnp.asarray(0, CHECKPOINT_DTYPES[checkpoint])
+        )
+    output_ref[...] = selected
 
 
 def pallas_layernorm_probe(
@@ -142,6 +155,7 @@ def pallas_layernorm_probe(
         raise TypeError("arithmetic must be PallasLayerNormArithmetic")
     padded_rows = pad_to_multiple(rows, bm)
     padded_width = pad_to_multiple(logical_width, width_alignment)
+    mask_padding = _logical_width_requires_mask(logical_width, padded_width)
     padding = ((0, padded_rows - rows), (0, padded_width - logical_width))
     values_padded = jnp.pad(values.astype(jnp.bfloat16), padding)
     scale_padded = jnp.pad(
@@ -160,6 +174,7 @@ def pallas_layernorm_probe(
             logical_width=logical_width,
             epsilon=epsilon,
             arithmetic=arithmetic,
+            mask_padding=mask_padding,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
