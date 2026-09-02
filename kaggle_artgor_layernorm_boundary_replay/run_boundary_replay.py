@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 
-EXPECTED_SOURCE_COMMIT = "0000000000000000000000000000000000000000"
+EXPECTED_SOURCE_COMMIT = "5ee2b43719addd5c2e205f61039e2f6ddd07274c"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch-artgor-layernorm-boundary-replay")
 OUTPUT = Path("/kaggle/working/artgor_layernorm_boundary_replay")
