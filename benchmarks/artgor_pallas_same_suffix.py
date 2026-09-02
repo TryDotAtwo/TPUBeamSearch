@@ -220,7 +220,7 @@ def main(argv=None):
     parser.add_argument("--dataset", type=Path, default=None)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
-    result = run(dataset=args.dataset or _dataset_path(), output=args.output)
+    result = run(dataset=_dataset_path(args.dataset), output=args.output)
     print(json.dumps({"status": result["status"], "result": str(args.output / RESULT_NAME)}, indent=2))
 
 

@@ -1,6 +1,9 @@
 import jax.numpy as jnp
 import numpy as np
 import pytest
+from pathlib import Path
+
+import benchmarks.artgor_pallas_same_suffix as benchmark
 
 from benchmarks.artgor_pallas_same_suffix import (
     reference_hidden_after_depth,
@@ -27,3 +30,14 @@ def test_depth_contract_rejects_invalid_boundaries():
         reference_hidden_after_depth(states, weights, architecture, -1)
     with pytest.raises(ValueError, match="outside"):
         reference_suffix(jnp.zeros((2, architecture.HIDDEN2)), weights, architecture, 99)
+
+
+def test_main_passes_optional_dataset_through_shared_resolver(monkeypatch, tmp_path):
+    resolved = Path("resolved-dataset")
+    seen = {}
+    monkeypatch.setattr(benchmark, "_dataset_path", lambda explicit: resolved if explicit is None else explicit)
+    monkeypatch.setattr(benchmark, "run", lambda **kwargs: seen.update(kwargs) or {"status": "complete"})
+
+    benchmark.main(["--output", str(tmp_path)])
+
+    assert seen == {"dataset": resolved, "output": tmp_path}
