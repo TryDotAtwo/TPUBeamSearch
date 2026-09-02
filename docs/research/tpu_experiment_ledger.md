@@ -681,3 +681,18 @@ Together with the exact subtraction-only result, this shows centered FP32 drift
 is rounded away at BF16 variance.  The causal investigation advances to the
 exact variance feeding epsilon/add/rsqrt/BF16 invstd and then affine.  No timing
 or fusion result is claimed.
+
+## Fixed-variance invstd and affine v1: 2026-09-02
+
+[Terminal report](../../test_results/artgor_layernorm_invstd_v1/report.md)
+records private `trydotatwo/tpu-artgor-layernorm-invstd` v1 at source
+`df562624015a2b27b722e14915138d7345c0764b`, eight TPUv5lite devices and all six
+B256/device corpora.
+
+Same-call JAX, materialized JAX, Pallas interpret and real Pallas FP32 invstd
+are hash exact.  BF16-rounded invstd is also exact, and one-custom-call Pallas
+affine matches JAX exactly from explicit centered/invstd/scale/bias inputs.
+All error metrics are zero.  Consequently neither rsqrt nor affine is an
+intrinsic Pallas precision limitation; drift arises from fused producer/
+consumer lifetime inside the larger LayerNorm kernel.  The next correctness
+baseline materializes mean, variance and BF16 invstd between Pallas calls.
