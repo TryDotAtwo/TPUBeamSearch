@@ -626,3 +626,24 @@ The next causal bundle holds the exact BK128 Dense input fixed and attributes
 LayerNorm in observable stages: JAX monolithic/decomposed/materialized controls
 and Pallas mean, centered, variance, rsqrt, affine and ReLU checkpoints.  It
 uses one-factor changes rather than a Cartesian dtype sweep.
+
+## LayerNorm arithmetic attribution v4: 2026-09-02
+
+[Terminal report](../../test_results/artgor_layernorm_attribution_v4/report.md)
+records private `trydotatwo/tpu-artgor-layernorm-arithmetic-attribution` v4 at
+source `fee05807dc82a836bf3c8c17aba03131033b86c9`, eight TPUv5lite devices and
+256 rows/device across all six frozen corpora.
+
+- Baseline Pallas mean is exact against decomposed same-call JAX on all cases.
+- First Pallas drift is centered FP32 subtraction: 2,087,923--2,096,937 of
+  2,097,152 elements, max abs 0.000244--0.000977.  BF16 variance later rounds
+  back to exact, but final ReLU still differs in445,631--550,725 elements.
+- Monolithic, same-call decomposed and separately materialized JAX controls
+  also disagree.  Original versus same-call differs in424,968--520,663 final
+  elements; original versus materialized in132,523--175,840.  The unchanged
+  monolithic model remains the oracle; the controls expose boundary-sensitive
+  lowering rather than authorizing a semantics change.
+- No candidate is promoted or timed.  The next causal probe freezes the exact
+  BF16 values and mean and compares subtraction-only Pallas, interpret Pallas,
+  same-call JAX and materialized JAX before one centered-to-variance fusion
+  control.  It must also record RMSE, hashes and module identity omitted by v4.
