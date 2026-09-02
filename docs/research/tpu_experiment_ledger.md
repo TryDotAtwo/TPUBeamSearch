@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-02: raw-mean v8 result
+
+Late Dense + FP32 pre-round mean gives exact legal42 input prefix and shared
+suffix, but stress43 retains 15 hidden / 17 shared-suffix Q mismatches.
+BF16-mean controls exactly match isolated JAX LN; before-bias dot rounding
+fails Dense itself. Checkpoint/model/input hashes match v7. Original full Q
+still fails; no speed claim or default change. Next: raw Dense BK comparison
+and same-buffer reduction/intermediate diagnostics, before residual expansion.
+See `test_results/artgor_pallas_same_suffix_v8/report.md`.
+
 ## 2026-09-02: composition v7 and mean-source hypothesis
 
 Full all-Pallas B256/device still mismatches original Q: 45926/54013 legal/stress.
