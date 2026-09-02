@@ -647,3 +647,24 @@ source `fee05807dc82a836bf3c8c17aba03131033b86c9`, eight TPUv5lite devices and
   BF16 values and mean and compares subtraction-only Pallas, interpret Pallas,
   same-call JAX and materialized JAX before one centered-to-variance fusion
   control.  It must also record RMSE, hashes and module identity omitted by v4.
+
+## Fixed-operand centered subtraction v1: 2026-09-02
+
+[Terminal report](../../test_results/artgor_layernorm_subtraction_v1/report.md)
+records private `trydotatwo/tpu-artgor-layernorm-subtraction` v1 at source
+`a5b7690fd0e3b24a98e26fe2c134b93308107762`, eight TPUv5lite devices and all
+six frozen B256/device corpora.
+
+- Fixed BF16 Dense values and exact BF16 mean produce bitwise-identical FP32
+  centered tensors in same-call JAX, materialized-cast JAX, Pallas interpret
+  and real standalone Pallas: zero mismatches across every corpus.
+- A one-custom-call Pallas centered-to-BF16-variance kernel is also exact
+  against materialized JAX variance on every corpus.
+- StableHLO identities are distinct and both real Pallas arms contain one
+  `tpu_custom_call`; this is real TPU evidence, not an interpret-only result.
+
+Therefore the earlier drift is caused by keeping mean production and centered
+subtraction inside the larger LayerNorm Pallas kernel, not by an unavoidable
+Pallas FP32 subtraction precision limit.  The next correctness baseline splits
+LayerNorm at the mean materialization boundary; dispatch reduction or an
+in-kernel VMEM barrier is deferred until full-model exactness is recovered.
