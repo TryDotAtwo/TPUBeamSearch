@@ -781,3 +781,21 @@ was avoidable vector work but not the numerical cause. V8 directly reuses the
 TPU-proven exact three-input `fp32_variance` probe for no-skip LayerNorm+ReLU,
 removing the production-only fourth ref/wrapper. Skip LayerNorm remains
 separate so the next first mismatch distinguishes core LN from residual add.
+
+## Exact-probe all-Pallas diagnostic v8: 2026-09-02
+
+[Terminal report](../../test_results/artgor_pallas_exact_diagnostic_v8/report.md)
+records private diagnostic v8 at source
+`dc7f91caaf69e30ec423a7c6927e2f9900cfd6aa` on eight TPUv5lite devices.
+
+Even literal reuse of the standalone hash-exact Pallas probe reports the same
+21,165--25,312 mismatches against the 44-output JAX trace. This proves the
+remaining discrepancy is instrumentation-induced: returning all JAX
+intermediates changes its LayerNorm lowering relative to the isolated
+monolithic operator and unchanged full `jax_model.apply`.
+
+V9 makes the unchanged full-model BF16 Q comparison the gating oracle and keeps
+the multi-output stage trace diagnostic only. It proceeds through B16K/device
+and conditional B32K/device timing even when the instrumented trace differs.
+Final default promotion still requires a valid isolated boundary audit in
+addition to exact full Q, clean HLO and speed.

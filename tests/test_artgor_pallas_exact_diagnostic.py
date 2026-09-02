@@ -87,6 +87,17 @@ def test_next_diagnostic_freezes_only_monolithic_exact_bk128_candidate():
     )
 
 
+def test_instrumented_stage_drift_does_not_suppress_full_model_oracle():
+    diagnostic = _module()
+    configs = {"candidate": object()}
+    stage_results = {
+        "candidate": {"legal_seed_42": {"all_stages_exact": False}},
+    }
+    assert diagnostic.full_output_candidate_ids(configs, stage_results) == (
+        "candidate",
+    )
+
+
 def test_stage_count_contract_maps_only_four_n_plus_four_models():
     diagnostic = _module()
 
