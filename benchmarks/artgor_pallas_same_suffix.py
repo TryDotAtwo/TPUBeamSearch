@@ -88,6 +88,18 @@ def reference_input_dense(embedded, weights):
     return embedded @ weights.input.dense.weight + weights.input.dense.bias
 
 
+def reference_input_ln(dense, weights, architecture):
+    return jax.nn.relu(layer_norm_reference(
+        dense, weights.input.normalization, epsilon=architecture.LAYER_NORM_EPSILON,
+    ))
+
+
+def reference_residual(hidden, block, architecture):
+    branch = _normalized(hidden, block.first, epsilon=architecture.LAYER_NORM_EPSILON, relu=True)
+    branch = _normalized(branch, block.second, epsilon=architecture.LAYER_NORM_EPSILON, relu=False)
+    return jax.nn.relu(hidden + branch)
+
+
 def reference_suffix_from_input_dense(dense, weights, architecture):
     hidden = layer_norm_reference(
         dense, weights.input.normalization, epsilon=architecture.LAYER_NORM_EPSILON,
@@ -127,6 +139,22 @@ def _mapped(call, *, mesh, input_spec, weights_example):
 
 def _metrics(reference, candidate):
     return _tensor_comparison(jax.block_until_ready(reference), jax.block_until_ready(candidate))
+
+
+def compare_isolated_operator(values, *, reference_op, candidate_op, suffix,
+                              monolithic, prefix_output):
+    """Both operators consume the identical runtime tensor; prefix is diagnostic."""
+    reference = jax.block_until_ready(reference_op(values))
+    candidate = jax.block_until_ready(candidate_op(values))
+    control_q = jax.block_until_ready(suffix(reference))
+    candidate_q = jax.block_until_ready(suffix(candidate))
+    return {
+        "boundary": _metrics(reference, candidate),
+        "candidate_vs_same_suffix": _metrics(control_q, candidate_q),
+        "same_suffix_control_vs_monolithic": _metrics(monolithic, control_q),
+        "isolated_reference_vs_prefix": _metrics(prefix_output, reference),
+        "zero_replacement": _metrics(control_q, suffix(reference)),
+    }
 
 
 def run(*, dataset: Path, output: Path) -> dict:
@@ -216,6 +244,16 @@ def run(*, dataset: Path, output: Path) -> dict:
                 bm=cfg.input_bm, arithmetic=cfg.layernorm_arithmetic,
             ), mesh=mesh, input_spec=state_spec, weights_example=pweights,
         )
+        ref_ln = _mapped(
+            lambda dense, w: reference_input_ln(dense, w, architecture),
+            mesh=mesh, input_spec=state_spec, weights_example=weights,
+        )
+        ref_blocks = [
+            _mapped(
+                lambda h, w, i=i: reference_residual(h, w.residuals[i], architecture),
+                mesh=mesh, input_spec=state_spec, weights_example=weights,
+            ) for i in range(architecture.RESIDUAL_COUNT)
+        ]
         puzzle = load_puzzle(dataset / "puzzle_info.json", state_len=150, move_count=30)
         for case_name, kind, seed in CASES:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
@@ -242,13 +280,14 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "candidate_vs_same_suffix": _metrics(dense_control_q, dense_candidate_q),
                 "same_suffix_control_vs_monolithic": _metrics(monolithic, dense_control_q),
             })
-            candidate_ln = jax.block_until_ready(pinput_ln(dense, pweights_d))
-            ln_control_q = jax.block_until_ready(suffix[0](hidden[0], weights_d))
-            ln_candidate_q = jax.block_until_ready(suffix[0](candidate_ln, weights_d))
             rows.append({
-                "operator": "input.layernorm_relu", "boundary": _metrics(hidden[0], candidate_ln),
-                "candidate_vs_same_suffix": _metrics(ln_control_q, ln_candidate_q),
-                "same_suffix_control_vs_monolithic": _metrics(monolithic, ln_control_q),
+                "operator": "input.layernorm_relu",
+                **compare_isolated_operator(
+                    dense, reference_op=lambda x: ref_ln(x, weights_d),
+                    candidate_op=lambda x: pinput_ln(x, pweights_d),
+                    suffix=lambda x: suffix[0](x, weights_d),
+                    monolithic=monolithic, prefix_output=hidden[0],
+                ),
             })
 
             candidate = jax.block_until_ready(pinput(states, pweights_d))
@@ -260,14 +299,14 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "same_suffix_control_vs_monolithic": _metrics(monolithic, control_q),
             })
             for index, call in enumerate(pblocks):
-                candidate = jax.block_until_ready(call(hidden[index], pweights_d))
-                control_q = jax.block_until_ready(suffix[index + 1](hidden[index + 1], weights_d))
-                candidate_q = jax.block_until_ready(suffix[index + 1](candidate, weights_d))
                 rows.append({
                     "operator": f"residual.{index}",
-                    "boundary": _metrics(hidden[index + 1], candidate),
-                    "candidate_vs_same_suffix": _metrics(control_q, candidate_q),
-                    "same_suffix_control_vs_monolithic": _metrics(monolithic, control_q),
+                    **compare_isolated_operator(
+                        hidden[index], reference_op=lambda x: ref_blocks[index](x, weights_d),
+                        candidate_op=lambda x: call(x, pweights_d),
+                        suffix=lambda x: suffix[index + 1](x, weights_d),
+                        monolithic=monolithic, prefix_output=hidden[index + 1],
+                    ),
                 })
             candidate_q = jax.block_until_ready(phead(hidden[-1], pweights_d))
             control_q = jax.block_until_ready(suffix[-1](hidden[-1], weights_d))

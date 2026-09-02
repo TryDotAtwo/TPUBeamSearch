@@ -55,3 +55,17 @@ def test_main_passes_optional_dataset_through_shared_resolver(monkeypatch, tmp_p
     benchmark.main(["--output", str(tmp_path)])
 
     assert seen == {"dataset": resolved, "output": tmp_path}
+
+
+def test_isolated_control_does_not_attribute_prefix_drift_to_exact_operator():
+    assert hasattr(benchmark, "compare_isolated_operator")
+    x = jnp.array([[2., 3.]])
+    result = benchmark.compare_isolated_operator(
+        x, reference_op=lambda h: h * 2, candidate_op=lambda h: h * 2,
+        suffix=lambda h: h + 1, monolithic=jnp.array([[9., 9.]]),
+        prefix_output=jnp.array([[7., 7.]]),
+    )
+    assert result["boundary"]["exact"]
+    assert result["candidate_vs_same_suffix"]["exact"]
+    assert not result["same_suffix_control_vs_monolithic"]["exact"]
+    assert not result["isolated_reference_vs_prefix"]["exact"]

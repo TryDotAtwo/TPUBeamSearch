@@ -1,5 +1,10 @@
 # Artgor Pallas same-suffix v2
 
+**Attribution correction (v3 source audit):** the residual and LN references
+were prefix outputs, not isolated JAX operators consuming the same runtime input.
+The mismatch measurements remain valid, but the causal interpretation below
+is superseded by the v3 report and matched-input v4 experiment.
+
 The causal diagnostic completed on eight Kaggle TPU cores for legal seed 42 and
 stress seed 43 at 256 states/device.
 

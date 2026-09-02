@@ -1,6 +1,6 @@
 # Artgor all-Pallas diagnostic v9
 
-Eight Kaggle TPU v3 cores evaluated the production-only all-Pallas engine against
+Eight Kaggle `TPU v5 lite` devices evaluated the production-only all-Pallas engine against
 the unchanged `jax_model.apply` oracle and the published exact hybrid.
 
 ## Result

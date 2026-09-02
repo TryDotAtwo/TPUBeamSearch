@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-02: same-suffix v3 attribution correction
+
+Embedding and isolated input Dense have zero hidden and shared-suffix mismatches
+on legal42/stress43 (8 TPU v5 lite, B256/device). LN and residual causal claims
+from v2 are withdrawn: their JAX references came from whole prefixes, while
+Pallas consumed separately materialized operator inputs. v4 adds isolated JAX
+operators consuming exactly those same tensors, reports reference-prefix drift
+separately, and explicitly checks zero replacement. No arithmetic change yet.
+See `test_results/artgor_pallas_same_suffix_v3/report.md`.
+
 This file separates measured facts from hypotheses so benchmark conclusions do
 not silently turn into architecture assumptions.
 
