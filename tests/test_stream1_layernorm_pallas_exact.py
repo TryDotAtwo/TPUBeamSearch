@@ -21,6 +21,7 @@ from tpu_beam_search.stream1_layernorm_pallas_exact import (
     prepare_pallas_exact_weights,
     stream1_layernorm_pallas_exact_stages,
     pallas_fully_materialized_layernorm_checkpoints,
+    _layer_norm_activation_math,
 )
 
 
@@ -194,6 +195,21 @@ def test_monolithic_fp32_variance_keeps_one_call_per_semantic_stage():
     assert pallas_exact_custom_call_count(architecture, config) == len(
         pallas_exact_stage_names(architecture)
     )
+
+
+def test_aligned_monolithic_math_has_no_predicate_or_select_in_jaxpr():
+    values = jnp.ones((2, 128), jnp.bfloat16)
+    scale = jnp.ones((128,), jnp.bfloat16)
+    bias = jnp.zeros((128,), jnp.bfloat16)
+    skip = jnp.zeros((2, 128), jnp.bfloat16)
+    closed = jax.make_jaxpr(lambda x, s, b, k: _layer_norm_activation_math(
+        x, s, b, k, logical_width=128, epsilon=1e-5,
+        arithmetic="monolithic_fp32_variance", add_skip=False, relu=True,
+        mask_padding=False,
+    ))(values, scale, bias, skip)
+    primitives = {equation.primitive.name for equation in closed.jaxpr.eqns}
+    assert "lt" not in primitives
+    assert "select_n" not in primitives
 
 
 def test_fully_materialized_checkpoints_expose_the_executed_boundaries():

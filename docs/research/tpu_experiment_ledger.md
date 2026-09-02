@@ -751,3 +751,20 @@ records private arithmetic match v1 at source
 The promoted one-call contract uses BF16-rounded mean, FP32 centered values and
 variance, BF16-rounded invstd, FP32 affine, final BF16 rounding, optional skip
 and ReLU. It advances to the full44-stage all-Pallas gate before timing.
+
+## FP32-variance all-Pallas diagnostic v6: 2026-09-02
+
+[Terminal report](../../test_results/artgor_pallas_exact_diagnostic_v6/report.md)
+records private full-model diagnostic v6 at source
+`989715789d8eff007fb08c143ccedcfeb8121e27` on eight TPUv5lite devices.
+
+- Embedding and BK128 input Dense are exact.
+- First mismatch is still `input.layernorm_relu`, reduced to
+  21,165--25,312 BF16 elements (max abs0.0078125--0.015625).
+- The standalone one-call arithmetic-identical Pallas probe is hash exact.
+  The production-only difference is an unconditional column predicate/select
+  path even at aligned width1024; the probe omits it statically.
+
+V7 removes masking for aligned widths, preserving it only for real padding.
+This simultaneously removes avoidable vector work and tests whether the
+predicate changed Mosaic arithmetic lowering. Timing remains correctness-gated.

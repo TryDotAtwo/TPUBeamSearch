@@ -163,6 +163,74 @@ def _validate_prepared_weights(
     _validate_layernorm_shapes(states, logical, architecture)
 
 
+def _layer_norm_activation_math(
+    values_bf16,
+    scale,
+    bias,
+    skip,
+    *,
+    logical_width: int,
+    epsilon: float,
+    arithmetic: str,
+    add_skip: bool,
+    relu: bool,
+    mask_padding: bool,
+):
+    values_bf16 = values_bf16.astype(jnp.bfloat16)
+    if mask_padding:
+        columns = jax.lax.broadcasted_iota(jnp.int32, values_bf16.shape, 1)
+        valid = columns < logical_width
+    else:
+        valid = None
+    if arithmetic in ("hlo_mixed", "monolithic_fp32_variance"):
+        values = values_bf16.astype(jnp.float32)
+        masked = jnp.where(valid, values, 0.0) if mask_padding else values
+        mean = (jnp.sum(masked, axis=1, keepdims=True) / logical_width).astype(
+            jnp.bfloat16
+        )
+        centered = values - mean.astype(jnp.float32)
+        if mask_padding:
+            centered = jnp.where(valid, centered, 0.0)
+        variance = jnp.sum(
+            centered * centered, axis=1, keepdims=True,
+        ) / logical_width
+        if arithmetic == "hlo_mixed":
+            variance = variance.astype(jnp.bfloat16)
+        eps = jnp.asarray(epsilon, jnp.bfloat16).astype(jnp.float32)
+        invstd = jax.lax.rsqrt(variance.astype(jnp.float32) + eps).astype(
+            jnp.bfloat16
+        )
+        normalized = centered * invstd.astype(jnp.float32)
+        result = (
+            normalized * scale.astype(jnp.float32)[None, :]
+            + bias.astype(jnp.float32)[None, :]
+        ).astype(jnp.bfloat16)
+    else:
+        masked = (
+            jnp.where(valid, values_bf16, jnp.bfloat16(0))
+            if mask_padding else values_bf16
+        )
+        mean = jnp.sum(masked, axis=1, keepdims=True) / logical_width
+        centered = values_bf16 - mean
+        if mask_padding:
+            centered = jnp.where(valid, centered, jnp.bfloat16(0))
+        variance = jnp.sum(centered * centered, axis=1, keepdims=True) / logical_width
+        result = (
+            centered
+            * jax.lax.rsqrt(variance + epsilon)
+            * scale[None, :]
+            + bias[None, :]
+        ).astype(jnp.bfloat16)
+    if add_skip:
+        result = (result + skip.astype(jnp.bfloat16)).astype(jnp.bfloat16)
+    if relu:
+        result = jnp.maximum(result, jnp.bfloat16(0)).astype(jnp.bfloat16)
+    return (
+        jnp.where(valid, result, jnp.bfloat16(0))
+        if mask_padding else result
+    )
+
+
 def _layer_norm_activation_kernel(
     values_ref,
     scale_ref,
@@ -175,47 +243,17 @@ def _layer_norm_activation_kernel(
     arithmetic: str,
     add_skip: bool,
     relu: bool,
+    mask_padding: bool,
 ):
-    values_bf16 = values_ref[...].astype(jnp.bfloat16)
-    columns = jax.lax.broadcasted_iota(jnp.int32, values_bf16.shape, 1)
-    valid = columns < logical_width
-    if arithmetic in ("hlo_mixed", "monolithic_fp32_variance"):
-        values = values_bf16.astype(jnp.float32)
-        masked = jnp.where(valid, values, 0.0)
-        mean = (jnp.sum(masked, axis=1, keepdims=True) / logical_width).astype(
-            jnp.bfloat16
-        )
-        centered = jnp.where(valid, values - mean.astype(jnp.float32), 0.0)
-        variance = jnp.sum(
-            centered * centered, axis=1, keepdims=True,
-        ) / logical_width
-        if arithmetic == "hlo_mixed":
-            variance = variance.astype(jnp.bfloat16)
-        eps = jnp.asarray(epsilon, jnp.bfloat16).astype(jnp.float32)
-        invstd = jax.lax.rsqrt(variance.astype(jnp.float32) + eps).astype(
-            jnp.bfloat16
-        )
-        normalized = centered * invstd.astype(jnp.float32)
-        result = (
-            normalized * scale_ref[...].astype(jnp.float32)[None, :]
-            + bias_ref[...].astype(jnp.float32)[None, :]
-        ).astype(jnp.bfloat16)
-    else:
-        masked = jnp.where(valid, values_bf16, jnp.bfloat16(0))
-        mean = jnp.sum(masked, axis=1, keepdims=True) / logical_width
-        centered = jnp.where(valid, values_bf16 - mean, jnp.bfloat16(0))
-        variance = jnp.sum(centered * centered, axis=1, keepdims=True) / logical_width
-        result = (
-            centered
-            * jax.lax.rsqrt(variance + epsilon)
-            * scale_ref[...][None, :]
-            + bias_ref[...][None, :]
-        ).astype(jnp.bfloat16)
-    if add_skip:
-        result = (result + skip_ref[...].astype(jnp.bfloat16)).astype(jnp.bfloat16)
-    if relu:
-        result = jnp.maximum(result, jnp.bfloat16(0)).astype(jnp.bfloat16)
-    output_ref[...] = jnp.where(valid, result, jnp.bfloat16(0))
+    output_ref[...] = _layer_norm_activation_math(
+        values_ref[...], scale_ref[...], bias_ref[...], skip_ref[...],
+        logical_width=logical_width,
+        epsilon=epsilon,
+        arithmetic=arithmetic,
+        add_skip=add_skip,
+        relu=relu,
+        mask_padding=mask_padding,
+    )
 
 
 def _split_mean_kernel(values_ref, mean_ref, *, logical_width: int):
@@ -488,6 +526,7 @@ def pallas_exact_layer_norm_activation(
         )
     padded_rows = pad_to_multiple(rows, bm)
     padded_width = pad_to_multiple(logical_width, width_alignment)
+    mask_padding = padded_width != logical_width
     padding = ((0, padded_rows - rows), (0, padded_width - logical_width))
     values_padded = jnp.pad(values.astype(jnp.bfloat16), padding)
     scale_padded = jnp.pad(
@@ -508,6 +547,7 @@ def pallas_exact_layer_norm_activation(
             arithmetic=arithmetic,
             add_skip=add_skip,
             relu=relu,
+            mask_padding=mask_padding,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
