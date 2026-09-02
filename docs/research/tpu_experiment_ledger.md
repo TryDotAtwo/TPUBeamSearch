@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-02: matched-input same-suffix v4
+
+Input LN now has zero same-input/same-suffix mismatches on legal42/stress43,
+as do embedding, input Dense and head. Input prefix still differs: isolated
+reference LN versus prefix has 21982/24861 mismatches. All ten isolated residual
+blocks remain inexact under corrected same-input controls; residual0 has
+264009/206762 hidden and 44372/53795 Q mismatches. Zero-replacement checks pass.
+Next is a 10-candidate residual0 operator arithmetic/BK A/B with compiled HLO.
+Final unchanged full-model oracle remains mandatory.
+
 ## 2026-09-02: same-suffix v3 attribution correction
 
 Embedding and isolated input Dense have zero hidden and shared-suffix mismatches

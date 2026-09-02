@@ -1,4 +1,5 @@
 import jax.numpy as jnp
+import jax
 import numpy as np
 import pytest
 from pathlib import Path
@@ -69,3 +70,33 @@ def test_isolated_control_does_not_attribute_prefix_drift_to_exact_operator():
     assert result["candidate_vs_same_suffix"]["exact"]
     assert not result["same_suffix_control_vs_monolithic"]["exact"]
     assert not result["isolated_reference_vs_prefix"]["exact"]
+
+
+def test_residual_operator_factorization_preserves_jax_block_and_skip():
+    assert hasattr(benchmark, "residual_operator")
+    _, states, architecture, weights = model_fixture()
+    hidden = reference_hidden_after_depth(states, weights, architecture, 0)
+    branch = hidden
+    for stage in range(4):
+        branch = benchmark.residual_operator(
+            branch, hidden, weights.residuals[0], architecture, stage=stage,
+        )
+    expected = benchmark.reference_residual(hidden, weights.residuals[0], architecture)
+    np.testing.assert_array_equal(np.asarray(branch), np.asarray(expected))
+    with pytest.raises(ValueError, match="stage"):
+        benchmark.residual_operator(hidden, hidden, weights.residuals[0], architecture, stage=4)
+
+
+def test_operator_ab_chains_reference_inputs_and_keeps_skip_fixed():
+    hidden, weight = jnp.array([[2., 3.]]), jnp.array(1.)
+    references = [jax.jit(lambda pair, w: pair[0] + w) for _ in range(4)]
+    prefixes = [jax.jit(lambda h, w, s=s: h + (s + 1) * w) for s in range(4)]
+    suffixes = [jax.jit(lambda pair, w: pair[0] + pair[1]) for _ in range(4)]
+    candidates = [{"equal": reference} for reference in references]
+    rows = benchmark.run_residual0_ab(
+        hidden, weight, (references, prefixes, suffixes, candidates), hidden,
+    )
+    assert len(rows) == 4
+    assert all(row["boundary"]["exact"] for row in rows)
+    assert all(row["isolated_reference_vs_prefix"]["exact"] for row in rows)
+    assert all(row["zero_replacement"]["exact"] for row in rows)

@@ -23,6 +23,7 @@ from benchmarks.layernorm_quality import load_puzzle
 from benchmarks.stream1_layernorm_arithmetic import runtime_inventory, sha256_file
 from tpu_beam_search.stream1_architecture import Stream1Architecture
 from tpu_beam_search.stream1_layernorm_pallas_exact import (
+    _exact_dense,
     PallasExactConfig, pallas_exact_embedding, pallas_exact_head,
     pallas_exact_input_block, pallas_exact_input_dense,
     pallas_exact_layer_norm_activation, pallas_exact_residual_block,
@@ -100,6 +101,78 @@ def reference_residual(hidden, block, architecture):
     return jax.nn.relu(hidden + branch)
 
 
+def residual_operator(values, skip, block, architecture, *, stage,
+                      pallas_config=None, interpret=False):
+    """One residual operator; both backends consume the same explicit operands."""
+    if stage not in range(4):
+        raise ValueError("residual stage must be 0..3")
+    layer = block.first if stage < 2 else block.second
+    if stage in (0, 2):
+        if pallas_config is None:
+            return values @ layer.dense.weight + layer.dense.bias
+        return _exact_dense(
+            values, layer.dense, bm=pallas_config.residual_bm,
+            bk=pallas_config.residual_bk, bn=pallas_config.residual_bn,
+            rounding=pallas_config.dense_rounding, interpret=interpret,
+        )
+    if pallas_config is None:
+        normalized = layer_norm_reference(
+            values, layer.normalization, epsilon=architecture.LAYER_NORM_EPSILON,
+        )
+        return jax.nn.relu(skip + normalized if stage == 3 else normalized)
+    return pallas_exact_layer_norm_activation(
+        values, layer.normalization.scale, layer.normalization.bias,
+        skip=skip if stage == 3 else None, add_skip=stage == 3, relu=True,
+        epsilon=architecture.LAYER_NORM_EPSILON, bm=pallas_config.residual_bm,
+        arithmetic=pallas_config.layernorm_arithmetic, interpret=interpret,
+    )
+
+
+def residual0_suffix(pair, weights, architecture, stage):
+    values, skip = pair
+    for following in range(stage + 1, 4):
+        values = residual_operator(values, skip, weights.residuals[0], architecture, stage=following)
+    return reference_suffix(values, weights, architecture, 1)
+
+
+def residual0_prefix(hidden, weights, architecture, stage):
+    values = hidden
+    for current in range(stage + 1):
+        values = residual_operator(values, hidden, weights.residuals[0], architecture, stage=current)
+    return values
+
+
+def residual0_runner_bundle(mesh, weights, architecture, cfg):
+    """Frozen 10-case Dense-BK/LN-arithmetic A/B; no speed promotion."""
+    references, prefixes, suffixes, candidates = [], [], [], []
+    spec = P("core", None)
+    for stage in range(4):
+        references.append(_mapped(
+            lambda pair, w, s=stage: residual_operator(*pair, w.residuals[0], architecture, stage=s),
+            mesh=mesh, input_spec=(spec, spec), weights_example=weights,
+        ))
+        prefixes.append(_mapped(
+            lambda h, w, s=stage: residual0_prefix(h, w, architecture, s),
+            mesh=mesh, input_spec=spec, weights_example=weights,
+        ))
+        suffixes.append(_mapped(
+            lambda pair, w, s=stage: residual0_suffix(pair, w, architecture, s),
+            mesh=mesh, input_spec=(spec, spec), weights_example=weights,
+        ))
+        variants = (
+            [(f"bk{bk}", dataclasses.replace(cfg, residual_bk=bk)) for bk in (128, 1024)]
+            if stage in (0, 2) else
+            [(arithmetic, dataclasses.replace(cfg, layernorm_arithmetic=arithmetic))
+             for arithmetic in ("monolithic_fp32_variance", "hlo_mixed", "legacy_bf16")]
+        )
+        candidates.append({name: _mapped(
+            lambda pair, w, s=stage, c=variant: residual_operator(
+                *pair, w.residuals[0], architecture, stage=s, pallas_config=c,
+            ), mesh=mesh, input_spec=(spec, spec), weights_example=weights,
+        ) for name, variant in variants})
+    return references, prefixes, suffixes, candidates
+
+
 def reference_suffix_from_input_dense(dense, weights, architecture):
     hidden = layer_norm_reference(
         dense, weights.input.normalization, epsilon=architecture.LAYER_NORM_EPSILON,
@@ -155,6 +228,43 @@ def compare_isolated_operator(values, *, reference_op, candidate_op, suffix,
         "isolated_reference_vs_prefix": _metrics(prefix_output, reference),
         "zero_replacement": _metrics(control_q, suffix(reference)),
     }
+
+
+def run_residual0_ab(hidden, weights_d, bundle, monolithic, *, hlo_output=None):
+    references, prefixes, suffixes, candidates = bundle
+    rows = []
+    values = hidden
+    names = ("dense1", "layernorm1_relu", "dense2", "layernorm2_skip_relu")
+    if hlo_output is not None:
+        hlo_output.mkdir(parents=True, exist_ok=True)
+    for stage, name in enumerate(names):
+        pair = (values, hidden)
+        prefix = jax.block_until_ready(prefixes[stage](hidden, weights_d))
+        reference = references[stage]
+        suffix_call = suffixes[stage]
+        for variant, candidate in candidates[stage].items():
+            try:
+                comparison = compare_isolated_operator(
+                    pair, reference_op=lambda x: reference(x, weights_d),
+                    candidate_op=lambda x: candidate(x, weights_d),
+                    suffix=lambda x: suffix_call((x, hidden), weights_d),
+                    monolithic=monolithic, prefix_output=prefix,
+                )
+                rows.append({"operator": name, "variant": variant, **comparison})
+                if hlo_output is not None:
+                    for label, call in (("jax", reference), (variant, candidate)):
+                        lowered = call.lower(pair, weights_d)
+                        (hlo_output / f"{name}-{label}.stablehlo.txt").write_text(
+                            str(lowered.compiler_ir(dialect="stablehlo")), encoding="utf-8",
+                        )
+                        (hlo_output / f"{name}-{label}.compiled.txt").write_text(
+                            lowered.compile().as_text(), encoding="utf-8",
+                        )
+            except Exception as error:
+                rows.append({"operator": name, "variant": variant,
+                             "error_type": type(error).__name__, "error": str(error)})
+        values = jax.block_until_ready(reference(pair, weights_d))
+    return rows
 
 
 def run(*, dataset: Path, output: Path) -> dict:
@@ -254,12 +364,17 @@ def run(*, dataset: Path, output: Path) -> dict:
                 mesh=mesh, input_spec=state_spec, weights_example=weights,
             ) for i in range(architecture.RESIDUAL_COUNT)
         ]
+        operator_bundle = residual0_runner_bundle(mesh, weights, architecture, cfg)
         puzzle = load_puzzle(dataset / "puzzle_info.json", state_len=150, move_count=30)
         for case_name, kind, seed in CASES:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
             states = jax.device_put(host, state_sharding)
             monolithic = jax.block_until_ready(original(states, original_weights_d))
             hidden = [jax.block_until_ready(call(states, weights_d)) for call in boundary]
+            operator_ab = run_residual0_ab(
+                hidden[0], weights_d, operator_bundle, monolithic,
+                hlo_output=output / "residual0_hlo" if case_name == CASES[0][0] else None,
+            )
             rows = []
 
             embedded = jax.block_until_ready(ref_embedding(states, weights_d))
@@ -318,6 +433,7 @@ def run(*, dataset: Path, output: Path) -> dict:
             report["cases"][case_name] = {
                 "kind": kind, "seed": seed, "input_sha256": _array_sha256(host),
                 "operators": rows,
+                "residual0_operator_ab": operator_ab,
             }
             checkpoint(path, report)
         report.update(
