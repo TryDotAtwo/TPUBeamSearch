@@ -1,5 +1,17 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: input trace v9 prepared
+
+Diagnostic-only BK128/BK1024 raw FP32 Dense comparison plus same-buffer JAX
+and Pallas traces of sum, BF16 mean, centered values, FP32 variance, BF16
+invstd and output. Compare instrumented output to uninstrumented raw-mean LN;
+retain prefix/shared-suffix/original controls and export all prefix mismatch
+coordinates with affected raw rows as NPZ. These intermediates are diagnostic
+expressions, not a claim to expose physical values inside monolithic JAX.
+No engine/default/BN changes. CPU hand-derived trace and artifact tests pass;
+TPU compile and numerical results pending. Expert second-opinion request timed
+out; no expert endorsement is assumed.
+
 ## 2026-09-02: raw-mean v8 result
 
 Late Dense + FP32 pre-round mean gives exact legal42 input prefix and shared

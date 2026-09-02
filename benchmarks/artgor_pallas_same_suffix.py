@@ -19,6 +19,7 @@ from benchmarks.artgor_exact_notebook_validation import (
     _tensor_comparison, checkpoint,
 )
 from benchmarks.artgor_pallas_exact_diagnostic import _make_states
+from benchmarks.artgor_input_trace import TRACE_NAMES, input_trace, save_mismatch_rows
 from benchmarks.layernorm_quality import load_puzzle
 from benchmarks.stream1_layernorm_arithmetic import runtime_inventory, sha256_file
 from tpu_beam_search.stream1_architecture import Stream1Architecture
@@ -393,6 +394,20 @@ def run(*, dataset: Path, output: Path) -> dict:
                 epsilon=architecture.LAYER_NORM_EPSILON,
             ), mesh=mesh, input_spec=state_spec, weights_example=weights,
         ) for source in ("fp32", "bf16")}
+        raw_bk1024 = _mapped(
+            lambda x, w: pallas_layernorm_dense(
+                x, w.input.dense.weight, w.input.dense.bias,
+                bm=cfg.input_bm, bk=1024, bn=cfg.input_bn,
+                dense_rounding="late", output_dtype=jnp.float32,
+            ), mesh=mesh, input_spec=state_spec, weights_example=weights,
+        )
+        trace_runners = {use_pallas: jax.jit(jax.shard_map(
+            lambda raw, w, p=use_pallas: input_trace(
+                raw, w.input.normalization.scale, w.input.normalization.bias,
+                epsilon=architecture.LAYER_NORM_EPSILON, pallas=p, bm=cfg.input_bm),
+            mesh=mesh, in_specs=(state_spec, jax.tree.map(lambda _: P(), weights)),
+            out_specs=tuple(P("core", None) for _ in TRACE_NAMES), check_vma=False,
+        )) for use_pallas in (False, True)}
         puzzle = load_puzzle(dataset / "puzzle_info.json", state_len=150, move_count=30)
         for case_name, kind, seed in CASES:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
@@ -428,6 +443,32 @@ def run(*, dataset: Path, output: Path) -> dict:
             dense = jax.block_until_ready(ref_input_dense(embedded, weights_d))
             input_mean_ab = []
             prefix_q = jax.block_until_ready(suffix[0](hidden[0], weights_d))
+            raw128 = jax.block_until_ready(raw_dense_runners["late"](embedded, weights_d))
+            raw1024 = jax.block_until_ready(raw_bk1024(embedded, weights_d))
+            input_trace_ab = {"raw_bk128_vs_bk1024": _metrics(raw128, raw1024), "cases": []}
+            for bk, raw in ((128, raw128), (1024, raw1024)):
+                jt = jax.block_until_ready(trace_runners[False](raw, weights_d))
+                pt = jax.block_until_ready(trace_runners[True](raw, weights_d))
+                value = jax.block_until_ready(mean_runners["fp32"](raw, weights_d))
+                trace_output = pt[-1].astype(jnp.bfloat16)
+                artifact = f"{case_name}_bk{bk}_prefix_mismatches.npz"
+                save_mismatch_rows(output / artifact, raw,
+                                   hidden[0].astype(jnp.float32), value.astype(jnp.float32))
+                input_trace_ab["cases"].append({
+                    "bk": bk, "rounded_dense": _metrics(dense, raw.astype(jnp.bfloat16)),
+                    "jax_vs_pallas_trace": {name: _metrics(j, p) for name, j, p in zip(TRACE_NAMES, jt, pt)},
+                    "trace_output_vs_uninstrumented": _metrics(value, trace_output),
+                    "prefix_boundary": _metrics(hidden[0], value),
+                    "same_suffix": _metrics(prefix_q, suffix[0](value, weights_d)),
+                    "original_q": _metrics(monolithic, suffix[0](value, weights_d)),
+                    "mismatch_artifact": artifact,
+                })
+                if case_name == CASES[0][0]:
+                    for label, call, arg in (("raw_dense_bk1024", raw_bk1024, embedded),
+                                             ("trace_jax", trace_runners[False], raw),
+                                             ("trace_pallas", trace_runners[True], raw)):
+                        (output / f"{label}.compiled.txt").write_text(
+                            call.lower(arg, weights_d).compile().as_text(), encoding="utf-8")
             for rounding, raw_call in raw_dense_runners.items():
                 raw = jax.block_until_ready(raw_call(embedded, weights_d))
                 for mean_source, ln_call in mean_runners.items():
@@ -495,6 +536,7 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "residual0_operator_ab": operator_ab,
                 "full_composition_vs_original": _metrics(monolithic, full_pallas),
                 "input_mean_ab": input_mean_ab,
+                "input_trace_ab": input_trace_ab,
             }
             checkpoint(path, report)
         report.update(
