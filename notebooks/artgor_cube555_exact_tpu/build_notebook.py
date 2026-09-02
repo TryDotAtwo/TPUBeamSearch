@@ -302,7 +302,7 @@ else:
 def _metadata_bytes() -> bytes:
     metadata = {
         "id": PUBLIC_SLUG,
-        "title": "CayleyPy Cube555 TPU Beam Q - Exact 1.59x Inference",
+        "title": "CayleyPy Cube555 TPU Beam Q Exact",
         "code_file": OUTPUT.name,
         "language": "python",
         "kernel_type": "notebook",

@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import zipfile
 
@@ -97,6 +98,14 @@ def test_kaggle_metadata_is_private_tpu_only_and_attaches_both_sources():
         "trydotatwo/tpu-beam-search-exact-artgor-code",
     }
     assert metadata["competition_sources"] == ["cayley-py-555-cube"]
+
+
+def test_kaggle_title_resolves_to_declared_kernel_slug():
+    metadata = json.loads(
+        (FOLDER / "kernel-metadata.json").read_text(encoding="utf-8")
+    )
+    resolved = re.sub(r"[^a-z0-9]+", "-", metadata["title"].lower()).strip("-")
+    assert resolved == metadata["id"].split("/", 1)[1]
 
 
 def test_generated_notebook_mounts_verified_flat_runtime_zip(tmp_path, monkeypatch):
