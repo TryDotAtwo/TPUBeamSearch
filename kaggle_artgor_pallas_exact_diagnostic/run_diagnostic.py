@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "4f9116fadefb9fbf5558d1097a4a11a70747169e"
+COMMIT_SHA = "7888c0e548d111f53861d766193f41bee58df81a"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch-artgor-pallas-exact-diagnostic")
 OUTPUT = Path("/kaggle/working/artgor_pallas_exact_diagnostic")
