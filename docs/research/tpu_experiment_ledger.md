@@ -696,3 +696,19 @@ All error metrics are zero.  Consequently neither rsqrt nor affine is an
 intrinsic Pallas precision limitation; drift arises from fused producer/
 consumer lifetime inside the larger LayerNorm kernel.  The next correctness
 baseline materializes mean, variance and BF16 invstd between Pallas calls.
+
+## Fully materialized all-Pallas diagnostic v5: 2026-09-02
+
+[Terminal report](../../test_results/artgor_pallas_exact_diagnostic_v5/report.md)
+records private all-Pallas diagnostic v5 at source
+`c642863f3fee4e1e2ae170a239245a2dae54097b` on eight TPUv5lite devices.
+
+- Embedding and BK128 input Dense are bitwise exact on all six frozen corpora.
+- Five explicit Pallas calls per LayerNorm still first diverge at
+  `input.layernorm_relu`: 154,177--194,400 BF16 values differ, with max abs
+  0.015625--0.03125.
+- These counts are identical to the unsplit and split-mean all-Pallas runs.
+  Since the fixed-operand mean/subtraction/variance/invstd/affine probes are
+  exact, the next diagnostic compares the same modular Pallas intermediates
+  with monolithic and explicitly materialized JAX controls. Timing remains
+  blocked by correctness.
