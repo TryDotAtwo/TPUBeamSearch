@@ -1,5 +1,5 @@
 {
-  "id": "trydotatwo/tpu-artgor-layernorm-attribution",
+  "id": "trydotatwo/tpu-artgor-layernorm-arithmetic-attribution",
   "title": "TPU Artgor LayerNorm Arithmetic Attribution",
   "code_file": "run_attribution.py",
   "language": "python",

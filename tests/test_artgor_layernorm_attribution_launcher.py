@@ -9,7 +9,10 @@ FOLDER = ROOT / "kaggle_artgor_layernorm_attribution"
 
 def test_launcher_is_private_tpu_and_pinned_to_full_sha():
     metadata = json.loads((FOLDER / "kernel-metadata.json").read_text())
-    assert metadata["id"] == "trydotatwo/tpu-artgor-layernorm-attribution"
+    assert (
+        metadata["id"]
+        == "trydotatwo/tpu-artgor-layernorm-arithmetic-attribution"
+    )
     assert metadata["enable_tpu"] is True
     assert metadata["enable_gpu"] is False
     assert metadata["is_private"] is True
