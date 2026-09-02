@@ -79,6 +79,7 @@ def build_notebook(source_commit: str) -> bytes:
             f"frozen Artgor notebook hash changed: {actual_hash}"
         )
     notebook = json.loads(source_bytes)
+    notebook["nbformat_minor"] = max(notebook.get("nbformat_minor", 0), 5)
     cells = notebook["cells"]
     if len(cells) != 6:
         raise RuntimeError("frozen Artgor notebook must contain six cells")
@@ -107,7 +108,49 @@ Source: scriptVersionId=344319112.  TPUBeamSearch code commit:
     cell1 = _replace_once(
         cell1,
         "import json, sys, time, csv\n",
-        "import json, sys, time, csv, hashlib\n",
+        """import sys, subprocess
+import importlib.metadata as importlib_metadata
+
+# Kaggle's base image can pair a new JAX wheel with an old system libtpu.  Pallas
+# then refuses to lower even though ordinary JAX works.  Install the exact triplet
+# used by the publication gate before importing JAX.
+TPU_RUNTIME_REQUIREMENTS = (
+    "jax[tpu]==0.10.2",
+    "jaxlib==0.10.2",
+    "libtpu==0.0.42.1",
+)
+TPU_RUNTIME_VERSIONS = {
+    "jax": "0.10.2",
+    "jaxlib": "0.10.2",
+    "libtpu": "0.0.42.1",
+}
+
+
+def _installed_version(distribution):
+    try:
+        return importlib_metadata.version(distribution)
+    except importlib_metadata.PackageNotFoundError:
+        return None
+
+
+before = {name: _installed_version(name) for name in TPU_RUNTIME_VERSIONS}
+if before != TPU_RUNTIME_VERSIONS:
+    print("installing validated TPU runtime:", TPU_RUNTIME_REQUIREMENTS)
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", "--quiet",
+         "--disable-pip-version-check", *TPU_RUNTIME_REQUIREMENTS],
+        check=True,
+    )
+after = {name: _installed_version(name) for name in TPU_RUNTIME_VERSIONS}
+if after != TPU_RUNTIME_VERSIONS:
+    raise RuntimeError(
+        f"validated TPU runtime install failed: expected {TPU_RUNTIME_VERSIONS}, "
+        f"got {after}"
+    )
+print("TPU runtime packages:", after)
+
+import json, time, csv, hashlib
+""",
     )
     cell1 += f"""
 
@@ -277,11 +320,57 @@ else:
             )
 """,
     )
+    cell4 = _replace_once(
+        cell4,
+        'print(f"solving {len(pid_list)} pids x {len(FRAMES)} frame(s)")\n',
+        '''print(f"solving {len(pid_list)} pids x {len(FRAMES)} frame(s)")
+successful_frame_runs = 0
+failed_frame_runs = []
+''',
+    )
+    cell4 = _replace_once(
+        cell4,
+        '''            results.append({"pid": pid, "sym": k, "inverted": inverted,
+                            "found": False, "error": str(e),
+                            "wall_s": time.time() - t0})
+            continue
+
+        rec = {"pid": pid, "sym": k, "inverted": inverted,
+''',
+        '''            error_record = {"pid": pid, "sym": k, "inverted": inverted,
+                            "found": False, "error": str(e),
+                            "wall_s": time.time() - t0}
+            results.append(error_record)
+            failed_frame_runs.append(error_record)
+            with open(OUT_JSON, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=1)
+            continue
+
+        successful_frame_runs += 1
+        rec = {"pid": pid, "sym": k, "inverted": inverted,
+''',
+    )
+    cell4 = _replace_once(
+        cell4,
+        "# BEST of frames, not first of frames.\n",
+        '''if pid_list and successful_frame_runs == 0:
+    raise RuntimeError(
+        f"all requested frame runs failed ({len(failed_frame_runs)}); "
+        "refusing to emit a baseline-only submission as a successful run"
+    )
+
+# BEST of frames, not first of frames.
+''',
+    )
     cells[4]["source"] = cell4
 
     for cell in cells:
-        cell["outputs"] = []
-        cell["execution_count"] = None
+        if cell["cell_type"] == "code":
+            cell["outputs"] = []
+            cell["execution_count"] = None
+        else:
+            cell.pop("outputs", None)
+            cell.pop("execution_count", None)
     notebook["metadata"].setdefault("tpu_beam_search", {})
     notebook["metadata"]["tpu_beam_search"] = {
         "artgor_script_version": SOURCE_VERSION,
@@ -309,7 +398,7 @@ def _metadata_bytes() -> bytes:
         "is_private": True,
         "enable_gpu": False,
         "enable_tpu": True,
-        "enable_internet": False,
+        "enable_internet": True,
         "dataset_sources": [
             "artgor/cube555-tpu-artifacts",
             CODE_DATASET,

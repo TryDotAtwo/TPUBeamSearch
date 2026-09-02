@@ -33,6 +33,8 @@ def _runtime_commit() -> str:
 
 def test_generated_notebook_preserves_six_cell_flow_and_exact_engine():
     notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+    assert notebook["nbformat"] == 4
+    assert notebook["nbformat_minor"] >= 5
     assert len(notebook["cells"]) == 6
     assert [cell["cell_type"] for cell in notebook["cells"]] == [
         "markdown",
@@ -60,8 +62,32 @@ def test_generated_notebook_preserves_six_cell_flow_and_exact_engine():
     assert "release_manifest.json" in joined
     assert "sha256" in joined
     for cell in notebook["cells"]:
-        assert cell.get("outputs", []) == []
-        assert cell.get("execution_count") is None
+        if cell["cell_type"] == "code":
+            assert cell.get("outputs", []) == []
+            assert cell.get("execution_count") is None
+        else:
+            assert "outputs" not in cell
+            assert "execution_count" not in cell
+
+
+def test_generated_notebook_bootstraps_the_validated_tpu_runtime_before_jax():
+    notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+    source = "".join(notebook["cells"][1]["source"])
+    assert "jax[tpu]==0.10.2" in source
+    assert "jaxlib==0.10.2" in source
+    assert "libtpu==0.0.42.1" in source
+    assert "subprocess.run" in source
+    assert source.index("libtpu==0.0.42.1") < source.index("import jax\n")
+
+
+def test_generated_notebook_fails_closed_when_every_frame_errors():
+    notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+    source = "".join(notebook["cells"][4]["source"])
+    assert "successful_frame_runs" in source
+    assert "all requested frame runs failed" in source
+    assert source.index("all requested frame runs failed") < source.index(
+        "# BEST of frames"
+    )
 
 
 def test_generated_notebook_records_its_frozen_source_and_builder_hash():
@@ -92,7 +118,7 @@ def test_kaggle_metadata_is_private_tpu_only_and_attaches_both_sources():
     assert metadata["is_private"] is True
     assert metadata["enable_tpu"] is True
     assert metadata["enable_gpu"] is False
-    assert metadata["enable_internet"] is False
+    assert metadata["enable_internet"] is True
     assert set(metadata["dataset_sources"]) == {
         "artgor/cube555-tpu-artifacts",
         "trydotatwo/tpu-beam-search-exact-artgor-code",
