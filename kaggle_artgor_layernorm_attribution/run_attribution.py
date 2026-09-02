@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "53aff1638647e80c8f353b05222d699fb8f28bc9"
+COMMIT_SHA = "95ce4777cce0ad18fc5c9735edc89bd7206ea2c0"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch-artgor-layernorm-attribution")
 OUTPUT = Path("/kaggle/working/artgor_layernorm_attribution")
