@@ -53,6 +53,27 @@ def test_config_rejects_nonpositive_tiles():
         _tiny_config(residual_bk=0)
 
 
+@pytest.mark.parametrize("arithmetic", ["hlo_mixed_late_skip", "monolithic_fp32_variance_late_skip"])
+def test_late_skip_keeps_half_bf16_ulp_until_after_residual_add(arithmetic):
+    # 1 + 1/256 is a BF16 halfway tie: rounding before adding -1 loses it.
+    values = jnp.tile(jnp.array([-1., 1.], jnp.bfloat16), (2, 64))
+    actual = _layer_norm_activation_math(
+        values, jnp.ones(128, jnp.bfloat16),
+        jnp.full((128,), 1 / 256, jnp.bfloat16),
+        jnp.full_like(values, -1), logical_width=128, epsilon=1e-5,
+        arithmetic=arithmetic, add_skip=True, relu=True, mask_padding=False,
+    )
+    expected = np.tile(np.array([0., 1 / 256], np.float32), (2, 64))
+    np.testing.assert_array_equal(np.asarray(actual, np.float32), expected)
+    kernel = pallas_exact_layer_norm_activation(
+        values, jnp.ones(128, jnp.bfloat16),
+        jnp.full((128,), 1 / 256, jnp.bfloat16),
+        skip=jnp.full_like(values, -1), add_skip=True, relu=True,
+        arithmetic=arithmetic, bm=2, interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(kernel, np.float32), expected)
+
+
 def test_production_defaults_use_tpu_legal_bias_vector_tiles():
     config = PallasExactConfig()
 

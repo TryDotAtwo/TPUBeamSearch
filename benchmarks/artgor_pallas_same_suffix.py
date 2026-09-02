@@ -143,7 +143,7 @@ def residual0_prefix(hidden, weights, architecture, stage):
 
 
 def residual0_runner_bundle(mesh, weights, architecture, cfg):
-    """Frozen 10-case Dense-BK/LN-arithmetic A/B; no speed promotion."""
+    """Dense/LN controls plus factorial variance/skip-rounding A/B."""
     references, prefixes, suffixes, candidates = [], [], [], []
     spec = P("core", None)
     for stage in range(4):
@@ -165,6 +165,11 @@ def residual0_runner_bundle(mesh, weights, architecture, cfg):
             [(arithmetic, dataclasses.replace(cfg, layernorm_arithmetic=arithmetic))
              for arithmetic in ("monolithic_fp32_variance", "hlo_mixed", "legacy_bf16")]
         )
+        if stage == 3:
+            variants.extend(
+                (arithmetic, dataclasses.replace(cfg, layernorm_arithmetic=arithmetic))
+                for arithmetic in ("hlo_mixed_late_skip", "monolithic_fp32_variance_late_skip")
+            )
         candidates.append({name: _mapped(
             lambda pair, w, s=stage, c=variant: residual_operator(
                 *pair, w.residuals[0], architecture, stage=s, pallas_config=c,

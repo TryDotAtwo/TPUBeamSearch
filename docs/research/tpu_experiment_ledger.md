@@ -1,5 +1,14 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-02: residual0 operator arithmetic v5
+
+Same-input Dense1/2 are exact at BK128 and BK1024; LN1 FP32-variance is exact.
+First isolated operator mismatch is LN2+skip+ReLU (249092/192197 hidden values
+legal42/stress43). JAX compiled HLO rounds variance to BF16 but retains affine,
+skip add and ReLU in FP32 until output. Pallas rounded affine before skip.
+v6 tests variance BF16/FP32 x early/late skip rounding, preserving defaults.
+Half-ULP CPU/interpreter witness covers new modes; TPU confirmation pending.
+
 ## 2026-09-02: matched-input same-suffix v4
 
 Input LN now has zero same-input/same-suffix mismatches on legal42/stress43,

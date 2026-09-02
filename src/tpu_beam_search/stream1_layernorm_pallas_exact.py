@@ -49,6 +49,8 @@ _LAYER_NORM_ARITHMETICS = (
     "legacy_bf16",
     "hlo_mixed",
     "monolithic_fp32_variance",
+    "hlo_mixed_late_skip",
+    "monolithic_fp32_variance_late_skip",
     "split_mean_hlo_mixed",
     "fully_materialized_hlo_mixed",
 )
@@ -186,7 +188,8 @@ def _layer_norm_activation_math(
         valid = columns < logical_width
     else:
         valid = None
-    if arithmetic in ("hlo_mixed", "monolithic_fp32_variance"):
+    late_skip = arithmetic in ("hlo_mixed_late_skip", "monolithic_fp32_variance_late_skip")
+    if arithmetic in ("hlo_mixed", "monolithic_fp32_variance") or late_skip:
         values = values_bf16.astype(jnp.float32)
         masked = jnp.where(valid, values, 0.0) if mask_padding else values
         mean = (jnp.sum(masked, axis=1, keepdims=True) / logical_width).astype(
@@ -198,7 +201,7 @@ def _layer_norm_activation_math(
         variance = jnp.sum(
             centered * centered, axis=1, keepdims=True,
         ) / logical_width
-        if arithmetic == "hlo_mixed":
+        if arithmetic in ("hlo_mixed", "hlo_mixed_late_skip"):
             variance = variance.astype(jnp.bfloat16)
         eps = jnp.asarray(epsilon, jnp.bfloat16).astype(jnp.float32)
         invstd = jax.lax.rsqrt(variance.astype(jnp.float32) + eps).astype(
@@ -208,7 +211,9 @@ def _layer_norm_activation_math(
         result = (
             normalized * scale.astype(jnp.float32)[None, :]
             + bias.astype(jnp.float32)[None, :]
-        ).astype(jnp.bfloat16)
+        )
+        if not late_skip:
+            result = result.astype(jnp.bfloat16)
     else:
         masked = (
             jnp.where(valid, values_bf16, jnp.bfloat16(0))
@@ -225,9 +230,15 @@ def _layer_norm_activation_math(
             * scale[None, :]
             + bias[None, :]
         ).astype(jnp.bfloat16)
-    if add_skip:
+    if late_skip:
+        if add_skip:
+            result = skip.astype(jnp.float32) + result
+        if relu:
+            result = jnp.maximum(result, jnp.float32(0))
+        result = result.astype(jnp.bfloat16)
+    elif add_skip:
         result = (result + skip.astype(jnp.bfloat16)).astype(jnp.bfloat16)
-    if relu:
+    if relu and not late_skip:
         result = jnp.maximum(result, jnp.bfloat16(0)).astype(jnp.bfloat16)
     return (
         jnp.where(valid, result, jnp.bfloat16(0))
