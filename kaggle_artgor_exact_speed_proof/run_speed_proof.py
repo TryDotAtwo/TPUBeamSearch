@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "af8e13cc85f4626affbfedb0e867ede426164a41"
+COMMIT_SHA = "3070839d4f04cff8fa58794024384c9bd98aa947"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch-artgor-exact-speed-proof")
 OUTPUT = Path("/kaggle/working/artgor_exact_speed_proof")

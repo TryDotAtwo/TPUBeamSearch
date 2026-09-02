@@ -21,6 +21,16 @@ def test_speed_proof_launcher_is_pinned_and_writes_a_persistent_log():
         cwd=ROOT,
         check=False,
     ).returncode == 0
+    assert subprocess.run(
+        [
+            "git",
+            "cat-file",
+            "-e",
+            f"{match.group(1)}:benchmarks/artgor_exact_speed_proof.py",
+        ],
+        cwd=ROOT,
+        check=False,
+    ).returncode == 0
     assert "https://github.com/TryDotAtwo/TPUBeamSearch.git" in source
     assert "jax[tpu]==0.10.2" in source
     assert "jaxlib==0.10.2" in source
