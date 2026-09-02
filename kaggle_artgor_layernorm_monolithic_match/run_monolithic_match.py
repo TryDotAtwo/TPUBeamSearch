@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 
-EXPECTED_SOURCE_COMMIT = "0000000000000000000000000000000000000000"
+EXPECTED_SOURCE_COMMIT = "a50f6490abc6e65428d73a86ab9ae1122ace28d3"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch-artgor-layernorm-monolithic-match")
 OUTPUT = Path("/kaggle/working/artgor_layernorm_monolithic_match")
