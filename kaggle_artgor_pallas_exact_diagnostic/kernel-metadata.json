@@ -1,0 +1,17 @@
+{
+  "id": "trydotatwo/tpu-artgor-pallas-exact-diagnostic",
+  "title": "TPU Artgor All-Pallas Exact Diagnostic",
+  "code_file": "run_diagnostic.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "artgor/cube555-tpu-artifacts"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
