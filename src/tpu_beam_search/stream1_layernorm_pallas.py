@@ -29,15 +29,15 @@ def _logical_mean(values, logical_width, mean_mode):
     return jnp.sum(values, axis=1, keepdims=True) / logical_width
 
 
-def _dense_bias(accumulator, bias, dense_rounding):
+def _dense_bias(accumulator, bias, dense_rounding, output_dtype=jnp.bfloat16):
     if dense_rounding == "bf16_before_bias":
         accumulator = accumulator.astype(jnp.bfloat16).astype(jnp.float32)
-    return (accumulator + bias.astype(jnp.float32)).astype(jnp.bfloat16)
+    return (accumulator + bias.astype(jnp.float32)).astype(output_dtype)
 
 
 def _layernorm_dense_kernel(
     input_ref, weight_ref, bias_ref, output_ref, accumulator_ref,
-    *, nsteps: int, dense_rounding: str,
+    *, nsteps: int, dense_rounding: str, output_dtype=jnp.bfloat16,
 ):
     kstep = pl.program_id(2)
 
@@ -52,7 +52,7 @@ def _layernorm_dense_kernel(
     @pl.when(kstep == nsteps - 1)
     def finish():
         output_ref[...] = _dense_bias(
-            accumulator_ref[...], bias_ref[...][None, :], dense_rounding
+            accumulator_ref[...], bias_ref[...][None, :], dense_rounding, output_dtype
         )
 
 
@@ -65,6 +65,7 @@ def pallas_layernorm_dense(
     bk: int = 256,
     bn: int = 512,
     dense_rounding: str = "late",
+    output_dtype=jnp.bfloat16,
     interpret: bool = False,
 ):
     """LN-only Dense experiment; legacy and dot-before-bias BF16 boundaries.
@@ -72,9 +73,13 @@ def pallas_layernorm_dense(
     Both modes use BF16 operands and FP32 tiled dot accumulation. The early
     mode rounds the *completed* reduction before bias, never each K tile.
     Interpreter matching does not establish TPU lowering equivalence.
+    The optional float32 output preserves bias-add preactivation for diagnostics;
+    default bfloat16 output and the existing fast path are unchanged.
     """
     _validate_arithmetic(dense_rounding=dense_rounding)
-    if dense_rounding == "late":
+    if output_dtype not in (jnp.bfloat16, jnp.float32):
+        raise ValueError("output_dtype must be bfloat16 or float32")
+    if dense_rounding == "late" and output_dtype == jnp.bfloat16:
         return pallas_dense_linear(
             values, weight, bias, bm=bm, bk=bk, bn=bn, relu=False, interpret=interpret
         )
@@ -107,20 +112,21 @@ def pallas_layernorm_dense(
     nsteps = padded_input // bk
     call = pl.pallas_call(
         functools.partial(
-            _layernorm_dense_kernel, nsteps=nsteps, dense_rounding=dense_rounding
+            _layernorm_dense_kernel, nsteps=nsteps, dense_rounding=dense_rounding,
+            output_dtype=output_dtype,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,
             in_specs=[
-                pl.BlockSpec((bm, bk), lambda i, j, k: (i, k)),
-                pl.BlockSpec((bk, bn), lambda i, j, k: (k, j)),
-                pl.BlockSpec((bn,), lambda i, j, k: (j,)),
+                pl.BlockSpec((bm, bk), lambda i, j, k: (i.astype(jnp.int32), k.astype(jnp.int32))),
+                pl.BlockSpec((bk, bn), lambda i, j, k: (k.astype(jnp.int32), j.astype(jnp.int32))),
+                pl.BlockSpec((bn,), lambda i, j, k: (j.astype(jnp.int32),)),
             ],
-            out_specs=pl.BlockSpec((bm, bn), lambda i, j, k: (i, j)),
+            out_specs=pl.BlockSpec((bm, bn), lambda i, j, k: (i.astype(jnp.int32), j.astype(jnp.int32))),
             scratch_shapes=[pltpu.VMEM((bm, bn), jnp.float32)],
             grid=(padded_rows // bm, padded_output // bn, nsteps),
         ),
-        out_shape=jax.ShapeDtypeStruct((padded_rows, padded_output), jnp.bfloat16),
+        out_shape=jax.ShapeDtypeStruct((padded_rows, padded_output), output_dtype),
         compiler_params=pltpu.CompilerParams(
             dimension_semantics=("parallel", "parallel", "arbitrary")
         ),

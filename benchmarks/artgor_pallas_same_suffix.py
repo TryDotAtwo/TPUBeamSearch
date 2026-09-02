@@ -29,7 +29,9 @@ from tpu_beam_search.stream1_layernorm_pallas_exact import (
     pallas_exact_layer_norm_activation, pallas_exact_residual_block,
     prepare_pallas_exact_weights,
     stream1_layernorm_pallas_exact_inference,
+    pallas_preactivation_ln,
 )
+from tpu_beam_search.stream1_layernorm_pallas import pallas_layernorm_dense
 from tpu_beam_search.stream1_layernorm_reference import (
     layer_norm_reference, layernorm_stream1_weights_from_artgor_params,
 )
@@ -377,6 +379,20 @@ def run(*, dataset: Path, output: Path) -> dict:
             ) for i in range(architecture.RESIDUAL_COUNT)
         ]
         operator_bundle = residual0_runner_bundle(mesh, weights, architecture, cfg)
+        raw_dense_runners = {rounding: _mapped(
+            lambda x, w, r=rounding: pallas_layernorm_dense(
+                x, w.input.dense.weight, w.input.dense.bias,
+                bm=cfg.input_bm, bk=cfg.input_bk, bn=cfg.input_bn,
+                dense_rounding=r, output_dtype=jnp.float32,
+            ), mesh=mesh, input_spec=state_spec, weights_example=weights,
+        ) for rounding in ("late", "bf16_before_bias")}
+        mean_runners = {source: _mapped(
+            lambda raw, w, s=source: pallas_preactivation_ln(
+                raw, w.input.normalization.scale, w.input.normalization.bias,
+                mean_source=s, bm=cfg.input_bm,
+                epsilon=architecture.LAYER_NORM_EPSILON,
+            ), mesh=mesh, input_spec=state_spec, weights_example=weights,
+        ) for source in ("fp32", "bf16")}
         puzzle = load_puzzle(dataset / "puzzle_info.json", state_len=150, move_count=30)
         for case_name, kind, seed in CASES:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
@@ -410,6 +426,26 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "same_suffix_control_vs_monolithic": _metrics(monolithic, embedded_control_q),
             })
             dense = jax.block_until_ready(ref_input_dense(embedded, weights_d))
+            input_mean_ab = []
+            prefix_q = jax.block_until_ready(suffix[0](hidden[0], weights_d))
+            for rounding, raw_call in raw_dense_runners.items():
+                raw = jax.block_until_ready(raw_call(embedded, weights_d))
+                for mean_source, ln_call in mean_runners.items():
+                    value = jax.block_until_ready(ln_call(raw, weights_d))
+                    q = jax.block_until_ready(suffix[0](value, weights_d))
+                    input_mean_ab.append({
+                        "dense_rounding": rounding, "mean_source": mean_source,
+                        "rounded_dense_vs_reference": _metrics(dense, raw.astype(jnp.bfloat16)),
+                        "prefix_boundary": _metrics(hidden[0], value),
+                        "standalone_ln_control": _metrics(ref_ln(raw.astype(jnp.bfloat16), weights_d), value),
+                        "same_suffix": _metrics(prefix_q, q),
+                        "original_q": _metrics(monolithic, q),
+                    })
+                    if case_name == CASES[0][0]:
+                        for label, call, arg in ((f"raw_dense_{rounding}", raw_call, embedded),
+                                                 (f"raw_mean_{mean_source}", ln_call, raw)):
+                            lowered = call.lower(arg, weights_d)
+                            (output / f"{label}.compiled.txt").write_text(lowered.compile().as_text(), encoding="utf-8")
             candidate_dense = jax.block_until_ready(pinput_dense(embedded, pweights_d))
             dense_control_q = jax.block_until_ready(suffix_input_dense(dense, weights_d))
             dense_candidate_q = jax.block_until_ready(suffix_input_dense(candidate_dense, weights_d))
@@ -458,6 +494,7 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "operators": rows,
                 "residual0_operator_ab": operator_ab,
                 "full_composition_vs_original": _metrics(monolithic, full_pallas),
+                "input_mean_ab": input_mean_ab,
             }
             checkpoint(path, report)
         report.update(

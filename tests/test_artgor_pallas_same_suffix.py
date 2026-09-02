@@ -100,3 +100,13 @@ def test_operator_ab_chains_reference_inputs_and_keeps_skip_fixed():
     assert all(row["boundary"]["exact"] for row in rows)
     assert all(row["isolated_reference_vs_prefix"]["exact"] for row in rows)
     assert all(row["zero_replacement"]["exact"] for row in rows)
+
+
+def test_dense_preactivation_retains_sub_bf16_bias():
+    from tpu_beam_search.stream1_layernorm_pallas import pallas_layernorm_dense
+    values = jnp.ones((2, 8), jnp.bfloat16)
+    weight = jnp.full((8, 8), 1 / 8, jnp.bfloat16)
+    bias = jnp.full((8,), 1 / 256, jnp.bfloat16)
+    actual = pallas_layernorm_dense(values, weight, bias, bm=2, bk=8, bn=8,
+                                   output_dtype=jnp.float32, interpret=True)
+    np.testing.assert_array_equal(np.asarray(actual), np.full((2, 8), 1 + 1 / 256, np.float32))

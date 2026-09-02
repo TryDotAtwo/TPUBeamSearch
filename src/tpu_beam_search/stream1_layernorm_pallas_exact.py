@@ -184,6 +184,7 @@ def _layer_norm_activation_math(
     add_skip: bool,
     relu: bool,
     mask_padding: bool,
+    mean_values=None,
 ):
     values_bf16 = values_bf16.astype(jnp.bfloat16)
     if mask_padding:
@@ -194,7 +195,8 @@ def _layer_norm_activation_math(
     late_skip = arithmetic in ("hlo_mixed_late_skip", "monolithic_fp32_variance_late_skip")
     if arithmetic in ("hlo_mixed", "monolithic_fp32_variance") or late_skip:
         values = values_bf16.astype(jnp.float32)
-        masked = jnp.where(valid, values, 0.0) if mask_padding else values
+        mean_input = values if mean_values is None else mean_values.astype(jnp.float32)
+        masked = jnp.where(valid, mean_input, 0.0) if mask_padding else mean_input
         mean = (jnp.sum(masked, axis=1, keepdims=True) / logical_width).astype(
             jnp.bfloat16
         )
@@ -272,6 +274,46 @@ def _layer_norm_activation_kernel(
         relu=relu,
         mask_padding=mask_padding,
     )
+
+
+def _preactivation_ln_kernel(raw_ref, scale_ref, bias_ref, output_ref, *, mean_source, width, epsilon):
+    raw = raw_ref[...]
+    output_ref[...] = _layer_norm_activation_math(
+        raw.astype(jnp.bfloat16), scale_ref[...], bias_ref[...], raw,
+        logical_width=width, epsilon=epsilon,
+        arithmetic="monolithic_fp32_variance", add_skip=False, relu=True,
+        mask_padding=raw.shape[1] != width,
+        mean_values=raw if mean_source == "fp32" else None,
+    )
+
+
+def pallas_preactivation_ln(raw, scale, bias, *, mean_source="fp32", bm=128,
+                            epsilon=1e-5, interpret=False):
+    """Diagnostic: mean may consume pre-round Dense, centering consumes BF16."""
+    if raw.ndim != 2 or raw.dtype != jnp.float32 or min(raw.shape) <= 0:
+        raise ValueError("raw must be a nonempty float32 matrix")
+    if mean_source not in ("fp32", "bf16") or bm <= 0:
+        raise ValueError("invalid mean_source or bm")
+    rows, width = raw.shape
+    if scale.shape != (width,) or bias.shape != (width,):
+        raise ValueError("normalization vectors must match width")
+    padded_rows, padded_width = pad_to_multiple(rows, bm), pad_to_multiple(width, 128)
+    matrix_spec = pl.BlockSpec((bm, padded_width), _matrix_row_index)
+    vector_spec = pl.BlockSpec((padded_width,), _vector_zero_index)
+    call = pl.pallas_call(
+        functools.partial(_preactivation_ln_kernel, mean_source=mean_source, width=width, epsilon=epsilon),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0, in_specs=[matrix_spec, vector_spec, vector_spec],
+            out_specs=matrix_spec, grid=(padded_rows // bm,),
+        ), out_shape=jax.ShapeDtypeStruct((padded_rows, padded_width), jnp.bfloat16),
+        compiler_params=pltpu.CompilerParams(dimension_semantics=("parallel",)),
+        interpret=interpret, name=f"preactivation_ln_{mean_source}",
+    )
+    return call(
+        jnp.pad(raw, ((0, padded_rows - rows), (0, padded_width - width))),
+        jnp.pad(scale, (0, padded_width - width)),
+        jnp.pad(bias, (0, padded_width - width)),
+    )[:rows, :width]
 
 
 def _split_mean_kernel(values_ref, mean_ref, *, logical_width: int):

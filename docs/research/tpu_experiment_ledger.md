@@ -1,5 +1,14 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-02: composition v7 and mean-source hypothesis
+
+Full all-Pallas B256/device still mismatches original Q: 45926/54013 legal/stress.
+Residual0 after late-skip correction: 18377/17568 hidden mismatches, 567/816
+same-suffix Q. Input-prefix HLO reduces FP32 Dense+bias while storing BF16 for
+centering. v8 tests raw mean versus rounded mean crossed with dot-before-bias
+versus late dot rounding, retaining explicit standalone controls. No default
+change; no all-model exactness or speed claim.
+
 ## 2026-09-02: residual skip-rounding v6
 
 FP32 variance + late affine/skip/ReLU rounding gives zero hidden and same-suffix

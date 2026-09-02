@@ -86,6 +86,19 @@ def test_call_count_respects_separate_skip_mode():
     )
 
 
+@pytest.mark.parametrize("mean_source,positive", [("fp32", 0.5), ("bf16", 1.)])
+def test_preactivation_ln_uses_raw_mean_but_bf16_centering(mean_source, positive):
+    assert hasattr(pallas_exact_module, "pallas_preactivation_ln")
+    values = jnp.tile(jnp.array([-1., 1 + 1 / 256], jnp.float32), (2, 64))
+    actual = pallas_exact_module.pallas_preactivation_ln(
+        values, jnp.full((128,), 256, jnp.bfloat16),
+        jnp.full((128,), -255, jnp.bfloat16),
+        mean_source=mean_source, bm=2, interpret=True,
+    )
+    expected = np.tile(np.array([0., positive], np.float32), (2, 64))
+    np.testing.assert_array_equal(np.asarray(actual, np.float32), expected)
+
+
 @pytest.mark.parametrize("arithmetic", ["hlo_mixed_late_skip", "monolithic_fp32_variance_late_skip"])
 def test_late_skip_keeps_half_bf16_ulp_until_after_residual_add(arithmetic):
     # 1 + 1/256 is a BF16 halfway tie: rounding before adding -1 loses it.
