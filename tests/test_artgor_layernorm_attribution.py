@@ -1,12 +1,15 @@
 import numpy as np
 
 from benchmarks.artgor_layernorm_attribution import (
+    CASE_DEFINITIONS,
+    RESULT_NAME,
     attribution_variants,
     compare_checkpoint_sequences,
     decide_attribution,
     jax_layernorm_checkpoints,
 )
 from tpu_beam_search.stream1_layernorm_pallas_attribution import (
+    PallasLayerNormArithmetic,
     pallas_layernorm_probe,
 )
 
@@ -28,6 +31,18 @@ def test_attribution_variants_are_ordered_one_factor_changes():
             for field in candidate.__dataclass_fields__
         )
         assert differences == 1, name
+
+
+def test_attribution_protocol_covers_six_frozen_corpora():
+    assert RESULT_NAME == "artgor_layernorm_attribution.json"
+    assert tuple(name for name, _, _ in CASE_DEFINITIONS) == (
+        "legal_seed_42",
+        "legal_seed_142",
+        "legal_seed_242",
+        "stress_seed_43",
+        "stress_seed_143",
+        "stress_seed_243",
+    )
 
 
 def test_jax_checkpoint_contract_has_every_observable_boundary():
@@ -96,4 +111,26 @@ def test_interpreted_pallas_probe_exposes_each_checkpoint():
         )
         if expected.shape[1] == 1:
             expected = jnp.broadcast_to(expected, values.shape)
+        np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
+def test_interpreted_pallas_probe_matches_each_one_factor_jax_arm():
+    import jax.numpy as jnp
+
+    values = jnp.asarray([[1, 2, 3, 4]], dtype=jnp.bfloat16)
+    scale = jnp.asarray([1, 2, 1, 2], dtype=jnp.bfloat16)
+    bias = jnp.asarray([0, 1, 0, 1], dtype=jnp.bfloat16)
+    for arithmetic in attribution_variants().values():
+        expected = jax_layernorm_checkpoints(
+            values, scale, bias, arithmetic=arithmetic,
+        )["relu"]
+        actual = pallas_layernorm_probe(
+            values,
+            scale,
+            bias,
+            checkpoint="relu",
+            arithmetic=PallasLayerNormArithmetic(**arithmetic.__dict__),
+            bm=1,
+            interpret=True,
+        )
         np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
