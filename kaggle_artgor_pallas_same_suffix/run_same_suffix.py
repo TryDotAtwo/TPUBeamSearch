@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "SOURCE_COMMIT_PLACEHOLDER"
+COMMIT_SHA = "85c286e722d622bf948d3d0149d8fefbd86262ae"
 REPOSITORY = "https://github.com/TryDotAtwo/TPUBeamSearch.git"
 CHECKOUT = Path("/tmp/TPUBeamSearch-artgor-pallas-same-suffix")
 OUTPUT = Path("/kaggle/working/artgor_pallas_same_suffix")
