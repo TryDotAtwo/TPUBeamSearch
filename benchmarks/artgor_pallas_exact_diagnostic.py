@@ -36,6 +36,7 @@ from tpu_beam_search.stream1_architecture import Stream1Architecture
 from tpu_beam_search.stream1_layernorm_pallas_exact import (
     PallasExactConfig,
     make_sharded_pallas_exact_inference,
+    pallas_exact_custom_call_count,
     pallas_exact_stage_names,
     prepare_pallas_exact_weights,
     stream1_layernorm_pallas_exact_stages,
@@ -73,7 +74,7 @@ _FORBIDDEN_MODEL_OPS = (
 
 
 def candidate_configs() -> dict[str, PallasExactConfig]:
-    """Frozen first diagnostic: whole-K versus 128-wide residual reductions."""
+    """Correctness-first split-mean candidate; BK1024 remains a negative control."""
 
     common = dict(
         embedding_bm=4096,
@@ -85,14 +86,11 @@ def candidate_configs() -> dict[str, PallasExactConfig]:
         head_bk=1024,
         head_bn=128,
         dense_rounding="late",
-        layernorm_arithmetic="hlo_mixed",
+        layernorm_arithmetic="split_mean_hlo_mixed",
     )
     return {
-        "pallas_exact_bk128": PallasExactConfig(
+        "pallas_exact_split_mean_bk128": PallasExactConfig(
             input_bk=128, residual_bk=128, **common,
-        ),
-        "pallas_exact_bk1024": PallasExactConfig(
-            input_bk=1024, residual_bk=1024, **common,
         ),
     }
 
@@ -191,15 +189,26 @@ def compare_stage_sequences(reference, candidate) -> dict:
     }
 
 
-def audit_all_pallas_hlo(hlo_text: str, stage_names) -> dict:
+def audit_all_pallas_hlo(
+    hlo_text: str,
+    stage_names,
+    *,
+    expected_custom_call_count: int | None = None,
+) -> dict:
     """Reject model arithmetic that escaped the declared Pallas custom calls."""
 
     text = str(hlo_text)
-    expected_count = len(tuple(stage_names))
+    semantic_count = len(tuple(stage_names))
+    expected_count = (
+        semantic_count
+        if expected_custom_call_count is None
+        else expected_custom_call_count
+    )
     custom_call_count = text.count("tpu_custom_call")
     forbidden = [operation for operation in _FORBIDDEN_MODEL_OPS if operation in text]
     return {
-        "expected_stage_count": expected_count,
+        "expected_stage_count": semantic_count,
+        "expected_custom_call_count": expected_count,
         "custom_call_count": custom_call_count,
         "forbidden_operations": forbidden,
         "passes": custom_call_count == expected_count and not forbidden,
@@ -669,7 +678,13 @@ def run_diagnostic(*, dataset: Path, output: Path) -> dict:
         stablehlo = str(lowered.compiler_ir(dialect="stablehlo"))
         hlo_path = output / "pallas_exact_full.stablehlo.txt"
         hlo_path.write_text(stablehlo, encoding="utf-8")
-        report["hlo_audit"] = audit_all_pallas_hlo(stablehlo, names)
+        report["hlo_audit"] = audit_all_pallas_hlo(
+            stablehlo,
+            names,
+            expected_custom_call_count=pallas_exact_custom_call_count(
+                architecture, configs[selected_id],
+            ),
+        )
         report["hlo_audit"]["stablehlo_sha256"] = hashlib.sha256(
             stablehlo.encode()
         ).hexdigest()

@@ -12,6 +12,7 @@ from tpu_beam_search.stream1_layernorm_pallas_exact import (
     PallasExactConfig,
     make_sharded_pallas_exact_inference,
     pallas_exact_layer_norm_activation,
+    pallas_exact_custom_call_count,
     pallas_exact_stage_names,
     prepare_pallas_exact_weights,
     stream1_layernorm_pallas_exact_stages,
@@ -113,6 +114,33 @@ def test_layer_norm_activation_executes_normalization_skip_and_relu_in_pallas():
     )
 
     np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
+@pytest.mark.parametrize("add_skip", [False, True])
+def test_split_mean_layernorm_matches_hlo_mixed_interpret(add_skip):
+    values = jnp.arange(256, dtype=jnp.float32).reshape(2, 128).astype(jnp.bfloat16)
+    scale = jnp.linspace(0.5, 1.5, 128).astype(jnp.bfloat16)
+    bias = jnp.linspace(-0.25, 0.25, 128).astype(jnp.bfloat16)
+    skip = jnp.flip(values, axis=1) if add_skip else None
+    expected = pallas_exact_layer_norm_activation(
+        values, scale, bias, skip=skip, add_skip=add_skip, relu=True,
+        bm=2, arithmetic="hlo_mixed", interpret=True,
+    )
+    actual = pallas_exact_layer_norm_activation(
+        values, scale, bias, skip=skip, add_skip=add_skip, relu=True,
+        bm=2, arithmetic="split_mean_hlo_mixed", interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
+def test_split_mean_custom_call_contract_adds_one_dispatch_per_layernorm():
+    _, _, architecture, _ = model_fixture()
+    ordinary = _tiny_config(layernorm_arithmetic="hlo_mixed")
+    split = _tiny_config(layernorm_arithmetic="split_mean_hlo_mixed")
+    semantic = len(pallas_exact_stage_names(architecture))
+    layernorms = 1 + 2 * architecture.RESIDUAL_COUNT
+    assert pallas_exact_custom_call_count(architecture, ordinary) == semantic
+    assert pallas_exact_custom_call_count(architecture, split) == semantic + layernorms
 
 
 def test_stage_trace_has_one_pallas_boundary_per_model_operator():

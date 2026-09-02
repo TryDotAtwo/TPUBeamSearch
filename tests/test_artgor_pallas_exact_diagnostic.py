@@ -69,21 +69,19 @@ def test_reference_stage_sequence_ends_at_the_unchanged_semantic_model():
         )
 
 
-def test_first_diagnostic_freezes_bk128_and_whole_k_candidates():
+def test_next_diagnostic_freezes_only_split_mean_bk128_candidate():
     diagnostic = _module()
 
     configs = diagnostic.candidate_configs()
 
-    assert tuple(configs) == ("pallas_exact_bk128", "pallas_exact_bk1024")
-    assert configs["pallas_exact_bk128"].input_bk == 128
-    assert configs["pallas_exact_bk128"].residual_bk == 128
-    assert configs["pallas_exact_bk1024"].input_bk == 1024
-    assert configs["pallas_exact_bk1024"].residual_bk == 1024
+    assert tuple(configs) == ("pallas_exact_split_mean_bk128",)
+    assert configs["pallas_exact_split_mean_bk128"].input_bk == 128
+    assert configs["pallas_exact_split_mean_bk128"].residual_bk == 128
     assert all(config.input_bn >= 256 for config in configs.values())
     assert all(config.residual_bn >= 256 for config in configs.values())
     assert all(config.dense_rounding == "late" for config in configs.values())
     assert all(
-        config.layernorm_arithmetic == "hlo_mixed"
+        config.layernorm_arithmetic == "split_mean_hlo_mixed"
         for config in configs.values()
     )
 
@@ -101,7 +99,7 @@ def test_stage_count_contract_maps_only_four_n_plus_four_models():
         diagnostic.pallas_exact_stage_names_from_count(43)
 
 
-def test_hlo_audit_requires_all_44_custom_calls_and_rejects_jax_model_ops():
+def test_hlo_audit_accepts_explicit_expected_custom_call_count():
     diagnostic = _module()
     stage_names = tuple(
         ["embedding", "input.dense", "input.layernorm_relu"]
@@ -120,12 +118,19 @@ def test_hlo_audit_requires_all_44_custom_calls_and_rejects_jax_model_ops():
     clean = "\n".join(
         f'custom_call @tpu_custom_call {{stage = "{name}"}}' for name in stage_names
     )
-    passed = diagnostic.audit_all_pallas_hlo(clean, stage_names)
+    split_clean = clean + "\n" + "\n".join(
+        f'custom_call @tpu_custom_call {{mean = {index}}}' for index in range(21)
+    )
+    passed = diagnostic.audit_all_pallas_hlo(
+        split_clean, stage_names, expected_custom_call_count=65,
+    )
     assert passed["passes"] is True
-    assert passed["custom_call_count"] == 44
+    assert passed["custom_call_count"] == 65
 
-    contaminated = clean + "\n%0 = stablehlo.dot_general %arg0, %arg1"
-    failed = diagnostic.audit_all_pallas_hlo(contaminated, stage_names)
+    contaminated = split_clean + "\n%0 = stablehlo.dot_general %arg0, %arg1"
+    failed = diagnostic.audit_all_pallas_hlo(
+        contaminated, stage_names, expected_custom_call_count=65,
+    )
     assert failed["passes"] is False
     assert "stablehlo.dot_general" in failed["forbidden_operations"]
 

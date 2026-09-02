@@ -35,7 +35,11 @@ from .stream1_layernorm_reference import _validate_layernorm_shapes
 from .tpu_layout import pad_to_multiple
 
 
-_LAYER_NORM_ARITHMETICS = ("legacy_bf16", "hlo_mixed")
+_LAYER_NORM_ARITHMETICS = (
+    "legacy_bf16",
+    "hlo_mixed",
+    "split_mean_hlo_mixed",
+)
 
 
 def _matrix_row_index(row_block):
@@ -204,6 +208,121 @@ def _layer_norm_activation_kernel(
     output_ref[...] = jnp.where(valid, result, jnp.bfloat16(0))
 
 
+def _split_mean_kernel(values_ref, mean_ref, *, logical_width: int):
+    values = values_ref[...].astype(jnp.float32)
+    mean = (
+        jnp.sum(values, axis=1, keepdims=True) / logical_width
+    ).astype(jnp.bfloat16)
+    mean_ref[...] = jnp.broadcast_to(mean, values_ref.shape)
+
+
+def _split_mean_remainder_kernel(
+    values_ref,
+    mean_ref,
+    scale_ref,
+    bias_ref,
+    skip_ref,
+    output_ref,
+    *,
+    logical_width: int,
+    epsilon: float,
+    add_skip: bool,
+    relu: bool,
+):
+    values = values_ref[...].astype(jnp.bfloat16).astype(jnp.float32)
+    mean = mean_ref[...].astype(jnp.bfloat16).astype(jnp.float32)
+    centered = values - mean
+    variance = (
+        jnp.sum(centered * centered, axis=1, keepdims=True) / logical_width
+    ).astype(jnp.bfloat16)
+    epsilon_fp32 = jnp.asarray(epsilon, jnp.bfloat16).astype(jnp.float32)
+    invstd = jax.lax.rsqrt(
+        variance.astype(jnp.float32) + epsilon_fp32
+    ).astype(jnp.bfloat16)
+    result = (
+        centered
+        * invstd.astype(jnp.float32)
+        * scale_ref[...].astype(jnp.float32)[None, :]
+        + bias_ref[...].astype(jnp.float32)[None, :]
+    ).astype(jnp.bfloat16)
+    if add_skip:
+        result = (result + skip_ref[...].astype(jnp.bfloat16)).astype(jnp.bfloat16)
+    if relu:
+        result = jnp.maximum(result, jnp.bfloat16(0)).astype(jnp.bfloat16)
+    output_ref[...] = result
+
+
+def _pallas_split_mean_layer_norm_activation(
+    values,
+    scale,
+    bias,
+    *,
+    skip,
+    add_skip: bool,
+    relu: bool,
+    epsilon: float,
+    bm: int,
+    width_alignment: int,
+    interpret: bool,
+):
+    rows, logical_width = values.shape
+    padded_rows = pad_to_multiple(rows, bm)
+    padded_width = pad_to_multiple(logical_width, width_alignment)
+    if padded_width != logical_width:
+        raise ValueError("split-mean LayerNorm requires an aligned logical width")
+    padding = ((0, padded_rows - rows), (0, 0))
+    values_padded = jnp.pad(values.astype(jnp.bfloat16), padding)
+    scale_padded = scale.astype(jnp.bfloat16)
+    bias_padded = bias.astype(jnp.bfloat16)
+    skip_source = values if skip is None else skip
+    skip_padded = jnp.pad(skip_source.astype(jnp.bfloat16), padding)
+    matrix_spec = pl.BlockSpec((bm, logical_width), _matrix_row_index)
+    vector_spec = pl.BlockSpec((logical_width,), _vector_zero_index)
+    shape = jax.ShapeDtypeStruct((padded_rows, logical_width), jnp.bfloat16)
+    mean_call = pl.pallas_call(
+        functools.partial(_split_mean_kernel, logical_width=logical_width),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[matrix_spec],
+            out_specs=matrix_spec,
+            grid=(padded_rows // bm,),
+        ),
+        out_shape=shape,
+        compiler_params=pltpu.CompilerParams(dimension_semantics=("parallel",)),
+        interpret=interpret,
+        name="stream1_pallas_exact_ln_split_mean",
+    )
+    mean_matrix = mean_call(values_padded)
+    remainder_call = pl.pallas_call(
+        functools.partial(
+            _split_mean_remainder_kernel,
+            logical_width=logical_width,
+            epsilon=epsilon,
+            add_skip=add_skip,
+            relu=relu,
+        ),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[
+                matrix_spec,
+                matrix_spec,
+                vector_spec,
+                vector_spec,
+                matrix_spec,
+            ],
+            out_specs=matrix_spec,
+            grid=(padded_rows // bm,),
+        ),
+        out_shape=shape,
+        compiler_params=pltpu.CompilerParams(dimension_semantics=("parallel",)),
+        interpret=interpret,
+        name="stream1_pallas_exact_ln_split_remainder",
+    )
+    return remainder_call(
+        values_padded, mean_matrix, scale_padded, bias_padded, skip_padded,
+    )[:rows]
+
+
 def pallas_exact_layer_norm_activation(
     values,
     scale,
@@ -234,6 +353,19 @@ def pallas_exact_layer_norm_activation(
         raise ValueError("bm and width_alignment must be positive integers")
     if not math.isfinite(epsilon) or epsilon < 0:
         raise ValueError("epsilon must be finite and non-negative")
+    if arithmetic == "split_mean_hlo_mixed":
+        return _pallas_split_mean_layer_norm_activation(
+            values,
+            scale,
+            bias,
+            skip=skip,
+            add_skip=add_skip,
+            relu=relu,
+            epsilon=epsilon,
+            bm=bm,
+            width_alignment=width_alignment,
+            interpret=interpret,
+        )
     padded_rows = pad_to_multiple(rows, bm)
     padded_width = pad_to_multiple(logical_width, width_alignment)
     padding = ((0, padded_rows - rows), (0, padded_width - logical_width))
@@ -301,6 +433,17 @@ def pallas_exact_stage_names(
         ))
     names.append("head.dense")
     return tuple(names)
+
+
+def pallas_exact_custom_call_count(
+    architecture: Stream1Architecture,
+    config: PallasExactConfig,
+) -> int:
+    semantic_count = len(pallas_exact_stage_names(architecture))
+    if config.layernorm_arithmetic != "split_mean_hlo_mixed":
+        return semantic_count
+    layernorm_count = 1 + 2 * architecture.RESIDUAL_COUNT
+    return semantic_count + layernorm_count
 
 
 def stream1_layernorm_pallas_exact_stages(
