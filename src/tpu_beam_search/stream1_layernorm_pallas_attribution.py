@@ -39,6 +39,18 @@ def _logical_width_requires_mask(logical_width: int, padded_width: int) -> bool:
     return logical_width != padded_width
 
 
+def _checkpoint_dtype(
+    checkpoint: str, arithmetic: PallasLayerNormArithmetic,
+):
+    if checkpoint == "mean" and not arithmetic.mean_bf16:
+        return jnp.float32
+    if checkpoint == "variance" and not arithmetic.variance_bf16:
+        return jnp.float32
+    if checkpoint == "invstd" and not arithmetic.invstd_bf16:
+        return jnp.float32
+    return CHECKPOINT_DTYPES[checkpoint]
+
+
 def _matrix_index(row_block):
     return row_block.astype(jnp.int32), jnp.asarray(0, jnp.int32)
 
@@ -58,6 +70,7 @@ def _probe_kernel(
     epsilon: float,
     arithmetic: PallasLayerNormArithmetic,
     mask_padding: bool,
+    output_dtype,
 ):
     values_bf16 = values_ref[...].astype(jnp.bfloat16)
     values_fp32 = values_bf16.astype(jnp.float32)
@@ -121,7 +134,7 @@ def _probe_kernel(
         selected = jnp.broadcast_to(selected, values_bf16.shape)
     if mask_padding:
         selected = jnp.where(
-            valid, selected, jnp.asarray(0, CHECKPOINT_DTYPES[checkpoint])
+            valid, selected, jnp.asarray(0, output_dtype)
         )
     output_ref[...] = selected
 
@@ -168,7 +181,7 @@ def pallas_layernorm_probe(
     )
     matrix_spec = pl.BlockSpec((bm, padded_width), _matrix_index)
     vector_spec = pl.BlockSpec((padded_width,), _vector_index)
-    dtype = CHECKPOINT_DTYPES[checkpoint]
+    dtype = _checkpoint_dtype(checkpoint, arithmetic)
     call = pl.pallas_call(
         functools.partial(
             _probe_kernel,
@@ -177,6 +190,7 @@ def pallas_layernorm_probe(
             epsilon=epsilon,
             arithmetic=arithmetic,
             mask_padding=mask_padding,
+            output_dtype=dtype,
         ),
         grid_spec=pltpu.PrefetchScalarGridSpec(
             num_scalar_prefetch=0,

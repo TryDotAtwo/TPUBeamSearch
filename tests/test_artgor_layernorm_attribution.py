@@ -137,6 +137,34 @@ def test_interpreted_pallas_probe_matches_each_one_factor_jax_arm():
         np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
 
 
+def test_interpreted_one_factor_probes_match_all_checkpoint_dtypes():
+    import jax.numpy as jnp
+
+    values = jnp.arange(128, dtype=jnp.float32)[None, :].astype(jnp.bfloat16)
+    scale = jnp.ones((128,), dtype=jnp.bfloat16)
+    bias = jnp.zeros((128,), dtype=jnp.bfloat16)
+    for arithmetic in attribution_variants().values():
+        expected = jax_layernorm_checkpoints(
+            values, scale, bias, arithmetic=arithmetic,
+        )
+        for checkpoint, reference in expected.items():
+            actual = pallas_layernorm_probe(
+                values,
+                scale,
+                bias,
+                checkpoint=checkpoint,
+                arithmetic=arithmetic,
+                bm=1,
+                interpret=True,
+            )
+            if reference.shape != actual.shape:
+                reference = jnp.broadcast_to(reference, actual.shape)
+            assert actual.dtype == reference.dtype
+            np.testing.assert_array_equal(
+                np.asarray(actual), np.asarray(reference),
+            )
+
+
 def test_aligned_production_width_elides_compiler_sensitive_predicate():
     assert _logical_width_requires_mask(1024, 1024) is False
     assert _logical_width_requires_mask(130, 256) is True
