@@ -78,9 +78,9 @@ def candidate_configs() -> dict[str, PallasExactConfig]:
     common = dict(
         embedding_bm=4096,
         input_bm=128,
-        input_bn=128,
+        input_bn=256,
         residual_bm=128,
-        residual_bn=128,
+        residual_bn=256,
         head_bm=256,
         head_bk=1024,
         head_bn=128,

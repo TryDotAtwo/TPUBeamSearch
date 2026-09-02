@@ -42,7 +42,9 @@ def test_metadata_uses_one_private_tpu_session_without_competition_data():
     metadata_path = FOLDER / "kernel-metadata.json"
     assert metadata_path.is_file(), "all-Pallas diagnostic metadata is missing"
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-    assert metadata["id"] == "trydotatwo/tpu-artgor-pallas-exact-diagnostic"
+    assert metadata["id"] == (
+        "trydotatwo/tpu-artgor-all-pallas-exact-diagnostic"
+    )
     assert metadata["code_file"] == "run_diagnostic.py"
     assert metadata["kernel_type"] == "script"
     assert metadata["is_private"] is True

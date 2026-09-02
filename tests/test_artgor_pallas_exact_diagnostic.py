@@ -79,6 +79,8 @@ def test_first_diagnostic_freezes_bk128_and_whole_k_candidates():
     assert configs["pallas_exact_bk128"].residual_bk == 128
     assert configs["pallas_exact_bk1024"].input_bk == 1024
     assert configs["pallas_exact_bk1024"].residual_bk == 1024
+    assert all(config.input_bn >= 256 for config in configs.values())
+    assert all(config.residual_bn >= 256 for config in configs.values())
     assert all(config.dense_rounding == "late" for config in configs.values())
     assert all(
         config.layernorm_arithmetic == "hlo_mixed"

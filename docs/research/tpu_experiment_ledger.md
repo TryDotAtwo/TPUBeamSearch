@@ -570,3 +570,36 @@ JAX/jaxlib0.10.2, libtpu0.0.42.1 and eight TPUv5lite devices with x64 enabled.
 - V1 failed because x64 promoted Python zero literals in the banked Pallas LUT
   `BlockSpec`, yielding illegal `(i32,i64,i64)` Mosaic indices.  Commit
   `2b99bdf` fixes all LUT indices to int32;371 local tests pass before v2.
+
+## Packaged Artgor notebook v2 completed: 2026-09-02
+
+[Safe report](../../test_results/artgor_exact_public_notebook_v2/report.md)
+records the actual packaged notebook v2 at runtime source `2b99bdf`.  Its four
+frame-runs exactly match the preserved Artgor scriptVersionId344319112 run on
+pid/frame/inversion/found status, beam, checkpoint, found path length and path
+hash.  Both found paths report runtime `verify=True`.
+
+The matched four-record total falls from25,518.988s to21,928.830s, a measured
+**1.1637x** full-frame wall-speedup.  Per-frame ratios are1.1598x-1.1665x.
+This is the comparable end-to-end solver evidence; it remains distinct from
+the larger model-only inference speedup.
+
+## Strict exact-split speed proof passed: 2026-09-02
+
+[Terminal report](../../test_results/artgor_exact_speed_proof_v1/report.md)
+records private `trydotatwo/tpu-artgor-exact-speed-proof` v1 at source
+`3070839d4f04cff8fa58794024384c9bd98aa947`.  It uses eight TPUv5lite devices,
+32,768 states/device, three warmups and21 alternating synchronized samples for
+each of three legal and three categorical-stress seeds.
+
+- All six full-Q outputs are BF16 hash exact with zero mismatches.
+- All126 paired observations exceed the frozen1.5x threshold.
+- The weakest case median is1.5836x, weakest individual pair1.5219x and
+  weakest one-sided bootstrap lower99 bound1.5755x.
+- The downloaded raw pairs were independently recomputed with the frozen
+  statistic implementation and per-case bootstrap seeds; every gate passes.
+
+This establishes the component claim: exact-split full-Q inference is at least
+1.5x faster than unchanged JAX under the frozen protocol.  It does not promote
+the whole solver to a1.5x claim.  The all-Pallas44-boundary diagnostic is the
+next sequential TPU experiment; exact-split remains the production fallback.

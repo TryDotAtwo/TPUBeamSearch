@@ -61,10 +61,10 @@ class PallasExactConfig:
     embedding_bm: int = 4096
     input_bm: int = 128
     input_bk: int = 128
-    input_bn: int = 128
+    input_bn: int = 256
     residual_bm: int = 128
     residual_bk: int = 128
-    residual_bn: int = 128
+    residual_bn: int = 256
     head_bm: int = 256
     head_bk: int = 1024
     head_bn: int = 128

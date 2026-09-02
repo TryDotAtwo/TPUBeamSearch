@@ -1,5 +1,5 @@
 {
-  "id": "trydotatwo/tpu-artgor-pallas-exact-diagnostic",
+  "id": "trydotatwo/tpu-artgor-all-pallas-exact-diagnostic",
   "title": "TPU Artgor All-Pallas Exact Diagnostic",
   "code_file": "run_diagnostic.py",
   "language": "python",

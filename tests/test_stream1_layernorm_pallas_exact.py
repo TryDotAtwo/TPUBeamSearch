@@ -41,6 +41,13 @@ def test_config_rejects_nonpositive_tiles():
         _tiny_config(residual_bk=0)
 
 
+def test_production_defaults_use_tpu_legal_bias_vector_tiles():
+    config = PallasExactConfig()
+
+    assert config.input_bn >= 256
+    assert config.residual_bn >= 256
+
+
 def test_prepared_weights_quantize_embedding_once_into_runtime_banks():
     _, _, architecture, weights = model_fixture()
 
