@@ -140,3 +140,22 @@ def test_interpreted_pallas_probe_matches_each_one_factor_jax_arm():
 def test_aligned_production_width_elides_compiler_sensitive_predicate():
     assert _logical_width_requires_mask(1024, 1024) is False
     assert _logical_width_requires_mask(130, 256) is True
+
+
+def test_aligned_scalar_checkpoint_is_broadcast_to_output_tile():
+    import jax.numpy as jnp
+
+    values = jnp.arange(128, dtype=jnp.float32)[None, :].astype(jnp.bfloat16)
+    actual = pallas_layernorm_probe(
+        values,
+        jnp.ones((128,), dtype=jnp.bfloat16),
+        jnp.zeros((128,), dtype=jnp.bfloat16),
+        checkpoint="mean",
+        bm=1,
+        interpret=True,
+    )
+    assert actual.shape == values.shape
+    np.testing.assert_array_equal(
+        np.asarray(actual),
+        np.broadcast_to(np.asarray(jnp.mean(values)), values.shape),
+    )

@@ -117,6 +117,8 @@ def _probe_kernel(
         "affine_bf16": affine_bf16,
         "relu": relu,
     }[checkpoint]
+    if selected.shape != values_bf16.shape:
+        selected = jnp.broadcast_to(selected, values_bf16.shape)
     if mask_padding:
         selected = jnp.where(
             valid, selected, jnp.asarray(0, CHECKPOINT_DTYPES[checkpoint])
