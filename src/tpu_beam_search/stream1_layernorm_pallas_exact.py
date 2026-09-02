@@ -330,18 +330,18 @@ def _pallas_split_mean_layer_norm_activation(
     )[:rows]
 
 
-def _pallas_fully_materialized_layer_norm_activation(
+def pallas_fully_materialized_layernorm_checkpoints(
     values,
     scale,
     bias,
     *,
-    skip,
-    add_skip: bool,
-    relu: bool,
-    epsilon: float,
-    bm: int,
-    width_alignment: int,
-    interpret: bool,
+    skip=None,
+    add_skip: bool = False,
+    relu: bool = False,
+    epsilon: float = 1e-5,
+    bm: int = 128,
+    width_alignment: int = 128,
+    interpret: bool = False,
 ):
     rows, logical_width = values.shape
     if pad_to_multiple(logical_width, width_alignment) != logical_width:
@@ -379,7 +379,7 @@ def _pallas_fully_materialized_layer_norm_activation(
         bm=bm,
         interpret=interpret,
     )
-    return pallas_invstd_affine(
+    affine = pallas_invstd_affine(
         centered,
         invstd,
         scale,
@@ -390,6 +390,41 @@ def _pallas_fully_materialized_layer_norm_activation(
         bm=bm,
         interpret=interpret,
     )
+    return {
+        "mean": mean_matrix[:, :1],
+        "centered": centered,
+        "variance": variance,
+        "invstd": invstd,
+        "affine_relu" if relu else "affine_bf16": affine,
+    }
+
+
+def _pallas_fully_materialized_layer_norm_activation(
+    values,
+    scale,
+    bias,
+    *,
+    skip,
+    add_skip: bool,
+    relu: bool,
+    epsilon: float,
+    bm: int,
+    width_alignment: int,
+    interpret: bool,
+):
+    checkpoints = pallas_fully_materialized_layernorm_checkpoints(
+        values,
+        scale,
+        bias,
+        skip=skip,
+        add_skip=add_skip,
+        relu=relu,
+        epsilon=epsilon,
+        bm=bm,
+        width_alignment=width_alignment,
+        interpret=interpret,
+    )
+    return next(reversed(checkpoints.values()))
 
 
 def pallas_exact_layer_norm_activation(

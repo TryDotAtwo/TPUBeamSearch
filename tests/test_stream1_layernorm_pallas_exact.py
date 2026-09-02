@@ -16,6 +16,7 @@ from tpu_beam_search.stream1_layernorm_pallas_exact import (
     pallas_exact_stage_names,
     prepare_pallas_exact_weights,
     stream1_layernorm_pallas_exact_stages,
+    pallas_fully_materialized_layernorm_checkpoints,
 )
 
 
@@ -166,6 +167,25 @@ def test_fully_materialized_contract_uses_five_calls_per_layernorm():
     semantic = len(pallas_exact_stage_names(architecture))
     layernorms = 1 + 2 * architecture.RESIDUAL_COUNT
     assert pallas_exact_custom_call_count(architecture, config) == semantic + 4 * layernorms
+
+
+def test_fully_materialized_checkpoints_expose_the_executed_boundaries():
+    values = jnp.arange(256, dtype=jnp.float32).reshape(2, 128).astype(jnp.bfloat16)
+    scale = jnp.linspace(0.5, 1.5, 128).astype(jnp.bfloat16)
+    bias = jnp.linspace(-0.25, 0.25, 128).astype(jnp.bfloat16)
+    checkpoints = pallas_fully_materialized_layernorm_checkpoints(
+        values, scale, bias, relu=True, bm=2, interpret=True,
+    )
+    assert tuple(checkpoints) == (
+        "mean", "centered", "variance", "invstd", "affine_relu",
+    )
+    expected = pallas_exact_layer_norm_activation(
+        values, scale, bias, relu=True, bm=2,
+        arithmetic="fully_materialized_hlo_mixed", interpret=True,
+    )
+    np.testing.assert_array_equal(
+        np.asarray(checkpoints["affine_relu"]), np.asarray(expected),
+    )
 
 
 def test_stage_trace_has_one_pallas_boundary_per_model_operator():
