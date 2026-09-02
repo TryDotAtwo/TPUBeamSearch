@@ -603,3 +603,26 @@ This establishes the component claim: exact-split full-Q inference is at least
 1.5x faster than unchanged JAX under the frozen protocol.  It does not promote
 the whole solver to a1.5x claim.  The all-Pallas44-boundary diagnostic is the
 next sequential TPU experiment; exact-split remains the production fallback.
+
+## All-Pallas transparent diagnostic v3: 2026-09-02
+
+[Terminal report](../../test_results/artgor_pallas_exact_diagnostic_v3/report.md)
+records private `trydotatwo/tpu-artgor-all-pallas-exact-diagnostic` v3 at source
+`7888c0e548d111f53861d766193f41bee58df81a` on eight TPUv5lite devices.  V1 and
+v2 were compile-only failures (illegal rank-one BN128 bias tile, then mixed
+i32/i64 LayerNorm BlockSpec indices); v3 is the first arithmetic result.
+
+- Prepacked Pallas embedding is BF16 exact for both candidates on all six
+  legal/stress corpora.
+- BK128 input Dense is BF16 exact on all six corpora.  The first mismatch is
+  always `input.layernorm_relu`; legal42 differs in163,288/2,097,152 elements
+  (max abs about0.03), stress43 in154,177 (max abs about0.02).
+- BK1024 first diverges in input Dense (120 legal42 and174 stress43 elements),
+  so it is retained only as a reduction-order negative control.
+- Neither candidate reaches performance promotion.  No fusion or all-Pallas
+  speed result is claimed; exact-split remains the production engine.
+
+The next causal bundle holds the exact BK128 Dense input fixed and attributes
+LayerNorm in observable stages: JAX monolithic/decomposed/materialized controls
+and Pallas mean, centered, variance, rsqrt, affine and ReLU checkpoints.  It
+uses one-factor changes rather than a Cartesian dtype sweep.
