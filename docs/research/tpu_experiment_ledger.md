@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-02: residual skip-rounding v6
+
+FP32 variance + late affine/skip/ReLU rounding gives zero hidden and same-suffix
+Q mismatches on legal42/stress43 for isolated residual0 LN2. BF16 variance + late
+rounding remains inexact (104256/58954 hidden). Visible HLO variance conversion
+is not sufficient evidence of actual rounding: use measured winner, not the
+earlier HLO-only prediction. Next config independently selects normal/skip LN
+arithmetic and checks corrected block/full composition, still against original
+JAX. B256/device only; no production promotion or speed claim.
+
 ## 2026-09-02: residual0 operator arithmetic v5
 
 Same-input Dense1/2 are exact at BK128 and BK1024; LN1 FP32-variance is exact.

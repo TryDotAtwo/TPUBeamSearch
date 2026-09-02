@@ -98,6 +98,7 @@ class PallasExactConfig:
     head_bn: int = 128
     dense_rounding: str = "late"
     layernorm_arithmetic: str = "hlo_mixed"
+    skip_layernorm_arithmetic: str | None = None
 
     def __post_init__(self) -> None:
         tiles = (
@@ -121,6 +122,8 @@ class PallasExactConfig:
             raise ValueError(
                 f"layernorm_arithmetic must be one of {_LAYER_NORM_ARITHMETICS}"
             )
+        if self.skip_layernorm_arithmetic is not None and self.skip_layernorm_arithmetic not in _LAYER_NORM_ARITHMETICS:
+            raise ValueError("unsupported skip_layernorm_arithmetic")
 
 
 def prepare_pallas_exact_weights(
@@ -627,13 +630,11 @@ def pallas_exact_custom_call_count(
     config: PallasExactConfig,
 ) -> int:
     semantic_count = len(pallas_exact_stage_names(architecture))
-    if config.layernorm_arithmetic != "split_mean_hlo_mixed":
-        if config.layernorm_arithmetic == "fully_materialized_hlo_mixed":
-            layernorm_count = 1 + 2 * architecture.RESIDUAL_COUNT
-            return semantic_count + 4 * layernorm_count
-        return semantic_count
-    layernorm_count = 1 + 2 * architecture.RESIDUAL_COUNT
-    return semantic_count + layernorm_count
+    extras = {"split_mean_hlo_mixed": 1, "fully_materialized_hlo_mixed": 4}
+    skip_mode = config.skip_layernorm_arithmetic or config.layernorm_arithmetic
+    return (semantic_count
+            + (1 + architecture.RESIDUAL_COUNT) * extras.get(config.layernorm_arithmetic, 0)
+            + architecture.RESIDUAL_COUNT * extras.get(skip_mode, 0))
 
 
 def pallas_exact_input_block(
@@ -743,7 +744,7 @@ def pallas_exact_residual_block(
         relu=True,
         epsilon=architecture.LAYER_NORM_EPSILON,
         bm=config.residual_bm,
-        arithmetic=config.layernorm_arithmetic,
+        arithmetic=config.skip_layernorm_arithmetic or config.layernorm_arithmetic,
         interpret=interpret,
     )
 
@@ -854,7 +855,7 @@ def stream1_layernorm_pallas_exact_stages(
             relu=True,
             epsilon=architecture.LAYER_NORM_EPSILON,
             bm=config.residual_bm,
-            arithmetic=config.layernorm_arithmetic,
+            arithmetic=config.skip_layernorm_arithmetic or config.layernorm_arithmetic,
             interpret=interpret,
         )
         stages.append(PallasExactStage(

@@ -53,6 +53,39 @@ def test_config_rejects_nonpositive_tiles():
         _tiny_config(residual_bk=0)
 
 
+def test_skip_arithmetic_override_does_not_change_non_skip_layers(monkeypatch):
+    _, states, architecture, weights = model_fixture()
+    prepared = prepare_pallas_exact_weights(weights, architecture)
+    config = _tiny_config(
+        layernorm_arithmetic="monolithic_fp32_variance",
+        skip_layernorm_arithmetic="monolithic_fp32_variance_late_skip",
+    )
+    calls = []
+    original = pallas_exact_module.pallas_exact_layer_norm_activation
+    def observe(*args, **kwargs):
+        calls.append((kwargs.get("add_skip", False), kwargs["arithmetic"]))
+        return original(*args, **kwargs)
+    monkeypatch.setattr(pallas_exact_module, "pallas_exact_layer_norm_activation", observe)
+    trace = stream1_layernorm_pallas_exact_stages(
+        states, prepared, architecture, config=config, interpret=True,
+    )
+    assert all(mode == ("monolithic_fp32_variance_late_skip" if skip else "monolithic_fp32_variance")
+               for skip, mode in calls)
+    actual = pallas_exact_residual_block(
+        trace[2].value, prepared.residuals[0], architecture, config=config, interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(trace[6].value))
+
+
+def test_call_count_respects_separate_skip_mode():
+    _, _, architecture, _ = model_fixture()
+    config = _tiny_config(layernorm_arithmetic="split_mean_hlo_mixed",
+                         skip_layernorm_arithmetic="monolithic_fp32_variance_late_skip")
+    assert pallas_exact_custom_call_count(architecture, config) == (
+        len(pallas_exact_stage_names(architecture)) + 1 + architecture.RESIDUAL_COUNT
+    )
+
+
 @pytest.mark.parametrize("arithmetic", ["hlo_mixed_late_skip", "monolithic_fp32_variance_late_skip"])
 def test_late_skip_keeps_half_bf16_ulp_until_after_residual_add(arithmetic):
     # 1 + 1/256 is a BF16 halfway tie: rounding before adding -1 loses it.

@@ -28,6 +28,7 @@ from tpu_beam_search.stream1_layernorm_pallas_exact import (
     pallas_exact_input_block, pallas_exact_input_dense,
     pallas_exact_layer_norm_activation, pallas_exact_residual_block,
     prepare_pallas_exact_weights,
+    stream1_layernorm_pallas_exact_inference,
 )
 from tpu_beam_search.stream1_layernorm_reference import (
     layer_norm_reference, layernorm_stream1_weights_from_artgor_params,
@@ -46,6 +47,7 @@ def config() -> PallasExactConfig:
         residual_bm=128, residual_bk=128, residual_bn=256,
         head_bm=256, head_bk=1024, head_bn=128,
         dense_rounding="late", layernorm_arithmetic="monolithic_fp32_variance",
+        skip_layernorm_arithmetic="monolithic_fp32_variance_late_skip",
     )
 
 
@@ -329,6 +331,11 @@ def run(*, dataset: Path, output: Path) -> dict:
             lambda hidden, w: pallas_exact_head(hidden, w, config=cfg),
             mesh=mesh, input_spec=state_spec, weights_example=pweights,
         )
+        pfull = _mapped(
+            lambda states, w: stream1_layernorm_pallas_exact_inference(
+                states, w, architecture, config=cfg,
+            ), mesh=mesh, input_spec=state_spec, weights_example=pweights,
+        )
         ref_embedding = _mapped(
             lambda states, w: reference_embedding(states, w, architecture),
             mesh=mesh, input_spec=state_spec, weights_example=weights,
@@ -375,6 +382,17 @@ def run(*, dataset: Path, output: Path) -> dict:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
             states = jax.device_put(host, state_sharding)
             monolithic = jax.block_until_ready(original(states, original_weights_d))
+            full_pallas = jax.block_until_ready(pfull(states, pweights_d))
+            if case_name == CASES[0][0]:
+                for label, runner, arguments in (
+                    ("original_full", original, (states, original_weights_d)),
+                    ("pallas_full", pfull, (states, pweights_d)),
+                    ("jax_input_prefix", boundary[0], (states, weights_d)),
+                    ("pallas_input_prefix", pinput, (states, pweights_d)),
+                ):
+                    lowered = runner.lower(*arguments)
+                    (output / f"{label}.compiled.txt").write_text(lowered.compile().as_text(), encoding="utf-8")
+                    (output / f"{label}.stablehlo.txt").write_text(str(lowered.compiler_ir(dialect="stablehlo")), encoding="utf-8")
             hidden = [jax.block_until_ready(call(states, weights_d)) for call in boundary]
             operator_ab = run_residual0_ab(
                 hidden[0], weights_d, operator_bundle, monolithic,
@@ -439,6 +457,7 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "kind": kind, "seed": seed, "input_sha256": _array_sha256(host),
                 "operators": rows,
                 "residual0_operator_ab": operator_ab,
+                "full_composition_vs_original": _metrics(monolithic, full_pallas),
             }
             checkpoint(path, report)
         report.update(
