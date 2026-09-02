@@ -1,0 +1,15 @@
+{
+  "id": "trydotatwo/tpu-artgor-pallas-same-suffix",
+  "title": "TPU Artgor Pallas Same Suffix",
+  "code_file": "run_same_suffix.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": ["artgor/cube555-tpu-artifacts"],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

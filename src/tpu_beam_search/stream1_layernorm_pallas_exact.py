@@ -625,6 +625,119 @@ def pallas_exact_custom_call_count(
     return semantic_count + layernorm_count
 
 
+def pallas_exact_input_block(
+    states,
+    weights: PallasExactWeights,
+    architecture: Stream1Architecture,
+    *,
+    config: PallasExactConfig = PallasExactConfig(),
+    interpret: bool = False,
+):
+    """Run embedding, input Dense and input LayerNorm as an isolated prefix."""
+
+    _validate_prepared_weights(states, weights, architecture)
+    logical_states = states[:, : architecture.STATE_LEN]
+    hidden = flat_embedding_prepacked(
+        logical_states,
+        weights.embedding,
+        embed_dim=architecture.EMBED_DIM,
+        bm=config.embedding_bm,
+        interpret=interpret,
+    )
+    hidden = _exact_dense(
+        hidden,
+        weights.input.dense,
+        bm=config.input_bm,
+        bk=config.input_bk,
+        bn=config.input_bn,
+        rounding=config.dense_rounding,
+        interpret=interpret,
+    )
+    return pallas_exact_layer_norm_activation(
+        hidden,
+        weights.input.normalization.scale,
+        weights.input.normalization.bias,
+        relu=True,
+        epsilon=architecture.LAYER_NORM_EPSILON,
+        bm=config.input_bm,
+        arithmetic=config.layernorm_arithmetic,
+        interpret=interpret,
+    )
+
+
+def pallas_exact_residual_block(
+    hidden,
+    block: LayerNormResidualWeights,
+    architecture: Stream1Architecture,
+    *,
+    config: PallasExactConfig = PallasExactConfig(),
+    interpret: bool = False,
+):
+    """Run one four-dispatch residual block on a supplied hidden boundary."""
+
+    skip = hidden
+    branch = _exact_dense(
+        hidden,
+        block.first.dense,
+        bm=config.residual_bm,
+        bk=config.residual_bk,
+        bn=config.residual_bn,
+        rounding=config.dense_rounding,
+        interpret=interpret,
+    )
+    branch = pallas_exact_layer_norm_activation(
+        branch,
+        block.first.normalization.scale,
+        block.first.normalization.bias,
+        relu=True,
+        epsilon=architecture.LAYER_NORM_EPSILON,
+        bm=config.residual_bm,
+        arithmetic=config.layernorm_arithmetic,
+        interpret=interpret,
+    )
+    branch = _exact_dense(
+        branch,
+        block.second.dense,
+        bm=config.residual_bm,
+        bk=config.residual_bk,
+        bn=config.residual_bn,
+        rounding=config.dense_rounding,
+        interpret=interpret,
+    )
+    return pallas_exact_layer_norm_activation(
+        branch,
+        block.second.normalization.scale,
+        block.second.normalization.bias,
+        skip=skip,
+        add_skip=True,
+        relu=True,
+        epsilon=architecture.LAYER_NORM_EPSILON,
+        bm=config.residual_bm,
+        arithmetic=config.layernorm_arithmetic,
+        interpret=interpret,
+    )
+
+
+def pallas_exact_head(
+    hidden,
+    weights: PallasExactWeights,
+    *,
+    config: PallasExactConfig = PallasExactConfig(),
+    interpret: bool = False,
+):
+    """Run the isolated final Q projection."""
+
+    return _exact_dense(
+        hidden,
+        weights.output,
+        bm=config.head_bm,
+        bk=config.head_bk,
+        bn=config.head_bn,
+        rounding=config.dense_rounding,
+        interpret=interpret,
+    )
+
+
 def stream1_layernorm_pallas_exact_stages(
     states,
     weights: PallasExactWeights,

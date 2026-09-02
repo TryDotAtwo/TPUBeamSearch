@@ -15,7 +15,9 @@ from test_layernorm_followup import model_fixture
 from tpu_beam_search.stream1_layernorm_pallas_exact import (
     PallasExactConfig,
     make_sharded_pallas_exact_inference,
+    pallas_exact_input_block,
     pallas_exact_layer_norm_activation,
+    pallas_exact_residual_block,
     pallas_exact_custom_call_count,
     pallas_exact_stage_names,
     prepare_pallas_exact_weights,
@@ -265,6 +267,26 @@ def test_stage_trace_has_one_pallas_boundary_per_model_operator():
     assert len(trace) == 4 * architecture.RESIDUAL_COUNT + 4
     assert trace[-1].value.shape == (len(states), architecture.MOVE_COUNT)
     assert bool(jnp.all(jnp.isfinite(trace[-1].value)))
+
+
+def test_isolated_input_and_residual_blocks_match_the_stage_trace():
+    _, states, architecture, weights = model_fixture()
+    prepared = prepare_pallas_exact_weights(weights, architecture)
+    config = _tiny_config(layernorm_arithmetic="monolithic_fp32_variance")
+
+    trace = stream1_layernorm_pallas_exact_stages(
+        states, prepared, architecture, config=config, interpret=True,
+    )
+    input_hidden = pallas_exact_input_block(
+        states, prepared, architecture, config=config, interpret=True,
+    )
+    block_hidden = pallas_exact_residual_block(
+        input_hidden, prepared.residuals[0], architecture,
+        config=config, interpret=True,
+    )
+
+    np.testing.assert_array_equal(np.asarray(input_hidden), np.asarray(trace[2].value))
+    np.testing.assert_array_equal(np.asarray(block_hidden), np.asarray(trace[6].value))
 
 
 def test_sharded_runner_returns_the_last_diagnostic_stage():
