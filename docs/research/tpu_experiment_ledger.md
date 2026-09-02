@@ -712,3 +712,23 @@ records private all-Pallas diagnostic v5 at source
   exact, the next diagnostic compares the same modular Pallas intermediates
   with monolithic and explicitly materialized JAX controls. Timing remains
   blocked by correctness.
+
+## LayerNorm boundary replay v1: 2026-09-02
+
+[Terminal report](../../test_results/artgor_layernorm_boundary_replay_v1/report.md)
+records private boundary replay v1 at source
+`5ee2b43719addd5c2e205f61039e2f6ddd07274c` on eight TPUv5lite devices.
+
+- StableHLO contains the expected five `tpu_custom_call` operations.
+- Real modular Pallas is hash exact with separately materialized JAX at mean,
+  centered FP32, BF16 variance, BF16 invstd and affine+ReLU on all six frozen
+  B256/device corpora. Every boundary has zero mismatches and zero error.
+- The monolithic Artgor JAX final differs from both exact-matching modular
+  paths by 132,523--175,840 BF16 elements (max abs0.015625--0.03125,
+  RMSE0.000663--0.000728). Pallas and materialized JAX final hashes are equal
+  in every case.
+
+Thus the remaining target is the effective arithmetic of the unmaterialized
+monolithic JAX lowering, not an isolated Pallas primitive. The next one-factor
+ladder compares final hashes directly against that oracle before any timing or
+fusion optimization.
