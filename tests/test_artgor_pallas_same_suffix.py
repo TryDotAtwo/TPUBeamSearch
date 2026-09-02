@@ -6,8 +6,12 @@ from pathlib import Path
 import benchmarks.artgor_pallas_same_suffix as benchmark
 
 from benchmarks.artgor_pallas_same_suffix import (
+    reference_embedding,
     reference_hidden_after_depth,
+    reference_input_dense,
     reference_suffix,
+    reference_suffix_from_embedding,
+    reference_suffix_from_input_dense,
 )
 from test_layernorm_followup import model_fixture
 from tpu_beam_search.stream1_layernorm_reference import (
@@ -22,6 +26,16 @@ def test_boundary_plus_same_suffix_reconstructs_typed_reference():
         hidden = reference_hidden_after_depth(states, weights, architecture, depth)
         actual = reference_suffix(hidden, weights, architecture, depth)
         np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+    embedded = reference_embedding(states, weights, architecture)
+    dense = reference_input_dense(embedded, weights)
+    np.testing.assert_array_equal(
+        np.asarray(reference_suffix_from_embedding(embedded, weights, architecture)),
+        np.asarray(expected),
+    )
+    np.testing.assert_array_equal(
+        np.asarray(reference_suffix_from_input_dense(dense, weights, architecture)),
+        np.asarray(expected),
+    )
 
 
 def test_depth_contract_rejects_invalid_boundaries():

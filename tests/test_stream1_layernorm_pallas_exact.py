@@ -16,6 +16,8 @@ from tpu_beam_search.stream1_layernorm_pallas_exact import (
     PallasExactConfig,
     make_sharded_pallas_exact_inference,
     pallas_exact_input_block,
+    pallas_exact_embedding,
+    pallas_exact_input_dense,
     pallas_exact_layer_norm_activation,
     pallas_exact_residual_block,
     pallas_exact_custom_call_count,
@@ -287,6 +289,14 @@ def test_isolated_input_and_residual_blocks_match_the_stage_trace():
 
     np.testing.assert_array_equal(np.asarray(input_hidden), np.asarray(trace[2].value))
     np.testing.assert_array_equal(np.asarray(block_hidden), np.asarray(trace[6].value))
+    embedded = pallas_exact_embedding(
+        states, prepared, architecture, config=config, interpret=True,
+    )
+    dense = pallas_exact_input_dense(
+        embedded, prepared, config=config, interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(embedded), np.asarray(trace[0].value))
+    np.testing.assert_array_equal(np.asarray(dense), np.asarray(trace[1].value))
 
 
 def test_sharded_runner_returns_the_last_diagnostic_stage():

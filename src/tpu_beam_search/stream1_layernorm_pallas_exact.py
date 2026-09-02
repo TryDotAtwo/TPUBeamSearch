@@ -635,23 +635,11 @@ def pallas_exact_input_block(
 ):
     """Run embedding, input Dense and input LayerNorm as an isolated prefix."""
 
-    _validate_prepared_weights(states, weights, architecture)
-    logical_states = states[:, : architecture.STATE_LEN]
-    hidden = flat_embedding_prepacked(
-        logical_states,
-        weights.embedding,
-        embed_dim=architecture.EMBED_DIM,
-        bm=config.embedding_bm,
-        interpret=interpret,
+    hidden = pallas_exact_embedding(
+        states, weights, architecture, config=config, interpret=interpret,
     )
-    hidden = _exact_dense(
-        hidden,
-        weights.input.dense,
-        bm=config.input_bm,
-        bk=config.input_bk,
-        bn=config.input_bn,
-        rounding=config.dense_rounding,
-        interpret=interpret,
+    hidden = pallas_exact_input_dense(
+        hidden, weights, config=config, interpret=interpret,
     )
     return pallas_exact_layer_norm_activation(
         hidden,
@@ -661,6 +649,37 @@ def pallas_exact_input_block(
         epsilon=architecture.LAYER_NORM_EPSILON,
         bm=config.input_bm,
         arithmetic=config.layernorm_arithmetic,
+        interpret=interpret,
+    )
+
+
+def pallas_exact_embedding(
+    states, weights: PallasExactWeights, architecture: Stream1Architecture, *,
+    config: PallasExactConfig = PallasExactConfig(), interpret: bool = False,
+):
+    """Run only the prepacked flattened embedding lookup."""
+    _validate_prepared_weights(states, weights, architecture)
+    return flat_embedding_prepacked(
+        states[:, : architecture.STATE_LEN],
+        weights.embedding,
+        embed_dim=architecture.EMBED_DIM,
+        bm=config.embedding_bm,
+        interpret=interpret,
+    )
+
+
+def pallas_exact_input_dense(
+    hidden, weights: PallasExactWeights, *,
+    config: PallasExactConfig = PallasExactConfig(), interpret: bool = False,
+):
+    """Run only the input projection on a supplied flattened embedding."""
+    return _exact_dense(
+        hidden,
+        weights.input.dense,
+        bm=config.input_bm,
+        bk=config.input_bk,
+        bn=config.input_bn,
+        rounding=config.dense_rounding,
         interpret=interpret,
     )
 

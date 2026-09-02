@@ -799,3 +799,13 @@ the multi-output stage trace diagnostic only. It proceeds through B16K/device
 and conditional B32K/device timing even when the instrumented trace differs.
 Final default promotion still requires a valid isolated boundary audit in
 addition to exact full Q, clean HLO and speed.
+
+## 2026-09-02: Artgor all-Pallas same-suffix v2
+
+Eight-TPU isolated block attribution (`392db0e`) found the first causal mismatch
+in `input_stack`: 21,982 hidden / 9,624 same-suffix Q mismatches on legal seed 42
+and 24,861 / 27,957 on stress seed 43. All ten isolated residual blocks were
+also inexact; the isolated head was bitwise exact. Alternating JAX-only control
+drift relative to monolithic output is explicitly separated from the causal
+candidate-versus-same-suffix comparison. Next experiment splits embedding,
+input Dense and input LayerNorm+ReLU under the same suffix protocol.

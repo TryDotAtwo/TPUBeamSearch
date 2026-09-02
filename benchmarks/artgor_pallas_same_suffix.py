@@ -23,8 +23,10 @@ from benchmarks.layernorm_quality import load_puzzle
 from benchmarks.stream1_layernorm_arithmetic import runtime_inventory, sha256_file
 from tpu_beam_search.stream1_architecture import Stream1Architecture
 from tpu_beam_search.stream1_layernorm_pallas_exact import (
-    PallasExactConfig, pallas_exact_head, pallas_exact_input_block,
-    pallas_exact_residual_block, prepare_pallas_exact_weights,
+    PallasExactConfig, pallas_exact_embedding, pallas_exact_head,
+    pallas_exact_input_block, pallas_exact_input_dense,
+    pallas_exact_layer_norm_activation, pallas_exact_residual_block,
+    prepare_pallas_exact_weights,
 )
 from tpu_beam_search.stream1_layernorm_reference import (
     layer_norm_reference, layernorm_stream1_weights_from_artgor_params,
@@ -73,6 +75,30 @@ def reference_hidden_after_depth(states, weights, architecture, depth: int):
         )
         hidden = jax.nn.relu(skip + branch)
     return hidden
+
+
+def reference_embedding(states, weights, architecture):
+    logical = states[:, :architecture.STATE_LEN]
+    return weights.embedding[logical.astype(jnp.int32)].reshape(
+        states.shape[0], architecture.STATE_LEN * architecture.EMBED_DIM,
+    )
+
+
+def reference_input_dense(embedded, weights):
+    return embedded @ weights.input.dense.weight + weights.input.dense.bias
+
+
+def reference_suffix_from_input_dense(dense, weights, architecture):
+    hidden = layer_norm_reference(
+        dense, weights.input.normalization, epsilon=architecture.LAYER_NORM_EPSILON,
+    )
+    return reference_suffix(jax.nn.relu(hidden), weights, architecture, 0)
+
+
+def reference_suffix_from_embedding(embedded, weights, architecture):
+    return reference_suffix_from_input_dense(
+        reference_input_dense(embedded, weights), weights, architecture,
+    )
 
 
 def reference_suffix(hidden, weights, architecture, start_depth: int):
@@ -160,6 +186,36 @@ def run(*, dataset: Path, output: Path) -> dict:
             lambda hidden, w: pallas_exact_head(hidden, w, config=cfg),
             mesh=mesh, input_spec=state_spec, weights_example=pweights,
         )
+        ref_embedding = _mapped(
+            lambda states, w: reference_embedding(states, w, architecture),
+            mesh=mesh, input_spec=state_spec, weights_example=weights,
+        )
+        ref_input_dense = _mapped(
+            reference_input_dense, mesh=mesh, input_spec=state_spec, weights_example=weights,
+        )
+        suffix_embedding = _mapped(
+            lambda embedded, w: reference_suffix_from_embedding(embedded, w, architecture),
+            mesh=mesh, input_spec=state_spec, weights_example=weights,
+        )
+        suffix_input_dense = _mapped(
+            lambda dense, w: reference_suffix_from_input_dense(dense, w, architecture),
+            mesh=mesh, input_spec=state_spec, weights_example=weights,
+        )
+        pembedding = _mapped(
+            lambda states, w: pallas_exact_embedding(states, w, architecture, config=cfg),
+            mesh=mesh, input_spec=state_spec, weights_example=pweights,
+        )
+        pinput_dense = _mapped(
+            lambda embedded, w: pallas_exact_input_dense(embedded, w, config=cfg),
+            mesh=mesh, input_spec=state_spec, weights_example=pweights,
+        )
+        pinput_ln = _mapped(
+            lambda dense, w: pallas_exact_layer_norm_activation(
+                dense, w.input.normalization.scale, w.input.normalization.bias,
+                relu=True, epsilon=architecture.LAYER_NORM_EPSILON,
+                bm=cfg.input_bm, arithmetic=cfg.layernorm_arithmetic,
+            ), mesh=mesh, input_spec=state_spec, weights_example=pweights,
+        )
         puzzle = load_puzzle(dataset / "puzzle_info.json", state_len=150, move_count=30)
         for case_name, kind, seed in CASES:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
@@ -167,6 +223,33 @@ def run(*, dataset: Path, output: Path) -> dict:
             monolithic = jax.block_until_ready(original(states, original_weights_d))
             hidden = [jax.block_until_ready(call(states, weights_d)) for call in boundary]
             rows = []
+
+            embedded = jax.block_until_ready(ref_embedding(states, weights_d))
+            candidate_embedded = jax.block_until_ready(pembedding(states, pweights_d))
+            embedded_control_q = jax.block_until_ready(suffix_embedding(embedded, weights_d))
+            embedded_candidate_q = jax.block_until_ready(suffix_embedding(candidate_embedded, weights_d))
+            rows.append({
+                "operator": "embedding", "boundary": _metrics(embedded, candidate_embedded),
+                "candidate_vs_same_suffix": _metrics(embedded_control_q, embedded_candidate_q),
+                "same_suffix_control_vs_monolithic": _metrics(monolithic, embedded_control_q),
+            })
+            dense = jax.block_until_ready(ref_input_dense(embedded, weights_d))
+            candidate_dense = jax.block_until_ready(pinput_dense(embedded, pweights_d))
+            dense_control_q = jax.block_until_ready(suffix_input_dense(dense, weights_d))
+            dense_candidate_q = jax.block_until_ready(suffix_input_dense(candidate_dense, weights_d))
+            rows.append({
+                "operator": "input.dense", "boundary": _metrics(dense, candidate_dense),
+                "candidate_vs_same_suffix": _metrics(dense_control_q, dense_candidate_q),
+                "same_suffix_control_vs_monolithic": _metrics(monolithic, dense_control_q),
+            })
+            candidate_ln = jax.block_until_ready(pinput_ln(dense, pweights_d))
+            ln_control_q = jax.block_until_ready(suffix[0](hidden[0], weights_d))
+            ln_candidate_q = jax.block_until_ready(suffix[0](candidate_ln, weights_d))
+            rows.append({
+                "operator": "input.layernorm_relu", "boundary": _metrics(hidden[0], candidate_ln),
+                "candidate_vs_same_suffix": _metrics(ln_control_q, ln_candidate_q),
+                "same_suffix_control_vs_monolithic": _metrics(monolithic, ln_control_q),
+            })
 
             candidate = jax.block_until_ready(pinput(states, pweights_d))
             control_q = jax.block_until_ready(suffix[0](hidden[0], weights_d))
