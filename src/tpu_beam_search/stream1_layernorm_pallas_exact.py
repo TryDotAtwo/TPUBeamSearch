@@ -38,6 +38,16 @@ from .tpu_layout import pad_to_multiple
 _LAYER_NORM_ARITHMETICS = ("legacy_bf16", "hlo_mixed")
 
 
+def _matrix_row_index(row_block):
+    """Keep every Mosaic BlockSpec index explicitly int32 under x64 mode."""
+
+    return row_block.astype(jnp.int32), jnp.asarray(0, jnp.int32)
+
+
+def _vector_zero_index(_row_block):
+    return (jnp.asarray(0, jnp.int32),)
+
+
 class PallasExactWeights(NamedTuple):
     """Runtime weights for the all-Pallas path."""
 
@@ -236,10 +246,8 @@ def pallas_exact_layer_norm_activation(
     )
     skip_source = values if skip is None else skip
     skip_padded = jnp.pad(skip_source.astype(jnp.bfloat16), padding)
-    matrix_spec = pl.BlockSpec(
-        (bm, padded_width), lambda row_block: (row_block, 0)
-    )
-    vector_spec = pl.BlockSpec((padded_width,), lambda row_block: (0,))
+    matrix_spec = pl.BlockSpec((bm, padded_width), _matrix_row_index)
+    vector_spec = pl.BlockSpec((padded_width,), _vector_zero_index)
     call = pl.pallas_call(
         functools.partial(
             _layer_norm_activation_kernel,

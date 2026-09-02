@@ -6,6 +6,7 @@ import numpy as np
 import pytest
 from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
 
+import tpu_beam_search.stream1_layernorm_pallas_exact as pallas_exact_module
 from test_layernorm_followup import model_fixture
 from tpu_beam_search.stream1_layernorm_pallas_exact import (
     PallasExactConfig,
@@ -46,6 +47,24 @@ def test_production_defaults_use_tpu_legal_bias_vector_tiles():
 
     assert config.input_bn >= 256
     assert config.residual_bn >= 256
+
+
+def test_layernorm_block_indices_remain_int32_when_x64_is_enabled():
+    with jax.enable_x64():
+        matrix = jax.make_jaxpr(pallas_exact_module._matrix_row_index)(
+            jnp.int32(0)
+        )
+        vector = jax.make_jaxpr(pallas_exact_module._vector_zero_index)(
+            jnp.int32(0)
+        )
+
+    assert [value.aval.dtype for value in matrix.jaxpr.outvars] == [
+        jnp.dtype(jnp.int32),
+        jnp.dtype(jnp.int32),
+    ]
+    assert [value.aval.dtype for value in vector.jaxpr.outvars] == [
+        jnp.dtype(jnp.int32),
+    ]
 
 
 def test_prepared_weights_quantize_embedding_once_into_runtime_banks():
