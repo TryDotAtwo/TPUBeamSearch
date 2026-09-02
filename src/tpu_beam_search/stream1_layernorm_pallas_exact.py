@@ -31,6 +31,12 @@ from .stream1_embedding_experimental import (
 )
 from .stream1_layernorm_exact import prepare_exact_layernorm_inference_weights
 from .stream1_layernorm_pallas import pallas_layernorm_dense
+from .stream1_layernorm_subtraction import pallas_centered_subtraction
+from .stream1_layernorm_invstd import (
+    pallas_invstd,
+    pallas_invstd_affine,
+    pallas_variance_from_centered,
+)
 from .stream1_layernorm_reference import _validate_layernorm_shapes
 from .tpu_layout import pad_to_multiple
 
@@ -39,6 +45,7 @@ _LAYER_NORM_ARITHMETICS = (
     "legacy_bf16",
     "hlo_mixed",
     "split_mean_hlo_mixed",
+    "fully_materialized_hlo_mixed",
 )
 
 
@@ -323,6 +330,68 @@ def _pallas_split_mean_layer_norm_activation(
     )[:rows]
 
 
+def _pallas_fully_materialized_layer_norm_activation(
+    values,
+    scale,
+    bias,
+    *,
+    skip,
+    add_skip: bool,
+    relu: bool,
+    epsilon: float,
+    bm: int,
+    width_alignment: int,
+    interpret: bool,
+):
+    rows, logical_width = values.shape
+    if pad_to_multiple(logical_width, width_alignment) != logical_width:
+        raise ValueError("fully materialized LayerNorm requires aligned width")
+    padded_rows = pad_to_multiple(rows, bm)
+    values_padded = jnp.pad(
+        values.astype(jnp.bfloat16), ((0, padded_rows - rows), (0, 0))
+    )
+    matrix_spec = pl.BlockSpec((bm, logical_width), _matrix_row_index)
+    mean_call = pl.pallas_call(
+        functools.partial(_split_mean_kernel, logical_width=logical_width),
+        grid_spec=pltpu.PrefetchScalarGridSpec(
+            num_scalar_prefetch=0,
+            in_specs=[matrix_spec], out_specs=matrix_spec,
+            grid=(padded_rows // bm,),
+        ),
+        out_shape=jax.ShapeDtypeStruct(
+            (padded_rows, logical_width), jnp.bfloat16,
+        ),
+        compiler_params=pltpu.CompilerParams(dimension_semantics=("parallel",)),
+        interpret=interpret,
+        name="stream1_pallas_exact_ln_materialized_mean",
+    )
+    mean_matrix = mean_call(values_padded)[:rows]
+    centered = pallas_centered_subtraction(
+        values, mean_matrix[:, :1], bm=bm, interpret=interpret,
+    )
+    variance = pallas_variance_from_centered(
+        centered, bm=bm, interpret=interpret,
+    )
+    invstd = pallas_invstd(
+        variance,
+        epsilon=epsilon,
+        output_bf16=True,
+        bm=bm,
+        interpret=interpret,
+    )
+    return pallas_invstd_affine(
+        centered,
+        invstd,
+        scale,
+        bias,
+        skip=skip,
+        add_skip=add_skip,
+        relu=relu,
+        bm=bm,
+        interpret=interpret,
+    )
+
+
 def pallas_exact_layer_norm_activation(
     values,
     scale,
@@ -355,6 +424,19 @@ def pallas_exact_layer_norm_activation(
         raise ValueError("epsilon must be finite and non-negative")
     if arithmetic == "split_mean_hlo_mixed":
         return _pallas_split_mean_layer_norm_activation(
+            values,
+            scale,
+            bias,
+            skip=skip,
+            add_skip=add_skip,
+            relu=relu,
+            epsilon=epsilon,
+            bm=bm,
+            width_alignment=width_alignment,
+            interpret=interpret,
+        )
+    if arithmetic == "fully_materialized_hlo_mixed":
+        return _pallas_fully_materialized_layer_norm_activation(
             values,
             scale,
             bias,
@@ -441,6 +523,9 @@ def pallas_exact_custom_call_count(
 ) -> int:
     semantic_count = len(pallas_exact_stage_names(architecture))
     if config.layernorm_arithmetic != "split_mean_hlo_mixed":
+        if config.layernorm_arithmetic == "fully_materialized_hlo_mixed":
+            layernorm_count = 1 + 2 * architecture.RESIDUAL_COUNT
+            return semantic_count + 4 * layernorm_count
         return semantic_count
     layernorm_count = 1 + 2 * architecture.RESIDUAL_COUNT
     return semantic_count + layernorm_count

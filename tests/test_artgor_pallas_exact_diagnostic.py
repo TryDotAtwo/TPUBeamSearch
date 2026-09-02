@@ -69,19 +69,19 @@ def test_reference_stage_sequence_ends_at_the_unchanged_semantic_model():
         )
 
 
-def test_next_diagnostic_freezes_only_split_mean_bk128_candidate():
+def test_next_diagnostic_freezes_only_fully_materialized_bk128_candidate():
     diagnostic = _module()
 
     configs = diagnostic.candidate_configs()
 
-    assert tuple(configs) == ("pallas_exact_split_mean_bk128",)
-    assert configs["pallas_exact_split_mean_bk128"].input_bk == 128
-    assert configs["pallas_exact_split_mean_bk128"].residual_bk == 128
+    assert tuple(configs) == ("pallas_exact_fully_materialized_bk128",)
+    assert configs["pallas_exact_fully_materialized_bk128"].input_bk == 128
+    assert configs["pallas_exact_fully_materialized_bk128"].residual_bk == 128
     assert all(config.input_bn >= 256 for config in configs.values())
     assert all(config.residual_bn >= 256 for config in configs.values())
     assert all(config.dense_rounding == "late" for config in configs.values())
     assert all(
-        config.layernorm_arithmetic == "split_mean_hlo_mixed"
+        config.layernorm_arithmetic == "fully_materialized_hlo_mixed"
         for config in configs.values()
     )
 

@@ -4,6 +4,7 @@ from benchmarks.artgor_layernorm_invstd import RESULT_NAME, tensor_metrics
 from tpu_beam_search.stream1_layernorm_invstd import (
     pallas_invstd,
     pallas_invstd_affine,
+    pallas_variance_from_centered,
 )
 
 
@@ -45,6 +46,37 @@ def test_interpreted_invstd_affine_matches_explicit_expression():
     ).astype(jnp.bfloat16)
     actual = pallas_invstd_affine(
         centered, invstd, scale, bias, bm=2, interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
+def test_interpreted_variance_from_centered_is_bf16_exact():
+    import jax.numpy as jnp
+
+    centered = jnp.arange(256, dtype=jnp.float32).reshape(2, 128) / 128 - 1
+    expected = jnp.mean(centered * centered, axis=1, keepdims=True).astype(
+        jnp.bfloat16
+    )
+    actual = pallas_variance_from_centered(
+        centered, bm=2, interpret=True,
+    )
+    np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
+
+
+def test_interpreted_affine_can_apply_skip_and_relu_inside_pallas():
+    import jax.numpy as jnp
+
+    centered = jnp.arange(128, dtype=jnp.float32)[None, :] / 64 - 1
+    invstd = jnp.asarray([[1.0]], dtype=jnp.bfloat16)
+    scale = jnp.ones((128,), dtype=jnp.bfloat16)
+    bias = jnp.zeros((128,), dtype=jnp.bfloat16)
+    skip = jnp.full((1, 128), 0.25, dtype=jnp.bfloat16)
+    expected = jnp.maximum(
+        centered.astype(jnp.bfloat16) + skip, jnp.bfloat16(0)
+    ).astype(jnp.bfloat16)
+    actual = pallas_invstd_affine(
+        centered, invstd, scale, bias,
+        skip=skip, add_skip=True, relu=True, bm=1, interpret=True,
     )
     np.testing.assert_array_equal(np.asarray(actual), np.asarray(expected))
 
