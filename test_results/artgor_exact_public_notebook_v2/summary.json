@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "notebook": {
+    "slug": "trydotatwo/cayleypy-cube555-tpu-beam-q-exact",
+    "version": 2,
+    "status": "complete",
+    "packaging_commit": "af8e13c",
+    "runtime_source_commit": "2b99bdf5116f828a21d35b2c5910467f6ab039c2",
+    "upstream_artgor_script_version_id": 344319112,
+    "upstream_notebook_sha256": "c74613a9fa400b391aca49bb128a2f6d3b0465e8e7cb933abc9b126a317e0e0b"
+  },
+  "runtime": {
+    "jax": "0.10.2",
+    "jaxlib": "0.10.2",
+    "libtpu": "0.0.42.1",
+    "device_count": 8,
+    "device_kind": "TPU v5 lite",
+    "inference_engine": "exact_split"
+  },
+  "configuration": {
+    "pids": [1034, 1020],
+    "frames": [
+      {"sym": 0, "inverted": false},
+      {"sym": 7, "inverted": true}
+    ],
+    "global_beam": 16777216,
+    "checkpoint": "q555_2k_BEST.pt",
+    "checkpoint_size_bytes": 99061299,
+    "checkpoint_sha256_prefix": "2b540c3e396f"
+  },
+  "comparison_to_immutable_artgor_run": {
+    "frame_record_count": 4,
+    "all_identity_fields_equal": true,
+    "all_found_status_equal": true,
+    "all_found_path_lengths_equal": true,
+    "all_found_path_hashes_equal": true,
+    "all_found_paths_runtime_verified": true,
+    "records": [
+      {"pid": 1034, "sym": 0, "inverted": false, "found": true, "path_len": 116, "path_sha256": "09e4f63515dbc381fec510fc1a5f65010e46cfeb78edd279c4620103f5fa583d", "original_wall_s": 3346.595, "exact_wall_s": 2869.031, "wall_speedup": 1.1665},
+      {"pid": 1034, "sym": 7, "inverted": true, "found": false, "original_wall_s": 9339.882, "exact_wall_s": 8007.539, "wall_speedup": 1.1664},
+      {"pid": 1020, "sym": 0, "inverted": false, "found": true, "path_len": 120, "path_sha256": "be345142bcb234e6abfa6367176eee6ecd2c01458612d4496842111a392a89e4", "original_wall_s": 3496.465, "exact_wall_s": 3002.461, "wall_speedup": 1.1645},
+      {"pid": 1020, "sym": 7, "inverted": true, "found": false, "original_wall_s": 9336.046, "exact_wall_s": 8049.799, "wall_speedup": 1.1598}
+    ],
+    "original_total_wall_s": 25518.988,
+    "exact_total_wall_s": 21928.830,
+    "aggregate_wall_speedup": 1.1637
+  },
+  "private_artifact_hashes": {
+    "raw_results_sha256": "244c333b8744a2919728789bc246cf019be823eaf92133891657e3ee1880dc16",
+    "raw_log_sha256": "4b5866860fe48aba7060d80169edbc39fdb2f19cbac16702f93f77842946ceb5"
+  },
+  "publication_boundary": "No competition input rows, initial states, solution strings, move-index arrays, submission.csv, or raw private log are included."
+}
