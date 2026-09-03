@@ -57,6 +57,9 @@ diagnostic code, not an HBM-scale partition or remote DMA implementation.
 Final local verification after the split and signed-count changes: 556 passed
 in 280.73 s, original C++ oracle enabled. Two split cases join the next physical
 bundle (13 total cases); local tests do not establish TPU lowering success.
+V5 source b469a6863a6ca3472c71022245d7d3ef4f86be65. Download into
+`test_results/beam_primitives_v5/`; inspect all ten groups / thirteen cases.
+Unchanged hash errors remain expected unresolved failures, not accepted cases.
 
 Stream3 source adapter added while V4 remains QUEUED. All five source-oracle
 tests pass (18.57 s), including three new Stream3 cases: world=8 with payload
