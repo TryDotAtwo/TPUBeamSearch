@@ -1,0 +1,16 @@
+[{"stream_name":"stderr","time":17.273254083,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":18.469863676,"data":"\n"}
+,{"stream_name":"stderr","time":18.469893196,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":18.469898266,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":18.603790309,"data":"Cloning into '/tmp/TPUBeamSearch-artgor-prefix-gate'...\n"}
+,{"stream_name":"stderr","time":23.813253777,"data":"HEAD is now at 04f9d6b Add controlled variance capture and precision replay sweep\n"}
+,{"stream_name":"stdout","time":27.918900458,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":27.918947208,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":33.579616952,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":33.579657332,"data":"E0000 00:00:1788410114.521241      45 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":33.579663602,"data":"=== Source Location Trace: ===\n"}
+,{"stream_name":"stdout","time":33.579667862,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":1102.206542812,"data":"{\"status\": \"complete\"}\n"}
+,{"stream_name":"stderr","time":1111.165711393,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1113.601603299,"data":"[NbConvertApp] Writing 281409 bytes to __results__.html\n"}
+]

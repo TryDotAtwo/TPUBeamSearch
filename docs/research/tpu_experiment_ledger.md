@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: variance v5 capture rejected; keep validated v4 inputs
+
+New variance capture changes JAXoutput by1,418,986/1,418,932 elements at16K/256,
+while invstd remains exact. Capturedmean changes materially; HLO now reduces
+a BF16 Dense parameter instead of the prior fused FP32 bias-add intermediate.
+All five variance orders/replays ran, but on perturbedmean: no original-prefix
+causal conclusion. Next pin fixedinputs to unchangedv4capture and separately
+control every shared field. Local C: full download failed; compact JSON/log/HLO
+saved, full archive downloading to D:/TPUBeamSearchArtifacts/artgor_variance_capture_v5.
+See `test_results/artgor_variance_capture_v5/report.md`; no default/speed change.
+
 ## 2026-09-03: controlled variance capture/replay prepared
 
 Adds JAX BF16 variance with v4 output/invstd controls and prior invstd SHA.
