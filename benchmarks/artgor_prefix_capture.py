@@ -20,7 +20,7 @@ from benchmarks.artgor_pallas_same_suffix import (
 )
 
 
-def captured_prefix(states, weights, architecture, *, include_invstd=False):
+def captured_prefix(states, weights, architecture, *, include_invstd=False, include_variance=False):
     """Return Dense, broadcast mean and original LN output in one executable.
 
     Extra outputs may change compiler fusion. Callers MUST compare slot 2
@@ -31,10 +31,13 @@ def captured_prefix(states, weights, architecture, *, include_invstd=False):
     dense = reference_input_dense(embedded, weights)
     mean = jnp.broadcast_to(jnp.mean(dense, axis=-1, keepdims=True), dense.shape)
     output = reference_input_ln(dense, weights, architecture)
-    if include_invstd:
+    if include_invstd or include_variance:
         variance = jnp.mean(jnp.square(dense-mean),axis=-1,keepdims=True)
         invstd = jax.lax.rsqrt(variance+architecture.LAYER_NORM_EPSILON)
-        return jnp.stack((dense,mean,output,jnp.broadcast_to(invstd,dense.shape)),axis=1)
+        parts=(dense,mean,output,jnp.broadcast_to(invstd,dense.shape))
+        if include_variance:
+            parts=parts+(jnp.broadcast_to(variance,dense.shape),)
+        return jnp.stack(parts,axis=1)
     return jnp.stack((dense, mean, output), axis=1)
 
 
@@ -57,11 +60,13 @@ def pallas_capture(states, weights, architecture, *, include_invstd=False):
     return jnp.stack((dense, mean, output), axis=1)
 
 
-def run(dataset, output, *, include_invstd=False):
+def run(dataset, output, *, include_invstd=False, include_variance=False):
+    include_invstd=include_invstd or include_variance
     output.mkdir(parents=True, exist_ok=True)
     path = output/'artgor_prefix_capture.json'
     report = dict(status='running', schema_version=1, comparisons={},
-                  scope='captured_input_prefix_only_no_speed_claim',include_invstd=include_invstd)
+                  scope='captured_input_prefix_only_no_speed_claim',include_invstd=include_invstd,
+                  include_variance=include_variance)
     gate.checkpoint(path, report)
     try:
         devices = jax.devices()
@@ -107,10 +112,13 @@ def run(dataset, output, *, include_invstd=False):
         for label, function, example, resident in (
             ('jax', lambda x,w: gate.reference_hidden_after_depth(x,w,architecture,0), weights,wd),
             ('pallas', lambda x,w: gate.pallas_prefix(x,w,architecture,order='lanes_tree'),packed,pd),
-            ('jax_capture',lambda x,w: captured_prefix(x,w,architecture,include_invstd=include_invstd),weights,wd),
+            ('jax_capture',lambda x,w: captured_prefix(x,w,architecture,include_invstd=include_invstd,include_variance=include_variance),weights,wd),
             ('pallas_capture',lambda x,w: pallas_capture(x,w,architecture,include_invstd=include_invstd),packed,pd),
         ):
             calls[label] = (gate._mapped(function,mesh=mesh,input_spec=spec,weights_example=example),resident)
+        if include_variance:
+            calls['jax_v4_control']=(gate._mapped(lambda x,w:captured_prefix(x,w,architecture,include_invstd=True),
+                mesh=mesh,input_spec=spec,weights_example=weights),wd)
         # The same external-mean remainder is used for every substitution.
         def remainder(values, w):
             return gate.external_mean_ln(values[:,0].astype(jnp.float32), values[:,1],
@@ -135,6 +143,8 @@ def run(dataset, output, *, include_invstd=False):
             else:
                 for source, captured in (('jax',j),('pallas',p)):
                     names=('dense','mean','output','invstd') if include_invstd else ('dense','mean','output')
+                    if include_variance and source=='jax':
+                        names=names+('variance',)
                     for slot, name in enumerate(names):
                         compare(f'{source}_shape_{name}',large_captures[source][:,slot],captured[:,slot])
                 large_captures.clear()
@@ -207,6 +217,58 @@ def run(dataset, output, *, include_invstd=False):
                 controls=report['attribution_controls'][str(size)]
                 controls.update(invstd_native_zero_exact=native_affine,fixed_mean_split_zero_exact=fixed_zero)
                 controls['valid']=controls['valid'] and native_affine and fixed_zero
+                if include_variance:
+                    from benchmarks.artgor_invstd_capture import variance_pair, variance_rsqrt, chunked_pair_host
+                    from benchmarks.artgor_input_trace import MEAN_ORDERS
+                    old=arrays['jax_v4_control']
+                    output_control=compare(f'{size}_variance_capture_output_control',old[:,2],j[:,2])['exact']
+                    inv_control=compare(f'{size}_variance_capture_invstd_control',old[:,3],j[:,3])['exact']
+                    prior=json.loads((Path(__file__).resolve().parents[1]/
+                        'test_results/artgor_invstd_capture_v4/artgor_invstd_capture/artgor_prefix_capture.json').read_text())
+                    prior_inv=prior['comparisons'][f'{size}_fixed_mean_invstd']['reference_sha256']
+                    reproduced_inv=gate._array_sha256(old[:,3])==prior_inv
+                    controls.update(variance_capture_output_exact=output_control,
+                        variance_capture_invstd_exact=inv_control,v4_invstd_sha_reproduced=reproduced_inv)
+                    controls['valid']=controls['valid'] and output_control and inv_control and reproduced_inv
+                    replay_call=gate._mapped(lambda x,w:variance_rsqrt(x,epsilon=architecture.LAYER_NORM_EPSILON),
+                        mesh=mesh,input_spec=spec,weights_example=packed)
+                    # Original source BF16 epsilon+rsqrt on an actual BF16 variance buffer.
+                    jax_replay=gate._mapped(lambda x,w:jax.lax.rsqrt(x+architecture.LAYER_NORM_EPSILON),
+                        mesh=mesh,input_spec=spec,weights_example=packed)
+                    for label,call in (('jax',jax_replay),('pallas',replay_call)):
+                        replay=evaluate_aux(f'jax_variance_replay_{label}',call,j[:,4])
+                        compare(f'{size}_jax_variance_replay_{label}',j[:,3],replay)
+                    report.setdefault('variance_cases',{})[str(size)]={}
+                    for order in MEAN_ORDERS:
+                        pair_call=jax.jit(jax.shard_map(lambda x,w:variance_pair(x[:,0],x[:,1],
+                            epsilon=architecture.LAYER_NORM_EPSILON,order=order),mesh=mesh,
+                            in_specs=(spec,jax.tree.map(lambda _:P(),packed)),out_specs=(spec,spec),check_vma=False))
+                        var,inv=chunked_pair_host(fixed_inputs,lambda chunk:jax.block_until_ready(
+                            pair_call(jax.device_put(chunk,sharding),pd)),chunk_rows=size)
+                        sample=fixed_inputs.reshape(8,16384,*fixed_inputs.shape[1:])[:,:size].reshape(8*size,*fixed_inputs.shape[1:])
+                        lowered=pair_call.lower(jax.device_put(sample,sharding),pd)
+                        (output/f'variance_pair_{order}_{size}.compiled.txt').write_text(lowered.compile().as_text(),encoding='utf-8')
+                        (output/f'variance_pair_{order}_{size}.stablehlo.txt').write_text(str(lowered.compiler_ir(dialect='stablehlo')),encoding='utf-8')
+                        label=f'{size}_variance_{order}'
+                        compare(label+'_bf16',j[:,4],var.astype(jnp.bfloat16))
+                        compare(label+'_invstd',j[:,3],inv)
+                        if order=='native':
+                            zero=compare(label+'_native_zero',fixed_inv,inv)['exact']
+                            controls['variance_native_zero_exact']=zero
+                            controls['valid']=controls['valid'] and zero
+                        for precision,values in (('fp32',var),('bf16',var.astype(jnp.bfloat16))):
+                            replay=evaluate_aux(f'variance_replay_{order}_{precision}',replay_call,values)
+                            compare(label+'_replay_'+precision,j[:,3],replay)
+                            if precision=='fp32':
+                                compare(label+'_replay_zero',inv,replay)
+                        # Save actual FP32 scalar bits, including the two affected rows.
+                        np.savez_compressed(output/f'{label}_scalars.npz',
+                            variance_fp32=var[:,0],invstd_bf16_bits=np.ascontiguousarray(inv[:,0]).view(np.uint16),
+                            jax_variance_bf16_bits=np.ascontiguousarray(j[:,4,0]).view(np.uint16),
+                            jax_invstd_bf16_bits=np.ascontiguousarray(j[:,3,0]).view(np.uint16))
+                        report['variance_cases'][str(size)][order]={'complete':True}
+                        gate.checkpoint(path,report)
+                        del var,inv
                 del fixed_inputs,fixed_inv,fixed_reference
             del arrays,j,p
             gate.checkpoint(path,report)
@@ -224,5 +286,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset',type=Path)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--include-invstd',action='store_true')
+    parser.add_argument('--include-variance',action='store_true')
     args=parser.parse_args()
-    print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,include_invstd=args.include_invstd)['status']}))
+    print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,
+        include_invstd=args.include_invstd,include_variance=args.include_variance)['status']}))

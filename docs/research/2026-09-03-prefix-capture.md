@@ -45,3 +45,23 @@ outputs, and both new zero-controls. Export HLO for auxiliary executables as
 well. Unit/interpreter tests cover the BF16 capture slot and externally supplied
 invstd affecting output; they are not TPU proof. No variance-trace widening is
 introduced in this step, and no production defaults change.
+
+## Variance follow-up
+
+`--include-variance` retains the untouched reference and v4 capture as controls,
+adding actual BF16 variance in slot4 of the new JAX capture. Both output and
+invstd must equal the v4 capture, and the v4 invstd SHA must reproduce the
+published run. No entire-trace widening is used.
+
+On fixed JAX Dense/mean, Pallas returns FP32 variance and BF16 invstd as two
+separately typed outputs from one kernel. Native invstd must reconstruct v4's
+producer. Five reduction orders use identical centered-square inputs. Each
+variance is replayed from a real FP32 or BF16 buffer through the same Pallas
+epsilon/rsqrt kernel; the FP32 replay has its own native reconstruction check.
+The captured JAX BF16 variance is also replayed through JAX and Pallas. A failed
+replay control is a boundary effect, not evidence for reduction causality.
+
+Retain all previous controls, both complete-corpus shapes, HLO, mismatch rows
+and scalar NPZ files with full FP32 variance and BF16 invstd/variance bits.
+The pair-output host collector preserves device-major order and distinct dtypes.
+This is attribution only: no production kernel or default is promoted.

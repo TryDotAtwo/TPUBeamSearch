@@ -1,5 +1,14 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: controlled variance capture/replay prepared
+
+Adds JAX BF16 variance with v4 output/invstd controls and prior invstd SHA.
+Pallas paired FP32variance/BF16invstd outputs preserve physical buffer dtypes.
+Five centered-square reduction orders, real FP32/BF16 variance replay and
+native/split controls isolate reduction versus epsilon/rsqrt/boundary effects.
+Same legal42 full corpus at16K/chunk256; full scalar bits and HLO retained.
+No production/default/BN/beam change; target results pending.
+
 ## 2026-09-03: invstd v4 explains the two remaining prefix rows
 
 All capture/native/split controls pass at16K andchunk256; hashes/runtime matchv3.
