@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: captured prefix v3 separates mean from remaining LN drift
+
+All capture/zero controls pass at16K andchunk256 on same131072legal42states.
+BF16 Dense exact everywhere. Large JAX mean differs on row54401 only;
+mean substitution removes its54output errors, leaving1275 on rows760/28870.
+Dense substitution has no effect. Small shape all exact. Full prior large
+hashes reproduced. Next controlled BF16 invstd capture/swap, then variance or
+affine attribution according to results; no full-model/default/speed promotion.
+See `test_results/artgor_prefix_capture_v3/report.md`.
+
 ## 2026-09-03: controlled captured-boundary follow-up prepared
 
 Added BF16 Dense/mean/output capture with untouched JAX/Pallas controls at
