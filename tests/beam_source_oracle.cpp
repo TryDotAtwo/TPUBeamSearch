@@ -3,11 +3,43 @@
 #include "hash.hpp"
 #include "state.hpp"
 #include "stream4.hpp"
+#include "stream3.hpp"
 #include <string>
 #include <iostream>
 #include <vector>
 
 int main(int argc, char** argv) {
+    if (argc == 2 && std::string(argv[1]) == "stream3") {
+        unsigned count, threshold, rank, world;
+        if (!(std::cin >> count >> threshold >> rank >> world)
+            || world == 0 || world > 256 || rank >= world) return 2;
+        std::vector<beam::Stream3CandidateInput> input(count);
+        for (auto& m : input) {
+            std::uint64_t w[9];
+            for (auto& x : w) std::cin >> x;
+            m = {{w[0] | (w[1] << 32), w[2] | (w[3] << 32)},
+                 std::uint32_t(w[6]), std::uint32_t(w[8]),
+                 w[4] | (w[5] << 32), std::uint8_t(w[7])};
+        }
+        if (!std::cin) return 3;
+        const auto result = beam::stream3_threshold_dedup_split(input, threshold,
+            std::uint16_t(rank), world);
+        std::cout << "STREAM3\n" << result.local_pending.size() << ' '
+                  << result.remote_send.size() << '\n';
+        for (auto x : result.send_count) std::cout << x << ' ';
+        std::cout << '\n';
+        for (auto x : result.send_offset) std::cout << x << ' ';
+        std::cout << '\n';
+        for (const auto* group : {&result.local_pending, &result.remote_send}) {
+            for (const auto& m : *group) {
+                std::cout << (m.hash.lo & 0xffffffffULL) << ' ' << (m.hash.lo >> 32) << ' '
+                          << (m.hash.hi & 0xffffffffULL) << ' ' << (m.hash.hi >> 32) << ' '
+                          << (m.parent_idx & 0xffffffffULL) << ' ' << (m.parent_idx >> 32) << ' '
+                          << m.score_key << ' ' << m.route_packed << '\n';
+            }
+        }
+        return 0;
+    }
     if (argc == 2 && std::string(argv[1]) == "dedup") {
         unsigned count, threshold;
         if (!(std::cin >> count >> threshold)) return 2;

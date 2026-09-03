@@ -10,7 +10,7 @@ comparison, not isolated kernels. No complete-port or performance claim yet.
 | S1 MOVE_COUNT score producer | existing inference engines only | exact selected-model integration, quantization without HBM float-Q |
 | S2 immediate hash / exact goal | beam_stream2.py; independent C++ source oracle | real TPU compile, valid-input launcher, K1/K2, bounded solved collection |
 | Hash128 owner/shard arithmetic | beam_hash.py uint32 pairs; edge/random modulo tests and C++ oracle | physical TPU lowering, fingerprint and K1 bucket salts |
-| S3 threshold/sort/dedup | beam_dedup.py diagnostic bitonic baseline; payload tie-break tests | routing/compaction buffers, source Stream3 full split parity, HBM-scale sort |
+| S3 threshold/sort/dedup | beam_dedup.py diagnostic bitonic; original C++ Stream3 comparison with host split adapter | TPU routing/compaction buffers and full split, HBM-scale sort |
 | S4 threshold/sort/dedup | same primitive with score/parent64/route tie-break; C++ oracle | resident A/B collector, independent capacity/trigger, committed histogram |
 | S5 | ownership/epoch design only | remote DMA readiness/ack, zero counts, coordinated threshold, race and TPU tests |
 | Three scratch overlays | design only | explicit arena plan, alias report, drain gates |
@@ -26,7 +26,7 @@ No skips in this run. JAX 0.10.1 CPU interpretation; no physical TPU or CUDA
 execution evidence for these new primitives yet.
 
 The adapter `tests/beam_source_oracle.cpp` links original `src/hash.cpp`,
-`src/state.cpp`, `src/stream4.cpp` from D:/100XH100 read-only. It executes on the
+`src/state.cpp`, `src/stream4.cpp`, `src/stream3.cpp` from D:/100XH100 read-only. It executes on the
 CPU. It is stronger than a reimplemented Python oracle, but not CUDA execution.
 Run from repo root:
 
@@ -42,9 +42,18 @@ GPU source identities inspected 2026-09-03 (SHA256):
 - src/hash.cpp: 369b34d3eaa526b002b553ee4bf2e9ee1eccd69861c6cac7f1d06a5162b65136
 - src/state.cpp: 7094caed55c9876eb496a4e5c705b814309b5d3807b7e935712b78d09614406c
 - src/stream4.cpp: d233acefb23c030057de8a92f6de1fda55617ef925d757a49d7742b736bb72f2
+- src/stream3.cpp: 584d37e0c96d581174359932a2fe04df76cbfdfca12b44b0a5df75c3aec1d2b5
 - cuda/stream2.cu: d52252daba39fc913a31c7ded25f08721b8b58aa8c5ca0e09872bf7a6e61f126
 
 ## Next execution order
+
+Stream3 source adapter added while V4 remains QUEUED. All five source-oracle
+tests pass (18.57 s), including three new Stream3 cases: world=8 with payload
+ties opposed to parent order, world=1 with UINT32_MAX threshold, and empty input.
+Pallas CPU interpretation reproduces survivor metadata; host test partition
+matches original C++ local/remote ordering, counts and offsets. This does not
+implement or validate TPU partition/DMA. No production primitive changed.
+See `test_results/beam_stream3_source_parity.md` for the scope and reproduction.
 
 V10 prefix session completed; see
 `test_results/artgor_reduction_geometry_v10/report.md`. Transposed JAX reduction
