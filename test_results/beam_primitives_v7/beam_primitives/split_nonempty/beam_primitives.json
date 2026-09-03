@@ -1,0 +1,71 @@
+{
+  "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+  "source_sha": "2eb6aa7b40c9b56456c4bfc1627504904b4dc851",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "x64_enabled": false,
+  "cases": [
+    {
+      "name": "split_127",
+      "input_sha256": [
+        "43e22f1a4e7e55ec9571623424889d3b0603aed47f8e7539d23beac58a95d891",
+        "74262255d51a0607f0055fb1be5629f63ee1644199c8c5bcf652f7dc036947a6",
+        "8d12d9fcf1bb74eb413e34f28b96439b1260da900a2c70af2440c5c7dbb43c03"
+      ],
+      "status": "error",
+      "phase": "compile",
+      "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %125 = \"arith.extsi\"(%124) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %125 = \"arith.extsi\"(%124) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+    }
+  ],
+  "timings": {},
+  "timing_protocol": {
+    "warmup": 3,
+    "repeats": 21,
+    "order": "alternating forward/reverse",
+    "scope": "complete primitive call on eight devices; no placement/compile"
+  },
+  "all_exact": false
+}

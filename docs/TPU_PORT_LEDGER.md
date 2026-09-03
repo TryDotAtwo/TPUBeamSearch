@@ -82,6 +82,13 @@ original C++ oracle enabled.
 V7 source 2eb6aa7b40c9b56456c4bfc1627504904b4dc851; download into
 `test_results/beam_primitives_v7/`. Same thirteen cases isolate the select change.
 
+V7 COMPLETE, all_exact=false; report: `test_results/beam_primitives_v7/report.md`.
+Five controls remain exact and both hash failures are unchanged. All four dedup
+and both split cases retain the identical V6 `select_n` i1-to-i8 invalid-layout
+compile failure. The control-plane hypothesis is therefore falsified: the next
+step is a minimal physical selector probe for the shared survivor data path,
+not another broad production rewrite.
+
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
 split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts
