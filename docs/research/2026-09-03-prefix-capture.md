@@ -81,7 +81,7 @@ Pallas affine with fixed v4 Dense/mean. All tensor counts/SHA remain exhaustive,
 but NPZ mismatch examples are limited to eight rows (`examples_only=true`).
 Complete scalar variance/invstd bits are retained for every corpus row.
 
-## Same-buffer rsqrt consumer follow-up (not yet launched)
+## Same-buffer rsqrt consumer follow-up
 
 `benchmarks.artgor_rsqrt_consumers.consume_variance` supplies paired JAX/Pallas
 consumers for explicit FP32 arithmetic and a separate BF16 source-expression
@@ -99,3 +99,12 @@ to broadcast on the host after execution for prefix comparisons. Retain full
 scalar bits and shape-correct sharding (`P('core')` for rank one). Test the
 collector's device-major ordering before launching. No standalone consumer
 result licenses an all-Pallas or speed claim.
+
+`--compare-consumers` now enables this matrix in the capture runner, implying
+`--use-v4-inputs`. It evaluates eight consumers per shape on the native pair's
+same FP32 variance: JAX/Pallas x scalar/broadcast x FP32/BF16-expression.
+Each pair records direct equality, equality to native Pallas and validated JAX
+invstd, and prefix reconstruction. Scalar input/output bits are saved for all
+rows; lowered consumer and affine HLO are saved separately. Existing five-order
+comparisons remain intact. A compilation failure terminates the diagnostic
+with partial JSON rather than being interpreted as a numerical/timing result.

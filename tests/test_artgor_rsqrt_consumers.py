@@ -3,6 +3,25 @@ import jax.numpy as jnp
 import pytest
 
 
+def test_consumer_collector_preserves_device_order_before_host_broadcast():
+    from benchmarks.artgor_rsqrt_consumers import collect_consumer
+    values = np.arange(16, dtype=np.float32)
+    seen = []
+    def operation(x):
+        seen.append(x.copy())
+        return x + 100
+    result = collect_consumer(values, operation, devices=2, chunk_rows=2, width=3)
+    np.testing.assert_array_equal(seen[0], [0, 1, 8, 9])
+    np.testing.assert_array_equal(result, np.repeat((values + 100)[:, None], 3, axis=1))
+
+
+def test_consumer_collector_keeps_matrix_columns():
+    from benchmarks.artgor_rsqrt_consumers import collect_consumer
+    values = np.arange(48, dtype=np.float32).reshape(16, 3)
+    result = collect_consumer(values, lambda x: x + 2, devices=2, chunk_rows=2, width=3)
+    np.testing.assert_array_equal(result, values + 2)
+
+
 @pytest.mark.parametrize('shape', [(256,), (128, 128)])
 @pytest.mark.parametrize('engine', ['jax', 'pallas'])
 @pytest.mark.parametrize('arithmetic', ['fp32', 'bf16_expression'])

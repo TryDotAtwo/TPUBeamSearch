@@ -64,7 +64,9 @@ def select_inference_capture(arrays,*,use_v4_inputs):
     return arrays['jax_v4_control' if use_v4_inputs else 'jax_capture']
 
 
-def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4_inputs=False):
+def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4_inputs=False,
+        compare_consumers=False):
+    use_v4_inputs=use_v4_inputs or compare_consumers
     include_variance=include_variance or use_v4_inputs
     include_invstd=include_invstd or include_variance
     output.mkdir(parents=True, exist_ok=True)
@@ -72,7 +74,7 @@ def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4
     report = dict(status='running', schema_version=1, comparisons={},
                   scope='captured_input_prefix_only_no_speed_claim',include_invstd=include_invstd,
                   include_variance=include_variance,use_v4_inputs=use_v4_inputs,
-                  examples_only=use_v4_inputs)
+                  examples_only=use_v4_inputs,compare_consumers=compare_consumers)
     gate.checkpoint(path, report)
     try:
         devices = jax.devices()
@@ -266,6 +268,42 @@ def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4
                         (output/f'variance_pair_{order}_{size}.compiled.txt').write_text(lowered.compile().as_text(),encoding='utf-8')
                         (output/f'variance_pair_{order}_{size}.stablehlo.txt').write_text(str(lowered.compiler_ir(dialect='stablehlo')),encoding='utf-8')
                         label=f'{size}_variance_{order}'
+                        if compare_consumers and order=='native':
+                            from benchmarks.artgor_rsqrt_consumers import consume_variance, collect_consumer
+                            report.setdefault('consumer_cases',{})[str(size)]={}
+                            for layout in ('scalar','broadcast'):
+                                values=np.ascontiguousarray(var[:,0] if layout=='scalar' else var)
+                                cspec=P('core') if layout=='scalar' else P('core',None)
+                                csharding=NamedSharding(mesh,cspec)
+                                for arithmetic in ('fp32','bf16_expression'):
+                                    prior_result=None
+                                    for engine in ('jax','pallas'):
+                                        name=f'consumer_{layout}_{arithmetic}_{engine}'
+                                        call=jax.jit(jax.shard_map(
+                                            lambda x:consume_variance(x,engine=engine,arithmetic=arithmetic,
+                                                epsilon=architecture.LAYER_NORM_EPSILON),
+                                            mesh=mesh,in_specs=cspec,out_specs=cspec,check_vma=False))
+                                        sample=values.reshape(8,16384,*values.shape[1:])[:,:size].reshape(8*size,*values.shape[1:])
+                                        lowered=call.lower(jax.device_put(sample,csharding))
+                                        (output/f'{name}_{size}.compiled.txt').write_text(lowered.compile().as_text(),encoding='utf-8')
+                                        (output/f'{name}_{size}.stablehlo.txt').write_text(str(lowered.compiler_ir(dialect='stablehlo')),encoding='utf-8')
+                                        result=collect_consumer(values,lambda chunk:jax.block_until_ready(
+                                            call(jax.device_put(chunk,csharding))),chunk_rows=size,width=var.shape[1])
+                                        compare(f'{size}_{name}_invstd',j[:,3],result)
+                                        compare(f'{size}_{name}_native',inv,result)
+                                        if prior_result is not None:
+                                            compare(f'{size}_{name}_vs_jax',prior_result,result)
+                                        prefix=evaluate_aux(name+'_affine',affine_call,
+                                            np.stack((j[:,0],j[:,1],result),axis=1))
+                                        compare(f'{size}_{name}_prefix',arrays['jax'],prefix)
+                                        np.savez_compressed(output/f'{size}_{name}_scalars.npz',
+                                            variance_fp32=values if layout=='scalar' else values[:,0],
+                                            invstd_bf16_bits=np.ascontiguousarray(result[:,0]).view(np.uint16),
+                                            reference_bf16_bits=np.ascontiguousarray(j[:,3,0]).view(np.uint16))
+                                        report['consumer_cases'][str(size)][name]={'complete':True}
+                                        gate.checkpoint(path,report)
+                                        prior_result=result
+                                        del prefix
                         compare(label+'_bf16',diagnostic_j[:,4],var.astype(jnp.bfloat16))
                         compare(label+'_invstd',j[:,3],inv)
                         if use_v4_inputs:
@@ -309,6 +347,8 @@ if __name__ == '__main__':
     parser.add_argument('--include-invstd',action='store_true')
     parser.add_argument('--include-variance',action='store_true')
     parser.add_argument('--use-v4-inputs',action='store_true')
+    parser.add_argument('--compare-consumers',action='store_true')
     args=parser.parse_args()
     print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,
-        include_invstd=args.include_invstd,include_variance=args.include_variance,use_v4_inputs=args.use_v4_inputs)['status']}))
+        include_invstd=args.include_invstd,include_variance=args.include_variance,
+        use_v4_inputs=args.use_v4_inputs,compare_consumers=args.compare_consumers)['status']}))

@@ -3,8 +3,19 @@ import functools
 
 import jax
 import jax.numpy as jnp
+import numpy as np
 from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
+
+
+def collect_consumer(values, operation, *, devices=8, chunk_rows=256, width=1024):
+    from benchmarks.artgor_prefix_shape import chunked_host
+    result = chunked_host(values, operation, devices=devices, chunk_rows=chunk_rows)
+    if result.ndim == 1:
+        return np.broadcast_to(result[:, None], (len(result), width))
+    if result.shape != (len(values), width):
+        raise ValueError('unexpected consumer output shape')
+    return result
 
 
 def _expression(values, *, arithmetic, epsilon):

@@ -1,5 +1,17 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: same-buffer rsqrt consumers integrated
+
+Capture runner `--compare-consumers` uses validated v4 inputs and the native
+real FP32 variance for eight JAX/Pallas x scalar/broadcast x FP32/BF16-expression
+consumers at each shape. Direct pair/native/JAX invstd and same-affine prefix
+comparisons, full scalar bits and HLO. Two collector tests first failed for
+missing behavior, then passed; scalar device-major order and post-execution
+host broadcast are checked. This is preparation, not a new TPU result.
+Targeted tests:20passed. First full run aborted near its end with only
+`Fatal Python error` (no usable trace). Unchanged repeat:489passed/252.79s.
+The abort remains unexplained, not claimed fixed. Compileall/diff checks pass.
+
 ## 2026-09-03: fixed-v4 variance v6 complete
 
 Fixed-input controls and v4 mean/invstd SHA pass at both shapes. All five
