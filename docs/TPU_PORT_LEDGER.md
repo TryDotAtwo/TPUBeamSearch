@@ -79,6 +79,8 @@ unchanged. Structural regression was red for all three representative cases and
 is green after the change; physical confirmation remains required.
 Full local verification after the V7 change: 562 passed in 290.50 s with the
 original C++ oracle enabled.
+V7 source 2eb6aa7b40c9b56456c4bfc1627504904b4dc851; download into
+`test_results/beam_primitives_v7/`. Same thirteen cases isolate the select change.
 
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
