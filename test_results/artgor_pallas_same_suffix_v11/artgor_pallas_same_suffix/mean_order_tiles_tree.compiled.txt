@@ -1,0 +1,40 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(f32[256,1024]{1,0:T(8,128)})->bf16[256,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/benchmarks/artgor_pallas_same_suffix.py"
+3 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/benchmarks/artgor_input_trace.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "run"
+6 "run.<locals>.<lambda>"
+7 "mean_buffer"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=636 end_line=636 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=631 end_line=631 column=13 end_column=13}
+5 {file_name_id=2 function_name_id=5 line=484 end_line=484 column=31 end_column=31}
+6 {file_name_id=2 function_name_id=6 line=425 end_line=425 column=40 end_column=40}
+7 {file_name_id=3 function_name_id=7 line=45 end_line=45 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+
+
+ENTRY %main.0_spmd (param.1: f32[256,1024]) -> bf16[256,1024] {
+  %param.1 = f32[256,1024]{1,0:T(8,128)} parameter(0), sharding={devices=[8,1]<=[8]}, metadata={op_name="raw"}
+  ROOT %raw_mean_bf16_buffer_tiles_tree.1 = bf16[256,1024]{1,0:T(8,128)(2,1)} custom-call(%param.1), custom_call_target="tpu_custom_call", operand_layout_constraints={f32[256,1024]{1,0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(<lambda>)/shard_map/raw_mean_bf16_buffer_tiles_tree/pallas_call" stack_frame_id=7}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"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ZAB2ZWN0b3IuYnJvYWRjYXN0AGFyaXRoLmRpdmYAYXJpdGgudHJ1bmNmAHRwdS52ZWN0b3Jfc3RvcmUAL3RtcC9UUFVCZWFtU2VhcmNoLWFydGdvci1wYWxsYXMtc2FtZS1zdWZmaXgvYmVuY2htYXJrcy9hcnRnb3JfaW5wdXRfdHJhY2UucHkAc3RyaWRlcwBvZmZzZXRzAHNpemVzAF9tZWFuX2tlcm5lbAB2YWx1ZQBmdW5jdGlvbl90eXBlAHN5bV9uYW1lAF9vcmRlcmVkX3N1bQB0cmFuc2Zvcm1faW5kaWNlcwB0cmFuc2Zvcm1fMAB3aW5kb3dfYm91bmRzAHRyYW5zZm9ybV8xAGJyb2FkY2FzdF9pbl9kaW06AGJyb2FkY2FzdF9pbl9kaW0vYnJvYWRjYXN0X2luX2RpbQBzdGFibGVfbW9zYWljLnZlcnNpb24AZGltZW5zaW9uX3NlbWFudGljcwBpdGVyYXRpb25fYm91bmRzAHNjYWxhcl9wcmVmZXRjaABzY3JhdGNoX29wZXJhbmRzAHJhd19tZWFuX2JmMTZfYnVmZmVyX3RpbGVzX3RyZWUAdHB1LmNvcmVfdHlwZQB3aW5kb3dfcGFyYW1zAGdldDoAZ2V0L2dldABzbGljZToAc2xpY2Uvc2xpY2UAcmVkdWNlX3N1bToAcmVkdWNlX3N1bS9yZWR1Y2Vfc3VtAGtpbmQAcmVkdWN0aW9uX2RpbXMAZmFzdG1hdGgAYWRkOgBhZGQvYWRkAGRpdjoAZGl2AGNvbnZlcnRfZWxlbWVudF90eXBlOgBjb252ZXJ0X2VsZW1lbnRfdHlwZS9jb252ZXJ0X2VsZW1lbnRfdHlwZQBzd2FwOgBzd2FwL3N3YXAAYWRkAG9wZXJhbmRTZWdtZW50U2l6ZXMA","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"1572864"}]}
+}
+

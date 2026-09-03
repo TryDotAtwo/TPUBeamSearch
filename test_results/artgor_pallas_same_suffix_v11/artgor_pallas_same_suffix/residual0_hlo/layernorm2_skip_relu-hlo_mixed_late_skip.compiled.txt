@@ -1,0 +1,55 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(bf16[256,1024]{1,0:T(8,128)(2,1)}, bf16[256,1024]{1,0:T(8,128)(2,1)}, bf16[1024]{0:T(1024)(128)(2,1)}, bf16[1024]{0:T(1024)(128)(2,1)})->bf16[256,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_parameters={false,false,false,false}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default;default;default;default",arg_memory_spaces="0;0;0;0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/benchmarks/artgor_pallas_same_suffix.py"
+3 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/src/tpu_beam_search/stream1_layernorm_pallas_exact.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "run"
+6 "run_residual0_ab"
+7 "compare_isolated_operator"
+8 "run_residual0_ab.<locals>.<lambda>"
+9 "residual0_runner_bundle.<locals>.<lambda>"
+10 "residual_operator"
+11 "pallas_exact_layer_norm_activation"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=636 end_line=636 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=631 end_line=631 column=13 end_column=13}
+5 {file_name_id=2 function_name_id=5 line=444 end_line=444 column=26 end_column=26}
+6 {file_name_id=2 function_name_id=6 line=259 end_line=259 column=29 end_column=29}
+7 {file_name_id=2 function_name_id=7 line=233 end_line=233 column=38 end_column=38}
+8 {file_name_id=2 function_name_id=8 line=261 end_line=261 column=43 end_column=43}
+9 {file_name_id=2 function_name_id=9 line=181 end_line=181 column=48 end_column=48}
+10 {file_name_id=2 function_name_id=10 line=130 end_line=130 column=11 end_column=11}
+11 {file_name_id=3 function_name_id=11 line=637 end_line=637 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+8 {file_location_id=8 parent_frame_id=8}
+9 {file_location_id=9 parent_frame_id=9}
+10 {file_location_id=10 parent_frame_id=10}
+11 {file_location_id=11 parent_frame_id=11}
+
+
+ENTRY %main.2_spmd (param.4: bf16[256,1024], param.5: bf16[256,1024], param.6: bf16[1024], param.7: bf16[1024]) -> bf16[256,1024] {
+  %param.7 = bf16[1024]{0:T(1024)(128)(2,1)} parameter(3), sharding={replicated}, metadata={op_name="w.residuals[0].second.normalization.bias"}
+  %param.6 = bf16[1024]{0:T(1024)(128)(2,1)} parameter(2), sharding={replicated}, metadata={op_name="w.residuals[0].second.normalization.scale"}
+  %param.5 = bf16[256,1024]{1,0:T(8,128)(2,1)} parameter(1), sharding={devices=[8,1]<=[8]}, metadata={op_name="pair[1]"}
+  %param.4 = bf16[256,1024]{1,0:T(8,128)(2,1)} parameter(0), sharding={devices=[8,1]<=[8]}, metadata={op_name="pair[0]"}
+  ROOT %stream1_pallas_exact_ln_hlo_mixed_late_skip.1 = bf16[256,1024]{1,0:T(8,128)(2,1)} custom-call(%param.4, %param.6, %param.7, %param.5), custom_call_target="tpu_custom_call", operand_layout_constraints={bf16[256,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}, bf16[256,1024]{1,0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(<lambda>)/shard_map/stream1_pallas_exact_ln_hlo_mixed_late_skip/pallas_call" stack_frame_id=11}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"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cml0aC5leHRmAGZ1bmMuZnVuYwBmdW5jLnJldHVybgB2ZWN0b3IubG9hZABhcml0aC50cnVuY2YAYXJpdGgubXVsZgBhcml0aC5hZGRmAHZlY3Rvci5tdWx0aV9yZWR1Y3Rpb24AYXJpdGguZGl2ZgBhcml0aC5zdWJmAG1hdGgucnNxcnQAYXJpdGgubWF4aW11bWYAdHB1LnZlY3Rvcl9zdG9yZQAvdG1wL1RQVUJlYW1TZWFyY2gtYXJ0Z29yLXBhbGxhcy1zYW1lLXN1ZmZpeC9zcmMvdHB1X2JlYW1fc2VhcmNoL3N0cmVhbTFfbGF5ZXJub3JtX3BhbGxhc19leGFjdC5weQBfbGF5ZXJfbm9ybV9hY3RpdmF0aW9uX21hdGgAY29udmVydF9lbGVtZW50X3R5cGU6AGNvbnZlcnRfZWxlbWVudF90eXBlL2NvbnZlcnRfZWxlbWVudF90eXBlAGZ1bmN0aW9uX3R5cGUAc3ltX25hbWUAdmFsdWUAX2xheWVyX25vcm1fYWN0aXZhdGlvbl9rZXJuZWwAdHJhbnNmb3JtX2luZGljZXMAd2luZG93X2JvdW5kcwBnZXQ6AGdldC9nZXQAYnJvYWRjYXN0X2luX2RpbToAYnJvYWRjYXN0X2luX2RpbS9icm9hZGNhc3RfaW5fZGltAG11bDoAbXVsL211bABhZGQ6AHRyYW5zZm9ybV8wAHBpcGVsaW5lX21vZGUAdHJhbnNmb3JtXzEAdHJhbnNmb3JtXzIAdHJhbnNmb3JtXzMAdHJhbnNmb3JtXzQAcmVkdWNlX3N1bToAcmVkdWNlX3N1bS9yZWR1Y2Vfc3VtAGRpdjoAZGl2AGFkZABhZGQvYWRkAHN0YWJsZV9tb3NhaWMudmVyc2lvbgBkaW1lbnNpb25fc2VtYW50aWNzAGl0ZXJhdGlvbl9ib3VuZHMAc2NhbGFyX3ByZWZldGNoAHNjcmF0Y2hfb3BlcmFuZHMAc3RyZWFtMV9wYWxsYXNfZXhhY3RfbG5faGxvX21peGVkX2xhdGVfc2tpcAB0cHUuY29yZV90eXBlAHdpbmRvd19wYXJhbXMAa2luZAByZWR1Y3Rpb25fZGltcwBmYXN0bWF0aABzdWI6AHN1Yi9zdWIAcnNxcnQ6AHJzcXJ0L3JzcXJ0AG1heDoAbWF4AHN3YXA6AHN3YXAvc3dhcABvcGVyYW5kU2VnbWVudFNpemVzAHN0cmlkZXMA","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"2068480"}]}
+}
+

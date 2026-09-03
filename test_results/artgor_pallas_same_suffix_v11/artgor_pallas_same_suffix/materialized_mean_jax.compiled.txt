@@ -1,0 +1,67 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(f32[256,1024]{1,0:T(8,128)})->bf16[256,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/benchmarks/artgor_pallas_same_suffix.py"
+2 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/benchmarks/artgor_input_trace.py"
+3 "<frozen runpy>"
+
+FunctionNames
+1 "run.<locals>.<lambda>"
+2 "mean_buffer"
+3 "_ordered_sum"
+4 "_run_module_as_main"
+5 "_run_code"
+6 "<module>"
+7 "main"
+8 "run"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=415 end_line=415 column=32 end_column=32}
+2 {file_name_id=2 function_name_id=2 line=43 end_line=43 column=13 end_column=13}
+3 {file_name_id=2 function_name_id=3 line=16 end_line=16 column=15 end_column=15}
+4 {file_name_id=3 function_name_id=4 line=198 end_line=198 column=11 end_column=11}
+5 {file_name_id=3 function_name_id=5 line=88 end_line=88 column=4 end_column=4}
+6 {file_name_id=1 function_name_id=6 line=636 end_line=636 column=4 end_column=4}
+7 {file_name_id=1 function_name_id=7 line=631 end_line=631 column=13 end_column=13}
+8 {file_name_id=1 function_name_id=8 line=463 end_line=463 column=39 end_column=39}
+9 {file_name_id=2 function_name_id=2 line=43 end_line=43 column=12 end_column=12}
+10 {file_name_id=2 function_name_id=2 line=42 end_line=42 column=15 end_column=15}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=1}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+8 {file_location_id=8 parent_frame_id=8}
+9 {file_location_id=1 parent_frame_id=9}
+10 {file_location_id=2 parent_frame_id=10}
+11 {file_location_id=9 parent_frame_id=10}
+12 {file_location_id=3 parent_frame_id=11}
+13 {file_location_id=10 parent_frame_id=10}
+
+
+%region_0.0 (reduce_sum.0: f32[], reduce_sum.1: f32[]) -> f32[] {
+  %reduce_sum.1 = f32[]{:T(128)} parameter(1), metadata={op_name="reduce_sum"}
+  %reduce_sum.0 = f32[]{:T(128)} parameter(0), metadata={op_name="reduce_sum"}
+  ROOT %reduce_sum.2 = f32[]{:T(128)} add(%reduce_sum.0, %reduce_sum.1), metadata={op_name="reduce_sum" stack_frame_id=3}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"scoped_memory_configs":[],"used_scoped_memory_configs":[]}
+}
+
+%fused_computation (param_0.1: f32[256]) -> bf16[256] {
+  %param_0.1 = f32[256]{0:T(256)S(1)} parameter(0)
+  %constant.4.clone.2 = f32[]{:T(128)} constant(0.0009765625), metadata={op_name="jit(<lambda>)/shard_map" stack_frame_id=8}
+  %div.9 = f32[256]{0:T(256)} broadcast(%constant.4.clone.2), dimensions={}, metadata={op_name="jit(<lambda>)/shard_map/div" stack_frame_id=10}
+  %div.8 = f32[256]{0:T(256)} multiply(%param_0.1, %div.9), metadata={op_name="jit(<lambda>)/shard_map/div" stack_frame_id=10}
+  ROOT %convert_element_type.5 = bf16[256]{0:T(256)(128)(2,1)S(1)} convert(%div.8), metadata={op_name="jit(<lambda>)/shard_map/convert_element_type" stack_frame_id=11}
+}
+
+ENTRY %main.0_spmd (param.1: f32[256,1024]) -> bf16[256,1024] {
+  %constant.1.clone.1 = f32[]{:T(128)} constant(0), metadata={op_name="jit(<lambda>)/shard_map" stack_frame_id=8}
+  %param.1 = f32[256,1024]{1,0:T(8,128)} parameter(0), sharding={devices=[8,1]<=[8]}, metadata={op_name="raw"}
+  %reduce_sum.9 = f32[256]{0:T(256)S(1)} reduce(%param.1, %constant.1.clone.1), dimensions={1}, to_apply=%region_0.0, metadata={op_name="jit(<lambda>)/shard_map/reduce_sum" stack_frame_id=12}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"1052672"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"6144","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["32","8"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+  %multiply_convert_fusion = bf16[256]{0:T(256)(128)(2,1)S(1)} fusion(%reduce_sum.9), kind=kLoop, calls=%fused_computation, metadata={op_name="jit(<lambda>)/shard_map/convert_element_type" stack_frame_id=11}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"0"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"1826","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["1"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+  ROOT %broadcast_in_dim.2 = bf16[256,1024]{1,0:T(8,128)(2,1)} broadcast(%multiply_convert_fusion), dimensions={0}, metadata={op_name="jit(<lambda>)/shard_map/broadcast_in_dim" stack_frame_id=13}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"output_chunk_bound_config":{"output_chunk_bound":["8"]},"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"524288"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"5398","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["32","8"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+}
+

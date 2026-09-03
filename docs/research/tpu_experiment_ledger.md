@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: reduction-order v11 result
+
+lanes_tree, tiles_serial and tiles_tree reproduce every JAX BF16 mean and
+prefix/shared-suffix Q on legal42/stress43 at B256/device. Native and
+lanes_serial retain stress15 hidden/17 Q mismatches. All five compile; all
+outputs finite. No unique JAX physical tree or fastest candidate established.
+Next dedicated six-corpus16K/32K gate must test the composed all-Pallas prefix,
+not merely substitute mean into materialized reference-embedding diagnostics.
+Full model/default promotion remains blocked on its unchanged oracle.
+See `test_results/artgor_pallas_same_suffix_v11/report.md`.
+
 ## 2026-09-03: reduction-order v11 prepared
 
 Mean-only Pallas A/B: native; add corresponding lanes across 128-wide tiles
