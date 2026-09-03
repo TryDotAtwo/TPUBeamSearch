@@ -71,6 +71,15 @@ Full local verification: 559 passed in 220.01 s with original C++ oracle enabled
 V6 source 9f2d083aa51bfe240ebaae3243d0fff20112dbc9; new output directory
 `test_results/beam_primitives_v6/`. Same thirteen cases isolate physical effect.
 
+V6 COMPLETE, all_exact=false; report: `test_results/beam_primitives_v6/report.md`.
+The scalar stores are gone. Six dedup/split cases now share Invalid input layout
+at select_n, specifically i1->i8 vector extension. V7 removes only control-plane
+boolean selects, using uint32 indicator multiply/add while leaving data sorting
+unchanged. Structural regression was red for all three representative cases and
+is green after the change; physical confirmation remains required.
+Full local verification after the V7 change: 562 passed in 290.50 s with the
+original C++ oracle enabled.
+
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
 split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts

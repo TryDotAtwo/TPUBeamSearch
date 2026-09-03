@@ -1,0 +1,1024 @@
+{
+  "scope": "sequential isolated eight-TPU primitive groups; not full beam",
+  "groups": [
+    {
+      "name": "pack_matched",
+      "requested_cases": [
+        "pack_serial_b2",
+        "pack_serial_b3",
+        "pack_pipeline_b2",
+        "pack_pipeline_b3"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "pack_serial_b2",
+            "input_sha256": [
+              "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+              "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+              "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+              "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+            ],
+            "status": "exact",
+            "phase": "execute",
+            "compile_seconds": 0.4695172510000134,
+            "exact": true,
+            "mismatched_elements": 0,
+            "dtype_match": true,
+            "output_sha256": [
+              "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+            ]
+          },
+          {
+            "name": "pack_serial_b3",
+            "input_sha256": [
+              "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+              "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+              "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+              "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+            ],
+            "status": "exact",
+            "phase": "execute",
+            "compile_seconds": 0.09100641499998119,
+            "exact": true,
+            "mismatched_elements": 0,
+            "dtype_match": true,
+            "output_sha256": [
+              "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+            ]
+          },
+          {
+            "name": "pack_pipeline_b2",
+            "input_sha256": [
+              "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+              "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+              "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+              "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+            ],
+            "status": "exact",
+            "phase": "execute",
+            "compile_seconds": 0.1719518469999457,
+            "exact": true,
+            "mismatched_elements": 0,
+            "dtype_match": true,
+            "output_sha256": [
+              "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+            ]
+          },
+          {
+            "name": "pack_pipeline_b3",
+            "input_sha256": [
+              "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+              "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+              "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+              "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+            ],
+            "status": "exact",
+            "phase": "execute",
+            "compile_seconds": 0.19783740899998747,
+            "exact": true,
+            "mismatched_elements": 0,
+            "dtype_match": true,
+            "output_sha256": [
+              "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+            ]
+          }
+        ],
+        "timings": {
+          "pack_matched": {
+            "pack_serial_b2": {
+              "samples_ms": [
+                1.27996,
+                1.34841,
+                1.34254,
+                1.32928,
+                1.3605,
+                1.33531,
+                1.35184,
+                1.30018,
+                1.34195,
+                1.32636,
+                1.35848,
+                1.34225,
+                1.32521,
+                1.35041,
+                1.35532,
+                1.32912,
+                1.32108,
+                1.36638,
+                1.3334,
+                1.29262,
+                1.32182
+              ],
+              "median_ms": 1.33531,
+              "p10_ms": 1.30018,
+              "p90_ms": 1.35848,
+              "aggregate_candidates_per_second": 392633920.21328384,
+              "candidates_per_device": 65536
+            },
+            "pack_serial_b3": {
+              "samples_ms": [
+                1.30475,
+                1.30201,
+                1.33139,
+                1.31028,
+                1.31014,
+                1.32557,
+                1.30826,
+                1.32106,
+                1.35365,
+                1.33558,
+                1.3143,
+                1.31394,
+                1.32702,
+                1.33138,
+                1.31268,
+                1.328371,
+                1.30012,
+                1.30555,
+                1.32119,
+                1.31131,
+                1.31391
+              ],
+              "median_ms": 1.31394,
+              "p10_ms": 1.30475,
+              "p90_ms": 1.33139,
+              "aggregate_candidates_per_second": 399019742.14956534,
+              "candidates_per_device": 65536
+            },
+            "pack_pipeline_b2": {
+              "samples_ms": [
+                0.70841,
+                0.65397,
+                0.68233,
+                0.58801,
+                0.661771,
+                0.63079,
+                0.63636,
+                0.59188,
+                0.64628,
+                0.66966,
+                0.672541,
+                0.59444,
+                0.65545,
+                0.61046,
+                0.62575,
+                0.63603,
+                0.674351,
+                0.62899,
+                0.64554,
+                0.5979,
+                0.6412
+              ],
+              "median_ms": 0.6412,
+              "p10_ms": 0.59444,
+              "p90_ms": 0.674351,
+              "aggregate_candidates_per_second": 817666874.6101061,
+              "candidates_per_device": 65536
+            },
+            "pack_pipeline_b3": {
+              "samples_ms": [
+                0.74011,
+                0.61352,
+                0.59807,
+                0.57779,
+                0.648661,
+                0.62137,
+                0.58805,
+                0.57112,
+                0.61431,
+                0.58295,
+                0.61385,
+                0.58696,
+                0.59923,
+                0.59827,
+                0.59926,
+                0.60341,
+                0.59108,
+                0.5789,
+                0.61941,
+                0.60867,
+                0.59056
+              ],
+              "median_ms": 0.59923,
+              "p10_ms": 0.5789,
+              "p90_ms": 0.62137,
+              "aggregate_candidates_per_second": 874936168.0823723,
+              "candidates_per_device": 65536
+            }
+          }
+        },
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": true
+      }
+    },
+    {
+      "name": "routing",
+      "requested_cases": [
+        "route_8_7"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "route_8_7",
+            "input_sha256": [
+              "d5f1a6e6f37cbbcfd8a5fa0fd87bfd5017f5f3fbcf611313dcc86f0ff3bb6370"
+            ],
+            "status": "exact",
+            "phase": "execute",
+            "compile_seconds": 0.38075433400001657,
+            "exact": true,
+            "mismatched_elements": 0,
+            "dtype_match": true,
+            "output_sha256": [
+              "90ff4b1d10d496804ca8631aead00d73afc4d62fe0f42c33d44f911b16538b21"
+            ]
+          }
+        ],
+        "timings": {
+          "other_diagnostic": {
+            "route_8_7": {
+              "samples_ms": [
+                0.51674,
+                0.45398,
+                0.4714,
+                0.44699,
+                0.44797,
+                0.74696,
+                0.52527,
+                0.48625,
+                0.47134,
+                0.44502,
+                0.50194,
+                0.46113,
+                0.46794,
+                0.464031,
+                0.44436,
+                0.468791,
+                0.44262,
+                0.42454,
+                0.414049,
+                0.463669,
+                0.4295
+              ],
+              "median_ms": 0.463669,
+              "p10_ms": 0.4295,
+              "p90_ms": 0.51674
+            }
+          }
+        },
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": true
+      }
+    },
+    {
+      "name": "hash_120",
+      "requested_cases": [
+        "hash_goal_120_24"
+      ],
+      "status": "process_error",
+      "returncode": -6,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "hash_goal_120_24",
+            "input_sha256": [
+              "6afca7a263943008a6440760cc36d31de708a68040f9e73756e9d6ce8e06cb55",
+              "b75196b9b16de17a8d78fc673ce40185e2d1f8594bb70e760de6f87b0d9cb6fa",
+              "95ba0567df3c74cfa79ff6d15cb710a3aedc7e97a3773acfa0ee63d1c82914e8",
+              "c903a551d3a47e70e9ff2d139f60f6569b2364dcabdc3fb1cdb7e71fc3dfbc4e",
+              "e8613f5a5bc9f9feeda32a8e7c80b69dd4878e47b6a91723fb15eb84236b6a2b"
+            ],
+            "status": "started",
+            "phase": "compile"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        }
+      }
+    },
+    {
+      "name": "hash_150",
+      "requested_cases": [
+        "hash_goal_150_30"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "hash_goal_150_30",
+            "input_sha256": [
+              "c791f3d4c308d67bbf218818dbc8e6e6763064aa0eaa5af617474063ab4160c9",
+              "43784c2a342a0fa1ddb130dff3e0371e5c3f8f1b79dab79b9b15b72e7acf81fd",
+              "4a583349498e6c0333d3723631f6671112914425638e322b233654cc70f41940",
+              "da44b6c1a6ce55ff69546643b300a7b720cf93156ec83864449e9be43a629f74",
+              "e8613f5a5bc9f9feeda32a8e7c80b69dd4878e47b6a91723fb15eb84236b6a2b"
+            ],
+            "status": "error",
+            "phase": "compile",
+            "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: infer-vector-layout: unsupported shape cast\n\nat location: loc(\"reshape:\"(\"reshape/reshape\"(callsite(\"pallas_hash_goal.<locals>.kernel\"(\"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\":48:24 to :43) at \"pallas_hash_goal.<locals>.kernel\"(\"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\":48:24 to :43)))))\n\nThe MLIR operation involved:\n  %50 = \"tpu.reshape\"(%49) : (vector<8x160xi8>) -> vector<1280xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\", line 48, in pallas_hash_goal.<locals>.kernel\n    parent_values = pr[...].reshape(-1)\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\", line 48, in reshape/reshape\"(callsite(\"pallas_hash_goal.<locals>.kernel\n    parent_values = pr[...].reshape(-1)\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: infer-vector-layout: unsupported shape cast\n\nThe MLIR operation involved:\n  %50 = \"tpu.reshape\"(%49) : (vector<8x160xi8>) -> vector<1280xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": false
+      }
+    },
+    {
+      "name": "dedup_stream3_128",
+      "requested_cases": [
+        "dedup_stream3_128"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "dedup_stream3_128",
+            "input_sha256": [
+              "f1428529e0056b603576a7633b1f5a308b09e17c1f58150529c42bef74f73a7e",
+              "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+              "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+              "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+            ],
+            "status": "error",
+            "phase": "compile",
+            "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %134 = \"arith.extsi\"(%133) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %134 = \"arith.extsi\"(%133) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": false
+      }
+    },
+    {
+      "name": "dedup_stream4_128",
+      "requested_cases": [
+        "dedup_stream4_128"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "dedup_stream4_128",
+            "input_sha256": [
+              "f1428529e0056b603576a7633b1f5a308b09e17c1f58150529c42bef74f73a7e",
+              "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+              "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+              "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+            ],
+            "status": "error",
+            "phase": "compile",
+            "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %152 = \"arith.extsi\"(%151) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %152 = \"arith.extsi\"(%151) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": false
+      }
+    },
+    {
+      "name": "dedup_stream3_256",
+      "requested_cases": [
+        "dedup_stream3_256"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "dedup_stream3_256",
+            "input_sha256": [
+              "caf5423203b4eaf8ffe59723afa13e42ce86777f3745a2192df50afabb2971c9",
+              "8808405eec6fbe306fe3369f88daed79dd5613ddbb5e801f632b01d6218c5f08",
+              "1279dfa53db2ff4257faddaef5c1c653cce9648be517d7626621e45c2084fc9e",
+              "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+            ],
+            "status": "error",
+            "phase": "compile",
+            "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %133 = \"arith.extsi\"(%132) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<256xi1>) -> vector<256xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %133 = \"arith.extsi\"(%132) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<256xi1>) -> vector<256xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": false
+      }
+    },
+    {
+      "name": "dedup_stream4_256",
+      "requested_cases": [
+        "dedup_stream4_256"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "dedup_stream4_256",
+            "input_sha256": [
+              "caf5423203b4eaf8ffe59723afa13e42ce86777f3745a2192df50afabb2971c9",
+              "8808405eec6fbe306fe3369f88daed79dd5613ddbb5e801f632b01d6218c5f08",
+              "1279dfa53db2ff4257faddaef5c1c653cce9648be517d7626621e45c2084fc9e",
+              "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+            ],
+            "status": "error",
+            "phase": "compile",
+            "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %151 = \"arith.extsi\"(%150) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<256xi1>) -> vector<256xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %151 = \"arith.extsi\"(%150) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<256xi1>) -> vector<256xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": false
+      }
+    },
+    {
+      "name": "split_empty",
+      "requested_cases": [
+        "split_0"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "split_0",
+            "input_sha256": [
+              "6bee2e830144cbb057e1735a4adcbe141563431f269bf494f9ccd35b09b3c3df",
+              "fe5eb77c4e89cd6ea0a2af91638b4acd2c8c89f91ddfe90681e7eb6c9535231d",
+              "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+            ],
+            "status": "error",
+            "phase": "compile",
+            "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %125 = \"arith.extsi\"(%124) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %125 = \"arith.extsi\"(%124) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": false
+      }
+    },
+    {
+      "name": "split_nonempty",
+      "requested_cases": [
+        "split_127"
+      ],
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+        "source_sha": "9f2d083aa51bfe240ebaae3243d0fff20112dbc9",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite",
+            "process_index": 0
+          }
+        ],
+        "x64_enabled": false,
+        "cases": [
+          {
+            "name": "split_127",
+            "input_sha256": [
+              "43e22f1a4e7e55ec9571623424889d3b0603aed47f8e7539d23beac58a95d891",
+              "74262255d51a0607f0055fb1be5629f63ee1644199c8c5bcf652f7dc036947a6",
+              "8d12d9fcf1bb74eb413e34f28b96439b1260da900a2c70af2440c5c7dbb43c03"
+            ],
+            "status": "error",
+            "phase": "compile",
+            "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %125 = \"arith.extsi\"(%124) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 205, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %125 = \"arith.extsi\"(%124) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+          }
+        ],
+        "timings": {},
+        "timing_protocol": {
+          "warmup": 3,
+          "repeats": 21,
+          "order": "alternating forward/reverse",
+          "scope": "complete primitive call on eight devices; no placement/compile"
+        },
+        "all_exact": false
+      }
+    }
+  ],
+  "all_exact": false
+}

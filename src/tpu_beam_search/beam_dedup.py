@@ -71,7 +71,8 @@ def pallas_threshold_dedup(words, payload, count, threshold, *, mode, interpret=
         # TPU reduce_sum rejects unsigned inputs. Count <= 4096, so signed
         # accumulation is exact; retain the uint32 external storage contract.
         total = jnp.sum(keep.astype(jnp.int32)).astype(jnp.uint32)
-        out_count[...] = jnp.where(jnp.arange(128)[None, :] == 0, total, jnp.uint32(0))
+        first_lane = (jnp.arange(128)[None, :] == 0).astype(jnp.uint32)
+        out_count[...] = first_lane * total
 
     return pl.pallas_call(kernel,
         out_shape=(jax.ShapeDtypeStruct((8, n), jnp.uint32), jax.ShapeDtypeStruct((1, 128), jnp.uint32)),

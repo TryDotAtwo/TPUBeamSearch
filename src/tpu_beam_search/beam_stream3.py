@@ -46,15 +46,15 @@ def pallas_stream3_split(words, owners, count, *, local_rank, world_size, interp
         remote_out[...] = jnp.where(remote_data[9:10] != 0, remote_data[:8], neutral)
         positions = jnp.arange(control_width, dtype=jnp.uint32)[None, :]
         local_total = jnp.sum(is_local.astype(jnp.int32)).astype(jnp.uint32)
-        local_count[...] = jnp.where(positions == 0, local_total, jnp.uint32(0))
+        local_count[...] = (positions == 0).astype(jnp.uint32) * local_total
         counts = jnp.zeros((1, control_width), jnp.uint32)
         offsets = jnp.zeros((1, control_width), jnp.uint32)
         running = jnp.uint32(0)
         for peer in range(world_size):
             amount = jnp.sum((is_remote & (owner == peer)).astype(jnp.int32)).astype(jnp.uint32)
-            counts = jnp.where(positions == peer, amount, counts)
+            counts = counts + (positions == peer).astype(jnp.uint32) * amount
             running = running + amount
-            offsets = jnp.where(positions == peer + 1, running, offsets)
+            offsets = offsets + (positions == peer + 1).astype(jnp.uint32) * running
         counts_out[...] = counts
         offsets_out[...] = offsets
 

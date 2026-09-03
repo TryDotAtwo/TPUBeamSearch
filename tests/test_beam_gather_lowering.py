@@ -72,3 +72,12 @@ def test_control_outputs_never_store_scalars_to_vmem(name):
     scalar_stores = [eq for eq in equations(graph) if eq.primitive.name == 'swap'
                      and any(getattr(v.aval, 'shape', None) == () for v in eq.invars)]
     assert not scalar_stores
+
+
+@pytest.mark.parametrize('name', ['dedup_stream3_128', 'split_0', 'split_127'])
+def test_control_plane_construction_has_no_boolean_select(name):
+    case = next(c for c in build_cases(interpret=True) if c['name'] == name)
+    graph = jax.make_jaxpr(case['fn'])(*case['args'])
+    control_selects = [eq for eq in equations(graph) if eq.primitive.name == 'select_n'
+                       and any(getattr(v.aval, 'shape', None) == (1, 128) for v in eq.outvars)]
+    assert not control_selects
