@@ -63,6 +63,11 @@ V1 result: five exact cases (packing and routing), six gather compile rejections
 no timings collected. See `test_results/beam_primitives_v1/report.md`. Gather
 fixes have structural regression and unchanged CPU/source parity; physical
 confirmation is required in V2, which also adds eligible-case timing.
+V2 source: ef7512627d1ba9c58c5c444391107d1887d2ee84. Local verification:
+540 tests passed in 146.41 s with original-source C++ oracle enabled. Output
+destination for the new run is `test_results/beam_primitives_v2/`. Pack timing
+uses 65536 candidates/device, three warmups and 21 alternating synchronized
+samples; only exact cases are eligible. No V2 TPU result is established yet.
 
 1. Validate these primitives on physical TPU before propagating their lowering
    choices. Preserve the already active V10 session; never run a second TPU job.
