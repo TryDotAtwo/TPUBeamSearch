@@ -1,0 +1,374 @@
+{
+  "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+  "source_sha": "ef7512627d1ba9c58c5c444391107d1887d2ee84",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "x64_enabled": false,
+  "cases": [
+    {
+      "name": "pack_serial_b2",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.4743026959999952,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_serial_b3",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.09407189800003835,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_pipeline_b2",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.17526584500001263,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_pipeline_b3",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.20587048400000185,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "route_8_7",
+      "input_sha256": [
+        "d5f1a6e6f37cbbcfd8a5fa0fd87bfd5017f5f3fbcf611313dcc86f0ff3bb6370"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.12037830700000995,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "90ff4b1d10d496804ca8631aead00d73afc4d62fe0f42c33d44f911b16538b21"
+      ]
+    },
+    {
+      "name": "hash_goal_120_24",
+      "input_sha256": [
+        "6afca7a263943008a6440760cc36d31de708a68040f9e73756e9d6ce8e06cb55",
+        "b75196b9b16de17a8d78fc673ce40185e2d1f8594bb70e760de6f87b0d9cb6fa",
+        "95ba0567df3c74cfa79ff6d15cb710a3aedc7e97a3773acfa0ee63d1c82914e8",
+        "c903a551d3a47e70e9ff2d139f60f6569b2364dcabdc3fb1cdb7e71fc3dfbc4e",
+        "e8613f5a5bc9f9feeda32a8e7c80b69dd4878e47b6a91723fb15eb84236b6a2b"
+      ],
+      "status": "error",
+      "phase": "compile",
+      "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Only 32-bit scalar vector.extracts supported. Cast your input to a 32-bit type first.\n\nat location: loc(\"get:\"(\"get/get\"(callsite(\"pallas_hash_goal.<locals>.kernel.<locals>.position\"(\"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\":61:37 to :42) at \"pallas_hash_goal.<locals>.kernel.<locals>.position\"(\"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\":61:37 to :42)))))\n\nThe MLIR operation involved:\n  %262 = \"vector.extract\"(%261) <{static_position = array<i64: 0>}> : (vector<1xi8>) -> i8\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 169, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\", line 61, in pallas_hash_goal.<locals>.kernel.<locals>.position\n    goal & (value == cr[p]))\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\", line 61, in get/get\"(callsite(\"pallas_hash_goal.<locals>.kernel.<locals>.position\n    goal & (value == cr[p]))\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Only 32-bit scalar vector.extracts supported. Cast your input to a 32-bit type first.\n\nThe MLIR operation involved:\n  %262 = \"vector.extract\"(%261) <{static_position = array<i64: 0>}> : (vector<1xi8>) -> i8\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+    },
+    {
+      "name": "hash_goal_150_30",
+      "input_sha256": [
+        "c791f3d4c308d67bbf218818dbc8e6e6763064aa0eaa5af617474063ab4160c9",
+        "43784c2a342a0fa1ddb130dff3e0371e5c3f8f1b79dab79b9b15b72e7acf81fd",
+        "4a583349498e6c0333d3723631f6671112914425638e322b233654cc70f41940",
+        "da44b6c1a6ce55ff69546643b300a7b720cf93156ec83864449e9be43a629f74",
+        "e8613f5a5bc9f9feeda32a8e7c80b69dd4878e47b6a91723fb15eb84236b6a2b"
+      ],
+      "status": "error",
+      "phase": "compile",
+      "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Only 32-bit scalar vector.extracts supported. Cast your input to a 32-bit type first.\n\nat location: loc(\"get:\"(\"get/get\"(callsite(\"pallas_hash_goal.<locals>.kernel.<locals>.position\"(\"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\":61:37 to :42) at \"pallas_hash_goal.<locals>.kernel.<locals>.position\"(\"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\":61:37 to :42)))))\n\nThe MLIR operation involved:\n  %103 = \"vector.extract\"(%102) <{static_position = array<i64: 0>}> : (vector<1xi8>) -> i8\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 169, in main\n    executable = lowered.compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\", line 61, in pallas_hash_goal.<locals>.kernel.<locals>.position\n    goal & (value == cr[p]))\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_stream2.py\", line 61, in get/get\"(callsite(\"pallas_hash_goal.<locals>.kernel.<locals>.position\n    goal & (value == cr[p]))\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Only 32-bit scalar vector.extracts supported. Cast your input to a 32-bit type first.\n\nThe MLIR operation involved:\n  %103 = \"vector.extract\"(%102) <{static_position = array<i64: 0>}> : (vector<1xi8>) -> i8\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+    },
+    {
+      "name": "dedup_stream3_128",
+      "input_sha256": [
+        "f1428529e0056b603576a7633b1f5a308b09e17c1f58150529c42bef74f73a7e",
+        "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+        "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+        "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+      ],
+      "status": "error",
+      "phase": "compile",
+      "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/primitives.py\", line 652, in wrap_with_transforms\n    return f(*new_args)\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_dedup.py\", line 68, in kernel\n    neutral = jnp.zeros((8, n), jnp.uint32).at[6].set(jnp.uint32(0xffffffff))\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py\", line 1208, in set\n    return scatter._scatter_update(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 90, in _scatter_update\n    return internal_scatter(x, y, dynamic_idx)\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 143, in _scatter_impl\n    out = scatter_op(\njax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n\nThe preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n\n--------------------\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 168, in main\n    lowered = fn.lower(*inputs)\n              ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pmap.py\", line 330, in lower\n    lowered = jitted_f.trace(*args_flat).lower()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 492, in lower\n    lowering = _resolve_and_lower(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1091, in _resolve_and_lower\n    return _pjit_lower(\n           ^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1264, in _pjit_lower\n    return pxla.lower_sharding_computation(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1123, in lower_sharding_computation\n    tuple_args, shape_poly_state) = _cached_lowering_to_hlo(\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 736, in _cached_lowering_to_hlo\n    lowering_result = mlir.lower_jaxpr_to_module(\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1403, in lower_jaxpr_to_module\n    lower_jaxpr_to_fun(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1994, in lower_jaxpr_to_fun\n    out_vals, tokens_out = jaxpr_subcomp(\n                           ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1092, in _shard_map_lowering\n    return _shard_map_lowering_shardy(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1066, in _shard_map_lowering_shardy\n    out_nodes_, tokens_out = mlir.jaxpr_subcomp(\n                             ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n    return mlir.lower_per_platform(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 906, in tpu_lowering\n    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 405, in pallas_call_tpu_lowering_rule\n    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1014, in lower_jaxpr_to_pipelined_module\n    lower_jaxpr_into_pipelined_module(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1113, in lower_jaxpr_into_pipelined_module\n    func_op = _lower_jaxpr_to_func_common(\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1595, in _lower_jaxpr_to_func_common\n    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py\", line 197, in decorator\n    return_values = f(*func_args, **func_kwargs)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1592, in body_func\n    return jaxpr_subcomp(lowering_context, jaxpr, *other_args)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1839, in jaxpr_subcomp\n    raise NotImplementedError(\nNotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n"
+    },
+    {
+      "name": "dedup_stream4_128",
+      "input_sha256": [
+        "f1428529e0056b603576a7633b1f5a308b09e17c1f58150529c42bef74f73a7e",
+        "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+        "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+        "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+      ],
+      "status": "error",
+      "phase": "compile",
+      "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/primitives.py\", line 652, in wrap_with_transforms\n    return f(*new_args)\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_dedup.py\", line 68, in kernel\n    neutral = jnp.zeros((8, n), jnp.uint32).at[6].set(jnp.uint32(0xffffffff))\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py\", line 1208, in set\n    return scatter._scatter_update(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 90, in _scatter_update\n    return internal_scatter(x, y, dynamic_idx)\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 143, in _scatter_impl\n    out = scatter_op(\njax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n\nThe preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n\n--------------------\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 168, in main\n    lowered = fn.lower(*inputs)\n              ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pmap.py\", line 330, in lower\n    lowered = jitted_f.trace(*args_flat).lower()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 492, in lower\n    lowering = _resolve_and_lower(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1091, in _resolve_and_lower\n    return _pjit_lower(\n           ^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1264, in _pjit_lower\n    return pxla.lower_sharding_computation(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1123, in lower_sharding_computation\n    tuple_args, shape_poly_state) = _cached_lowering_to_hlo(\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 736, in _cached_lowering_to_hlo\n    lowering_result = mlir.lower_jaxpr_to_module(\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1403, in lower_jaxpr_to_module\n    lower_jaxpr_to_fun(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1994, in lower_jaxpr_to_fun\n    out_vals, tokens_out = jaxpr_subcomp(\n                           ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1092, in _shard_map_lowering\n    return _shard_map_lowering_shardy(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1066, in _shard_map_lowering_shardy\n    out_nodes_, tokens_out = mlir.jaxpr_subcomp(\n                             ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n    return mlir.lower_per_platform(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 906, in tpu_lowering\n    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 405, in pallas_call_tpu_lowering_rule\n    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1014, in lower_jaxpr_to_pipelined_module\n    lower_jaxpr_into_pipelined_module(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1113, in lower_jaxpr_into_pipelined_module\n    func_op = _lower_jaxpr_to_func_common(\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1595, in _lower_jaxpr_to_func_common\n    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py\", line 197, in decorator\n    return_values = f(*func_args, **func_kwargs)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1592, in body_func\n    return jaxpr_subcomp(lowering_context, jaxpr, *other_args)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1839, in jaxpr_subcomp\n    raise NotImplementedError(\nNotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n"
+    },
+    {
+      "name": "dedup_stream3_256",
+      "input_sha256": [
+        "caf5423203b4eaf8ffe59723afa13e42ce86777f3745a2192df50afabb2971c9",
+        "8808405eec6fbe306fe3369f88daed79dd5613ddbb5e801f632b01d6218c5f08",
+        "1279dfa53db2ff4257faddaef5c1c653cce9648be517d7626621e45c2084fc9e",
+        "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+      ],
+      "status": "error",
+      "phase": "compile",
+      "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/primitives.py\", line 652, in wrap_with_transforms\n    return f(*new_args)\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_dedup.py\", line 68, in kernel\n    neutral = jnp.zeros((8, n), jnp.uint32).at[6].set(jnp.uint32(0xffffffff))\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py\", line 1208, in set\n    return scatter._scatter_update(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 90, in _scatter_update\n    return internal_scatter(x, y, dynamic_idx)\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 143, in _scatter_impl\n    out = scatter_op(\njax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n\nThe preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n\n--------------------\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 168, in main\n    lowered = fn.lower(*inputs)\n              ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pmap.py\", line 330, in lower\n    lowered = jitted_f.trace(*args_flat).lower()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 492, in lower\n    lowering = _resolve_and_lower(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1091, in _resolve_and_lower\n    return _pjit_lower(\n           ^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1264, in _pjit_lower\n    return pxla.lower_sharding_computation(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1123, in lower_sharding_computation\n    tuple_args, shape_poly_state) = _cached_lowering_to_hlo(\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 736, in _cached_lowering_to_hlo\n    lowering_result = mlir.lower_jaxpr_to_module(\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1403, in lower_jaxpr_to_module\n    lower_jaxpr_to_fun(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1994, in lower_jaxpr_to_fun\n    out_vals, tokens_out = jaxpr_subcomp(\n                           ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1092, in _shard_map_lowering\n    return _shard_map_lowering_shardy(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1066, in _shard_map_lowering_shardy\n    out_nodes_, tokens_out = mlir.jaxpr_subcomp(\n                             ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n    return mlir.lower_per_platform(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 906, in tpu_lowering\n    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 405, in pallas_call_tpu_lowering_rule\n    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1014, in lower_jaxpr_to_pipelined_module\n    lower_jaxpr_into_pipelined_module(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1113, in lower_jaxpr_into_pipelined_module\n    func_op = _lower_jaxpr_to_func_common(\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1595, in _lower_jaxpr_to_func_common\n    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py\", line 197, in decorator\n    return_values = f(*func_args, **func_kwargs)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1592, in body_func\n    return jaxpr_subcomp(lowering_context, jaxpr, *other_args)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1839, in jaxpr_subcomp\n    raise NotImplementedError(\nNotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n"
+    },
+    {
+      "name": "dedup_stream4_256",
+      "input_sha256": [
+        "caf5423203b4eaf8ffe59723afa13e42ce86777f3745a2192df50afabb2971c9",
+        "8808405eec6fbe306fe3369f88daed79dd5613ddbb5e801f632b01d6218c5f08",
+        "1279dfa53db2ff4257faddaef5c1c653cce9648be517d7626621e45c2084fc9e",
+        "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+      ],
+      "status": "error",
+      "phase": "compile",
+      "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/primitives.py\", line 652, in wrap_with_transforms\n    return f(*new_args)\n  File \"/tmp/TPUBeamSearch-beam-primitives/src/tpu_beam_search/beam_dedup.py\", line 68, in kernel\n    neutral = jnp.zeros((8, n), jnp.uint32).at[6].set(jnp.uint32(0xffffffff))\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py\", line 1208, in set\n    return scatter._scatter_update(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 90, in _scatter_update\n    return internal_scatter(x, y, dynamic_idx)\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 143, in _scatter_impl\n    out = scatter_op(\njax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n\nThe preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n\n--------------------\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-beam-primitives/benchmarks/beam_primitive_bundle.py\", line 168, in main\n    lowered = fn.lower(*inputs)\n              ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pmap.py\", line 330, in lower\n    lowered = jitted_f.trace(*args_flat).lower()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 492, in lower\n    lowering = _resolve_and_lower(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1091, in _resolve_and_lower\n    return _pjit_lower(\n           ^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1264, in _pjit_lower\n    return pxla.lower_sharding_computation(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1123, in lower_sharding_computation\n    tuple_args, shape_poly_state) = _cached_lowering_to_hlo(\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 736, in _cached_lowering_to_hlo\n    lowering_result = mlir.lower_jaxpr_to_module(\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1403, in lower_jaxpr_to_module\n    lower_jaxpr_to_fun(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1994, in lower_jaxpr_to_fun\n    out_vals, tokens_out = jaxpr_subcomp(\n                           ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1092, in _shard_map_lowering\n    return _shard_map_lowering_shardy(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1066, in _shard_map_lowering_shardy\n    out_nodes_, tokens_out = mlir.jaxpr_subcomp(\n                             ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n    return mlir.lower_per_platform(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 906, in tpu_lowering\n    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 405, in pallas_call_tpu_lowering_rule\n    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1014, in lower_jaxpr_to_pipelined_module\n    lower_jaxpr_into_pipelined_module(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1113, in lower_jaxpr_into_pipelined_module\n    func_op = _lower_jaxpr_to_func_common(\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1595, in _lower_jaxpr_to_func_common\n    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py\", line 197, in decorator\n    return_values = f(*func_args, **func_kwargs)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1592, in body_func\n    return jaxpr_subcomp(lowering_context, jaxpr, *other_args)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1839, in jaxpr_subcomp\n    raise NotImplementedError(\nNotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n"
+    }
+  ],
+  "timings": {
+    "pack_matched": {
+      "pack_serial_b2": {
+        "samples_ms": [
+          1.35286,
+          1.36875,
+          1.33137,
+          1.42516,
+          1.355471,
+          1.34078,
+          1.324629,
+          1.36773,
+          1.38217,
+          1.34205,
+          1.34908,
+          1.32843,
+          1.34573,
+          1.389629,
+          1.335129,
+          1.34732,
+          1.32386,
+          1.35311,
+          1.34138,
+          1.36577,
+          1.32828
+        ],
+        "median_ms": 1.34732,
+        "p10_ms": 1.32828,
+        "p90_ms": 1.38217,
+        "aggregate_candidates_per_second": 389133984.502568,
+        "candidates_per_device": 65536
+      },
+      "pack_serial_b3": {
+        "samples_ms": [
+          1.34174,
+          1.33005,
+          1.33413,
+          1.33588,
+          1.361111,
+          1.31162,
+          1.31804,
+          1.3284,
+          1.35698,
+          1.31098,
+          1.33593,
+          1.33505,
+          1.32523,
+          1.35396,
+          1.35369,
+          1.34578,
+          1.35272,
+          1.35343,
+          1.39453,
+          1.33403,
+          1.36601
+        ],
+        "median_ms": 1.33593,
+        "p10_ms": 1.31804,
+        "p90_ms": 1.361111,
+        "aggregate_candidates_per_second": 392451700.31363916,
+        "candidates_per_device": 65536
+      },
+      "pack_pipeline_b2": {
+        "samples_ms": [
+          0.6723,
+          0.65486,
+          0.6837,
+          0.66525,
+          0.677991,
+          0.677769,
+          0.65689,
+          0.62478,
+          0.69945,
+          0.63774,
+          0.68772,
+          0.67787,
+          0.67571,
+          0.6473,
+          0.64591,
+          0.63379,
+          0.72424,
+          0.67096,
+          0.67533,
+          0.6327,
+          0.64831
+        ],
+        "median_ms": 0.67096,
+        "p10_ms": 0.63379,
+        "p90_ms": 0.68772,
+        "aggregate_candidates_per_second": 781399785.3821391,
+        "candidates_per_device": 65536
+      },
+      "pack_pipeline_b3": {
+        "samples_ms": [
+          0.61735,
+          0.63779,
+          0.66001,
+          0.6926,
+          0.62818,
+          0.633571,
+          0.60536,
+          0.59917,
+          0.67971,
+          0.60407,
+          0.65046,
+          0.61903,
+          0.63289,
+          0.64749,
+          0.61392,
+          0.61518,
+          0.62806,
+          0.68844,
+          0.62318,
+          0.68734,
+          0.6495
+        ],
+        "median_ms": 0.63289,
+        "p10_ms": 0.60536,
+        "p90_ms": 0.68734,
+        "aggregate_candidates_per_second": 828403040.0227528,
+        "candidates_per_device": 65536
+      }
+    },
+    "other_diagnostic": {
+      "route_8_7": {
+        "samples_ms": [
+          0.47852,
+          0.54206,
+          0.484731,
+          0.47164,
+          0.45842,
+          0.43692,
+          0.43096,
+          0.4516,
+          0.47782,
+          0.47285,
+          0.4762,
+          0.46735,
+          0.45982,
+          0.454891,
+          0.46916,
+          0.459589,
+          0.45128,
+          0.436889,
+          0.57588,
+          0.45187,
+          0.47144
+        ],
+        "median_ms": 0.46735,
+        "p10_ms": 0.43692,
+        "p90_ms": 0.484731
+      }
+    }
+  },
+  "timing_protocol": {
+    "warmup": 3,
+    "repeats": 21,
+    "order": "alternating forward/reverse",
+    "scope": "complete primitive call on eight devices; no placement/compile"
+  },
+  "all_exact": false
+}

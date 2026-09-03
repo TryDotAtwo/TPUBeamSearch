@@ -69,6 +69,13 @@ destination for the new run is `test_results/beam_primitives_v2/`. Pack timing
 uses 65536 candidates/device, three warmups and 21 alternating synchronized
 samples; only exact cases are eligible. No V2 TPU result is established yet.
 
+V2 is now COMPLETE; report: `test_results/beam_primitives_v2/report.md`.
+Five exact cases; six compile failures moved past gather to scalar uint8 extract
+(Stream2) and sentinel scatter (dedup). Packing medians serial/pipeline:
+b2 1.347320/0.670960 ms (2.008x), b3 1.335930/0.632890 ms (2.111x), at 65536
+candidates/device. These are primitive-call measurements, not beam/inference
+speed or profiler-confirmed overlap. V3 candidate fixes are in regression testing.
+
 1. Validate these primitives on physical TPU before propagating their lowering
    choices. Preserve the already active V10 session; never run a second TPU job.
 2. Add a standalone remote-DMA ring test: readiness, send/receive wait, slot

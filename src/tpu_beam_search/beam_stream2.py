@@ -48,6 +48,7 @@ def pallas_hash_goal(parents, generators, central, zobrist_words, count, *,
         parent_values = pr[...].reshape(-1)
         permutation = gr[...].reshape(-1)
         table = zr[...]
+        central_values = cr[...].astype(jnp.uint32)
 
         def position(p, acc):
             h0, h1, h2, h3, goal = acc
@@ -58,7 +59,8 @@ def pallas_hash_goal(parents, generators, central, zobrist_words, count, *,
                     h1 ^ _take_clipped(table[1], address),
                     h2 ^ _take_clipped(table[2], address),
                     h3 ^ _take_clipped(table[3], address),
-                    goal & (value == cr[p]))
+                    goal & (value.astype(jnp.uint32) == _take_clipped(
+                        central_values, jnp.full((tile_candidates,), p, jnp.int32))))
 
         zero = jnp.zeros((tile_candidates,), jnp.uint32)
         h0, h1, h2, h3, goal = jax.lax.fori_loop(

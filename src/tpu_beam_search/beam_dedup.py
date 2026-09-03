@@ -65,7 +65,8 @@ def pallas_threshold_dedup(words, payload, count, threshold, *, mode, interpret=
         # Stable compaction by validity then position; no conflicting scatter.
         data = _sort(data, (9, 10))
         keep = data[9] != 0
-        neutral = jnp.zeros((8, n), jnp.uint32).at[6].set(jnp.uint32(0xffffffff))
+        neutral = jnp.where(jnp.arange(8)[:, None] == 6,
+                            jnp.uint32(0xffffffff), jnp.uint32(0))
         out[...] = jnp.where(keep[None, :], data[:8], neutral)
         out_count[0] = jnp.sum(keep.astype(jnp.uint32))
 

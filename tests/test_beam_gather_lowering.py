@@ -41,3 +41,14 @@ def test_gathers_meet_mosaic_supported_shape_and_mode(name):
         assert d.operand_batching_dims == d.start_indices_batching_dims
         assert len(d.collapsed_slice_dims) == 1
         assert len(d.operand_batching_dims) == len(result.shape) - 1
+
+
+@pytest.mark.parametrize('name', ['hash_goal_120_24', 'dedup_stream4_128'])
+def test_no_scalar_uint8_load_or_scatter_after_v2(name):
+    case = next(c for c in build_cases(interpret=True) if c['name'] == name)
+    graph = jax.make_jaxpr(case['fn'])(*case['args'])
+    for eq in equations(graph):
+        assert eq.primitive.name != 'scatter'
+        if eq.primitive.name == 'get':
+            for var in eq.outvars:
+                assert not (var.aval.shape == () and str(var.aval.dtype) == 'uint8')
