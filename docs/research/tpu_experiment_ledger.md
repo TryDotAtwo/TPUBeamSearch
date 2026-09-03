@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: BF16 invstd capture/substitution prepared
+
+Adds actual BF16 invstd slot while retaining untouched-output controls.
+Native Pallas invstd+external-affine reconstruction must match the prior path.
+Cross JAX/Pallas invstd at fixed JAX Dense AND mean, recomputing Pallas invstd
+with that mean; split-zero control against existing external-mean LN avoids
+mistaking changed materialization for invstd causality. Same full legal42
+corpus,16K/chunk256, all original hashes/shape comparisons and auxiliary HLO.
+No default, beam or BN changes; TPU result pending.
+
 ## 2026-09-03: captured prefix v3 separates mean from remaining LN drift
 
 All capture/zero controls pass at16K andchunk256 on same131072legal42states.
