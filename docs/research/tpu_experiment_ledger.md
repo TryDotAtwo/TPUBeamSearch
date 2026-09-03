@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: controlled captured-boundary follow-up prepared
+
+Added BF16 Dense/mean/output capture with untouched JAX/Pallas controls at
+16K and chunk256 on the prior identical legal42 corpus. Four substitutions
+share one Pallas remainder; native zero-change must pass before attribution.
+Full shape comparisons, hashes, finite/bitwise checks, affected rows and HLO
+are retained. Capture-induced compilation changes explicitly invalidate causal
+claims. No full-model/default/BN/beam change; no new speed result.
+Protocol: `docs/research/2026-09-03-prefix-capture.md`.
+
 ## 2026-09-03: same-state shape v2 isolates JAX shape dependence
 
 Exact previous legal42 input/output hashes reproduced. JAX16K vs chunk256:
