@@ -32,7 +32,7 @@ def _distribution(lo, hi, salt):
 def build_cases(*, interpret=False):
     rng = np.random.default_rng(9341)
     cases = []
-    words = rng.integers(0, 2**32, (8, 640), dtype=np.uint32)
+    words = rng.integers(0, 2**32, (8, 65536), dtype=np.uint32)
     for pipelined in (False, True):
         for buffers in (2, 3):
             cases.append(dict(name=f'pack_{"pipeline" if pipelined else "serial"}_b{buffers}',
@@ -111,6 +111,25 @@ def compare_outputs(actual, expected):
                 output_sha256=[hashlib.sha256(np.asarray(x).tobytes()).hexdigest() for x in a])
 
 
+def measure_interleaved(variants, *, warmup=3, repeats=21):
+    if not variants or warmup < 0 or repeats <= 0:
+        raise ValueError('requires variants, nonnegative warmup and positive repeats')
+    names = list(variants)
+    for _ in range(warmup):
+        for name in names:
+            jax.block_until_ready(variants[name]())
+    samples = {name: [] for name in names}
+    for repeat in range(repeats):
+        order = names if repeat % 2 == 0 else names[::-1]
+        for name in order:
+            start = time.perf_counter_ns()
+            jax.block_until_ready(variants[name]())
+            samples[name].append((time.perf_counter_ns() - start) / 1e6)
+    return {name: dict(samples_ms=s, median_ms=float(np.median(s)),
+                       p10_ms=float(np.percentile(s, 10)), p90_ms=float(np.percentile(s, 90)))
+            for name, s in samples.items()}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
@@ -119,16 +138,19 @@ def main():
     devices = jax.devices()
     if len(devices) != 8 or any(d.platform != 'tpu' for d in devices):
         raise RuntimeError('requires exactly eight real TPU devices')
-    report = dict(scope='eight-device primitive compile/correctness, NOT complete beam or overlap proof',
+    report = dict(scope='eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof',
         source_sha=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         jax=jax.__version__, jaxlib=importlib.metadata.version('jaxlib'),
         libtpu=importlib.metadata.version('libtpu'),
         devices=[dict(id=d.id, kind=d.device_kind, process_index=d.process_index) for d in devices],
-        cases=[])
+        x64_enabled=bool(jax.config.jax_enable_x64), cases=[], timings={},
+        timing_protocol=dict(warmup=3, repeats=21, order='alternating forward/reverse',
+                             scope='complete primitive call on eight devices; no placement/compile'))
     path = args.output / 'beam_primitives.json'
     def save():
         path.write_text(json.dumps(report, indent=2), encoding='utf-8')
     save()
+    eligible = {}
     for case in build_cases():
         row = dict(name=case['name'], input_sha256=[hashlib.sha256(x.tobytes()).hexdigest() for x in case['args']],
                    status='started', phase='placement')
@@ -152,12 +174,29 @@ def main():
             expected = jax.tree.map(lambda x: np.stack([x] * 8), case['expected'])
             row.update(compare_outputs(actual, expected))
             row['status'] = 'exact' if row['exact'] else 'mismatch'
+            if row['exact']:
+                eligible[case['name']] = functools.partial(executable, *inputs)
         except Exception:
             row['status'] = 'error'
             row['error'] = traceback.format_exc()
         save()
         print(row['name'], row['status'], flush=True)
     report['all_exact'] = all(r['status'] == 'exact' for r in report['cases'])
+    for group, predicate in [('pack_matched', lambda name: name.startswith('pack_')),
+                             ('other_diagnostic', lambda name: not name.startswith('pack_'))]:
+        variants = {name: fn for name, fn in eligible.items() if predicate(name)}
+        if not variants:
+            continue
+        try:
+            print('TIMING', group, flush=True)
+            report['timings'][group] = measure_interleaved(variants)
+            if group == 'pack_matched':
+                for value in report['timings'][group].values():
+                    value['aggregate_candidates_per_second'] = 8 * 65536 / (value['median_ms'] / 1000)
+                    value['candidates_per_device'] = 65536
+        except Exception:
+            report['timings'][group] = dict(error=traceback.format_exc())
+        save()
     save()
 
 

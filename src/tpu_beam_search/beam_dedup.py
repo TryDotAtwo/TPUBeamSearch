@@ -10,6 +10,11 @@ import jax.numpy as jnp
 from jax.experimental import pallas as pl
 
 
+def _columns(data, indices):
+    return jnp.take_along_axis(data, jnp.broadcast_to(indices[None, :], data.shape),
+                               axis=1, mode='promise_in_bounds')
+
+
 def _sort(data, key_planes):
     n = data.shape[1]
     indices = jnp.arange(n)
@@ -17,7 +22,7 @@ def _sort(data, key_planes):
     while size <= n:
         stride = size // 2
         while stride:
-            partner = jnp.take(data, indices ^ stride, axis=1)
+            partner = _columns(data, indices ^ stride)
             less = jnp.zeros((n,), jnp.bool_)
             equal = jnp.ones((n,), jnp.bool_)
             for plane in key_planes:
@@ -53,7 +58,7 @@ def pallas_threshold_dedup(words, payload, count, threshold, *, mode, interpret=
         data = jnp.concatenate((w[...], p[...], valid[None, :], indices[None, :]), axis=0)
         keys = (9, 3, 2, 1, 0, 6, 8) if mode == 'stream3' else (9, 3, 2, 1, 0, 6, 5, 4, 7)
         data = _sort(data, keys)
-        previous = jnp.take(data[:4], jnp.maximum(indices, 1) - 1, axis=1)
+        previous = _columns(data[:4], jnp.maximum(indices, 1) - 1)
         unique = (data[9] != 0) & ((indices == 0) | jnp.any(data[:4] != previous, axis=0))
         data = jnp.concatenate((data[:9], unique[None, :].astype(jnp.uint32),
                                 indices[None, :]), axis=0)

@@ -1,0 +1,37 @@
+[{"stream_name":"stderr","time":19.691742065,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":22.980957416,"data":"\n"}
+,{"stream_name":"stderr","time":22.980985156,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":22.980991716,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":23.123724274,"data":"Cloning into '/tmp/TPUBeamSearch-beam-primitives'...\n"}
+,{"stream_name":"stderr","time":29.870309225,"data":"HEAD is now at c05b269 test: add eight-TPU beam primitive gate and archive V10 geometry\n"}
+,{"stream_name":"stdout","time":34.037103733,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":34.037189043,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":39.461772645,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":39.461806725,"data":"E0000 00:00:1788443039.088642      51 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":39.461813885,"data":"=== Source Location Trace: ===\n"}
+,{"stream_name":"stdout","time":39.461818595,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":48.71966717,"data":"START pack_serial_b2\n"}
+,{"stream_name":"stdout","time":49.190532441,"data":"pack_serial_b2 exact\n"}
+,{"stream_name":"stdout","time":49.190594791,"data":"START pack_serial_b3\n"}
+,{"stream_name":"stdout","time":49.281201377,"data":"pack_serial_b3 exact\n"}
+,{"stream_name":"stdout","time":49.281239117,"data":"START pack_pipeline_b2\n"}
+,{"stream_name":"stdout","time":49.446027058,"data":"pack_pipeline_b2 exact\n"}
+,{"stream_name":"stdout","time":49.446067658,"data":"START pack_pipeline_b3\n"}
+,{"stream_name":"stdout","time":49.645138711,"data":"pack_pipeline_b3 exact\n"}
+,{"stream_name":"stdout","time":49.645200901,"data":"START route_8_7\n"}
+,{"stream_name":"stdout","time":49.759834928,"data":"route_8_7 exact\n"}
+,{"stream_name":"stdout","time":49.759991148,"data":"START hash_goal_120_24\n"}
+,{"stream_name":"stdout","time":49.815478722,"data":"hash_goal_120_24 error\n"}
+,{"stream_name":"stdout","time":49.815721502,"data":"START hash_goal_150_30\n"}
+,{"stream_name":"stdout","time":49.853813434,"data":"hash_goal_150_30 error\n"}
+,{"stream_name":"stdout","time":49.854151744,"data":"START dedup_stream3_128\n"}
+,{"stream_name":"stdout","time":50.063021838,"data":"dedup_stream3_128 error\n"}
+,{"stream_name":"stdout","time":50.063239068,"data":"START dedup_stream4_128\n"}
+,{"stream_name":"stdout","time":50.284238972,"data":"dedup_stream4_128 error\n"}
+,{"stream_name":"stdout","time":50.284611052,"data":"START dedup_stream3_256\n"}
+,{"stream_name":"stdout","time":50.596408562,"data":"dedup_stream3_256 error\n"}
+,{"stream_name":"stdout","time":50.596762672,"data":"START dedup_stream4_256\n"}
+,{"stream_name":"stdout","time":50.936099204,"data":"dedup_stream4_256 error\n"}
+,{"stream_name":"stderr","time":59.286974735,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":61.773400936,"data":"[NbConvertApp] Writing 280735 bytes to __results__.html\n"}
+]

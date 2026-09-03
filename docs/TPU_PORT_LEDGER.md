@@ -52,13 +52,17 @@ on fixed Dense/mean reproduces original prefix exactly, normal geometry does not
 This is a useful S1 clue, not a completed Pallas inference path. No automatic
 standalone inference sweep is restarted.
 
-Physical primitive gate submitted as private Kaggle V1:
+Physical primitive gate completed as private Kaggle V1:
 `trydotatwo/tpu-beam-primitive-compile-and-correctness-gate`, source
 `c05b269a09edc38c846840d2fb433848b83a7986`, launcher `f24db82`.
 Kaggle assigned the title-derived slug on first creation; metadata was then
 corrected to the actual slug without resubmitting. Download into
 `test_results/beam_primitives_v1/` and inspect every case, even if kernel status
 is COMPLETE (compile errors are retained per case and do not abort the bundle).
+V1 result: five exact cases (packing and routing), six gather compile rejections;
+no timings collected. See `test_results/beam_primitives_v1/report.md`. Gather
+fixes have structural regression and unchanged CPU/source parity; physical
+confirmation is required in V2, which also adds eligible-case timing.
 
 1. Validate these primitives on physical TPU before propagating their lowering
    choices. Preserve the already active V10 session; never run a second TPU job.

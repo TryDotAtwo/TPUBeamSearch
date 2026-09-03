@@ -11,6 +11,12 @@ from jax.experimental import pallas as pl
 from .tpu_layout import pad_to_multiple
 
 
+def _take_clipped(vector, indices):
+    # Mosaic rejects GatherScatterMode.CLIP; make the bound explicit first.
+    indices = jnp.clip(indices, 0, vector.shape[0] - 1)
+    return jnp.take_along_axis(vector, indices, axis=0, mode='promise_in_bounds')
+
+
 def pallas_hash_goal(parents, generators, central, zobrist_words, count, *,
                      tile_candidates=128, interpret=False):
     if parents.ndim != 2 or parents.dtype != jnp.uint8 or min(parents.shape) <= 0:
@@ -45,13 +51,13 @@ def pallas_hash_goal(parents, generators, central, zobrist_words, count, *,
 
         def position(p, acc):
             h0, h1, h2, h3, goal = acc
-            source = jnp.take(permutation, move * width + p, mode='clip')
-            value = jnp.take(parent_values, safe_parent * width + source, mode='clip')
+            source = _take_clipped(permutation, move * width + p)
+            value = _take_clipped(parent_values, safe_parent * width + source)
             address = p * classes + value.astype(jnp.int32)
-            return (h0 ^ jnp.take(table[0], address, mode='clip'),
-                    h1 ^ jnp.take(table[1], address, mode='clip'),
-                    h2 ^ jnp.take(table[2], address, mode='clip'),
-                    h3 ^ jnp.take(table[3], address, mode='clip'),
+            return (h0 ^ _take_clipped(table[0], address),
+                    h1 ^ _take_clipped(table[1], address),
+                    h2 ^ _take_clipped(table[2], address),
+                    h3 ^ _take_clipped(table[3], address),
                     goal & (value == cr[p]))
 
         zero = jnp.zeros((tile_candidates,), jnp.uint32)

@@ -23,3 +23,22 @@ Keep one active Kaggle TPU session; prior prefix V10 is COMPLETE before launch.
 
 Next: fix any actual lowering failures with reproductions and run a separately
 validated remote-DMA ring probe before integrating the beam scheduler.
+
+## V2: gather fixes and eligible timing
+
+V1 completed with five exact cases and six gather compile rejections; see
+`test_results/beam_primitives_v1/report.md`. V2 changes gather forms without
+changing valid candidate semantics. Test `test_beam_gather_lowering.py` catches
+the original structural failure; it does not replace physical TPU validation.
+
+After correctness, only exact compiled cases receive timings. Packing uses the
+same uint32 data at 65536 candidates/device for serialized/pipelined b2/b3. Three
+warmup rounds, 21 synchronized rounds alternating forward/reverse variant order;
+retain every sample, median and p10/p90. Exclude compilation and placement.
+The other exact cases receive diagnostic primitive latencies in a separate group;
+unlike operations must not be described as comparative speedups. No end-to-end
+beam throughput claim. All cases still save phase/error individually.
+
+The larger seeded packing allocation changes the subsequent RNG stream, so V2
+fixtures differ from V1; input hashes identify that difference. The A/B packing
+variants within V2 have identical inputs. Runtime x64 is disabled explicitly.
