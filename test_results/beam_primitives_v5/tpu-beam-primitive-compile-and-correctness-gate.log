@@ -1,0 +1,29 @@
+[{"stream_name":"stderr","time":18.00441767,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":21.811588844,"data":"\n"}
+,{"stream_name":"stderr","time":21.811627684,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":21.811636684,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":21.95554367,"data":"Cloning into '/tmp/TPUBeamSearch-beam-primitives'...\n"}
+,{"stream_name":"stderr","time":28.048775969,"data":"HEAD is now at b469a68 feat: add bounded Pallas Stream3 split and fix TPU count reduction\n"}
+,{"stream_name":"stdout","time":28.088456921,"data":"GROUP pack_matched\n"}
+,{"stream_name":"stdout","time":51.965519438,"data":"GROUP_DONE pack_matched 0\n"}
+,{"stream_name":"stdout","time":51.965854168,"data":"GROUP routing\n"}
+,{"stream_name":"stdout","time":67.496801516,"data":"GROUP_DONE routing 0\n"}
+,{"stream_name":"stdout","time":67.497329386,"data":"GROUP hash_120\n"}
+,{"stream_name":"stdout","time":94.236797454,"data":"GROUP_DONE hash_120 -6\n"}
+,{"stream_name":"stdout","time":94.237283114,"data":"GROUP hash_150\n"}
+,{"stream_name":"stdout","time":110.402219892,"data":"GROUP_DONE hash_150 0\n"}
+,{"stream_name":"stdout","time":110.402825102,"data":"GROUP dedup_stream3_128\n"}
+,{"stream_name":"stdout","time":127.865395644,"data":"GROUP_DONE dedup_stream3_128 0\n"}
+,{"stream_name":"stdout","time":127.866081294,"data":"GROUP dedup_stream4_128\n"}
+,{"stream_name":"stdout","time":146.379492196,"data":"GROUP_DONE dedup_stream4_128 0\n"}
+,{"stream_name":"stdout","time":146.380294605,"data":"GROUP dedup_stream3_256\n"}
+,{"stream_name":"stdout","time":165.504149387,"data":"GROUP_DONE dedup_stream3_256 0\n"}
+,{"stream_name":"stdout","time":165.505170247,"data":"GROUP dedup_stream4_256\n"}
+,{"stream_name":"stdout","time":184.877809713,"data":"GROUP_DONE dedup_stream4_256 0\n"}
+,{"stream_name":"stdout","time":184.878727243,"data":"GROUP split_empty\n"}
+,{"stream_name":"stdout","time":204.208542373,"data":"GROUP_DONE split_empty 0\n"}
+,{"stream_name":"stdout","time":204.209664844,"data":"GROUP split_nonempty\n"}
+,{"stream_name":"stdout","time":224.008650137,"data":"GROUP_DONE split_nonempty 0\n"}
+,{"stream_name":"stderr","time":228.037568933,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":230.605533069,"data":"[NbConvertApp] Writing 280734 bytes to __results__.html\n"}
+]

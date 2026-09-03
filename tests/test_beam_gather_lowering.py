@@ -60,3 +60,15 @@ def test_dedup_count_reduction_uses_supported_signed_arithmetic():
     reductions = [eq for eq in equations(graph) if eq.primitive.name == 'reduce_sum']
     assert reductions
     assert all(str(eq.invars[0].aval.dtype) != 'uint32' for eq in reductions)
+    scalar_stores = [eq for eq in equations(graph) if eq.primitive.name == 'swap'
+                     and any(getattr(v.aval, 'shape', None) == () for v in eq.invars)]
+    assert not scalar_stores
+
+
+@pytest.mark.parametrize('name', ['dedup_stream3_128', 'split_0', 'split_127'])
+def test_control_outputs_never_store_scalars_to_vmem(name):
+    case = next(c for c in build_cases(interpret=True) if c['name'] == name)
+    graph = jax.make_jaxpr(case['fn'])(*case['args'])
+    scalar_stores = [eq for eq in equations(graph) if eq.primitive.name == 'swap'
+                     and any(getattr(v.aval, 'shape', None) == () for v in eq.invars)]
+    assert not scalar_stores

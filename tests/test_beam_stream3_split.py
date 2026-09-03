@@ -28,7 +28,7 @@ def test_stream3_split_compacts_local_and_groups_remote_stably(count, world, ran
             value[7] = np.uint32(rank << 16) | (owners[0, ids] << np.uint32(8)) | value[7]
         return value
 
-    assert int(local_count[0]) == len(local_ids)
+    assert int(local_count[0, 0]) == len(local_ids)
     np.testing.assert_array_equal(local[:, :len(local_ids)], expected(local_ids))
     np.testing.assert_array_equal(remote[:, :len(remote_ids)], expected(remote_ids))
     neutral = np.zeros((8, 128 - len(local_ids)), np.uint32)

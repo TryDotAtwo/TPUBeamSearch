@@ -61,6 +61,20 @@ V5 source b469a6863a6ca3472c71022245d7d3ef4f86be65. Download into
 `test_results/beam_primitives_v5/`; inspect all ten groups / thirteen cases.
 Unchanged hash errors remain expected unresolved failures, not accepted cases.
 
+V5 COMPLETE, all_exact=false; report: `test_results/beam_primitives_v5/report.md`.
+Five exact controls. Signed count reduction moved dedup to its next compiler
+boundary: scalar VMEM store; both split cases expose the same issue. V6 stores
+logical counts in lane [0,0] of padded [1,128] uint32 control planes, with all
+other lanes zero. Structural tests reject scalar stores; interpreter and source
+oracle parity remain exact. Physical confirmation is outstanding.
+Full local verification: 559 passed in 220.01 s with original C++ oracle enabled.
+
+V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
+The signed reduction passed its prior lowering boundary, then all dedup and
+split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts
+as aligned `[1,128]` uint32 control planes and writes whole vectors. This is a
+storage-layout change only: logical value remains `[0,0]`, unused lanes zero.
+
 Stream3 source adapter added while V4 remains QUEUED. All five source-oracle
 tests pass (18.57 s), including three new Stream3 cases: world=8 with payload
 ties opposed to parent order, world=1 with UINT32_MAX threshold, and empty input.

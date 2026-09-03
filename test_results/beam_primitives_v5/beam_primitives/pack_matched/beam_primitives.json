@@ -1,0 +1,255 @@
+{
+  "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+  "source_sha": "b469a6863a6ca3472c71022245d7d3ef4f86be65",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "x64_enabled": false,
+  "cases": [
+    {
+      "name": "pack_serial_b2",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.440304570999956,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_serial_b3",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.0886307439999996,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_pipeline_b2",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.16396160800002235,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_pipeline_b3",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.19671310000001085,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    }
+  ],
+  "timings": {
+    "pack_matched": {
+      "pack_serial_b2": {
+        "samples_ms": [
+          1.36749,
+          1.391989,
+          1.339471,
+          1.35274,
+          1.34436,
+          1.34151,
+          1.473481,
+          1.35963,
+          1.35151,
+          1.35434,
+          1.36804,
+          1.31196,
+          1.31368,
+          1.337,
+          1.36087,
+          1.35625,
+          1.36077,
+          1.31749,
+          1.3216,
+          1.3634,
+          1.33351
+        ],
+        "median_ms": 1.35274,
+        "p10_ms": 1.31749,
+        "p90_ms": 1.36804,
+        "aggregate_candidates_per_second": 387574848.0861067,
+        "candidates_per_device": 65536
+      },
+      "pack_serial_b3": {
+        "samples_ms": [
+          1.38228,
+          1.306369,
+          1.37473,
+          1.33835,
+          1.34855,
+          1.35014,
+          1.40334,
+          1.34142,
+          1.38263,
+          1.32175,
+          1.32135,
+          1.324671,
+          1.365301,
+          1.32902,
+          1.37237,
+          1.33892,
+          1.34206,
+          1.34704,
+          1.33305,
+          1.33537,
+          1.32409
+        ],
+        "median_ms": 1.34142,
+        "p10_ms": 1.32175,
+        "p90_ms": 1.38228,
+        "aggregate_candidates_per_second": 390845521.90961814,
+        "candidates_per_device": 65536
+      },
+      "pack_pipeline_b2": {
+        "samples_ms": [
+          0.668771,
+          0.64768,
+          0.65374,
+          0.64019,
+          0.69645,
+          0.6531,
+          0.668489,
+          0.67715,
+          0.677,
+          0.64696,
+          0.66371,
+          0.63146,
+          0.65462,
+          0.64651,
+          0.66344,
+          0.66077,
+          0.65956,
+          0.634649,
+          0.68571,
+          0.65456,
+          0.6775
+        ],
+        "median_ms": 0.65956,
+        "p10_ms": 0.64019,
+        "p90_ms": 0.6775,
+        "aggregate_candidates_per_second": 794905694.7055613,
+        "candidates_per_device": 65536
+      },
+      "pack_pipeline_b3": {
+        "samples_ms": [
+          0.65694,
+          0.65368,
+          0.6424,
+          0.62292,
+          0.67782,
+          0.62289,
+          0.667931,
+          0.6238,
+          0.66117,
+          0.62104,
+          0.63385,
+          0.5996,
+          0.61935,
+          0.60706,
+          0.64958,
+          0.60041,
+          0.672749,
+          0.74482,
+          0.61886,
+          0.64367,
+          0.6239
+        ],
+        "median_ms": 0.63385,
+        "p10_ms": 0.60706,
+        "p90_ms": 0.672749,
+        "aggregate_candidates_per_second": 827148378.9540112,
+        "candidates_per_device": 65536
+      }
+    }
+  },
+  "timing_protocol": {
+    "warmup": 3,
+    "repeats": 21,
+    "order": "alternating forward/reverse",
+    "scope": "complete primitive call on eight devices; no placement/compile"
+  },
+  "all_exact": true
+}

@@ -61,7 +61,7 @@ def test_original_cpp_stream4_matches_pallas():
     expected = np.array([list(map(int, line.split())) for line in raw.stdout.splitlines()], np.uint32).T
     out, count = pallas_threshold_dedup(jnp.array(words), jnp.zeros((1, 128), jnp.uint32),
         jnp.array([127], jnp.uint32), jnp.array([3], jnp.uint32), mode='stream4', interpret=True)
-    assert int(count[0]) == expected.shape[1]
+    assert int(count[0, 0]) == expected.shape[1]
     np.testing.assert_array_equal(out[:, :expected.shape[1]], expected)
 
 
@@ -94,7 +94,7 @@ def test_original_cpp_stream3_payload_ties_and_routing(world, rank, threshold, c
     padded_payload = np.pad(payload, (0, 1))[None, :]
     out, valid_count = pallas_threshold_dedup(jnp.array(words), jnp.array(padded_payload),
         jnp.array([count], jnp.uint32), jnp.array([threshold], jnp.uint32), mode='stream3', interpret=True)
-    size = int(valid_count[0])
+    size = int(valid_count[0, 0])
     routed = pallas_route_hashes(out[:4], world_size=world, shard_count=7, interpret=True)
     actual = np.array(out[:, :size]).T.copy()
     owners = np.asarray(routed[0, :size])
@@ -108,8 +108,8 @@ def test_original_cpp_stream3_payload_ties_and_routing(world, rank, threshold, c
     np.testing.assert_array_equal(offsets, np.concatenate(([0], np.cumsum(counts))))
     assert local_n == len(local) and remote_n == len(remote)
     device_local, device_remote, device_local_count, device_counts, device_offsets = pallas_stream3_split(
-        out, routed[:1], valid_count, local_rank=rank, world_size=world, interpret=True)
-    assert int(device_local_count[0]) == local_n
+        out, routed[:1], valid_count[:, :1].reshape(1), local_rank=rank, world_size=world, interpret=True)
+    assert int(device_local_count[0, 0]) == local_n
     np.testing.assert_array_equal(device_local[:, :local_n].T, expected[:local_n])
     np.testing.assert_array_equal(device_remote[:, :remote_n].T, expected[local_n:])
     np.testing.assert_array_equal(device_counts[0, :world], send_count)

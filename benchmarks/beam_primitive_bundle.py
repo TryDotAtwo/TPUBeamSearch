@@ -118,10 +118,12 @@ def build_cases(*, interpret=False):
             counts[0, p] = 0 if p == rank else np.count_nonzero(owners[0, :count] == p)
         offsets = np.zeros_like(counts)
         offsets[0, 1:world + 1] = np.cumsum(counts[0, :world])
+        local_count = np.zeros((1, 128), np.uint32)
+        local_count[0, 0] = len(local_ids)
         cases.append(dict(name=f'split_{count}',
             fn=functools.partial(pallas_stream3_split, local_rank=rank, world_size=world, interpret=interpret),
             args=(w, owners, np.array([count], np.uint32)),
-            expected=(*outputs, np.array([len(local_ids)], np.uint32), counts, offsets)))
+            expected=(*outputs, local_count, counts, offsets)))
     return cases
 
 

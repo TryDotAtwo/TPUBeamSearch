@@ -16,7 +16,7 @@ def test_dedup_preserves_128bit_identity_and_stage_tiebreak(mode):
     payload[0, :5] = [0, 1, 2, 3, 4]
     result, count = pallas_threshold_dedup(jnp.array(words), jnp.array(payload),
         jnp.array([5], jnp.uint32), jnp.array([10], jnp.uint32), mode=mode, interpret=True)
-    assert int(count[0]) == 3
+    assert int(count[0, 0]) == 3
     hashes, parents, scores, routes = unpack_candidates(np.array(result), count=3)
     assert hashes == [0, 5, 2**100 + 5]
     assert parents == [0, 2**40 if mode == 'stream3' else 1, 7]
@@ -30,7 +30,7 @@ def test_uintmax_threshold_does_not_admit_padding(count):
     out, n = pallas_threshold_dedup(jnp.array(words), jnp.zeros((1, 128), jnp.uint32),
         jnp.array([count], jnp.uint32), jnp.array([0xffffffff], jnp.uint32),
         mode='stream4', interpret=True)
-    assert int(n[0]) == count
+    assert int(n[0, 0]) == count
     assert np.all(np.asarray(out)[6, count:] == 0xffffffff)
 
 
@@ -38,5 +38,5 @@ def test_stream4_tie_break_uses_route_after_full_parent():
     words = pack_candidates([1, 1, 1], [2**32, 2**32, 2**32 + 1], [1, 1, 1], [9, 2, 0], capacity=128)
     out, n = pallas_threshold_dedup(jnp.array(words), jnp.zeros((1, 128), jnp.uint32),
         jnp.array([3], jnp.uint32), jnp.array([1], jnp.uint32), mode='stream4', interpret=True)
-    assert int(n[0]) == 1
+    assert int(n[0, 0]) == 1
     assert unpack_candidates(np.asarray(out), count=1)[3] == [2]

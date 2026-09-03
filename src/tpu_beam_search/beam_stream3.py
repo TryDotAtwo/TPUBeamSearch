@@ -44,8 +44,9 @@ def pallas_stream3_split(words, owners, count, *, local_rank, world_size, interp
         neutral = jnp.where(jnp.arange(8)[:, None] == 6, jnp.uint32(0xffffffff), jnp.uint32(0))
         local_out[...] = jnp.where(local_data[9:10] != 0, local_data[:8], neutral)
         remote_out[...] = jnp.where(remote_data[9:10] != 0, remote_data[:8], neutral)
-        local_count[0] = jnp.sum(is_local.astype(jnp.int32)).astype(jnp.uint32)
         positions = jnp.arange(control_width, dtype=jnp.uint32)[None, :]
+        local_total = jnp.sum(is_local.astype(jnp.int32)).astype(jnp.uint32)
+        local_count[...] = jnp.where(positions == 0, local_total, jnp.uint32(0))
         counts = jnp.zeros((1, control_width), jnp.uint32)
         offsets = jnp.zeros((1, control_width), jnp.uint32)
         running = jnp.uint32(0)
@@ -57,7 +58,7 @@ def pallas_stream3_split(words, owners, count, *, local_rank, world_size, interp
         counts_out[...] = counts
         offsets_out[...] = offsets
 
-    shapes = ((8, n), (8, n), (1,), (1, control_width), (1, control_width))
+    shapes = ((8, n), (8, n), (1, control_width), (1, control_width), (1, control_width))
     return pl.pallas_call(kernel,
         out_shape=tuple(jax.ShapeDtypeStruct(s, jnp.uint32) for s in shapes),
         in_specs=tuple(pl.BlockSpec(x.shape) for x in (words, owners, count)),
