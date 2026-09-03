@@ -19,7 +19,9 @@ from benchmarks.artgor_exact_notebook_validation import (
     _tensor_comparison, checkpoint,
 )
 from benchmarks.artgor_pallas_exact_diagnostic import _make_states
-from benchmarks.artgor_input_trace import TRACE_NAMES, input_trace, save_mismatch_rows
+from benchmarks.artgor_input_trace import (
+    TRACE_NAMES, input_trace, save_mismatch_rows, mean_buffer, external_mean_ln,
+)
 from benchmarks.layernorm_quality import load_puzzle
 from benchmarks.stream1_layernorm_arithmetic import runtime_inventory, sha256_file
 from tpu_beam_search.stream1_architecture import Stream1Architecture
@@ -409,6 +411,16 @@ def run(*, dataset: Path, output: Path) -> dict:
             out_specs=tuple(P("core", None) for _ in TRACE_NAMES), check_vma=False,
         )) for use_pallas in (False, True)}
         puzzle = load_puzzle(dataset / "puzzle_info.json", state_len=150, move_count=30)
+        materialized_means = {p: _mapped(
+            lambda raw, w, p=p: mean_buffer(raw, pallas=p, bm=cfg.input_bm),
+            mesh=mesh, input_spec=state_spec, weights_example=weights,
+        ) for p in (False, True)}
+        external_remainder = _mapped(
+            lambda pair, w: external_mean_ln(
+                pair[0], pair[1], w.input.normalization.scale, w.input.normalization.bias,
+                bm=cfg.input_bm, epsilon=architecture.LAYER_NORM_EPSILON),
+            mesh=mesh, input_spec=(state_spec, state_spec), weights_example=weights,
+        )
         for case_name, kind, seed in CASES:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
             states = jax.device_put(host, state_sharding)
@@ -444,11 +456,37 @@ def run(*, dataset: Path, output: Path) -> dict:
             input_mean_ab = []
             prefix_q = jax.block_until_ready(suffix[0](hidden[0], weights_d))
             raw128 = jax.block_until_ready(raw_dense_runners["late"](embedded, weights_d))
+            jm = jax.block_until_ready(materialized_means[False](raw128, weights_d))
+            pm = jax.block_until_ready(materialized_means[True](raw128, weights_d))
+            native = jax.block_until_ready(mean_runners["fp32"](raw128, weights_d))
+            external_mean_ab = {"jax_vs_pallas_mean": _metrics(jm, pm), "cases": []}
+            np.savez_compressed(output / f"{case_name}_mean_bits.npz",
+                                jax_mean_bits=np.asarray(jm).view(np.uint16)[:, 0],
+                                pallas_mean_bits=np.asarray(pm).view(np.uint16)[:, 0])
+            for label, mean in (("jax", jm), ("pallas", pm)):
+                candidate = jax.block_until_ready(external_remainder((raw128, mean), weights_d))
+                external_mean_ab["cases"].append({
+                    "source": label, "vs_native": _metrics(native, candidate),
+                    "prefix": _metrics(hidden[0], candidate),
+                    "same_suffix": _metrics(prefix_q, suffix[0](candidate, weights_d)),
+                    "original_q": _metrics(monolithic, suffix[0](candidate, weights_d)),
+                })
+                save_mismatch_rows(output / f"{case_name}_{label}_mean_prefix.npz", raw128,
+                                   hidden[0].astype(jnp.float32), candidate.astype(jnp.float32))
+            if case_name == CASES[0][0]:
+                for label, call, arg in (("materialized_mean_jax", materialized_means[False], raw128),
+                                         ("materialized_mean_pallas", materialized_means[True], raw128),
+                                         ("external_mean_remainder", external_remainder, (raw128, pm))):
+                    (output / f"{label}.compiled.txt").write_text(
+                        call.lower(arg, weights_d).compile().as_text(), encoding="utf-8")
             raw1024 = jax.block_until_ready(raw_bk1024(embedded, weights_d))
             input_trace_ab = {"raw_bk128_vs_bk1024": _metrics(raw128, raw1024), "cases": []}
             for bk, raw in ((128, raw128), (1024, raw1024)):
                 jt = jax.block_until_ready(trace_runners[False](raw, weights_d))
                 pt = jax.block_until_ready(trace_runners[True](raw, weights_d))
+                np.savez_compressed(output / f"{case_name}_bk{bk}_row_sums.npz",
+                                    jax_sum=np.asarray(jt[0])[:, 0],
+                                    pallas_sum=np.asarray(pt[0])[:, 0])
                 value = jax.block_until_ready(mean_runners["fp32"](raw, weights_d))
                 trace_output = pt[-1].astype(jnp.bfloat16)
                 artifact = f"{case_name}_bk{bk}_prefix_mismatches.npz"
@@ -537,6 +575,7 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "full_composition_vs_original": _metrics(monolithic, full_pallas),
                 "input_mean_ab": input_mean_ab,
                 "input_trace_ab": input_trace_ab,
+                "external_mean_ab": external_mean_ab,
             }
             checkpoint(path, report)
         report.update(

@@ -10,6 +10,50 @@ import numpy as np
 TRACE_NAMES = ('sum', 'mean_bf16', 'centered', 'variance', 'invstd_bf16', 'output')
 
 
+def _mean_kernel(raw, out):
+    out[...] = jnp.broadcast_to(
+        (jnp.sum(raw[...], axis=1, keepdims=True) / raw.shape[1]).astype(jnp.bfloat16), raw.shape)
+
+
+def mean_buffer(raw, *, pallas=False, interpret=False, bm=128):
+    """Return a genuinely BF16 buffer, not a widened round-trip trace."""
+    if not pallas:
+        return jnp.broadcast_to(
+            (jnp.sum(raw, axis=1, keepdims=True) / raw.shape[1]).astype(jnp.bfloat16), raw.shape)
+    matrix = pl.BlockSpec((bm, raw.shape[1]), lambda i: (i.astype(jnp.int32), jnp.int32(0)))
+    return pl.pallas_call(
+        _mean_kernel, out_shape=jax.ShapeDtypeStruct(raw.shape, jnp.bfloat16),
+        grid_spec=pltpu.PrefetchScalarGridSpec(num_scalar_prefetch=0,
+            in_specs=[matrix], out_specs=matrix, grid=(raw.shape[0] // bm,)),
+        compiler_params=pltpu.CompilerParams(dimension_semantics=('parallel',)),
+        interpret=interpret, name='raw_mean_bf16_buffer',
+    )(raw)
+
+
+def _external_kernel(raw, mean, scale, bias, out, *, epsilon):
+    centered = raw[...].astype(jnp.bfloat16).astype(jnp.float32) - mean[...].astype(jnp.float32)
+    variance = jnp.sum(centered * centered, axis=1, keepdims=True) / raw.shape[1]
+    invstd = jax.lax.rsqrt(variance + jnp.asarray(epsilon, jnp.bfloat16).astype(jnp.float32))
+    invstd = invstd.astype(jnp.bfloat16).astype(jnp.float32)
+    out[...] = jnp.maximum(centered * invstd * scale[...].astype(jnp.float32)[None, :]
+                           + bias[...].astype(jnp.float32)[None, :], 0).astype(jnp.bfloat16)
+
+
+def external_mean_ln(raw, mean, scale, bias, *, epsilon=1e-5, interpret=False, bm=128):
+    if mean.shape != raw.shape or mean.dtype != jnp.bfloat16:
+        raise ValueError('external mean must be a matching BF16 matrix')
+    matrix = pl.BlockSpec((bm, raw.shape[1]), lambda i: (i.astype(jnp.int32), jnp.int32(0)))
+    vector = pl.BlockSpec((raw.shape[1],), lambda i: (jnp.int32(0),))
+    return pl.pallas_call(
+        functools.partial(_external_kernel, epsilon=epsilon),
+        out_shape=jax.ShapeDtypeStruct(raw.shape, jnp.bfloat16),
+        grid_spec=pltpu.PrefetchScalarGridSpec(num_scalar_prefetch=0,
+            in_specs=[matrix, matrix, vector, vector], out_specs=matrix, grid=(raw.shape[0] // bm,)),
+        compiler_params=pltpu.CompilerParams(dimension_semantics=('parallel',)),
+        interpret=interpret, name='external_mean_ln_remainder',
+    )(raw, mean, scale, bias)
+
+
 def _math(raw, scale, bias, epsilon):
     total = jnp.sum(raw, axis=1, keepdims=True)
     mean = (total / raw.shape[1]).astype(jnp.bfloat16).astype(jnp.float32)

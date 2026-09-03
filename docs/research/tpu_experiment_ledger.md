@@ -1,5 +1,14 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: materialized mean v10 prepared
+
+Diagnostic JAX and Pallas kernels return actual BF16 mean buffers. A separate
+Pallas LN remainder consumes each buffer; native Pallas mean is the zero-change
+control against the uninstrumented kernel. Record full mean bits, row sums,
+prefix mismatch rows, shared-suffix and original Q controls. Tests demonstrate
+that changing the external mean changes output on a hand-derived rounding
+witness. Production/default/BN paths unchanged; TPU validation pending.
+
 ## 2026-09-03: input trace v9 results
 
 BK1024 fails input Dense BF16 gate (120/174 legal/stress mismatches), versus
