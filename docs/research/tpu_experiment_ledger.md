@@ -1,5 +1,17 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: composed prefix gate prepared
+
+Dedicated benchmark composes four Pallas calls (prepacked embedding, raw
+FP32 Dense BK128, candidate mean, LN remainder) inside one sharded JIT.
+Three surviving orders x six legal/stress seeds x16K/32K per device =36 cases.
+Reference is the unchanged JAX input-prefix function, not original full Q.
+Record finite, bitwise element mismatches (including signed zero), SHA,
+StableHLO/custom-call audit, and separate compilation/execution errors.
+Host comparison hashes/counts in chunks to avoid enormous mismatch-coordinate
+arrays. Hand-derived state-sensitive interpreter integration and comparison
+tests pass; target TPU gate pending. No speed/default/full-model promotion.
+
 ## 2026-09-03: reduction-order v11 result
 
 lanes_tree, tiles_serial and tiles_tree reproduce every JAX BF16 mean and
