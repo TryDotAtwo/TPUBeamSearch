@@ -68,6 +68,8 @@ logical counts in lane [0,0] of padded [1,128] uint32 control planes, with all
 other lanes zero. Structural tests reject scalar stores; interpreter and source
 oracle parity remain exact. Physical confirmation is outstanding.
 Full local verification: 559 passed in 220.01 s with original C++ oracle enabled.
+V6 source 9f2d083aa51bfe240ebaae3243d0fff20112dbc9; new output directory
+`test_results/beam_primitives_v6/`. Same thirteen cases isolate physical effect.
 
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
