@@ -46,6 +46,12 @@ GPU source identities inspected 2026-09-03 (SHA256):
 
 ## Next execution order
 
+V10 prefix session completed; see
+`test_results/artgor_reduction_geometry_v10/report.md`. Transposed JAX reduction
+on fixed Dense/mean reproduces original prefix exactly, normal geometry does not.
+This is a useful S1 clue, not a completed Pallas inference path. No automatic
+standalone inference sweep is restarted.
+
 1. Validate these primitives on physical TPU before propagating their lowering
    choices. Preserve the already active V10 session; never run a second TPU job.
 2. Add a standalone remote-DMA ring test: readiness, send/receive wait, slot

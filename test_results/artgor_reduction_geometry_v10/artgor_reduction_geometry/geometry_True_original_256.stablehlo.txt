@@ -1,0 +1,24 @@
+module @jit__lambda attributes {mhlo.num_partitions = 8 : i32, mhlo.num_replicas = 1 : i32} {
+  sdy.mesh @mesh = <["core"=8]> {stablehlo.mesh = {axes = [{name = "core", size = 8 : i64}]}}
+  func.func public @main(%arg0: tensor<1024x2048xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{}, {"core"}]>}, %arg1: tensor<2048xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{"core"}]>}) -> (tensor<2048xbf16> {jax.result_info = "result"}) {
+    %0 = sdy.manual_computation(%arg0, %arg1) in_shardings=[<@mesh, [{}, {"core"}]>, <@mesh, [{"core"}]>] out_shardings=[<@mesh, [{"core"}]>] manual_axes={"core"} (%arg2: tensor<1024x256xbf16>, %arg3: tensor<256xbf16>) {
+      %1 = stablehlo.broadcast_in_dim %arg3, dims = [1] : (tensor<256xbf16>) -> tensor<1x256xbf16>
+      %2 = stablehlo.broadcast_in_dim %1, dims = [0, 1] : (tensor<1x256xbf16>) -> tensor<1024x256xbf16>
+      %3 = stablehlo.subtract %arg2, %2 : tensor<1024x256xbf16>
+      %4 = chlo.square %3 : tensor<1024x256xbf16> -> tensor<1024x256xbf16>
+      %5 = stablehlo.convert %4 : (tensor<1024x256xbf16>) -> tensor<1024x256xf32>
+      %cst = stablehlo.constant dense<0.000000e+00> : tensor<f32>
+      %6 = stablehlo.reduce(%5 init: %cst) applies stablehlo.add across dimensions = [0] : (tensor<1024x256xf32>, tensor<f32>) -> tensor<256xf32>
+      %cst_0 = stablehlo.constant dense<1.024000e+03> : tensor<f32>
+      %7 = stablehlo.broadcast_in_dim %cst_0, dims = [] : (tensor<f32>) -> tensor<256xf32>
+      %8 = stablehlo.divide %6, %7 : tensor<256xf32>
+      %9 = stablehlo.convert %8 : (tensor<256xf32>) -> tensor<256xbf16>
+      %cst_1 = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %10 = stablehlo.broadcast_in_dim %cst_1, dims = [] : (tensor<bf16>) -> tensor<256xbf16>
+      %11 = stablehlo.add %9, %10 : tensor<256xbf16>
+      %12 = stablehlo.rsqrt %11 : tensor<256xbf16>
+      sdy.return %12 : tensor<256xbf16>
+    } : (tensor<1024x2048xbf16>, tensor<2048xbf16>) -> tensor<2048xbf16>
+    return %0 : tensor<2048xbf16>
+  }
+}
