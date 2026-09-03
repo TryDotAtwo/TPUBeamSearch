@@ -5,7 +5,7 @@ import re
 import subprocess
 import sys
 
-COMMIT_SHA = 'eadd7044467c92a8dcd6a3c7253a561cbb168a11'
+COMMIT_SHA = '676a3764c78a01ff1b352e98d5062b978df5b2c6'
 REPOSITORY = 'https://github.com/TryDotAtwo/TPUBeamSearch.git'
 CHECKOUT = Path('/tmp/TPUBeamSearch-artgor-prefix-gate')
 OUTPUT = Path('/kaggle/working/artgor_rsqrt_consumers')
