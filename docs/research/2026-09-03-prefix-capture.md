@@ -108,3 +108,20 @@ invstd, and prefix reconstruction. Scalar input/output bits are saved for all
 rows; lowered consumer and affine HLO are saved separately. Existing five-order
 comparisons remain intact. A compilation failure terminates the diagnostic
 with partial JSON rather than being interpreted as a numerical/timing result.
+
+## Fixed-input variance producer A/B
+
+`--compare-producers` implies validated v4 inputs. At both full-corpus shapes,
+JAX centered squares use either the original BF16 expression or explicit FP32.
+Each is tested fused through mean/epsilon/rsqrt, and separately materialized
+through original or FP32 reductions (six variants/shape). Fixed mean is never
+recomputed. Scalar invstd is compared against v4, native Pallas and the matching
+fused producer; shared Pallas affine reconstructs the prefix against untouched
+JAX. Square buffers have exhaustive hashes/dtypes/finite and shape records;
+all final scalar bits and HLO are retained. No new variance output is attached
+to the v4 oracle, so prior instrumentation failures remain isolated.
+
+Materialized-original vs fused-original is a boundary comparison, not merely
+a reduction algorithm comparison. Explicit FP32 reduction of BF16 squares is
+not equivalent to producing squares in FP32. The unchanged large oracle and
+its controls remain mandatory; no winner or speed claim before TPU evidence.

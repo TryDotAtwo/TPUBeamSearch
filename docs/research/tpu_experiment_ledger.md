@@ -1,5 +1,13 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: fixed-input variance producer A/B prepared
+
+SixJAXproducer variants per shape: original/FP32 centered squares fused through
+invstd or materialized then original/FP32 reduction. Samev4Dense/mean, oracle
+untouched; fullscalarbits, squarehashes, HLO, directinvstd/native/fused and
+sameaffineprefix comparisons. Threebehavior tests failed beforeimplementation
+thenpassed; full495passed145.21s. This is preparation, notTPUevidence.
+
 ## 2026-09-03: rsqrt v8 all16 consumers complete
 
 ExplicitFP32 JAX/Pallas consumers match exactly on identical realvariance,

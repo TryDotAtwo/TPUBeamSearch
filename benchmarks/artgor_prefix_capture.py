@@ -65,8 +65,8 @@ def select_inference_capture(arrays,*,use_v4_inputs):
 
 
 def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4_inputs=False,
-        compare_consumers=False):
-    use_v4_inputs=use_v4_inputs or compare_consumers
+        compare_consumers=False, compare_producers=False):
+    use_v4_inputs=use_v4_inputs or compare_consumers or compare_producers
     include_variance=include_variance or use_v4_inputs
     include_invstd=include_invstd or include_variance
     output.mkdir(parents=True, exist_ok=True)
@@ -74,7 +74,8 @@ def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4
     report = dict(status='running', schema_version=1, comparisons={},
                   scope='captured_input_prefix_only_no_speed_claim',include_invstd=include_invstd,
                   include_variance=include_variance,use_v4_inputs=use_v4_inputs,
-                  examples_only=use_v4_inputs,compare_consumers=compare_consumers)
+                  examples_only=use_v4_inputs,compare_consumers=compare_consumers,
+                  compare_producers=compare_producers)
     gate.checkpoint(path, report)
     try:
         devices = jax.devices()
@@ -268,6 +269,42 @@ def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4
                         (output/f'variance_pair_{order}_{size}.compiled.txt').write_text(lowered.compile().as_text(),encoding='utf-8')
                         (output/f'variance_pair_{order}_{size}.stablehlo.txt').write_text(str(lowered.compiler_ir(dialect='stablehlo')),encoding='utf-8')
                         label=f'{size}_variance_{order}'
+                        if compare_producers and order=='native':
+                            from benchmarks.artgor_variance_producer import centered_squares, reduce_invstd, fused_invstd
+                            report.setdefault('producer_cases',{})[str(size)]={}
+                            for arithmetic in ('fp32','original'):
+                                fused_call=gate._mapped(lambda x,w:fused_invstd(x[:,0],x[:,1],
+                                    arithmetic=arithmetic,epsilon=architecture.LAYER_NORM_EPSILON),
+                                    mesh=mesh,input_spec=spec,weights_example=packed)
+                                fused=evaluate_aux(f'producer_{arithmetic}_fused',fused_call,fixed_inputs)
+                                fused=np.broadcast_to(fused,j[:,3].shape)
+                                square_call=gate._mapped(lambda x,w:centered_squares(x[:,0],x[:,1],
+                                    arithmetic=arithmetic),mesh=mesh,input_spec=spec,weights_example=packed)
+                                squares=evaluate_aux(f'producer_{arithmetic}_squares',square_call,fixed_inputs)
+                                report.setdefault('producer_square_hashes',{})[f'{size}_{arithmetic}']=dict(
+                                    sha256=gate._array_sha256(squares),dtype=str(squares.dtype),
+                                    shape=list(squares.shape),finite=bool(np.isfinite(squares).all()))
+                                variants={'fused':fused}
+                                for reduction in ('fp32','original'):
+                                    reduce_call=gate._mapped(lambda x,w:reduce_invstd(x,
+                                        arithmetic=reduction,epsilon=architecture.LAYER_NORM_EPSILON),
+                                        mesh=mesh,input_spec=spec,weights_example=packed)
+                                    reduced=evaluate_aux(f'producer_{arithmetic}_materialized_{reduction}',reduce_call,squares)
+                                    variants[f'materialized_{reduction}']=np.broadcast_to(reduced,j[:,3].shape)
+                                for variant,result in variants.items():
+                                    name=f'producer_{arithmetic}_{variant}'
+                                    compare(f'{size}_{name}_invstd',j[:,3],result)
+                                    compare(f'{size}_{name}_native',inv,result)
+                                    compare(f'{size}_{name}_vs_fused',fused,result)
+                                    prefix=evaluate_aux(name+'_affine',affine_call,np.stack((j[:,0],j[:,1],result),axis=1))
+                                    compare(f'{size}_{name}_prefix',arrays['jax'],prefix)
+                                    np.savez_compressed(output/f'{size}_{name}_scalars.npz',
+                                        invstd_bf16_bits=np.ascontiguousarray(result[:,0]).view(np.uint16),
+                                        reference_bf16_bits=np.ascontiguousarray(j[:,3,0]).view(np.uint16))
+                                    report['producer_cases'][str(size)][name]={'complete':True}
+                                    gate.checkpoint(path,report)
+                                    del prefix
+                                del squares,variants
                         if compare_consumers and order=='native':
                             from benchmarks.artgor_rsqrt_consumers import consume_variance, collect_consumer
                             report.setdefault('consumer_cases',{})[str(size)]={}
@@ -348,7 +385,9 @@ if __name__ == '__main__':
     parser.add_argument('--include-variance',action='store_true')
     parser.add_argument('--use-v4-inputs',action='store_true')
     parser.add_argument('--compare-consumers',action='store_true')
+    parser.add_argument('--compare-producers',action='store_true')
     args=parser.parse_args()
     print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,
         include_invstd=args.include_invstd,include_variance=args.include_variance,
-        use_v4_inputs=args.use_v4_inputs,compare_consumers=args.compare_consumers)['status']}))
+        use_v4_inputs=args.use_v4_inputs,compare_consumers=args.compare_consumers,
+        compare_producers=args.compare_producers)['status']}))
