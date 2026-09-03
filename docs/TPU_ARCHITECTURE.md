@@ -5,6 +5,8 @@ Status: accepted direction, implementation in progress. Source contract:
 `894095f2`). The source remains read-only. This is the TPU implementation
 contract, not a claim that the full search is implemented.
 
+Whole-port progress and outstanding gates: [TPU_PORT_LEDGER.md](TPU_PORT_LEDGER.md).
+
 ## Logical types versus storage
 
 - State values remain uint8. Separate logical state width, persistent storage
