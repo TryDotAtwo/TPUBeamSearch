@@ -85,6 +85,13 @@ hash_goal_120_24, remaining five cases not attempted; no timings. See
 non-packing case in a sequential process, retaining partial JSON and full logs.
 The failing source expression is not yet identified; primitives stay unchanged.
 
+V4 source ea3eaa09822777e47c65101299fac7093bb8d952 uses the isolated coordinator.
+Local full suite: 544 passed in 157.05 s with source oracle enabled; the expanded
+isolation file separately passed all three tests. New output directory:
+`test_results/beam_primitives_v4/`. Inspect `beam_primitives/isolated_bundle.json`
+and each group's nested report/log; native process failures may coexist with a
+COMPLETE Kaggle status. Cross-process results are not matched latency ratios.
+
 1. Validate these primitives on physical TPU before propagating their lowering
    choices. Preserve the already active V10 session; never run a second TPU job.
 2. Add a standalone remote-DMA ring test: readiness, send/receive wait, slot

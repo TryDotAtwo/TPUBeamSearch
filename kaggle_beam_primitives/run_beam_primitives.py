@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = 'e9c90a9ef3f132fce651218f20b62707d741e21e'
+COMMIT_SHA = 'ea3eaa09822777e47c65101299fac7093bb8d952'
 CHECKOUT = Path('/tmp/TPUBeamSearch-beam-primitives')
 OUTPUT = Path('/kaggle/working/beam_primitives')
 
@@ -20,7 +20,7 @@ def main():
                XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
                PYTHONPATH=os.pathsep.join((str(CHECKOUT), str(CHECKOUT / 'src'))))
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    command = (sys.executable, '-m', 'benchmarks.beam_primitive_bundle', '--output', str(OUTPUT))
+    command = (sys.executable, '-m', 'benchmarks.beam_isolated_bundle', '--output', str(OUTPUT))
     with (OUTPUT / 'bundle.log').open('w', encoding='utf-8') as log:
         with subprocess.Popen(command, cwd=CHECKOUT, env=env, stdout=subprocess.PIPE,
                               stderr=subprocess.STDOUT, text=True, bufsize=1) as process:
