@@ -1,5 +1,19 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: same-state shape diagnostic prepared
+
+One16K/device legal42 corpus, input SHA enforced against prefix gate v1.
+Run unchanged JAX and lanes_tree Pallas prefixes full-size and chunk256/device;
+reconstruct device-major row order with tested partitioning. Record four
+bitwise comparisons, affected state/output rows, both shapes' HLO, and explicit
+reproduction of prior large-output hashes. This separates shape effects from
+sampling a different corpus; no residual, default or speed changes.
+The capture helper now retains signed-zero bit differences (failing test
+first); comparisons separately count numerical and signed-zero mismatches.
+Earlier numeric-only captures could omit signed-zero rows, while the prefix
+gate itself already rejected those bits. This is a diagnostic correction,
+not a relaxation of exactness.
+
 ## 2026-09-03: large composed prefix gate v1 rejected
 
 All36 cases finite/compiled, all6HLO audits pass4Pallas custom calls, but no

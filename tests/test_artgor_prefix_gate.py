@@ -10,6 +10,8 @@ def test_bounded_gate_counts_bitwise_mismatches_and_hashes_across_chunks():
     candidate[4,0] = 1.
     report = gate.compare_prefix(reference, candidate, chunk_rows=2)
     assert report['mismatch_count'] == 2
+    assert report['numeric_mismatch_count'] == 1
+    assert report['signed_zero_mismatch_count'] == 1
     assert report['first_mismatch'] == [3,1]
     assert report['reference_sha256'] == hashlib.sha256(reference.tobytes()).hexdigest()
     assert report['candidate_sha256'] == hashlib.sha256(candidate.tobytes()).hexdigest()

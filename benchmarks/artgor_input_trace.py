@@ -113,7 +113,11 @@ def input_trace(raw, scale, bias, *, epsilon, pallas=False, interpret=False, bm=
 
 def save_mismatch_rows(path, raw, reference, candidate):
     raw, reference, candidate = map(np.asarray, (raw, reference, candidate))
-    coordinates = np.argwhere(reference != candidate)
+    if reference.shape != candidate.shape or reference.dtype != candidate.dtype:
+        raise ValueError('mismatch capture requires equal shape and dtype')
+    a,b = [np.ascontiguousarray(x).view(np.uint8).reshape(*x.shape,x.dtype.itemsize)
+           for x in (reference,candidate)]
+    coordinates = np.argwhere(np.any(a != b,axis=-1))
     row_ids = np.unique(coordinates[:, 0])
     np.savez_compressed(path, coordinates=coordinates, row_ids=row_ids,
                         raw=raw[row_ids], reference=reference[row_ids], candidate=candidate[row_ids])

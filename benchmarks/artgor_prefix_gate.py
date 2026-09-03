@@ -35,6 +35,7 @@ def compare_prefix(reference, candidate, *, chunk_rows=4096):
         raise ValueError('prefix shape/dtype mismatch')
     hashes = [hashlib.sha256(), hashlib.sha256()]
     count, first, finite = 0, None, True
+    numeric_count, signed_zero_count = 0, 0
     for start in range(0, reference.shape[0], chunk_rows):
         a, b = [np.asarray(x[start:start+chunk_rows]) for x in (reference, candidate)]
         av, bv = [np.ascontiguousarray(x).view(np.uint8).reshape(*x.shape, x.dtype.itemsize) for x in (a,b)]
@@ -42,11 +43,14 @@ def compare_prefix(reference, candidate, *, chunk_rows=4096):
         hashes[1].update(bv.tobytes())
         unequal = np.any(av != bv, axis=-1)
         count += int(np.count_nonzero(unequal))
+        numeric_count += int(np.count_nonzero(a != b))
+        signed_zero_count += int(np.count_nonzero(unequal & (a == 0) & (b == 0)))
         if first is None and np.any(unequal):
             local = np.unravel_index(np.argmax(unequal), unequal.shape)
             first = [start + int(local[0]), int(local[1])]
         finite = finite and bool(np.isfinite(a.astype(np.float32)).all() and np.isfinite(b.astype(np.float32)).all())
     return dict(exact=finite and count == 0, finite=finite, mismatch_count=count,
+                numeric_mismatch_count=numeric_count, signed_zero_mismatch_count=signed_zero_count,
                 first_mismatch=first, shape=list(reference.shape), dtype=str(reference.dtype),
                 reference_sha256=hashes[0].hexdigest(), candidate_sha256=hashes[1].hexdigest())
 

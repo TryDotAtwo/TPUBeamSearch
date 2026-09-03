@@ -75,3 +75,14 @@ def test_mismatch_capture_keeps_all_coordinates_and_only_affected_rows(tmp_path)
         np.testing.assert_array_equal(data['row_ids'], [1])
         np.testing.assert_array_equal(data['raw'], raw[1:2])
         np.testing.assert_array_equal(data['candidate'], candidate[1:2])
+
+
+def test_mismatch_capture_includes_signed_zero_bit_difference(tmp_path):
+    import benchmarks.artgor_input_trace as trace
+    ref = np.zeros((2,2),np.float32)
+    candidate = ref.copy()
+    candidate[1,0] = -0.
+    path = tmp_path/'signed_zero.npz'
+    trace.save_mismatch_rows(path,ref,ref,candidate)
+    with np.load(path) as data:
+        np.testing.assert_array_equal(data['coordinates'],[[1,0]])
