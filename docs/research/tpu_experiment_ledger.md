@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: input trace v9 results
+
+BK1024 fails input Dense BF16 gate (120/174 legal/stress mismatches), versus
+zero for BK128. Raw FP32 outputs differ in 1420314/1487480 elements. Pallas
+trace output matches its uninstrumented control in all four cases. JAX trace
+BF16-to-FP32 round trips do not preserve BF16 rounding in measured outputs;
+later trace mismatches are not a model-defect attribution. BK128 remains at
+0/15 prefix and 0/17 same-suffix Q errors. Next: materialized BF16 means plus
+externally supplied-mean Pallas remainder and zero-change control. No promotion.
+See `test_results/artgor_pallas_same_suffix_v9/report.md`.
+
 ## 2026-09-03: input trace v9 prepared
 
 Diagnostic-only BK128/BK1024 raw FP32 Dense comparison plus same-buffer JAX
