@@ -1,0 +1,151 @@
+{
+  "status": "complete",
+  "schema_version": 1,
+  "comparisons": {
+    "jax_shape": {
+      "exact": false,
+      "finite": true,
+      "mismatch_count": 1329,
+      "numeric_mismatch_count": 1329,
+      "signed_zero_mismatch_count": 0,
+      "first_mismatch": [
+        760,
+        0
+      ],
+      "shape": [
+        131072,
+        1024
+      ],
+      "dtype": "bfloat16",
+      "reference_sha256": "9755606bffa3d179337f5741fcd23dce5f0469d6b11ebc56c546f6e25b6cd7f0",
+      "candidate_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f"
+    },
+    "pallas_shape": {
+      "exact": true,
+      "finite": true,
+      "mismatch_count": 0,
+      "numeric_mismatch_count": 0,
+      "signed_zero_mismatch_count": 0,
+      "first_mismatch": null,
+      "shape": [
+        131072,
+        1024
+      ],
+      "dtype": "bfloat16",
+      "reference_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f",
+      "candidate_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f"
+    },
+    "large_matched": {
+      "exact": false,
+      "finite": true,
+      "mismatch_count": 1329,
+      "numeric_mismatch_count": 1329,
+      "signed_zero_mismatch_count": 0,
+      "first_mismatch": [
+        760,
+        0
+      ],
+      "shape": [
+        131072,
+        1024
+      ],
+      "dtype": "bfloat16",
+      "reference_sha256": "9755606bffa3d179337f5741fcd23dce5f0469d6b11ebc56c546f6e25b6cd7f0",
+      "candidate_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f"
+    },
+    "small_matched": {
+      "exact": true,
+      "finite": true,
+      "mismatch_count": 0,
+      "numeric_mismatch_count": 0,
+      "signed_zero_mismatch_count": 0,
+      "first_mismatch": null,
+      "shape": [
+        131072,
+        1024
+      ],
+      "dtype": "bfloat16",
+      "reference_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f",
+      "candidate_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f"
+    }
+  },
+  "scope": "same_state_prefix_only",
+  "context": {
+    "source_commit": "5724a2745bc8785ea1e9ccc81922959fff371d02",
+    "input_sha256": "dfcf74c399aaf04361d3dda9ebb519cf77e280e17f137058e92a9314baa4b683",
+    "runtime": {
+      "python": "3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]",
+      "platform": "Linux-6.6.153+-x86_64-with-glibc2.41",
+      "versions": {
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "numpy": "2.5.0",
+        "torch": "2.8.0+cpu"
+      },
+      "devices": [
+        {
+          "id": 0,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 1,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 2,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 3,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 4,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 5,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 6,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 7,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        }
+      ],
+      "process_count": 1,
+      "process_index": 0,
+      "local_device_count": 8,
+      "active_device_count": 1,
+      "default_matmul_precision": null,
+      "x64_enabled": true
+    },
+    "checkpoint_sha256": "2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2",
+    "model_source_sha256": "6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e",
+    "full_local_batch": 16384,
+    "chunk_local_batch": 256,
+    "kind": "legal",
+    "seed": 42
+  },
+  "reproduces_previous_large_hashes": true
+}

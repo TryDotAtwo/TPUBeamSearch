@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: same-state shape v2 isolates JAX shape dependence
+
+Exact previous legal42 input/output hashes reproduced. JAX16K vs chunk256:
+1329 numerical differences across3rows (760/28870/54401), signedzero0.
+Pallas16K vs chunk256 exact; chunk256 JAX vs Pallas exact over all131072states.
+Therefore this failure is JAX shape dependence, not Pallas batch drift or new
+corpus sampling. Large-shape oracle remains required; no replacement allowed.
+Next capture Dense/mean plus output with an uninstrumented-prefix control,
+then same-remainder cross-substitution only if capture is valid.
+See `test_results/artgor_prefix_shape_v2/report.md`.
+
 ## 2026-09-03: same-state shape diagnostic prepared
 
 One16K/device legal42 corpus, input SHA enforced against prefix gate v1.
