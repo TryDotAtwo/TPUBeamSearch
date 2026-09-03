@@ -1,0 +1,43 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(f32[256,1024]{1,0:T(8,128)}, bf16[256,1024]{1,0:T(8,128)(2,1)}, bf16[1024]{0:T(1024)(128)(2,1)}, bf16[1024]{0:T(1024)(128)(2,1)})->bf16[256,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_parameters={false,false,false,false}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default;default;default;default",arg_memory_spaces="0;0;0;0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/benchmarks/artgor_pallas_same_suffix.py"
+3 "/tmp/TPUBeamSearch-artgor-pallas-same-suffix/benchmarks/artgor_input_trace.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "run"
+6 "run.<locals>.<lambda>"
+7 "external_mean_ln"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=608 end_line=608 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=603 end_line=603 column=13 end_column=13}
+5 {file_name_id=2 function_name_id=5 line=467 end_line=467 column=50 end_column=50}
+6 {file_name_id=2 function_name_id=6 line=419 end_line=419 column=28 end_column=28}
+7 {file_name_id=3 function_name_id=7 line=47 end_line=47 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+
+
+ENTRY %main.0_spmd (param.4: f32[256,1024], param.5: bf16[256,1024], param.6: bf16[1024], param.7: bf16[1024]) -> bf16[256,1024] {
+  %param.7 = bf16[1024]{0:T(1024)(128)(2,1)} parameter(3), sharding={replicated}, metadata={op_name="w.input.normalization.bias"}
+  %param.6 = bf16[1024]{0:T(1024)(128)(2,1)} parameter(2), sharding={replicated}, metadata={op_name="w.input.normalization.scale"}
+  %param.5 = bf16[256,1024]{1,0:T(8,128)(2,1)} parameter(1), sharding={devices=[8,1]<=[8]}, metadata={op_name="pair[1]"}
+  %param.4 = f32[256,1024]{1,0:T(8,128)} parameter(0), sharding={devices=[8,1]<=[8]}, metadata={op_name="pair[0]"}
+  ROOT %external_mean_ln_remainder.1 = bf16[256,1024]{1,0:T(8,128)(2,1)} custom-call(%param.4, %param.5, %param.6, %param.7), custom_call_target="tpu_custom_call", operand_layout_constraints={f32[256,1024]{1,0}, bf16[256,1024]{1,0}, bf16[1024]{0}, bf16[1024]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(<lambda>)/shard_map/external_mean_ln_remainder/pallas_call" stack_frame_id=7}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"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GwNHBQbOAgMdA0kLBnUDAwNLEwd1CQMDBUFNAwNBCwMHDQZBAxUFCVEFBkEDFQNTDwb6AgMbA1UFBg4DAx0DVwsGeQMDA1kVB3kJAwMFT1sDA0MyAwMFCwZDAwMDXx8HQwkDAwVdYREGTgMDDwNjAwMjCwMHAwMjCwMHDQYjAw8HC2dpIQUjdgMJZQtnaQkAAQcRAbMHAwcPAwEBAwMBBwMBAwMBBwMBCQQBBQEDBxEBtQcDBw8DAQEDAwEHAwEDAwEHAwEJBAEFAQMHEQG3BwMHDwMBAQMDAQcDAQMDAQcDAQkEAQMDBxEBuQcDBw8DAQEDAwEHAwEDAwEHAwEJBAEDAwcRAbsHAwcPAwEBAwMBBwMBAwMBBwMBCQQBBQEDBgMBBQEAFhCPESkVDQkLERkPCQsfCy0ZEQsTHR03IyEjKS0JCxkZGR0ZGUUlEQsRCx0lDRMdVS2dIyMfFxcvFxcXGxcZIxkVJR8PDw0JHRFidWlsdGluAHN0YWJsZV9tb3NhaWMAdHB1AGFyaXRoAHZlY3RvcgBtb2R1bGUAYXJpdGguY29uc3RhbnQAdmVjdG9yLnNoYXBlX2Nhc3QAZnVuYy5mdW5jAGZ1bmMucmV0dXJuAHZlY3Rvci5icm9hZGNhc3QAdmVjdG9yLmxvYWQAYXJpdGguZXh0ZgBhcml0aC50cnVuY2YAYXJpdGgubXVsZgBhcml0aC5hZGRmAGFyaXRoLnN1YmYAdmVjdG9yLm11bHRpX3JlZHVjdGlvbgBhcml0aC5kaXZmAG1hdGgucnNxcnQAYXJpdGgubWF4aW11bWYAdHB1LnZlY3Rvcl9zdG9yZQBfZXh0ZXJuYWxfa2VybmVsAC90bXAvVFBVQmVhbVNlYXJjaC1hcnRnb3ItcGFsbGFzLXNhbWUtc3VmZml4L2JlbmNobWFya3MvYXJ0Z29yX2lucHV0X3RyYWNlLnB5AGNvbnZlcnRfZWxlbWVudF90eXBlOgBjb252ZXJ0X2VsZW1lbnRfdHlwZS9jb252ZXJ0X2VsZW1lbnRfdHlwZQBmdW5jdGlvbl90eXBlAHN5bV9uYW1lAHZhbHVlAHRyYW5zZm9ybV9pbmRpY2VzAHdpbmRvd19ib3VuZHMAZ2V0OgBnZXQvZ2V0AG11bDoAbXVsL211bABicm9hZGNhc3RfaW5fZGltOgBicm9hZGNhc3RfaW5fZGltL2Jyb2FkY2FzdF9pbl9kaW0AdHJhbnNmb3JtXzAAdHJhbnNmb3JtXzEAcGlwZWxpbmVfbW9kZQB0cmFuc2Zvcm1fMgB0cmFuc2Zvcm1fMwB0cmFuc2Zvcm1fNABhZGQ6AGFkZABzdGFibGVfbW9zYWljLnZlcnNpb24AZGltZW5zaW9uX3NlbWFudGljcwBpdGVyYXRpb25fYm91bmRzAHNjYWxhcl9wcmVmZXRjaABzY3JhdGNoX29wZXJhbmRzAGV4dGVybmFsX21lYW5fbG5fcmVtYWluZGVyAHRwdS5jb3JlX3R5cGUAd2luZG93X3BhcmFtcwBmYXN0bWF0aABzdWI6AHN1Yi9zdWIAcmVkdWNlX3N1bToAcmVkdWNlX3N1bS9yZWR1Y2Vfc3VtAGtpbmQAcmVkdWN0aW9uX2RpbXMAZGl2OgBkaXYAcnNxcnQ6AHJzcXJ0L3JzcXJ0AGFkZC9hZGQAbWF4OgBtYXgAc3dhcDoAc3dhcC9zd2FwAG9wZXJhbmRTZWdtZW50U2l6ZXMAc3RyaWRlcwA=","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"2514944"}]}
+}
+

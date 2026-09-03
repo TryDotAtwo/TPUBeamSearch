@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: materialized mean v10 result
+
+JAX and Pallas actual BF16 means differ only at stress row1085 (0.0283203125
+versus0.0281982421875). Substituting JAX mean into identical Pallas remainder
+removes all15 prefix /17 same-suffix Q errors; legal stays exact. Native mean
+zero-change control exact on both corpora. Controlled mean-computation cause
+established for these inputs, not exact physical reduction tree. Next reproduce
+JAX mean via Pallas reduction-order A/B; successful diagnostic still uses JAX
+mean, and original full Q remains inexact. No all-Pallas completion or speed
+claim. See `test_results/artgor_pallas_same_suffix_v10/report.md`.
+
 ## 2026-09-03: materialized mean v10 prepared
 
 Diagnostic JAX and Pallas kernels return actual BF16 mean buffers. A separate
