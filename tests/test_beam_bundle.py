@@ -16,3 +16,10 @@ def test_bundle_has_independent_oracles_and_rejects_one_wrong_bit():
     result = compare_outputs(corrupted, case['expected'])
     assert not result['exact']
     assert result['mismatched_elements'] == 1
+
+
+def test_split_cases_have_independent_complete_buffer_oracles():
+    cases = [c for c in build_cases(interpret=True) if c['name'].startswith('split_')]
+    assert len(cases) == 2
+    for case in cases:
+        assert compare_outputs(case['fn'](*case['args']), case['expected'])['exact']

@@ -1,0 +1,25 @@
+[{"stream_name":"stderr","time":16.573872919,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":20.140246234,"data":"\n"}
+,{"stream_name":"stderr","time":20.140277784,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":20.140290714,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":20.273005221,"data":"Cloning into '/tmp/TPUBeamSearch-beam-primitives'...\n"}
+,{"stream_name":"stderr","time":27.644271107,"data":"HEAD is now at ea3eaa0 test: isolate TPU primitive compiler aborts and archive V3\n"}
+,{"stream_name":"stdout","time":27.683189806,"data":"GROUP pack_matched\n"}
+,{"stream_name":"stdout","time":51.045135594,"data":"GROUP_DONE pack_matched 0\n"}
+,{"stream_name":"stdout","time":51.045586474,"data":"GROUP routing\n"}
+,{"stream_name":"stdout","time":67.860024727,"data":"GROUP_DONE routing 0\n"}
+,{"stream_name":"stdout","time":67.860472477,"data":"GROUP hash_120\n"}
+,{"stream_name":"stdout","time":96.932357655,"data":"GROUP_DONE hash_120 -6\n"}
+,{"stream_name":"stdout","time":96.933078255,"data":"GROUP hash_150\n"}
+,{"stream_name":"stdout","time":115.957697762,"data":"GROUP_DONE hash_150 0\n"}
+,{"stream_name":"stdout","time":115.958294412,"data":"GROUP dedup_stream3_128\n"}
+,{"stream_name":"stdout","time":136.491364961,"data":"GROUP_DONE dedup_stream3_128 0\n"}
+,{"stream_name":"stdout","time":136.492097261,"data":"GROUP dedup_stream4_128\n"}
+,{"stream_name":"stdout","time":156.592556776,"data":"GROUP_DONE dedup_stream4_128 0\n"}
+,{"stream_name":"stdout","time":156.593394556,"data":"GROUP dedup_stream3_256\n"}
+,{"stream_name":"stdout","time":177.231204288,"data":"GROUP_DONE dedup_stream3_256 0\n"}
+,{"stream_name":"stdout","time":177.232072258,"data":"GROUP dedup_stream4_256\n"}
+,{"stream_name":"stdout","time":198.500962972,"data":"GROUP_DONE dedup_stream4_256 0\n"}
+,{"stream_name":"stderr","time":202.617808953,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":204.884416335,"data":"[NbConvertApp] Writing 280734 bytes to __results__.html\n"}
+]

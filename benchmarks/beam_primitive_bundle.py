@@ -17,6 +17,7 @@ from tpu_beam_search.beam_transport import pallas_pack_candidates
 from tpu_beam_search.beam_stream2 import pallas_hash_goal
 from tpu_beam_search.beam_hash import pallas_route_hashes
 from tpu_beam_search.beam_dedup import pallas_threshold_dedup
+from tpu_beam_search.beam_stream3 import pallas_stream3_split
 
 
 def _distribution(lo, hi, salt):
@@ -96,6 +97,31 @@ def build_cases(*, interpret=False):
                 fn=functools.partial(pallas_threshold_dedup, mode=mode, interpret=interpret),
                 args=(w, payload, np.array([n - 3], np.uint32), np.array([3], np.uint32)),
                 expected=(out, np.array([len(selected)], np.uint32))))
+    for count in (0, 127):
+        n, world, rank = 128, 8, 3
+        w = rng.integers(0, 2**32, (8, n), dtype=np.uint32)
+        w[7] %= 24
+        owners = rng.integers(0, world, (1, n), dtype=np.uint32)
+        local_ids = [i for i in range(count) if owners[0, i] == rank]
+        remote_ids = [i for p in range(world) if p != rank
+                      for i in range(count) if owners[0, i] == p]
+        outputs = []
+        for ids in (local_ids, remote_ids):
+            dst = np.zeros_like(w)
+            dst[6] = 0xffffffff
+            dst[:, :len(ids)] = w[:, ids]
+            dst[7, :len(ids)] = (np.uint32(rank << 16)
+                | (owners[0, ids] << np.uint32(8)) | w[7, ids])
+            outputs.append(dst)
+        counts = np.zeros((1, 128), np.uint32)
+        for p in range(world):
+            counts[0, p] = 0 if p == rank else np.count_nonzero(owners[0, :count] == p)
+        offsets = np.zeros_like(counts)
+        offsets[0, 1:world + 1] = np.cumsum(counts[0, :world])
+        cases.append(dict(name=f'split_{count}',
+            fn=functools.partial(pallas_stream3_split, local_rank=rank, world_size=world, interpret=interpret),
+            args=(w, owners, np.array([count], np.uint32)),
+            expected=(*outputs, np.array([len(local_ids)], np.uint32), counts, offsets)))
     return cases
 
 

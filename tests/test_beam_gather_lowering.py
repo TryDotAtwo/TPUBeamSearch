@@ -52,3 +52,11 @@ def test_no_scalar_uint8_load_or_scatter_after_v2(name):
         if eq.primitive.name == 'get':
             for var in eq.outvars:
                 assert not (var.aval.shape == () and str(var.aval.dtype) == 'uint8')
+
+
+def test_dedup_count_reduction_uses_supported_signed_arithmetic():
+    case = next(c for c in build_cases(interpret=True) if c['name'] == 'dedup_stream3_128')
+    graph = jax.make_jaxpr(case['fn'])(*case['args'])
+    reductions = [eq for eq in equations(graph) if eq.primitive.name == 'reduce_sum']
+    assert reductions
+    assert all(str(eq.invars[0].aval.dtype) != 'uint32' for eq in reductions)

@@ -19,6 +19,8 @@ GROUPS = {
     'hash_150': ['hash_goal_150_30'],
     **{f'dedup_{mode}_{n}': [f'dedup_{mode}_{n}']
        for n in (128, 256) for mode in ('stream3', 'stream4')},
+    'split_empty': ['split_0'],
+    'split_nonempty': ['split_127'],
 }
 
 

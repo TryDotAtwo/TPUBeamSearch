@@ -33,10 +33,12 @@ words, exact local/remote order, per-peer counts and prefix offsets.
 ## Evidence boundary
 
 The C++ oracle executes on CPU. Pallas dedup/routing uses CPU interpretation.
-The test partitions survivors on the host to match the source split contract;
-that partition is not a production TPU kernel. Therefore this establishes a
-reusable original-source oracle and local primitive semantic parity, NOT CUDA
-execution, physical TPU compilation, distributed exchange or throughput.
+The initial test partitions survivors on the host to match the source split
+contract. It is now extended to compare the bounded Pallas split directly with
+the same C++ local/remote records, counts and offsets. Both Pallas paths still
+use CPU interpretation. Therefore this establishes a reusable original-source
+oracle and local primitive semantic parity, NOT CUDA execution, physical TPU
+compilation, distributed exchange or throughput.
 
 V4 remains the independent physical compile gate and is not restarted by this
 change. Its pinned source does not include this test-only extension.

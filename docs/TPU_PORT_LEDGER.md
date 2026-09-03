@@ -10,7 +10,7 @@ comparison, not isolated kernels. No complete-port or performance claim yet.
 | S1 MOVE_COUNT score producer | existing inference engines only | exact selected-model integration, quantization without HBM float-Q |
 | S2 immediate hash / exact goal | beam_stream2.py; independent C++ source oracle | real TPU compile, valid-input launcher, K1/K2, bounded solved collection |
 | Hash128 owner/shard arithmetic | beam_hash.py uint32 pairs; edge/random modulo tests and C++ oracle | physical TPU lowering, fingerprint and K1 bucket salts |
-| S3 threshold/sort/dedup | beam_dedup.py diagnostic bitonic; original C++ Stream3 comparison with host split adapter | TPU routing/compaction buffers and full split, HBM-scale sort |
+| S3 threshold/sort/dedup | beam_dedup.py plus beam_stream3.py bounded Pallas split; source differential tests | physical split compile, HBM-scale sort and collector integration |
 | S4 threshold/sort/dedup | same primitive with score/parent64/route tie-break; C++ oracle | resident A/B collector, independent capacity/trigger, committed histogram |
 | S5 | ownership/epoch design only | remote DMA readiness/ack, zero counts, coordinated threshold, race and TPU tests |
 | Three scratch overlays | design only | explicit arena plan, alias report, drain gates |
@@ -46,6 +46,17 @@ GPU source identities inspected 2026-09-03 (SHA256):
 - cuda/stream2.cu: d52252daba39fc913a31c7ded25f08721b8b58aa8c5ca0e09872bf7a6e61f126
 
 ## Next execution order
+
+V4 COMPLETE, all_exact=false. See `test_results/beam_primitives_v4/report.md`.
+Five exact cases. Isolated hash120 abort no longer blocks hash150/dedup. Hash150
+identifies unsupported uint8 flatten; dedup identifies unsupported uint32 sum.
+The count <=4096 permits int32 sum with uint32 output unchanged. Hash kernels
+are not modified speculatively. New split uses separate local/remote buffers,
+stable owner grouping and padded uint32 control planes, but is bounded bitonic
+diagnostic code, not an HBM-scale partition or remote DMA implementation.
+Final local verification after the split and signed-count changes: 556 passed
+in 280.73 s, original C++ oracle enabled. Two split cases join the next physical
+bundle (13 total cases); local tests do not establish TPU lowering success.
 
 Stream3 source adapter added while V4 remains QUEUED. All five source-oracle
 tests pass (18.57 s), including three new Stream3 cases: world=8 with payload
@@ -102,10 +113,10 @@ and each group's nested report/log; native process failures may coexist with a
 COMPLETE Kaggle status. Cross-process results are not matched latency ratios.
 
 1. Validate these primitives on physical TPU before propagating their lowering
-   choices. Preserve the already active V10 session; never run a second TPU job.
+   choices. Preserve any QUEUED/RUNNING current gate; never run a second TPU job.
 2. Add a standalone remote-DMA ring test: readiness, send/receive wait, slot
    acknowledgement, zero-count and multiple-wrap cases, serialized control.
-3. Expand source oracle to Stream3 grouping and final request/response. Build
+3. Validate Pallas Stream3 grouping physically; expand source oracle to final request/response. Build
    HBM-scale sort/merge and preallocated A/B collector with fatal overflow.
 4. Integrate K1/K2, histogram epochs, final phases and stop, one tested subsystem
    at a time. Keep every row above explicit until its acceptance evidence exists.

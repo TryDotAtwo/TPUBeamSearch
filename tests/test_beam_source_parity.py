@@ -14,6 +14,7 @@ from tpu_beam_search.beam_stream2 import pallas_hash_goal
 from tpu_beam_search.beam_hash import pallas_route_hashes
 from tpu_beam_search.beam_dedup import pallas_threshold_dedup
 from tpu_beam_search.beam_types import pack_candidates
+from tpu_beam_search.beam_stream3 import pallas_stream3_split
 
 
 @pytest.mark.skipif(not os.environ.get('BEAM_SOURCE_ORACLE'), reason='original C++ oracle not configured')
@@ -106,6 +107,13 @@ def test_original_cpp_stream3_payload_ties_and_routing(world, rank, threshold, c
     np.testing.assert_array_equal(send_count, counts)
     np.testing.assert_array_equal(offsets, np.concatenate(([0], np.cumsum(counts))))
     assert local_n == len(local) and remote_n == len(remote)
+    device_local, device_remote, device_local_count, device_counts, device_offsets = pallas_stream3_split(
+        out, routed[:1], valid_count, local_rank=rank, world_size=world, interpret=True)
+    assert int(device_local_count[0]) == local_n
+    np.testing.assert_array_equal(device_local[:, :local_n].T, expected[:local_n])
+    np.testing.assert_array_equal(device_remote[:, :remote_n].T, expected[local_n:])
+    np.testing.assert_array_equal(device_counts[0, :world], send_count)
+    np.testing.assert_array_equal(device_offsets[0, :world + 1], offsets)
     if count:
         winner = actual[(actual[:, 0] == 7) & (actual[:, 3] == 0x80000000)]
         assert winner.shape == (1, 8)
