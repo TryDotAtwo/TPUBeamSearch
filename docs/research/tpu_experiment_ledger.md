@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: reduction-order v11 prepared
+
+Mean-only Pallas A/B: native; add corresponding lanes across 128-wide tiles
+before horizontal sum, or horizontally sum each tile first; combine tiles
+serially or by a balanced pairwise tree. Record all-row BF16 mean bits and
+external-remainder prefix/shared-suffix/original Q, retaining native control.
+Compilation errors are recorded separately per candidate; no timing claims.
+Hand-derived cancellation witnesses distinguish lane/tile grouping and
+serial/tree arithmetic in the interpreter. Actual TPU lowering remains an
+experiment; no claim that source order reconstructs JAX's physical tree.
+
 ## 2026-09-03: materialized mean v10 result
 
 JAX and Pallas actual BF16 means differ only at stress row1085 (0.0283203125

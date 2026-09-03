@@ -8,25 +8,46 @@ from jax.experimental.pallas import tpu as pltpu
 import numpy as np
 
 TRACE_NAMES = ('sum', 'mean_bf16', 'centered', 'variance', 'invstd_bf16', 'output')
+MEAN_ORDERS = ('native', 'lanes_serial', 'lanes_tree', 'tiles_serial', 'tiles_tree')
 
 
-def _mean_kernel(raw, out):
+def _ordered_sum(values, order):
+    if order == 'native':
+        return jnp.sum(values, axis=1, keepdims=True)
+    parts = [values[:, i:i+128] for i in range(0, values.shape[1], 128)]
+    if order.startswith('tiles'):
+        parts = [jnp.sum(part, axis=1, keepdims=True) for part in parts]
+    if order.endswith('serial'):
+        total = parts[0]
+        for part in parts[1:]:
+            total = total + part
+    else:
+        while len(parts) > 1:
+            parts = [parts[i] + parts[i+1] if i+1 < len(parts) else parts[i]
+                     for i in range(0, len(parts), 2)]
+        total = parts[0]
+    return jnp.sum(total, axis=1, keepdims=True) if order.startswith('lanes') else total
+
+
+def _mean_kernel(raw, out, *, order):
     out[...] = jnp.broadcast_to(
-        (jnp.sum(raw[...], axis=1, keepdims=True) / raw.shape[1]).astype(jnp.bfloat16), raw.shape)
+        (_ordered_sum(raw[...], order) / raw.shape[1]).astype(jnp.bfloat16), raw.shape)
 
 
-def mean_buffer(raw, *, pallas=False, interpret=False, bm=128):
+def mean_buffer(raw, *, pallas=False, interpret=False, bm=128, order='native'):
     """Return a genuinely BF16 buffer, not a widened round-trip trace."""
+    if order not in MEAN_ORDERS:
+        raise ValueError('unknown reduction order')
     if not pallas:
         return jnp.broadcast_to(
-            (jnp.sum(raw, axis=1, keepdims=True) / raw.shape[1]).astype(jnp.bfloat16), raw.shape)
+            (_ordered_sum(raw, order) / raw.shape[1]).astype(jnp.bfloat16), raw.shape)
     matrix = pl.BlockSpec((bm, raw.shape[1]), lambda i: (i.astype(jnp.int32), jnp.int32(0)))
     return pl.pallas_call(
-        _mean_kernel, out_shape=jax.ShapeDtypeStruct(raw.shape, jnp.bfloat16),
+        functools.partial(_mean_kernel, order=order), out_shape=jax.ShapeDtypeStruct(raw.shape, jnp.bfloat16),
         grid_spec=pltpu.PrefetchScalarGridSpec(num_scalar_prefetch=0,
             in_specs=[matrix], out_specs=matrix, grid=(raw.shape[0] // bm,)),
         compiler_params=pltpu.CompilerParams(dimension_semantics=('parallel',)),
-        interpret=interpret, name='raw_mean_bf16_buffer',
+        interpret=interpret, name=f'raw_mean_bf16_buffer_{order}',
     )(raw)
 
 

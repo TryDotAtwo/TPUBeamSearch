@@ -20,7 +20,7 @@ from benchmarks.artgor_exact_notebook_validation import (
 )
 from benchmarks.artgor_pallas_exact_diagnostic import _make_states
 from benchmarks.artgor_input_trace import (
-    TRACE_NAMES, input_trace, save_mismatch_rows, mean_buffer, external_mean_ln,
+    TRACE_NAMES, MEAN_ORDERS, input_trace, save_mismatch_rows, mean_buffer, external_mean_ln,
 )
 from benchmarks.layernorm_quality import load_puzzle
 from benchmarks.stream1_layernorm_arithmetic import runtime_inventory, sha256_file
@@ -421,6 +421,10 @@ def run(*, dataset: Path, output: Path) -> dict:
                 bm=cfg.input_bm, epsilon=architecture.LAYER_NORM_EPSILON),
             mesh=mesh, input_spec=(state_spec, state_spec), weights_example=weights,
         )
+        order_runners = {order: _mapped(
+            lambda raw, w, order=order: mean_buffer(raw, pallas=True, bm=cfg.input_bm, order=order),
+            mesh=mesh, input_spec=state_spec, weights_example=weights,
+        ) for order in MEAN_ORDERS}
         for case_name, kind, seed in CASES:
             host = _make_states(puzzle, kind, seed, TARGET_DEVICE_COUNT * LOCAL_BATCH)
             states = jax.device_put(host, state_sharding)
@@ -473,6 +477,29 @@ def run(*, dataset: Path, output: Path) -> dict:
                 })
                 save_mismatch_rows(output / f"{case_name}_{label}_mean_prefix.npz", raw128,
                                    hidden[0].astype(jnp.float32), candidate.astype(jnp.float32))
+            reduction_order_ab = []
+            for order, runner in order_runners.items():
+                phase = "compile"
+                try:
+                    compiled = runner.lower(raw128, weights_d).compile()
+                    if case_name == CASES[0][0]:
+                        (output / f"mean_order_{order}.compiled.txt").write_text(compiled.as_text(), encoding="utf-8")
+                    phase = "execute"
+                    mean = jax.block_until_ready(compiled(raw128, weights_d))
+                    candidate = jax.block_until_ready(external_remainder((raw128, mean), weights_d))
+                    q = jax.block_until_ready(suffix[0](candidate, weights_d))
+                    np.savez_compressed(output / f"{case_name}_mean_order_{order}.npz",
+                                        mean_bits=np.asarray(mean).view(np.uint16)[:, 0])
+                    reduction_order_ab.append({
+                        "order": order, "status": "complete",
+                        "finite": bool(np.isfinite(np.asarray(candidate, np.float32)).all()),
+                        "mean_vs_jax": _metrics(jm, mean), "vs_native": _metrics(native, candidate),
+                        "prefix": _metrics(hidden[0], candidate),
+                        "same_suffix": _metrics(prefix_q, q), "original_q": _metrics(monolithic, q),
+                    })
+                except Exception as error:
+                    reduction_order_ab.append({"order": order, "status": "error", "phase": phase,
+                                               "error_type": type(error).__name__, "error": str(error)})
             if case_name == CASES[0][0]:
                 for label, call, arg in (("materialized_mean_jax", materialized_means[False], raw128),
                                          ("materialized_mean_pallas", materialized_means[True], raw128),
@@ -576,6 +603,7 @@ def run(*, dataset: Path, output: Path) -> dict:
                 "input_mean_ab": input_mean_ab,
                 "input_trace_ab": input_trace_ab,
                 "external_mean_ab": external_mean_ab,
+                "reduction_order_ab": reduction_order_ab,
             }
             checkpoint(path, report)
         report.update(

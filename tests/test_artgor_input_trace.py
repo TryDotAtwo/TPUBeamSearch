@@ -1,5 +1,35 @@
 import jax.numpy as jnp
 import numpy as np
+import pytest
+
+
+@pytest.mark.parametrize('order,expected', [
+    ('lanes_serial', 1/256), ('lanes_tree', 1/256),
+    ('tiles_serial', 0.), ('tiles_tree', 0.),
+])
+def test_reduction_order_preserves_specified_cancellation(order, expected):
+    import benchmarks.artgor_input_trace as trace
+    raw = np.zeros((8,256), np.float32)
+    raw[:,0], raw[:,1], raw[:,128] = 2**24, 1, -(2**24)
+    mean = trace.mean_buffer(jnp.asarray(raw), pallas=True, interpret=True, bm=8, order=order)
+    np.testing.assert_array_equal(np.asarray(mean, np.float32), np.full((8,256), expected))
+
+
+def test_unknown_reduction_order_is_rejected():
+    import benchmarks.artgor_input_trace as trace
+    with pytest.raises(ValueError, match='order'):
+        trace.mean_buffer(jnp.zeros((8,128), jnp.float32), pallas=True, order='unknown')
+
+
+@pytest.mark.parametrize('family', ['lanes', 'tiles'])
+def test_serial_and_tree_have_distinct_four_part_rounding(family):
+    import benchmarks.artgor_input_trace as trace
+    raw = np.zeros((8,512), np.float32)
+    raw[:,[0,128,256,384]] = [2**25, 1, -(2**25), 1]
+    serial = trace.mean_buffer(jnp.asarray(raw), pallas=True, interpret=True, bm=8, order=family+'_serial')
+    tree = trace.mean_buffer(jnp.asarray(raw), pallas=True, interpret=True, bm=8, order=family+'_tree')
+    np.testing.assert_array_equal(np.asarray(serial, np.float32), np.full((8,512), 1/512))
+    np.testing.assert_array_equal(np.asarray(tree, np.float32), np.zeros((8,512)))
 
 
 def test_materialized_mean_and_remainder_honor_external_bf16_mean():
