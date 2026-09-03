@@ -1,0 +1,66 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(bf16[256,2,1024]{2,1,0:T(2,128)(2,1)})->bf16[256,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py"
+3 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_shape.py"
+4 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_variance_producer.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "run"
+5 "run.<locals>.evaluate_aux"
+6 "chunked_host"
+7 "run.<locals>.evaluate_aux.<locals>.<lambda>"
+8 "run.<locals>.<lambda>"
+9 "centered_squares"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=390 end_line=390 column=31 end_column=31}
+4 {file_name_id=2 function_name_id=4 line=283 end_line=283 column=40 end_column=40}
+5 {file_name_id=2 function_name_id=5 line=206 end_line=206 column=27 end_column=27}
+6 {file_name_id=3 function_name_id=6 line=27 end_line=27 column=28 end_column=28}
+7 {file_name_id=2 function_name_id=7 line=207 end_line=207 column=24 end_column=24}
+8 {file_name_id=2 function_name_id=8 line=281 end_line=281 column=85 end_column=85}
+9 {file_name_id=2 function_name_id=8 line=281 end_line=281 column=92 end_column=92}
+10 {file_name_id=2 function_name_id=8 line=281 end_line=281 column=68 end_column=68}
+11 {file_name_id=4 function_name_id=9 line=11 end_line=11 column=22 end_column=22}
+12 {file_name_id=4 function_name_id=9 line=11 end_line=11 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+8 {file_location_id=8 parent_frame_id=8}
+9 {file_location_id=9 parent_frame_id=8}
+10 {file_location_id=10 parent_frame_id=8}
+11 {file_location_id=11 parent_frame_id=11}
+12 {file_location_id=12 parent_frame_id=11}
+
+
+%fused_computation.2 (param_0.8: bf16[256,2,1024]) -> bf16[256,1024] {
+  %param_0.8 = bf16[256,2,1024]{2,0,1:T(8,128)(2,1)S(1)} parameter(0)
+  %slice.15 = bf16[256,1,1024]{2,0,1:T(8,128)(2,1)} slice(%param_0.8), slice={[0:256], [0:1], [0:1024]}, metadata={op_name="jit(<lambda>)/shard_map/slice" stack_frame_id=8}
+  %convert = f32[256,1,1024]{2,0,1:T(8,128)} convert(%slice.15)
+  %slice.14 = bf16[256,1,1024]{2,0,1:T(8,128)(2,1)} slice(%param_0.8), slice={[0:256], [1:2], [0:1024]}, metadata={op_name="jit(<lambda>)/shard_map/slice" stack_frame_id=9}
+  %convert.1 = f32[256,1,1024]{2,0,1:T(8,128)} convert(%slice.14)
+  %sub.9 = f32[256,1,1024]{2,0,1:T(8,128)} subtract(%convert, %convert.1), metadata={op_name="jit(<lambda>)/shard_map/sub" stack_frame_id=11}, backend_config={"flag_configs":[],"float_type_correction_info":{"original_shape":{"dimensions":["256","1","1024"],"element_type":"BF16","is_dynamic_dimension":[false,false,false],"layout":{"dim_level_types":[],"dim_ordered":[],"dim_unique":[],"dynamic_shape_metadata_prefix_bytes":"0","element_size_in_bits":"0","index_primitive_type":"PRIMITIVE_TYPE_INVALID","memory_space":"0","minor_to_major":["2","0","1"],"pointer_primitive_type":"PRIMITIVE_TYPE_INVALID","split_configs":[],"tail_padding_alignment_in_elements":"1","tiles":[{"dimensions":["8","128"]},{"dimensions":["2","1"]}]},"tuple_shapes":[]},"original_type":"BF16"},"scoped_memory_configs":[],"used_scoped_memory_configs":[]}
+  %square.10 = f32[256,1,1024]{2,0,1:T(8,128)} multiply(%sub.9, %sub.9), metadata={op_name="jit(<lambda>)/shard_map/square" stack_frame_id=12}, backend_config={"flag_configs":[],"float_type_correction_info":{"original_shape":{"dimensions":["256","1","1024"],"element_type":"BF16","is_dynamic_dimension":[false,false,false],"layout":{"dim_level_types":[],"dim_ordered":[],"dim_unique":[],"dynamic_shape_metadata_prefix_bytes":"0","element_size_in_bits":"0","index_primitive_type":"PRIMITIVE_TYPE_INVALID","memory_space":"0","minor_to_major":["2","0","1"],"pointer_primitive_type":"PRIMITIVE_TYPE_INVALID","split_configs":[],"tail_padding_alignment_in_elements":"1","tiles":[{"dimensions":["8","128"]},{"dimensions":["2","1"]}]},"tuple_shapes":[]},"original_type":"BF16"},"scoped_memory_configs":[],"used_scoped_memory_configs":[]}
+  %convert.2 = bf16[256,1,1024]{2,0,1:T(8,128)(2,1)} convert(%square.10)
+  ROOT %bitcast.1 = bf16[256,1024]{1,0:T(8,128)(2,1)} bitcast(%convert.2), metadata={op_name="jit(<lambda>)/shard_map/square" stack_frame_id=12}
+}
+
+ENTRY %main.0_spmd (param.1: bf16[256,2,1024]) -> bf16[256,1024] {
+  %param.1 = bf16[256,2,1024]{2,1,0:T(2,128)(2,1)} parameter(0), sharding={devices=[8,1,1]<=[8]}, metadata={op_name="x"}
+  %copy.2 = bf16[256,2,1024]{2,0,1:T(8,128)(2,1)S(1)} copy(%param.1), sharding={devices=[8,1,1]<=[8]}, metadata={op_name="x"}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"1048576"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"8724","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["2","32","8"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+  ROOT %fusion.1 = bf16[256,1024]{1,0:T(8,128)(2,1)} fusion(%copy.2), kind=kLoop, calls=%fused_computation.2, metadata={op_name="jit(<lambda>)/shard_map/square" stack_frame_id=12}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"667648"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"7786","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["32","8"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+}
+

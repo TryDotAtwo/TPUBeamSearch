@@ -1,0 +1,47 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(bf16[16384,1024]{1,0:T(8,128)(2,1)})->bf16[16384,1024]{1,0:T(8,128)(2,1)}}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py"
+3 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_shape.py"
+4 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_invstd_capture.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "run"
+5 "run.<locals>.evaluate_aux"
+6 "chunked_host"
+7 "run.<locals>.evaluate_aux.<locals>.<lambda>"
+8 "run.<locals>.<lambda>"
+9 "variance_rsqrt"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=390 end_line=390 column=31 end_column=31}
+4 {file_name_id=2 function_name_id=4 line=258 end_line=258 column=31 end_column=31}
+5 {file_name_id=2 function_name_id=5 line=206 end_line=206 column=27 end_column=27}
+6 {file_name_id=3 function_name_id=6 line=27 end_line=27 column=28 end_column=28}
+7 {file_name_id=2 function_name_id=7 line=207 end_line=207 column=24 end_column=24}
+8 {file_name_id=2 function_name_id=8 line=252 end_line=252 column=56 end_column=56}
+9 {file_name_id=4 function_name_id=9 line=95 end_line=95 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+8 {file_location_id=8 parent_frame_id=8}
+9 {file_location_id=9 parent_frame_id=9}
+
+
+ENTRY %main.0_spmd (param.1: bf16[16384,1024]) -> bf16[16384,1024] {
+  %param.1 = bf16[16384,1024]{1,0:T(8,128)(2,1)} parameter(0), sharding={devices=[8,1]<=[8]}, metadata={op_name="x"}
+  ROOT %variance_rsqrt_replay.1 = bf16[16384,1024]{1,0:T(8,128)(2,1)} custom-call(%param.1), custom_call_target="tpu_custom_call", operand_layout_constraints={bf16[16384,1024]{1,0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(<lambda>)/shard_map/variance_rsqrt_replay/pallas_call" stack_frame_id=9}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"TUzvUgFNTElSMjMuMC4wZ2l0AAErCQEDBQcBAwkDFwsNDxETFRcZGx0fA+O5FwGxBwsLExMPDwsLCw8PCwsLUwsLDwsLDwsTDw8PEwsPSwsPC4ULMwsLCwsLExsLGwsbGw8PCw8LDxsPDw8bEx8LDw8fCw8LDwsPHw8PDxsLDwsPGyMPC1MLEwUHjWFNBwNZARcPBw8nHx8HBxsbCwL6Bx8FIQUjAwMTYwMDE2UdZ2kdm50FJQUnBSkdfX8RBQEFKwUtBS8jBQUhgAAAAAAAAAAABAAAAAAAAAUxDRMdA28FMwU1HQN3BTcDA4W3HQORHQOZHQOjAwM5OwU5EQU9AxE/QQ9DR0lLF00XEU9RtVNVBTsBA7ENEWFmZmluZV9tYXA8KGQwLCBkMSkgLT4gKGQwLCBkMSk+AAU9IwUDEYAAAAAAAAAABT8FQQVDBUUFRwEFV1sDBRlZHR8JGwMFGV0dHwkhAwUPIxEbAwUPIxEhEQEBEQMBBUkda20FSxUlJS0FB7M3UR0ncx0pdRUrKy0FB7M3eQMDE3sTDRAAAMoNBU0dLYEdA4MtBQmzN7V9BU8diYsFUR2NjwVTFTExLQUJsxu1fx0nlR0plxUzMy0FB7WBqQVVHZ+hBVcVNTUtBQezCRkDBy2nqautrxEVAAVZIwEJIQEAAAABAAAAAgAAAAAAAAAFWyMBAQEjdHB1LmRpbWVuc2lvbl9zZW1hbnRpY3M8cGFyYWxsZWw+ACN0cHUubWVtb3J5X3NwYWNlPHZtZW0+ACN0cHUuY29yZV90eXBlPHRjPgAjYXJpdGguZmFzdG1hdGg8bm9uZT4AAQICAwECBBezBQIEAiAPRScFAgQCIA8nBQIEAiANCwcFBwEHBwEFAwEFAQEBCQTuAgUBEQE3BwMBDQURAT0HAyE/BwEBBwEHAQMDCwkDAwMDCwkDAwkGCwMJBwMHCQsGCwMJAwsNBnEDCwMNAwMVeQMNDwYVAwsDEREHFS8DCwUPExMHhy8DCwMVFQaTAwkDFwMDDQkDAwMDDQkDAwkGDQMJBwUbHRcFDaUJGQUbHQcAAQURAV8HAwcPAwEBAwMBBwMBAwMBBwMBBwQBBQEDBREBYQcDBw8DAQEDAwEHAwEDAwEHAwEHBAEFAQMGAwEFAQAuC10RKRUNGQ8TCxELHR0tIyEjKS0JVS0ZHRklDRMdlS8jGxcXIxclGRkVHw8NCR0RYnVpbHRpbgBzdGFibGVfbW9zYWljAHRwdQBhcml0aABtb2R1bGUAYXJpdGguY29uc3RhbnQAZnVuYy5mdW5jAGZ1bmMucmV0dXJuAHZlY3Rvci5sb2FkAHZlY3Rvci5zaGFwZV9jYXN0AGFyaXRoLmV4dGYAdmVjdG9yLmJyb2FkY2FzdABhcml0aC5hZGRmAG1hdGgucnNxcnQAYXJpdGgudHJ1bmNmAHRwdS52ZWN0b3Jfc3RvcmUAX3ZhcmlhbmNlX3JzcXJ0X2tlcm5lbAAvdG1wL1RQVUJlYW1TZWFyY2gtYXJ0Z29yLXByZWZpeC1nYXRlL2JlbmNobWFya3MvYXJ0Z29yX2ludnN0ZF9jYXB0dXJlLnB5AGZ1bmN0aW9uX3R5cGUAc3ltX25hbWUAdmFsdWUAdHJhbnNmb3JtX2luZGljZXMAdHJhbnNmb3JtXzAAd2luZG93X2JvdW5kcwB0cmFuc2Zvcm1fMQBjb252ZXJ0X2VsZW1lbnRfdHlwZToAY29udmVydF9lbGVtZW50X3R5cGUvY29udmVydF9lbGVtZW50X3R5cGUAYWRkAHN0YWJsZV9tb3NhaWMudmVyc2lvbgBkaW1lbnNpb25fc2VtYW50aWNzAGl0ZXJhdGlvbl9ib3VuZHMAc2NhbGFyX3ByZWZldGNoAHNjcmF0Y2hfb3BlcmFuZHMAdmFyaWFuY2VfcnNxcnRfcmVwbGF5AHRwdS5jb3JlX3R5cGUAd2luZG93X3BhcmFtcwBnZXQ6AGdldC9nZXQAYWRkOgBmYXN0bWF0aAByc3FydDoAcnNxcnQvcnNxcnQAc3dhcDoAc3dhcC9zd2FwAG9wZXJhbmRTZWdtZW50U2l6ZXMAc3RyaWRlcwA=","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"1048576"}]}
+}
+

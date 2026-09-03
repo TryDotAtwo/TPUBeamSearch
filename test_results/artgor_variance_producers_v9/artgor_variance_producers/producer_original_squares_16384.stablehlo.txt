@@ -1,0 +1,15 @@
+module @jit__lambda attributes {mhlo.num_partitions = 8 : i32, mhlo.num_replicas = 1 : i32} {
+  sdy.mesh @mesh = <["core"=8]> {stablehlo.mesh = {axes = [{name = "core", size = 8 : i64}]}}
+  func.func public @main(%arg0: tensor<131072x2x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{"core"}, {}, {}]>}) -> (tensor<131072x1024xbf16> {jax.result_info = "result"}) {
+    %0 = sdy.manual_computation(%arg0) in_shardings=[<@mesh, [{"core"}, {}, {}]>] out_shardings=[<@mesh, [{"core"}, {}]>] manual_axes={"core"} (%arg1: tensor<16384x2x1024xbf16>) {
+      %1 = stablehlo.slice %arg1 [0:16384, 0:1, 0:1024] : (tensor<16384x2x1024xbf16>) -> tensor<16384x1x1024xbf16>
+      %2 = stablehlo.reshape %1 : (tensor<16384x1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %3 = stablehlo.slice %arg1 [0:16384, 1:2, 0:1024] : (tensor<16384x2x1024xbf16>) -> tensor<16384x1x1024xbf16>
+      %4 = stablehlo.reshape %3 : (tensor<16384x1x1024xbf16>) -> tensor<16384x1024xbf16>
+      %5 = stablehlo.subtract %2, %4 : tensor<16384x1024xbf16>
+      %6 = chlo.square %5 : tensor<16384x1024xbf16> -> tensor<16384x1024xbf16>
+      sdy.return %6 : tensor<16384x1024xbf16>
+    } : (tensor<131072x2x1024xbf16>) -> tensor<131072x1024xbf16>
+    return %0 : tensor<131072x1024xbf16>
+  }
+}

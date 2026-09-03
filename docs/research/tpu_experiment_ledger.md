@@ -1,5 +1,14 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: variance producer v9 complete
+
+All12JAXproducer cases complete/finite, fixedv4controlsvalid. Fusedoriginal
+and allFP32-square variants reproducePallas invstd:2048/1275large differences,
+zerochunk256. MaterializedBF16squares differ965rows fromfused/native; both
+downstreamreduction modes same. Nofix; nextcompare original vsstandalone
+matrixlayout/reduction, holding BOTH Dense/mean fixedacrossshapes. HiddenFP32
+mean hypothesis unproven (originalHLOBF16parameter). See v9report.
+
 ## 2026-09-03: fixed-input variance producer A/B prepared
 
 SixJAXproducer variants per shape: original/FP32 centered squares fused through
