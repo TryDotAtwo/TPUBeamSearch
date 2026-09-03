@@ -67,14 +67,17 @@ V2 source: ef7512627d1ba9c58c5c444391107d1887d2ee84. Local verification:
 540 tests passed in 146.41 s with original-source C++ oracle enabled. Output
 destination for the new run is `test_results/beam_primitives_v2/`. Pack timing
 uses 65536 candidates/device, three warmups and 21 alternating synchronized
-samples; only exact cases are eligible. No V2 TPU result is established yet.
+samples; only exact cases are eligible. Completed results follow below.
 
 V2 is now COMPLETE; report: `test_results/beam_primitives_v2/report.md`.
 Five exact cases; six compile failures moved past gather to scalar uint8 extract
 (Stream2) and sentinel scatter (dedup). Packing medians serial/pipeline:
 b2 1.347320/0.670960 ms (2.008x), b3 1.335930/0.632890 ms (2.111x), at 65536
 candidates/device. These are primitive-call measurements, not beam/inference
-speed or profiler-confirmed overlap. V3 candidate fixes are in regression testing.
+speed or profiler-confirmed overlap. V3 fixes passed 542 local tests in 159.72 s,
+including original-source C++ parity and both new failing-before-fix regressions.
+V3 source e9c90a9ef3f132fce651218f20b62707d741e21e; download new outputs into
+`test_results/beam_primitives_v3/`. Physical confirmation remains outstanding.
 
 1. Validate these primitives on physical TPU before propagating their lowering
    choices. Preserve the already active V10 session; never run a second TPU job.

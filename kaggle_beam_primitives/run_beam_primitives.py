@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = 'ef7512627d1ba9c58c5c444391107d1887d2ee84'
+COMMIT_SHA = 'e9c90a9ef3f132fce651218f20b62707d741e21e'
 CHECKOUT = Path('/tmp/TPUBeamSearch-beam-primitives')
 OUTPUT = Path('/kaggle/working/beam_primitives')
 
