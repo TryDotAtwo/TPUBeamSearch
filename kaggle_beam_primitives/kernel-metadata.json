@@ -1,0 +1,15 @@
+{
+  "id": "trydotatwo/tpu-beam-primitives",
+  "title": "TPU Beam Primitive Compile and Correctness Gate",
+  "code_file": "run_beam_primitives.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": true,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
