@@ -133,7 +133,14 @@ def measure_interleaved(variants, *, warmup=3, repeats=21):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--case', action='append', dest='selected_cases')
     args = parser.parse_args()
+    cases = build_cases()
+    if args.selected_cases:
+        unknown = set(args.selected_cases) - {c['name'] for c in cases}
+        if unknown:
+            parser.error(f'unknown cases: {sorted(unknown)}')
+        cases = [c for c in cases if c['name'] in args.selected_cases]
     args.output.mkdir(parents=True, exist_ok=True)
     devices = jax.devices()
     if len(devices) != 8 or any(d.platform != 'tpu' for d in devices):
@@ -151,7 +158,7 @@ def main():
         path.write_text(json.dumps(report, indent=2), encoding='utf-8')
     save()
     eligible = {}
-    for case in build_cases():
+    for case in cases:
         row = dict(name=case['name'], input_sha256=[hashlib.sha256(x.tobytes()).hexdigest() for x in case['args']],
                    status='started', phase='placement')
         report['cases'].append(row)
@@ -164,6 +171,7 @@ def main():
             inputs = jax.tree.map(lambda x: jax.device_put(x, sharding), replicated)
             fn = jax.pmap(case['fn'], devices=devices)
             row['phase'] = 'compile'
+            save()
             start = time.perf_counter()
             lowered = fn.lower(*inputs)
             executable = lowered.compile()

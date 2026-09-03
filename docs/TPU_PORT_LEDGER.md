@@ -79,6 +79,12 @@ including original-source C++ parity and both new failing-before-fix regressions
 V3 source e9c90a9ef3f132fce651218f20b62707d741e21e; download new outputs into
 `test_results/beam_primitives_v3/`. Physical confirmation remains outstanding.
 
+V3 ended ERROR: five exact cases, native VectorLayout::join compiler abort at
+hash_goal_120_24, remaining five cases not attempted; no timings. See
+`test_results/beam_primitives_v3/report.md`. The next bundle isolates each
+non-packing case in a sequential process, retaining partial JSON and full logs.
+The failing source expression is not yet identified; primitives stay unchanged.
+
 1. Validate these primitives on physical TPU before propagating their lowering
    choices. Preserve the already active V10 session; never run a second TPU job.
 2. Add a standalone remote-DMA ring test: readiness, send/receive wait, slot

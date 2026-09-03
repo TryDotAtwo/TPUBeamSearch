@@ -1,0 +1,74 @@
+[{"stream_name":"stderr","time":14.405436568,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":17.340584852,"data":"\n"}
+,{"stream_name":"stderr","time":17.340611992,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":17.340616792,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":17.487629254,"data":"Cloning into '/tmp/TPUBeamSearch-beam-primitives'...\n"}
+,{"stream_name":"stderr","time":25.235072159,"data":"HEAD is now at e9c90a9 fix: remove scalar byte extraction and scatter in beam kernels\n"}
+,{"stream_name":"stdout","time":29.482575414,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":29.482629904,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":35.183624962,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":35.183666452,"data":"E0000 00:00:1788447046.746266      51 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":35.183672932,"data":"=== Source Location Trace: ===\n"}
+,{"stream_name":"stdout","time":35.183677292,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":44.323020385,"data":"START pack_serial_b2\n"}
+,{"stream_name":"stdout","time":44.819230392,"data":"pack_serial_b2 exact\n"}
+,{"stream_name":"stdout","time":44.820743732,"data":"START pack_serial_b3\n"}
+,{"stream_name":"stdout","time":44.944167719,"data":"pack_serial_b3 exact\n"}
+,{"stream_name":"stdout","time":44.945755349,"data":"START pack_pipeline_b2\n"}
+,{"stream_name":"stdout","time":45.133090854,"data":"pack_pipeline_b2 exact\n"}
+,{"stream_name":"stdout","time":45.134706484,"data":"START pack_pipeline_b3\n"}
+,{"stream_name":"stdout","time":45.359121388,"data":"pack_pipeline_b3 exact\n"}
+,{"stream_name":"stdout","time":45.359202178,"data":"START route_8_7\n"}
+,{"stream_name":"stdout","time":45.480662485,"data":"route_8_7 exact\n"}
+,{"stream_name":"stdout","time":45.480822235,"data":"START hash_goal_120_24\n"}
+,{"stream_name":"stdout","time":45.572076253,"data":"F0903 14:50:57.134745     982 layout.h:341] Check failed: arr.size() \u003e= layout_rank(implicit_dim) (1 vs. 2) \n"}
+,{"stream_name":"stdout","time":45.798398427,"data":"*** Check failure stack trace: ***\n"}
+,{"stream_name":"stdout","time":45.798438177,"data":"    @     0x7b04de89bc54  absl::log_internal::LogMessage::SendToLog()\n"}
+,{"stream_name":"stdout","time":45.798444137,"data":"    @     0x7b04de89bc18  absl::log_internal::LogMessage::Flush()\n"}
+,{"stream_name":"stdout","time":45.798448827,"data":"    @     0x7b04d934997d  mlir::tpu::VectorLayout::join()\n"}
+,{"stream_name":"stdout","time":45.798453257,"data":"    @     0x7b04d1972386  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::inferElementwise()\n"}
+,{"stream_name":"stdout","time":45.798457337,"data":"    @     0x7b04d196ff8d  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::inferBlock()\n"}
+,{"stream_name":"stdout","time":45.798474917,"data":"    @     0x7b04d1973dc4  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::infer()\n"}
+,{"stream_name":"stdout","time":45.798478077,"data":"    @     0x7b04d197027f  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::inferBlock()\n"}
+,{"stream_name":"stdout","time":45.798481557,"data":"    @     0x7b04d196e712  mlir::tpu::(anonymous namespace)::InferVectorLayoutPass::runOnOperation()\n"}
+,{"stream_name":"stdout","time":45.798485027,"data":"    @     0x7b04da4874a7  mlir::detail::OpToOpPassAdaptor::run()\n"}
+,{"stream_name":"stdout","time":45.798487767,"data":"    @     0x7b04da4879e7  mlir::detail::OpToOpPassAdaptor::runPipeline()\n"}
+,{"stream_name":"stdout","time":45.798490987,"data":"    @     0x7b04da488f64  mlir::detail::OpToOpPassAdaptor::runOnOperationImpl()\n"}
+,{"stream_name":"stdout","time":45.798493937,"data":"    @     0x7b04da4874eb  mlir::detail::OpToOpPassAdaptor::run()\n"}
+,{"stream_name":"stdout","time":45.798497567,"data":"    @     0x7b04da4879e7  mlir::detail::OpToOpPassAdaptor::runPipeline()\n"}
+,{"stream_name":"stdout","time":45.798500337,"data":"    @     0x7b04da489be7  mlir::PassManager::run()\n"}
+,{"stream_name":"stdout","time":45.798503057,"data":"    @     0x7b04d6d356b9  xla::jellyfish::RunAndCaptureDiagnostics()\n"}
+,{"stream_name":"stdout","time":45.798505967,"data":"    @     0x7b04d6d35535  xla::jellyfish::RunPass()\n"}
+,{"stream_name":"stdout","time":45.798508687,"data":"    @     0x7b04d10a2b5f  xla::jellyfish::RunMLIRPasses()::$_3::operator()()\n"}
+,{"stream_name":"stdout","time":45.798511927,"data":"    @     0x7b04d10a1848  xla::jellyfish::RunMLIRPasses()\n"}
+,{"stream_name":"stdout","time":45.798514847,"data":"    @     0x7b04d109144e  xla::jellyfish::(anonymous namespace)::CustomCallEmitter::Emit()\n"}
+,{"stream_name":"stdout","time":45.798517637,"data":"    @     0x7b04d109063d  std::__u::__function::__policy_func\u003c\u003e::__call_func\u003c\u003e()\n"}
+,{"stream_name":"stdout","time":45.798521427,"data":"    @     0x7b04d0b3f2fe  xla::jellyfish::LoweringEmitter::HandleCustomCall()::$_1::operator()()\n"}
+,{"stream_name":"stdout","time":45.798524377,"data":"    @     0x7b04d0b64a49  std::__u::__function::__policy_func\u003c\u003e::__call_func\u003c\u003e()\n"}
+,{"stream_name":"stdout","time":45.798527357,"data":"    @     0x7b04d0b6a79d  xla::jellyfish::LoweringEmitter::AddWorkUnit()::$_1::operator()()\n"}
+,{"stream_name":"stdout","time":45.798530187,"data":"    @     0x7b04d0b51cb6  std::__u::__function::__policy_func\u003c\u003e::__call_func\u003c\u003e()\n"}
+,{"stream_name":"stdout","time":45.798533047,"data":"    @     0x7b04d6d0c5b0  absl::internal_any_invocable::RemoteInvoker\u003c\u003e()\n"}
+,{"stream_name":"stdout","time":45.798535887,"data":"    @     0x7b04de46f3be  thread::Fiber::Body()\n"}
+,{"stream_name":"stdout","time":45.798540577,"data":"    @     0x7b04de474b82  thread::(anonymous namespace)::FutexDomainThread::WorkLoop()\n"}
+,{"stream_name":"stdout","time":45.798543477,"data":"    @     0x7b04de47d8d2  thread::CommonFiberDomainThread::Run()\n"}
+,{"stream_name":"stdout","time":45.798546697,"data":"    @     0x7b04de6d0cf6  Thread::ThreadBody()\n"}
+,{"stream_name":"stdout","time":45.798549547,"data":"    @     0x7b0599e9db7b  (unknown)\n"}
+,{"stream_name":"stdout","time":45.798553117,"data":"https://symbolize.stripped_domain/r/?trace=7b04de89bc53,7b04de89bc17,7b04d934997c,7b04d1972385,7b04d196ff8c,7b04d1973dc3,7b04d197027e,7b04d196e711,7b04da4874a6,7b04da4879e6,7b04da488f63,7b04da4874ea,7b04da4879e6,7b04da489be6,7b04d6d356b8,7b04d6d35534,7b04d10a2b5e,7b04d10a1847,7b04d109144d,7b04d109063c,7b04d0b3f2fd,7b04d0b64a48,7b04d0b6a79c,7b04d0b51cb5,7b04d6d0c5af,7b04de46f3bd,7b04de474b81,7b04de47d8d1,7b04de6d0cf5,7b0599e9db7a\u0026map= \n"}
+,{"stream_name":"stdout","time":45.798563077,"data":"https://symbolize.stripped_domain/r/?trace=7b0599e9f95c,7b0599e4adef,7b04de89bcb8,7b04de89bc17,7b04d934997c,7b04d1972385,7b04d196ff8c,7b04d1973dc3,7b04d197027e,7b04d196e711,7b04da4874a6,7b04da4879e6,7b04da488f63,7b04da4874ea,7b04da4879e6,7b04da489be6,7b04d6d356b8,7b04d6d35534,7b04d10a2b5e,7b04d10a1847,7b04d109144d,7b04d109063c,7b04d0b3f2fd,7b04d0b64a48,7b04d0b6a79c,7b04d0b51cb5,7b04d6d0c5af,7b04de46f3bd,7b04de474b81,7b04de47d8d1,7b04de6d0cf5,7b0599e9db7a\u0026map= \n"}
+,{"stream_name":"stdout","time":45.798567037,"data":"*** SIGABRT received by PID 51 (TID 982) on cpu 7, si_code=-6, from PID 51; ***\n"}
+,{"stream_name":"stdout","time":45.798569987,"data":"E0903 14:50:57.361367     982 coredump_hook.cc:310] RAW: Remote crash data gathering hook invoked.\n"}
+,{"stream_name":"stdout","time":45.798572977,"data":"E0903 14:50:57.361378     982 client.cc:261] RAW: Coroner client retries enabled, will retry for up to 30 sec.\n"}
+,{"stream_name":"stdout","time":45.798576307,"data":"E0903 14:50:57.361383     982 coredump_hook.cc:405] RAW: Sending fingerprint to remote end.\n"}
+,{"stream_name":"stdout","time":45.798579157,"data":"E0903 14:50:57.361401     982 coredump_hook.cc:415] RAW: Cannot send fingerprint to Coroner: [NOT_FOUND] stat failed on crash reporting socket /var/google/services/logmanagerd/remote_coredump.socket (Is the listener running?): No such file or directory\n"}
+,{"stream_name":"stdout","time":45.798582277,"data":"E0903 14:50:57.361404     982 coredump_hook.cc:467] RAW: Dumping core locally.\n"}
+,{"stream_name":"stdout","time":53.847636881,"data":"F0903 14:50:57.134745     982 layout.h:341] Check failed: arr.size() \u003e= layout_rank(implicit_dim) (1 vs. 2) \n"}
+,{"stream_name":"stdout","time":53.84768573,"data":"E0903 14:51:05.410357     982 process_state.cc:708] RAW: Raising signal 6 with default behavior\n"}
+,{"stream_name":"stderr","time":61.014695317,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":61.014738317,"data":"  File \"/kaggle/src/script.py\", line 37, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":61.014743857,"data":"    main()\n"}
+,{"stream_name":"stderr","time":61.014748297,"data":"  File \"/kaggle/src/script.py\", line 33, in main\n"}
+,{"stream_name":"stderr","time":61.014842177,"data":"    raise subprocess.CalledProcessError(code, command)\n"}
+,{"stream_name":"stderr","time":61.014858777,"data":"subprocess.CalledProcessError: Command '('/usr/local/bin/python', '-m', 'benchmarks.beam_primitive_bundle', '--output', '/kaggle/working/beam_primitives')' died with \u003cSignals.SIGABRT: 6\u003e.\n"}
+,{"stream_name":"stderr","time":65.063406573,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":67.318133135,"data":"[NbConvertApp] Writing 280735 bytes to __results__.html\n"}
+]
