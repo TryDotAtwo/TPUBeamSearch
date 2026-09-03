@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: invstd v4 explains the two remaining prefix rows
+
+All capture/native/split controls pass at16K andchunk256; hashes/runtime matchv3.
+JAX vs Pallas invstd differs on rows760/28870 only (2048broadcast elements).
+At fixed JAXDense/mean, Pallasinvstd leaves1275outputerrors; replacing only
+invstd by capturedJAX gives full untouchedJAXprefix SHA equality (zeroerrors).
+Thus no affine/ReLU change is needed for this corpus; mean+invstd still must
+be reproduced without borrowingJAX. Next controlled variance capture/replay
+separates reduction,variance rounding,epsilon andrsqrt. Not fullmodel/speed.
+See `test_results/artgor_invstd_capture_v4/report.md`.
+
 ## 2026-09-03: BF16 invstd capture/substitution prepared
 
 Adds actual BF16 invstd slot while retaining untouched-output controls.
