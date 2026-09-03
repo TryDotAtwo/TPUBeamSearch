@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: large composed prefix gate v1 rejected
+
+All36 cases finite/compiled, all6HLO audits pass4Pallas custom calls, but no
+exact candidate: 16K/device749..2189 mismatches, 32K1517..4315. First16K
+legal42 disagreement[760,0] for all3orders. JAX Dense/bias HLO layout changes
+from{1,0} atB256 to{0,1} at16K; cause not established. Next same-state large
+vs chunk256 JAX/Pallas controls, then first-boundary substitution. Do not
+confound larger sampled corpus with shape or composition effects. No default,
+residual or speed promotion. See `test_results/artgor_prefix_gate_v1/report.md`.
+
 ## 2026-09-03: composed prefix gate prepared
 
 Dedicated benchmark composes four Pallas calls (prepacked embedding, raw

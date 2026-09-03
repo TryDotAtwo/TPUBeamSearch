@@ -1,0 +1,1054 @@
+{
+  "status": "complete",
+  "schema_version": 1,
+  "cases": [
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 42,
+      "order": "lanes_tree",
+      "input_sha256": "dfcf74c399aaf04361d3dda9ebb519cf77e280e17f137058e92a9314baa4b683",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1329,
+        "first_mismatch": [
+          760,
+          0
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "9755606bffa3d179337f5741fcd23dce5f0469d6b11ebc56c546f6e25b6cd7f0",
+        "candidate_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 42,
+      "order": "tiles_serial",
+      "input_sha256": "dfcf74c399aaf04361d3dda9ebb519cf77e280e17f137058e92a9314baa4b683",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1321,
+        "first_mismatch": [
+          760,
+          0
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "9755606bffa3d179337f5741fcd23dce5f0469d6b11ebc56c546f6e25b6cd7f0",
+        "candidate_sha256": "e3c42aa129433b9bf666b0f30b8431ad245ba0817b316ead1d28de5858140746"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 42,
+      "order": "tiles_tree",
+      "input_sha256": "dfcf74c399aaf04361d3dda9ebb519cf77e280e17f137058e92a9314baa4b683",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1329,
+        "first_mismatch": [
+          760,
+          0
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "9755606bffa3d179337f5741fcd23dce5f0469d6b11ebc56c546f6e25b6cd7f0",
+        "candidate_sha256": "4fdf493ef43c17bca3ac8ad80045eb6cd2ab8fc49db5ea19d390a00a857b175f"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 142,
+      "order": "lanes_tree",
+      "input_sha256": "fc3e7d849c9fbcdb49a4bdc251d76bf0948432b1cb473fd6d8a7eec95f31ed5e",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 791,
+        "first_mismatch": [
+          40607,
+          0
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "26816e00983110a44b0b25e1b854c670db01def1b05a72b9a6a93c2210c5af43",
+        "candidate_sha256": "cbb7da45372fa763549d178ae9cad8b2f416b9ffe970f6a1c437773939fbc1da"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 142,
+      "order": "tiles_serial",
+      "input_sha256": "fc3e7d849c9fbcdb49a4bdc251d76bf0948432b1cb473fd6d8a7eec95f31ed5e",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 754,
+        "first_mismatch": [
+          6182,
+          22
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "26816e00983110a44b0b25e1b854c670db01def1b05a72b9a6a93c2210c5af43",
+        "candidate_sha256": "9fd221da00a1c3834e6ebbce472e5bb81367570a03ca00534388a4a5082fca49"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 142,
+      "order": "tiles_tree",
+      "input_sha256": "fc3e7d849c9fbcdb49a4bdc251d76bf0948432b1cb473fd6d8a7eec95f31ed5e",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 754,
+        "first_mismatch": [
+          6182,
+          22
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "26816e00983110a44b0b25e1b854c670db01def1b05a72b9a6a93c2210c5af43",
+        "candidate_sha256": "9fd221da00a1c3834e6ebbce472e5bb81367570a03ca00534388a4a5082fca49"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 242,
+      "order": "lanes_tree",
+      "input_sha256": "acfc1791927dfd0365053cb5eabba20e468807f5c4af863b4659d628d36fdaff",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1913,
+        "first_mismatch": [
+          42276,
+          0
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "7fb68b14ab0fc420de3fca467e79de967601cab38f5f6a658763775f18b4e057",
+        "candidate_sha256": "9cad4d9a2505e68f9fdb09b45639e999744fc2f651c4e54818024fd50d5df4c1"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 242,
+      "order": "tiles_serial",
+      "input_sha256": "acfc1791927dfd0365053cb5eabba20e468807f5c4af863b4659d628d36fdaff",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2010,
+        "first_mismatch": [
+          2158,
+          27
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "7fb68b14ab0fc420de3fca467e79de967601cab38f5f6a658763775f18b4e057",
+        "candidate_sha256": "ea1cf4fdb5314b9498c7a8a5c96e9e8729d4cc023b601a44c0a881ad3fcb4969"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "legal",
+      "seed": 242,
+      "order": "tiles_tree",
+      "input_sha256": "acfc1791927dfd0365053cb5eabba20e468807f5c4af863b4659d628d36fdaff",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1963,
+        "first_mismatch": [
+          2158,
+          27
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "7fb68b14ab0fc420de3fca467e79de967601cab38f5f6a658763775f18b4e057",
+        "candidate_sha256": "08fc7b17449d942896f449bbbd690eb014264a36c0b6facbd92d49acdf974bf3"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 43,
+      "order": "lanes_tree",
+      "input_sha256": "8aaefa2eab16490841df2b1c76f870891902a133132ad4855cb60573fc011140",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1217,
+        "first_mismatch": [
+          1085,
+          42
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "f0978bfb0f77ace590a6fe8182023526b1e32be0d108ee326292bdf35202d1d5",
+        "candidate_sha256": "c2c9abbe85f794ff53fad519f952cd9e854726f2e22030451b43a788b3bf9dd9"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 43,
+      "order": "tiles_serial",
+      "input_sha256": "8aaefa2eab16490841df2b1c76f870891902a133132ad4855cb60573fc011140",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1251,
+        "first_mismatch": [
+          1085,
+          42
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "f0978bfb0f77ace590a6fe8182023526b1e32be0d108ee326292bdf35202d1d5",
+        "candidate_sha256": "ae42eceb65c42bd0915e87cc5d39172ed6bb8da8839a3e44ae37bc3b47dafdd5"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 43,
+      "order": "tiles_tree",
+      "input_sha256": "8aaefa2eab16490841df2b1c76f870891902a133132ad4855cb60573fc011140",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1252,
+        "first_mismatch": [
+          1085,
+          42
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "f0978bfb0f77ace590a6fe8182023526b1e32be0d108ee326292bdf35202d1d5",
+        "candidate_sha256": "43aa8cdbf0919f9ff9ed7b8b57b845c9309a20a4d9e48fc17bdb4fb32d19f91a"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 143,
+      "order": "lanes_tree",
+      "input_sha256": "9ab5dd5de55917c6fb742d68c2f17f27ea40147194831876341adc440fcc5391",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2160,
+        "first_mismatch": [
+          8453,
+          84
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "9e16f109a59717f62d18c77670c4a6e1ffe48d8c3f3b2616345b7a00aae08f22",
+        "candidate_sha256": "cffa11b19e74c4211ecb09f487df2b14dbf60bc0199e3d6eea801d3796b411c3"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 143,
+      "order": "tiles_serial",
+      "input_sha256": "9ab5dd5de55917c6fb742d68c2f17f27ea40147194831876341adc440fcc5391",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2162,
+        "first_mismatch": [
+          14196,
+          554
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "9e16f109a59717f62d18c77670c4a6e1ffe48d8c3f3b2616345b7a00aae08f22",
+        "candidate_sha256": "6f5d29f6f752f7986965d1e96e6b83416f6d91b346ff8b90b7ddb1fd70b95364"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 143,
+      "order": "tiles_tree",
+      "input_sha256": "9ab5dd5de55917c6fb742d68c2f17f27ea40147194831876341adc440fcc5391",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2189,
+        "first_mismatch": [
+          3804,
+          114
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "9e16f109a59717f62d18c77670c4a6e1ffe48d8c3f3b2616345b7a00aae08f22",
+        "candidate_sha256": "c3cd8e0a96260e0f424b6bd7ffb77e46025bfd0c3248155db295066e4165087c"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 243,
+      "order": "lanes_tree",
+      "input_sha256": "390d43394e69e23233f8ab5c96d148e214485709c6fff500b498a1d8127e04f0",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 793,
+        "first_mismatch": [
+          3414,
+          81
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "bd4cc564edc5b01a3c20e9b60fb99fd29bc1d8b1ffe26b4cd79f5ed10ef19a72",
+        "candidate_sha256": "6e9bdd5e26ff6eee48e25a4dcbfd857034c8ae5324e9fb20e7ba148371eea6a4"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 243,
+      "order": "tiles_serial",
+      "input_sha256": "390d43394e69e23233f8ab5c96d148e214485709c6fff500b498a1d8127e04f0",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 758,
+        "first_mismatch": [
+          3414,
+          81
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "bd4cc564edc5b01a3c20e9b60fb99fd29bc1d8b1ffe26b4cd79f5ed10ef19a72",
+        "candidate_sha256": "bbcad4a148d257d9b68a68e6f8ea0c6af741ee68e93bd5d57cdcfa8144041c78"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 16384,
+      "kind": "stress",
+      "seed": 243,
+      "order": "tiles_tree",
+      "input_sha256": "390d43394e69e23233f8ab5c96d148e214485709c6fff500b498a1d8127e04f0",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 749,
+        "first_mismatch": [
+          3414,
+          81
+        ],
+        "shape": [
+          131072,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "bd4cc564edc5b01a3c20e9b60fb99fd29bc1d8b1ffe26b4cd79f5ed10ef19a72",
+        "candidate_sha256": "d21090b93e9b087bae04258726688e0373601ec695b492ed964c94e859c1503d"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 42,
+      "order": "lanes_tree",
+      "input_sha256": "340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2892,
+        "first_mismatch": [
+          760,
+          0
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "62920968e7d34ba4ca8cc323a007ee6e83967987cae4738dc9bfaaa1016247af",
+        "candidate_sha256": "0f2b980eacc7d2321cb923e4c6fbab7ebc851558ecde139dbb155ac14d8559e1"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 42,
+      "order": "tiles_serial",
+      "input_sha256": "340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2930,
+        "first_mismatch": [
+          760,
+          0
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "62920968e7d34ba4ca8cc323a007ee6e83967987cae4738dc9bfaaa1016247af",
+        "candidate_sha256": "c5ae7ff2681beee7fc7e885b7ed1be9302af308b5e19935d9446080bbe70e9b2"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 42,
+      "order": "tiles_tree",
+      "input_sha256": "340cce563b0b84eff52fc13da7979be261297e948223db5830fb0c7df267a743",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2938,
+        "first_mismatch": [
+          760,
+          0
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "62920968e7d34ba4ca8cc323a007ee6e83967987cae4738dc9bfaaa1016247af",
+        "candidate_sha256": "a215452bcb2713eec1011ac2dce2b1db6a19f52ac8c7f101220571742654cfca"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 142,
+      "order": "lanes_tree",
+      "input_sha256": "c8b39242fb19f7b6bdfcdfe71233dc73a938170acbf2d1b3a4e79bba88539e01",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 3466,
+        "first_mismatch": [
+          40607,
+          0
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "7198153e04e4cfadde33d43ecca53349e1eba6a8fa4c9fcc13b4629cccb3c18c",
+        "candidate_sha256": "564383cdacfcfbdf46f1c70a52ea6d01f4a1eaa54ca00e42fd7b4321dbb66532"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 142,
+      "order": "tiles_serial",
+      "input_sha256": "c8b39242fb19f7b6bdfcdfe71233dc73a938170acbf2d1b3a4e79bba88539e01",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 3502,
+        "first_mismatch": [
+          6182,
+          22
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "7198153e04e4cfadde33d43ecca53349e1eba6a8fa4c9fcc13b4629cccb3c18c",
+        "candidate_sha256": "a364deccbf6c87a07683ea9a8a6e281e75e30c8771c9d4c07d44040d344fa44d"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 142,
+      "order": "tiles_tree",
+      "input_sha256": "c8b39242fb19f7b6bdfcdfe71233dc73a938170acbf2d1b3a4e79bba88539e01",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 3503,
+        "first_mismatch": [
+          6182,
+          22
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "7198153e04e4cfadde33d43ecca53349e1eba6a8fa4c9fcc13b4629cccb3c18c",
+        "candidate_sha256": "8095e667097cac93cee4cf414a063c2296556b210c132ded7746c86783a7bddb"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 242,
+      "order": "lanes_tree",
+      "input_sha256": "6bf58336ae7748ea9f7b6746c2a9f72e4050f33f65ea709256d92dc04967c0b8",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2751,
+        "first_mismatch": [
+          42276,
+          0
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "a7f8133430d2ad1e7a720fe78650c4cb1a37d8b73697456e6c71671c2d31e33f",
+        "candidate_sha256": "d627a49c16d2c136f637901f5ce628369f633ddf0c6cc6f56b959b9a756a55fb"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 242,
+      "order": "tiles_serial",
+      "input_sha256": "6bf58336ae7748ea9f7b6746c2a9f72e4050f33f65ea709256d92dc04967c0b8",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2931,
+        "first_mismatch": [
+          2158,
+          27
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "a7f8133430d2ad1e7a720fe78650c4cb1a37d8b73697456e6c71671c2d31e33f",
+        "candidate_sha256": "6b4541c54829bec9f1f9bbba88673975ebe086bab5e74010964e2ac2c4cf4d9c"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "legal",
+      "seed": 242,
+      "order": "tiles_tree",
+      "input_sha256": "6bf58336ae7748ea9f7b6746c2a9f72e4050f33f65ea709256d92dc04967c0b8",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 2884,
+        "first_mismatch": [
+          2158,
+          27
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "a7f8133430d2ad1e7a720fe78650c4cb1a37d8b73697456e6c71671c2d31e33f",
+        "candidate_sha256": "4bacf5150073ede0d86512819f9aa10552f2dacc8f6817e0703898a9572a20e6"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 43,
+      "order": "lanes_tree",
+      "input_sha256": "8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1547,
+        "first_mismatch": [
+          1085,
+          42
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "1eb4aef9cce091f323d3b0397b90155f3fe53fe352073db598e6992c409b8598",
+        "candidate_sha256": "d8d4b194f9683152a6f947cdfd7c82125eea3cf7d2f227cfc41d2d018857ae46"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 43,
+      "order": "tiles_serial",
+      "input_sha256": "8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1517,
+        "first_mismatch": [
+          1085,
+          42
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "1eb4aef9cce091f323d3b0397b90155f3fe53fe352073db598e6992c409b8598",
+        "candidate_sha256": "a044b69ff79a27a07d0f88628f94196bc4caf0410f3fbbb0a9b1bfea3007b7ff"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 43,
+      "order": "tiles_tree",
+      "input_sha256": "8d054a06a9fcfa339cc77cecab7b98546f5212462c009403955ee390bff53955",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1532,
+        "first_mismatch": [
+          1085,
+          42
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "1eb4aef9cce091f323d3b0397b90155f3fe53fe352073db598e6992c409b8598",
+        "candidate_sha256": "8f4f92fb6dc535d3d1f333492a4b823f5e0c56e00f58b5ff5b6c0420599e7a46"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 143,
+      "order": "lanes_tree",
+      "input_sha256": "cdc0438220e568a4cf698618b02f635d01c3fa478a9bf54e1c0f7af5f22667fa",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 4270,
+        "first_mismatch": [
+          8453,
+          84
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "137f25655d7ce04c2911e10c1876a72db06e38504ecd2d36a72c6b7a2cd5cea9",
+        "candidate_sha256": "d5816ac162c838b72f5cf76182e074211c11dbeef57e91f9b94a66eac740b72e"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 143,
+      "order": "tiles_serial",
+      "input_sha256": "cdc0438220e568a4cf698618b02f635d01c3fa478a9bf54e1c0f7af5f22667fa",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 4260,
+        "first_mismatch": [
+          14196,
+          554
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "137f25655d7ce04c2911e10c1876a72db06e38504ecd2d36a72c6b7a2cd5cea9",
+        "candidate_sha256": "0705b5f4d9bd22f574ff49cc303e566d0e2432ebbad5ae8acbaa7775a4482546"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 143,
+      "order": "tiles_tree",
+      "input_sha256": "cdc0438220e568a4cf698618b02f635d01c3fa478a9bf54e1c0f7af5f22667fa",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 4315,
+        "first_mismatch": [
+          3804,
+          114
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "137f25655d7ce04c2911e10c1876a72db06e38504ecd2d36a72c6b7a2cd5cea9",
+        "candidate_sha256": "25fd9ed47bea19bdf9644d1e712af0609659bbb387c3ecf8350792d254678738"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 243,
+      "order": "lanes_tree",
+      "input_sha256": "5f4775653502537499158b6d175475e292aab65fcd59d1dc5eed3dd53e0336d4",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1589,
+        "first_mismatch": [
+          3414,
+          81
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "d08410b8554653ceb2a8726032f4f427a5d8869a3dc0f05777c5414840b67937",
+        "candidate_sha256": "3b1c1248d059dd303fd95d998d3d67f6430b812649ab0fcad5b69fa3a7b0d88a"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 243,
+      "order": "tiles_serial",
+      "input_sha256": "5f4775653502537499158b6d175475e292aab65fcd59d1dc5eed3dd53e0336d4",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1572,
+        "first_mismatch": [
+          3414,
+          81
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "d08410b8554653ceb2a8726032f4f427a5d8869a3dc0f05777c5414840b67937",
+        "candidate_sha256": "da6df23b14124d57602e7386af77fa8a74a57566e07c32ce7e5a58c403ebde0b"
+      },
+      "passes": false
+    },
+    {
+      "batch_per_device": 32768,
+      "kind": "stress",
+      "seed": 243,
+      "order": "tiles_tree",
+      "input_sha256": "5f4775653502537499158b6d175475e292aab65fcd59d1dc5eed3dd53e0336d4",
+      "status": "complete",
+      "comparison": {
+        "exact": false,
+        "finite": true,
+        "mismatch_count": 1561,
+        "first_mismatch": [
+          3414,
+          81
+        ],
+        "shape": [
+          262144,
+          1024
+        ],
+        "dtype": "bfloat16",
+        "reference_sha256": "d08410b8554653ceb2a8726032f4f427a5d8869a3dc0f05777c5414840b67937",
+        "candidate_sha256": "7796b8ead5e4917de39474911a79a3340d92c2852e04e6e233fcbdff4370dee2"
+      },
+      "passes": false
+    }
+  ],
+  "hlo": {
+    "16384_lanes_tree": {
+      "expected_stage_count": 4,
+      "expected_custom_call_count": 4,
+      "custom_call_count": 4,
+      "forbidden_operations": [],
+      "passes": true
+    },
+    "16384_tiles_serial": {
+      "expected_stage_count": 4,
+      "expected_custom_call_count": 4,
+      "custom_call_count": 4,
+      "forbidden_operations": [],
+      "passes": true
+    },
+    "16384_tiles_tree": {
+      "expected_stage_count": 4,
+      "expected_custom_call_count": 4,
+      "custom_call_count": 4,
+      "forbidden_operations": [],
+      "passes": true
+    },
+    "32768_lanes_tree": {
+      "expected_stage_count": 4,
+      "expected_custom_call_count": 4,
+      "custom_call_count": 4,
+      "forbidden_operations": [],
+      "passes": true
+    },
+    "32768_tiles_serial": {
+      "expected_stage_count": 4,
+      "expected_custom_call_count": 4,
+      "custom_call_count": 4,
+      "forbidden_operations": [],
+      "passes": true
+    },
+    "32768_tiles_tree": {
+      "expected_stage_count": 4,
+      "expected_custom_call_count": 4,
+      "custom_call_count": 4,
+      "forbidden_operations": [],
+      "passes": true
+    }
+  },
+  "scope": "input_prefix_only_no_speed_claim",
+  "context": {
+    "source_commit": "1e63659243ff66e3582ebeb522d509ee4ddad43e",
+    "runtime": {
+      "python": "3.12.13 (main, Jun 24 2026, 04:58:23) [GCC 14.2.0]",
+      "platform": "Linux-6.6.153+-x86_64-with-glibc2.41",
+      "versions": {
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "numpy": "2.5.0",
+        "torch": "2.8.0+cpu"
+      },
+      "devices": [
+        {
+          "id": 0,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 1,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 2,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 3,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 4,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 5,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 6,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        },
+        {
+          "id": 7,
+          "kind": "TPU v5 lite",
+          "platform": "tpu",
+          "process_index": 0
+        }
+      ],
+      "process_count": 1,
+      "process_index": 0,
+      "local_device_count": 8,
+      "active_device_count": 1,
+      "default_matmul_precision": null,
+      "x64_enabled": true
+    },
+    "checkpoint_sha256": "2b540c3e396f7fb5710ccc44201a698740df1761495ee4059be706374e8e5ac2",
+    "model_source_sha256": "6d00da89ce45cf84167db20780e30f676cde3ae756d376c8e05a7e0dcf98e46e",
+    "batches": [
+      16384,
+      32768
+    ],
+    "corpora": [
+      [
+        "legal",
+        42
+      ],
+      [
+        "legal",
+        142
+      ],
+      [
+        "legal",
+        242
+      ],
+      [
+        "stress",
+        43
+      ],
+      [
+        "stress",
+        143
+      ],
+      [
+        "stress",
+        243
+      ]
+    ]
+  },
+  "eligible_orders": []
+}
