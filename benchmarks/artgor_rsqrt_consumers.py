@@ -38,17 +38,21 @@ def consume_variance(values, *, engine, arithmetic='fp32', epsilon=1e-5,
     if engine == 'jax':
         return _expression(values, arithmetic=arithmetic, epsilon=epsilon)
     if values.ndim == 1:
-        block = pl.BlockSpec((128,), lambda i: (i.astype(jnp.int32),))
+        # BF16 rank-one outputs require a 256-element tile unless the
+        # block covers the entire array. Input FP32 alone permits 128.
+        rows = min(256, values.shape[0])
+        block = pl.BlockSpec((rows,), lambda i: (i.astype(jnp.int32),))
     elif values.ndim == 2:
+        rows = 128
         block = pl.BlockSpec((128, values.shape[1]),
                             lambda i: (i.astype(jnp.int32), jnp.int32(0)))
     else:
         raise ValueError('consumer expects rank one or two')
-    if values.shape[0] % 128:
-        raise ValueError('consumer rows must be aligned to 128')
+    if not rows or values.shape[0] % rows:
+        raise ValueError('consumer rows must be aligned to its block size')
     return pl.pallas_call(functools.partial(_kernel, arithmetic=arithmetic, epsilon=epsilon),
         out_shape=jax.ShapeDtypeStruct(values.shape, jnp.bfloat16),
         grid_spec=pltpu.PrefetchScalarGridSpec(num_scalar_prefetch=0,
-            in_specs=[block], out_specs=block, grid=(values.shape[0] // 128,)),
+            in_specs=[block], out_specs=block, grid=(values.shape[0] // rows,)),
         compiler_params=pltpu.CompilerParams(dimension_semantics=('parallel',)),
         interpret=interpret, name=f'rsqrt_{arithmetic}_{values.ndim}d')(values)

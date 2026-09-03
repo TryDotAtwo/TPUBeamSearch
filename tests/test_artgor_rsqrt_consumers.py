@@ -3,6 +3,20 @@ import jax.numpy as jnp
 import pytest
 
 
+@pytest.mark.parametrize('rows', [128, 256, 16384])
+def test_scalar_bf16_output_block_obeys_tpu_tiling(rows):
+    import jax
+    from benchmarks.artgor_rsqrt_consumers import consume_variance
+    traced = jax.make_jaxpr(lambda x: consume_variance(x, engine='pallas'))(
+        jax.ShapeDtypeStruct((rows,), jnp.float32))
+    mapping = traced.jaxpr.eqns[0].params['grid_mapping']
+    block = mapping.block_mappings[-1].block_shape[0].block_size
+    # Actual TPU v7 rejection: rank-one BF16 tile must cover the full
+    # array, be a multiple of 1024, or a power of two at least 256.
+    assert block == rows or block % 1024 == 0 or (block >= 256 and block & (block - 1) == 0)
+    assert mapping.grid[0] * block == rows
+
+
 def test_consumer_collector_preserves_device_order_before_host_broadcast():
     from benchmarks.artgor_rsqrt_consumers import collect_consumer
     values = np.arange(16, dtype=np.float32)

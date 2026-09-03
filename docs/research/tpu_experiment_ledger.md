@@ -1,5 +1,13 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: rsqrt v7 rejected at rank-one BF16 output mapping
+
+First Pallas scalar consumer failed compilation: block128 illegal for BF16
+output on16384local rows (minimum power-of-two tile256). Fix uses256scalar
+blocks and matching grid, leaves matrix path unchanged. Mapping regression
+failed at256/16384 before fix and15consumer tests pass after. Only one JAX
+consumer completed; no A/B/speed conclusion. See v7 report and partial JSON.
+
 ## 2026-09-03: same-buffer rsqrt consumers integrated
 
 Capture runner `--compare-consumers` uses validated v4 inputs and the native

@@ -1,0 +1,63 @@
+[{"stream_name":"stderr","time":18.158688412,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":19.783618621,"data":"\n"}
+,{"stream_name":"stderr","time":19.783655031,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":19.783660391,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":19.93589535,"data":"Cloning into '/tmp/TPUBeamSearch-artgor-prefix-gate'...\n"}
+,{"stream_name":"stderr","time":30.279423194,"data":"HEAD is now at eadd704 Integrate same-buffer rsqrt attribution matrix\n"}
+,{"stream_name":"stdout","time":34.332631425,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":34.332686785,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":39.493085176,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":39.493115896,"data":"E0000 00:00:1788425721.965416      47 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":39.493122726,"data":"=== Source Location Trace: ===\n"}
+,{"stream_name":"stdout","time":39.493127366,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":176.844758778,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":176.844794118,"data":"  File \"/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py\", line 283, in \u003clambda\u003e\n"}
+,{"stream_name":"stdout","time":176.844801408,"data":"    lambda x:consume_variance(x,engine=engine,arithmetic=arithmetic,\n"}
+,{"stream_name":"stdout","time":176.844806248,"data":"  File \"/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_rsqrt_consumers.py\", line 49, in consume_variance\n"}
+,{"stream_name":"stdout","time":176.844810898,"data":"    return pl.pallas_call(functools.partial(_kernel, arithmetic=arithmetic, epsilon=epsilon),\n"}
+,{"stream_name":"stdout","time":176.844816798,"data":"jax._src.source_info_util.JaxStackTraceBeforeTransformation: ValueError: The Pallas TPU lowering currently requires that rank 1 block shapes, either 1) the first (and only) dimension of the block shape is equal to the first (and only) dimension of the array shape, or 2) the first (and only) dimension of the block shape is a multiple of 1024, or 3) the first (and only) dimension of the block shape is a power of 2 and at least the tiling size (256 = 128 * (32 // 16)) of the array shape. Block spec for outputs in pallas_call rsqrt_fp32_1d at /tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_rsqrt_consumers.py:29 has block shape (Blocked(block_size=128),), array shape (16384,), and index_map { lambda ; a:i32[]. let  in (a,) }, in memory space \u003cMemorySpace.DEFAULT: 'default'\u003e.\n"}
+,{"stream_name":"stdout","time":176.844823278,"data":"See details at https://docs.jax.dev/en/latest/pallas/grid_blockspec.html#pallas-blockspec\n"}
+,{"stream_name":"stdout","time":176.844828348,"data":"\n"}
+,{"stream_name":"stdout","time":176.844832758,"data":"The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n"}
+,{"stream_name":"stdout","time":176.844849338,"data":"\n"}
+,{"stream_name":"stdout","time":176.844853098,"data":"--------------------\n"}
+,{"stream_name":"stdout","time":176.844856248,"data":"\n"}
+,{"stream_name":"stdout","time":176.844859628,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":176.844866988,"data":"\n"}
+,{"stream_name":"stdout","time":176.844869998,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":176.844872958,"data":"  File \"\u003cfrozen runpy\u003e\", line 198, in _run_module_as_main\n"}
+,{"stream_name":"stdout","time":176.844876208,"data":"  File \"\u003cfrozen runpy\u003e\", line 88, in _run_code\n"}
+,{"stream_name":"stdout","time":176.844879258,"data":"  File \"/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py\", line 352, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":176.844882738,"data":"    print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,\n"}
+,{"stream_name":"stdout","time":176.845030158,"data":"                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":176.845036028,"data":"  File \"/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py\", line 287, in run\n"}
+,{"stream_name":"stdout","time":176.845081368,"data":"    lowered=call.lower(jax.device_put(sample,csharding))\n"}
+,{"stream_name":"stdout","time":176.845219848,"data":"            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":176.845234598,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n"}
+,{"stream_name":"stdout","time":176.845433788,"data":"    return mlir.lower_per_platform(\n"}
+,{"stream_name":"stdout","time":176.845439398,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":176.845442488,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 899, in tpu_lowering\n"}
+,{"stream_name":"stdout","time":176.845618518,"data":"    return rule(ctx, *in_nodes, **params)\n"}
+,{"stream_name":"stdout","time":176.845671378,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":176.845697138,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 405, in pallas_call_tpu_lowering_rule\n"}
+,{"stream_name":"stdout","time":176.845812488,"data":"    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(\n"}
+,{"stream_name":"stdout","time":176.845892108,"data":"                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":176.845895158,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1014, in lower_jaxpr_to_pipelined_module\n"}
+,{"stream_name":"stdout","time":176.846103558,"data":"    lower_jaxpr_into_pipelined_module(\n"}
+,{"stream_name":"stdout","time":176.846107238,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1070, in lower_jaxpr_into_pipelined_module\n"}
+,{"stream_name":"stdout","time":176.846285848,"data":"    _check_block_mappings(\n"}
+,{"stream_name":"stdout","time":176.847210118,"data":"  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 989, in _check_block_mappings\n"}
+,{"stream_name":"stdout","time":176.847219908,"data":"    raise ValueError(\n"}
+,{"stream_name":"stdout","time":176.847223888,"data":"ValueError: The Pallas TPU lowering currently requires that rank 1 block shapes, either 1) the first (and only) dimension of the block shape is equal to the first (and only) dimension of the array shape, or 2) the first (and only) dimension of the block shape is a multiple of 1024, or 3) the first (and only) dimension of the block shape is a power of 2 and at least the tiling size (256 = 128 * (32 // 16)) of the array shape. Block spec for outputs in pallas_call rsqrt_fp32_1d at /tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_rsqrt_consumers.py:29 has block shape (Blocked(block_size=128),), array shape (16384,), and index_map { lambda ; a:i32[]. let  in (a,) }, in memory space \u003cMemorySpace.DEFAULT: 'default'\u003e.\n"}
+,{"stream_name":"stdout","time":176.847235878,"data":"See details at https://docs.jax.dev/en/latest/pallas/grid_blockspec.html#pallas-blockspec\n"}
+,{"stream_name":"stdout","time":176.847238628,"data":"--------------------\n"}
+,{"stream_name":"stdout","time":176.847241018,"data":"For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.\n"}
+,{"stream_name":"stderr","time":181.415851013,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":181.415900264,"data":"  File \"/kaggle/src/script.py\", line 37, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":181.415909653,"data":"    main()\n"}
+,{"stream_name":"stderr","time":181.415919544,"data":"  File \"/kaggle/src/script.py\", line 33, in main\n"}
+,{"stream_name":"stderr","time":181.416048324,"data":"    raise subprocess.CalledProcessError(code,command)\n"}
+,{"stream_name":"stderr","time":181.416068693,"data":"subprocess.CalledProcessError: Command '('/usr/local/bin/python', '-m', 'benchmarks.artgor_prefix_capture', '--output', '/kaggle/working/artgor_rsqrt_consumers', '--compare-consumers')' returned non-zero exit status 1.\n"}
+,{"stream_name":"stderr","time":185.553152814,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":187.764634095,"data":"[NbConvertApp] Writing 281409 bytes to __results__.html\n"}
+]

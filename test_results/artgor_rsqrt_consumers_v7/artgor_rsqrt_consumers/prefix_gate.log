@@ -1,0 +1,48 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788425721.965416      47 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: ===
+learning/45eac/tfrc/runtime/common_lib.cc:238
+Traceback (most recent call last):
+  File "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py", line 283, in <lambda>
+    lambda x:consume_variance(x,engine=engine,arithmetic=arithmetic,
+  File "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_rsqrt_consumers.py", line 49, in consume_variance
+    return pl.pallas_call(functools.partial(_kernel, arithmetic=arithmetic, epsilon=epsilon),
+jax._src.source_info_util.JaxStackTraceBeforeTransformation: ValueError: The Pallas TPU lowering currently requires that rank 1 block shapes, either 1) the first (and only) dimension of the block shape is equal to the first (and only) dimension of the array shape, or 2) the first (and only) dimension of the block shape is a multiple of 1024, or 3) the first (and only) dimension of the block shape is a power of 2 and at least the tiling size (256 = 128 * (32 // 16)) of the array shape. Block spec for outputs in pallas_call rsqrt_fp32_1d at /tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_rsqrt_consumers.py:29 has block shape (Blocked(block_size=128),), array shape (16384,), and index_map { lambda ; a:i32[]. let  in (a,) }, in memory space <MemorySpace.DEFAULT: 'default'>.
+See details at https://docs.jax.dev/en/latest/pallas/grid_blockspec.html#pallas-blockspec
+
+The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+
+--------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py", line 352, in <module>
+    print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py", line 287, in run
+    lowered=call.lower(jax.device_put(sample,csharding))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 974, in _pallas_call_lowering
+    return mlir.lower_per_platform(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 899, in tpu_lowering
+    return rule(ctx, *in_nodes, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py", line 405, in pallas_call_tpu_lowering_rule
+    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1014, in lower_jaxpr_to_pipelined_module
+    lower_jaxpr_into_pipelined_module(
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1070, in lower_jaxpr_into_pipelined_module
+    _check_block_mappings(
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 989, in _check_block_mappings
+    raise ValueError(
+ValueError: The Pallas TPU lowering currently requires that rank 1 block shapes, either 1) the first (and only) dimension of the block shape is equal to the first (and only) dimension of the array shape, or 2) the first (and only) dimension of the block shape is a multiple of 1024, or 3) the first (and only) dimension of the block shape is a power of 2 and at least the tiling size (256 = 128 * (32 // 16)) of the array shape. Block spec for outputs in pallas_call rsqrt_fp32_1d at /tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_rsqrt_consumers.py:29 has block shape (Blocked(block_size=128),), array shape (16384,), and index_map { lambda ; a:i32[]. let  in (a,) }, in memory space <MemorySpace.DEFAULT: 'default'>.
+See details at https://docs.jax.dev/en/latest/pallas/grid_blockspec.html#pallas-blockspec
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
