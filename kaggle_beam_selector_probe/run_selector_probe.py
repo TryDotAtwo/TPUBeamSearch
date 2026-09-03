@@ -5,9 +5,9 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = '50bdcaf3735d73c926d87786c13db749d5641037'
+COMMIT_SHA = '47b3fba8f85b385e68359884f60f021d3ba13883'
 CHECKOUT = Path('/tmp/TPUBeamSearch-selector-probe')
-OUTPUT = Path('/kaggle/working/selector_probe')
+OUTPUT = Path('/kaggle/working/dedup_stage_probe')
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
                XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
                PYTHONPATH=os.pathsep.join((str(CHECKOUT), str(CHECKOUT / 'src'))))
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    command = (sys.executable, '-m', 'benchmarks.beam_selector_probe', '--output', str(OUTPUT))
+    command = (sys.executable, '-m', 'benchmarks.beam_dedup_stage_probe', '--output', str(OUTPUT))
     with (OUTPUT / 'probe.log').open('w', encoding='utf-8') as log:
         with subprocess.Popen(command, cwd=CHECKOUT, env=env, stdout=subprocess.PIPE,
                               stderr=subprocess.STDOUT, text=True, bufsize=1) as process:
