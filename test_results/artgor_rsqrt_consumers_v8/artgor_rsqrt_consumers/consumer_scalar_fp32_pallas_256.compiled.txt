@@ -1,0 +1,37 @@
+HloModule jit__lambda, is_scheduled=true, entry_computation_layout={(f32[256]{0:T(256)})->bf16[256]{0:T(256)(128)(2,1)}}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_prefix_capture.py"
+3 "/tmp/TPUBeamSearch-artgor-prefix-gate/benchmarks/artgor_rsqrt_consumers.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "run"
+5 "run.<locals>.<lambda>"
+6 "consume_variance"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=352 end_line=352 column=31 end_column=31}
+4 {file_name_id=2 function_name_id=4 line=287 end_line=287 column=48 end_column=48}
+5 {file_name_id=2 function_name_id=5 line=283 end_line=283 column=53 end_column=53}
+6 {file_name_id=3 function_name_id=6 line=53 end_line=53 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+
+
+ENTRY %main.0_spmd (param.1: f32[256]) -> bf16[256] {
+  %param.1 = f32[256]{0:T(256)} parameter(0), sharding={devices=[8]<=[8]}, metadata={op_name="x"}
+  ROOT %rsqrt_fp32_1d.1 = bf16[256]{0:T(256)(128)(2,1)} custom-call(%param.1), custom_call_target="tpu_custom_call", operand_layout_constraints={f32[256]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(<lambda>)/shard_map/rsqrt_fp32_1d/pallas_call" stack_frame_id=6}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"TUzvUgFNTElSMjMuMC4wZ2l0AAEpCQEDBQcBAwkDFQsNDxETFRcZGx0D57sZAbMHCwsLCw8LDwsPD2UPCwsLMwsLExMPCxMPDw8TCw9LCw8LCzMLCwsLCxMbCxsLGxsPDwsPCw8bEx8LDw8PHxsLDwsPCw8PHw8LDwsPDxsLDwsPGyMPC1MLEwUHYY1NBwNZARkPFw8HBx8fBxcbFwsCwgcfBR8FIQUjBSUdZWcFJx1zdQUpHQ19HZ2fYWZmaW5lX21hcDwoZDApIC0+IChkMCk+ABEFAQUrBS0FLyMFAxEAAQAAAAAAAAUxDRUDAwlhAwMJYx0NbQUzAwN/uRWLExWZEx0NpQMDOTsFNREFPQMRP0EFQ0VHSRlLGQdNT7dRUwU3AQO1DRMFOSMFAxEBAAAAAAAAAAU7BT0FPwVBBUMBBVVZAwUbVx8hCR0DBRtbHyEJIwMFBSUHHQMFBSUHIxEBAREJAQVFHWlrBUcVKystAwc9PVMDAwlxEwcQAADKDQVJHS13FXkTHRF7LQMJMzM1gS0DBz0lpQVLHYOFBU0dh4kFTxUxMR0RjS0DCTMXNYMdkZMFUR2VlwVTFTMzHRGbLQMHNYWtBVUdoaMFVxU1NS0DBz0JHwMHLamrra+xERcABVkjAQkhAQAAAAEAAAABAAAAAAAAAAVbIwEBASN0cHUubWVtb3J5X3NwYWNlPHZtZW0+ACN0cHUuZGltZW5zaW9uX3NlbWFudGljczxwYXJhbGxlbD4AI3RwdS5jb3JlX3R5cGU8dGM+ACNhcml0aC5mYXN0bWF0aDxub25lPgABAgInAwIIBwECBAsDF7MDAggHFxezAwIIDxcHJwMCCA8FBwELDQEFAwEDAQEJBF4CBQERATcHAwENBREBPQcDGzMHAQELAQ0BAwMLKQMJCQYLAwMFAwcLBgsDAwMJAwMPbwMHDQYPAwMDDQ8HDy8DAwULDxEHgS8DAwMREwaPAxEDEwMDFSkDCQkGFQMRBQUXFQUVpwcVBRcHAAEFEQFdBwMFCwMBAQMDAScDAQcEAQMBBREBXwcDBQsDAQEDAwEnAwEHBAEDAQYDAQUBANoKXREpFQ1VLRkPEwsRCx0dHSMhIyktCRkdGSUZEQ0THZcjGxcXIyUZGRUfDw0JHRFidWlsdGluAHN0YWJsZV9tb3NhaWMAdHB1AGFyaXRoAG1vZHVsZQBhcml0aC5jb25zdGFudABmdW5jLmZ1bmMAZnVuYy5yZXR1cm4AdmVjdG9yLmxvYWQAdmVjdG9yLnNoYXBlX2Nhc3QAdmVjdG9yLmJyb2FkY2FzdABhcml0aC5hZGRmAG1hdGgucnNxcnQAYXJpdGgudHJ1bmNmAHRwdS52ZWN0b3Jfc3RvcmUAL3RtcC9UUFVCZWFtU2VhcmNoLWFydGdvci1wcmVmaXgtZ2F0ZS9iZW5jaG1hcmtzL2FydGdvcl9yc3FydF9jb25zdW1lcnMucHkAZnVuY3Rpb25fdHlwZQBzeW1fbmFtZQB2YWx1ZQBfa2VybmVsAF9leHByZXNzaW9uAHRyYW5zZm9ybV9pbmRpY2VzAHRyYW5zZm9ybV8wAHdpbmRvd19ib3VuZHMAdHJhbnNmb3JtXzEAYWRkAHN0YWJsZV9tb3NhaWMudmVyc2lvbgBkaW1lbnNpb25fc2VtYW50aWNzAGl0ZXJhdGlvbl9ib3VuZHMAc2NhbGFyX3ByZWZldGNoAHNjcmF0Y2hfb3BlcmFuZHMAcnNxcnRfZnAzMl8xZAB0cHUuY29yZV90eXBlAHdpbmRvd19wYXJhbXMAZ2V0OgBnZXQvZ2V0AGFkZDoAZmFzdG1hdGgAcnNxcnQ6AHJzcXJ0L3JzcXJ0AGNvbnZlcnRfZWxlbWVudF90eXBlOgBjb252ZXJ0X2VsZW1lbnRfdHlwZS9jb252ZXJ0X2VsZW1lbnRfdHlwZQBzd2FwOgBzd2FwL3N3YXAAb3BlcmFuZFNlZ21lbnRTaXplcwBzdHJpZGVzAA==","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"2048"}]}
+}
+

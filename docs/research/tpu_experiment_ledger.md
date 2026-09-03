@@ -1,5 +1,15 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: rsqrt v8 all16 consumers complete
+
+ExplicitFP32 JAX/Pallas consumers match exactly on identical realvariance,
+scalar andbroadcast,16K andchunk256. Both retain2048invstd/1275prefix errors
+againstlargeJAX; both exactagainstchunk256JAX. Thus tested FP32consumer is not
+the cause; next isolatevarianceproducer/boundary with outputcontrols.
+BF16-expressionJAX matchesFP32native, BF16-expressionPallas differs16293rows;
+sourcecastsare not interchangeable. Allfixedv4controls valid; diagnosticvariance
+invalidseparate. No fullmodel/speedclaim. See v8report.
+
 ## 2026-09-03: rsqrt v7 rejected at rank-one BF16 output mapping
 
 First Pallas scalar consumer failed compilation: block128 illegal for BF16
