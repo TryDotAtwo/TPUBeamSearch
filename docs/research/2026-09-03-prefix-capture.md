@@ -65,3 +65,18 @@ Retain all previous controls, both complete-corpus shapes, HLO, mismatch rows
 and scalar NPZ files with full FP32 variance and BF16 invstd/variance bits.
 The pair-output host collector preserves device-major order and distinct dtypes.
 This is attribution only: no production kernel or default is promoted.
+
+## Fixed-v4-input follow-up
+
+`--use-v4-inputs` explicitly selects the unchanged four-slot v4 capture for
+Dense, mean, invstd and output. The five-slot variance capture stays separate;
+its failed controls cannot supply the inference mean. Every shared field is
+compared. Original v4 mean/invstd SHA and exact JAX-statistics/Pallas-affine
+reconstruction remain mandatory. `diagnostic_variance_valid` is distinct from
+the validity of these fixed-input comparisons; BF16 variance comparisons and
+JAX-variance replays remain diagnostic-only when that flag is false.
+
+Each reduction candidate now also produces a full prefix output via the same
+Pallas affine with fixed v4 Dense/mean. All tensor counts/SHA remain exhaustive,
+but NPZ mismatch examples are limited to eight rows (`examples_only=true`).
+Complete scalar variance/invstd bits are retained for every corpus row.

@@ -74,3 +74,24 @@ def test_pair_chunks_preserve_device_major_order_and_dtypes():
     np.testing.assert_array_equal(first,states)
     np.testing.assert_array_equal(second,states)
     assert first.dtype==np.float32 and second.dtype==np.int16
+
+
+def test_bounded_capture_keeps_late_bitwise_rows_without_expansion(tmp_path):
+    from benchmarks.artgor_input_trace import save_bounded_mismatch_rows
+    a=np.zeros((100,128),np.float32)
+    b=a.copy()
+    b[70:]=-0.0
+    path=tmp_path/'bounded.npz'
+    save_bounded_mismatch_rows(path,np.arange(100)[:,None],a,b,max_rows=2)
+    with np.load(path) as result:
+        np.testing.assert_array_equal(result['row_ids'],[70,71])
+        assert result['reference'].shape==(2,128)
+        assert result['examples_only']
+
+
+def test_fixed_inputs_ignore_perturbed_variance_capture():
+    from benchmarks.artgor_prefix_capture import select_inference_capture
+    old=np.ones((2,4,8),dtype=np.float32)
+    perturbed=np.full((2,5,8),99,dtype=np.float32)
+    result=select_inference_capture({'jax_capture':perturbed,'jax_v4_control':old},use_v4_inputs=True)
+    np.testing.assert_array_equal(result,np.ones((2,4,8)))

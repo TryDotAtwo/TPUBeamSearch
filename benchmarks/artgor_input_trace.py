@@ -121,3 +121,20 @@ def save_mismatch_rows(path, raw, reference, candidate):
     row_ids = np.unique(coordinates[:, 0])
     np.savez_compressed(path, coordinates=coordinates, row_ids=row_ids,
                         raw=raw[row_ids], reference=reference[row_ids], candidate=candidate[row_ids])
+
+
+def save_bounded_mismatch_rows(path,raw,reference,candidate,*,max_rows=8):
+    """Examples only; full counts/hashes belong to the separate tensor comparison."""
+    raw,reference,candidate=map(np.asarray,(raw,reference,candidate))
+    if reference.shape!=candidate.shape or reference.dtype!=candidate.dtype or max_rows<=0:
+        raise ValueError('matching tensors and positive row limit required')
+    rows=[]
+    for start in range(0,len(reference),256):
+        a,b=[np.ascontiguousarray(x[start:start+256]).view(np.uint8).reshape(len(x[start:start+256]),-1)
+             for x in (reference,candidate)]
+        rows.extend((np.flatnonzero(np.any(a!=b,axis=1))+start).tolist())
+        if len(rows)>=max_rows:
+            break
+    row_ids=np.asarray(rows[:max_rows],dtype=np.int64)
+    np.savez_compressed(path,row_ids=row_ids,raw=raw[row_ids],reference=reference[row_ids],
+                        candidate=candidate[row_ids],examples_only=True,max_rows=max_rows)

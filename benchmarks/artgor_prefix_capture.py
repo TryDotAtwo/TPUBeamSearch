@@ -13,7 +13,7 @@ from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
 
 import benchmarks.artgor_prefix_gate as gate
 from benchmarks.artgor_prefix_shape import chunked_host
-from benchmarks.artgor_input_trace import save_mismatch_rows
+from benchmarks.artgor_input_trace import save_mismatch_rows, save_bounded_mismatch_rows
 
 from benchmarks.artgor_pallas_same_suffix import (
     reference_embedding, reference_input_dense, reference_input_ln,
@@ -60,13 +60,19 @@ def pallas_capture(states, weights, architecture, *, include_invstd=False):
     return jnp.stack((dense, mean, output), axis=1)
 
 
-def run(dataset, output, *, include_invstd=False, include_variance=False):
+def select_inference_capture(arrays,*,use_v4_inputs):
+    return arrays['jax_v4_control' if use_v4_inputs else 'jax_capture']
+
+
+def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4_inputs=False):
+    include_variance=include_variance or use_v4_inputs
     include_invstd=include_invstd or include_variance
     output.mkdir(parents=True, exist_ok=True)
     path = output/'artgor_prefix_capture.json'
     report = dict(status='running', schema_version=1, comparisons={},
                   scope='captured_input_prefix_only_no_speed_claim',include_invstd=include_invstd,
-                  include_variance=include_variance)
+                  include_variance=include_variance,use_v4_inputs=use_v4_inputs,
+                  examples_only=use_v4_inputs)
     gate.checkpoint(path, report)
     try:
         devices = jax.devices()
@@ -103,8 +109,8 @@ def run(dataset, output, *, include_invstd=False, include_variance=False):
         def compare(label, left, right):
             result = gate.compare_prefix(left, right)
             report['comparisons'][label] = result
-            save_mismatch_rows(output/f'{label}.npz', host,
-                               left.astype(np.float32), right.astype(np.float32))
+            save=save_bounded_mismatch_rows if use_v4_inputs else save_mismatch_rows
+            save(output/f'{label}.npz', host,left.astype(np.float32),right.astype(np.float32))
             gate.checkpoint(path, report)
             return result
 
@@ -148,6 +154,11 @@ def run(dataset, output, *, include_invstd=False, include_variance=False):
                     for slot, name in enumerate(names):
                         compare(f'{source}_shape_{name}',large_captures[source][:,slot],captured[:,slot])
                 large_captures.clear()
+            diagnostic_j=j
+            if use_v4_inputs:
+                j=select_inference_capture(arrays,use_v4_inputs=True)
+                for slot,name in enumerate(('dense','mean','output','invstd')):
+                    compare(f'{size}_diagnostic_vs_v4_{name}',j[:,slot],diagnostic_j[:,slot])
             control = compare(f'{size}_jax_capture_control',arrays['jax'],j[:,2])
             native = compare(f'{size}_pallas_capture_control',arrays['pallas'],p[:,2])
             compare(f'{size}_dense',j[:,0],p[:,0])
@@ -221,22 +232,27 @@ def run(dataset, output, *, include_invstd=False, include_variance=False):
                     from benchmarks.artgor_invstd_capture import variance_pair, variance_rsqrt, chunked_pair_host
                     from benchmarks.artgor_input_trace import MEAN_ORDERS
                     old=arrays['jax_v4_control']
-                    output_control=compare(f'{size}_variance_capture_output_control',old[:,2],j[:,2])['exact']
-                    inv_control=compare(f'{size}_variance_capture_invstd_control',old[:,3],j[:,3])['exact']
+                    output_control=compare(f'{size}_variance_capture_output_control',old[:,2],diagnostic_j[:,2])['exact']
+                    inv_control=compare(f'{size}_variance_capture_invstd_control',old[:,3],diagnostic_j[:,3])['exact']
                     prior=json.loads((Path(__file__).resolve().parents[1]/
                         'test_results/artgor_invstd_capture_v4/artgor_invstd_capture/artgor_prefix_capture.json').read_text())
                     prior_inv=prior['comparisons'][f'{size}_fixed_mean_invstd']['reference_sha256']
                     reproduced_inv=gate._array_sha256(old[:,3])==prior_inv
+                    reproduced_mean=gate._array_sha256(old[:,1])==prior['comparisons'][f'{size}_mean']['reference_sha256']
                     controls.update(variance_capture_output_exact=output_control,
-                        variance_capture_invstd_exact=inv_control,v4_invstd_sha_reproduced=reproduced_inv)
-                    controls['valid']=controls['valid'] and output_control and inv_control and reproduced_inv
+                        variance_capture_invstd_exact=inv_control,v4_invstd_sha_reproduced=reproduced_inv,
+                        v4_mean_sha_reproduced=reproduced_mean)
+                    controls['diagnostic_variance_valid']=output_control and inv_control
+                    controls['valid']=controls['valid'] and reproduced_inv and reproduced_mean
+                    if not use_v4_inputs:
+                        controls['valid']=controls['valid'] and output_control and inv_control
                     replay_call=gate._mapped(lambda x,w:variance_rsqrt(x,epsilon=architecture.LAYER_NORM_EPSILON),
                         mesh=mesh,input_spec=spec,weights_example=packed)
                     # Original source BF16 epsilon+rsqrt on an actual BF16 variance buffer.
                     jax_replay=gate._mapped(lambda x,w:jax.lax.rsqrt(x+architecture.LAYER_NORM_EPSILON),
                         mesh=mesh,input_spec=spec,weights_example=packed)
                     for label,call in (('jax',jax_replay),('pallas',replay_call)):
-                        replay=evaluate_aux(f'jax_variance_replay_{label}',call,j[:,4])
+                        replay=evaluate_aux(f'jax_variance_replay_{label}',call,diagnostic_j[:,4])
                         compare(f'{size}_jax_variance_replay_{label}',j[:,3],replay)
                     report.setdefault('variance_cases',{})[str(size)]={}
                     for order in MEAN_ORDERS:
@@ -250,8 +266,13 @@ def run(dataset, output, *, include_invstd=False, include_variance=False):
                         (output/f'variance_pair_{order}_{size}.compiled.txt').write_text(lowered.compile().as_text(),encoding='utf-8')
                         (output/f'variance_pair_{order}_{size}.stablehlo.txt').write_text(str(lowered.compiler_ir(dialect='stablehlo')),encoding='utf-8')
                         label=f'{size}_variance_{order}'
-                        compare(label+'_bf16',j[:,4],var.astype(jnp.bfloat16))
+                        compare(label+'_bf16',diagnostic_j[:,4],var.astype(jnp.bfloat16))
                         compare(label+'_invstd',j[:,3],inv)
+                        if use_v4_inputs:
+                            candidate_output=evaluate_aux(f'variance_affine_{order}',affine_call,
+                                np.stack((j[:,0],j[:,1],inv),axis=1))
+                            compare(label+'_prefix_output',arrays['jax'],candidate_output)
+                            del candidate_output
                         if order=='native':
                             zero=compare(label+'_native_zero',fixed_inv,inv)['exact']
                             controls['variance_native_zero_exact']=zero
@@ -264,13 +285,13 @@ def run(dataset, output, *, include_invstd=False, include_variance=False):
                         # Save actual FP32 scalar bits, including the two affected rows.
                         np.savez_compressed(output/f'{label}_scalars.npz',
                             variance_fp32=var[:,0],invstd_bf16_bits=np.ascontiguousarray(inv[:,0]).view(np.uint16),
-                            jax_variance_bf16_bits=np.ascontiguousarray(j[:,4,0]).view(np.uint16),
+                            jax_variance_bf16_bits=np.ascontiguousarray(diagnostic_j[:,4,0]).view(np.uint16),
                             jax_invstd_bf16_bits=np.ascontiguousarray(j[:,3,0]).view(np.uint16))
                         report['variance_cases'][str(size)][order]={'complete':True}
                         gate.checkpoint(path,report)
                         del var,inv
                 del fixed_inputs,fixed_inv,fixed_reference
-            del arrays,j,p
+            del arrays,j,p,diagnostic_j
             gate.checkpoint(path,report)
         report['status']='complete'
         gate.checkpoint(path,report)
@@ -287,6 +308,7 @@ if __name__ == '__main__':
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--include-invstd',action='store_true')
     parser.add_argument('--include-variance',action='store_true')
+    parser.add_argument('--use-v4-inputs',action='store_true')
     args=parser.parse_args()
     print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,
-        include_invstd=args.include_invstd,include_variance=args.include_variance)['status']}))
+        include_invstd=args.include_invstd,include_variance=args.include_variance,use_v4_inputs=args.use_v4_inputs)['status']}))

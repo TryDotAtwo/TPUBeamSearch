@@ -64,10 +64,12 @@ was deleted. JSON, the complete Kaggle log and four relevant compiled HLO files
 are saved/published here. The large/partial NPZ files on C: are deliberately
 excluded from Git (one exceeds GitHub's ordinary per-file limit).
 
-A separate authorized full download was started to
-`D:/TPUBeamSearchArtifacts/artgor_variance_capture_v5` (process session37752).
-It was still in progress when this report was written; complete archival of
-all NPZ/HLO is **not yet claimed**. The remote v5 remains available.
+The interrupted D: download was resumed after confirming the old process no
+longer existed. Full archive now verified at
+`D:/TPUBeamSearchArtifacts/artgor_variance_capture_v5`: 226 files, 1,293,417,572
+bytes, 111 NPZ CRC checks passed, no empty files. `archive_manifest.json`
+records all file lengths and SHA-256. Large NPZ files remain outside Git;
+the remote v5 remains available. No unrelated files were deleted.
 
 No production defaults, BN or beam changed. No full-model exactness or speed
 claim. The large-shape JAX oracle is unchanged.

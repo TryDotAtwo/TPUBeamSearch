@@ -1,5 +1,14 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: v5 archive verified; fixed-v4-input follow-up prepared
+
+Full D: archive verified:226files/1,293,417,572bytes/111NPZ CRC passes, no empty
+files; per-fileSHA manifest published. No unrelated deletion. Follow-up selects
+unchangedv4capture for inference; variancecapture stays diagnostic-only with
+separate validity. Explicitfieldcontrols and v4mean/invstdSHA plus fullprefix
+candidateoutputs. Bounded8row examples prevent broadcast-coordinate blowup;
+fullcounts/SHA/scalarbits remain. Production/default/BN/beam untouched.
+
 ## 2026-09-03: variance v5 capture rejected; keep validated v4 inputs
 
 New variance capture changes JAXoutput by1,418,986/1,418,932 elements at16K/256,
