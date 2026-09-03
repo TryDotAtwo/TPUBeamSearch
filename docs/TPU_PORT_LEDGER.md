@@ -89,6 +89,14 @@ compile failure. The control-plane hypothesis is therefore falsified: the next
 step is a minimal physical selector probe for the shared survivor data path,
 not another broad production rewrite.
 
+Selector probe V1 COMPLETE; report:
+`test_results/beam_selector_probe_v1/report.md`. All five plain `[8,128]`
+selector forms are physically exact, including broadcast/full boolean `where`
+and boolean/uint32 arithmetic masks. Thus no isolated selector form reproduces
+V7: the rejected layout is created by interaction with an earlier full-pipeline
+operation. The next physical probe bisects the actual dedup stages before any
+production change.
+
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
 split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts

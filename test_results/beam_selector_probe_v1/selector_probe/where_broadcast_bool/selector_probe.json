@@ -1,0 +1,51 @@
+{
+  "scope": "minimal selector lowering probe; not beam performance",
+  "source_sha": "50bdcaf3735d73c926d87786c13db749d5641037",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "case": "where_broadcast_bool",
+  "status": "exact",
+  "exact": true,
+  "input_sha256": [
+    "6d4934f7da97eef2965b1f6a4d9ce08b0c55d1bb314851db6c9c41665101e9dd",
+    "344bde423aae72b319c821aa470b8246f8781fc88ee1bed358cd7d7d1a778990",
+    "ef85b4aa722ad6e5fea9d73e1eed8f70b54e5aa2e215594b40a6ce6ce27512e0"
+  ],
+  "compile_seconds": 0.6894394179999495,
+  "mismatched_elements": 0
+}
