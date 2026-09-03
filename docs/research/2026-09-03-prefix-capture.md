@@ -125,3 +125,19 @@ Materialized-original vs fused-original is a boundary comparison, not merely
 a reduction algorithm comparison. Explicit FP32 reduction of BF16 squares is
 not equivalent to producing squares in FP32. The unchanged large oracle and
 its controls remain mandatory; no winner or speed claim before TPU evidence.
+
+## Separate-argument reduction geometry
+
+`--compare-geometry` implies v4 inputs and takes the LARGE capture's Dense and
+scalar mean once. Eight cases: matrix/transposed x FP32/original x16K/chunk256.
+Every case uses those identical host buffers, not the shape-specific mean.
+The original large invstd and prefix remain the oracle at both execution sizes.
+Two device arguments replace packed `[B,2,H]`; scalar mean is broadcast inside
+the expression. Transposed data is an actual host-transposed device input with
+`P(None,'core')`, not a renamed packed view. No explicit physical layout is
+forced: compiled HLO decides whether layouts genuinely differ or canonicalize.
+
+Record full fixed-input SHA, per-case invstd bits, native and cross-shape
+comparisons and shared-affine prefix equality, plus HLO. Collector tests verify
+device-major reconstruction and pairing of Dense rows with scalar means.
+The mean/variance-capture controls remain mandatory and independent.

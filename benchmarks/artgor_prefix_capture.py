@@ -65,8 +65,8 @@ def select_inference_capture(arrays,*,use_v4_inputs):
 
 
 def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4_inputs=False,
-        compare_consumers=False, compare_producers=False):
-    use_v4_inputs=use_v4_inputs or compare_consumers or compare_producers
+        compare_consumers=False, compare_producers=False, compare_geometry=False):
+    use_v4_inputs=use_v4_inputs or compare_consumers or compare_producers or compare_geometry
     include_variance=include_variance or use_v4_inputs
     include_invstd=include_invstd or include_variance
     output.mkdir(parents=True, exist_ok=True)
@@ -75,7 +75,7 @@ def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4
                   scope='captured_input_prefix_only_no_speed_claim',include_invstd=include_invstd,
                   include_variance=include_variance,use_v4_inputs=use_v4_inputs,
                   examples_only=use_v4_inputs,compare_consumers=compare_consumers,
-                  compare_producers=compare_producers)
+                  compare_producers=compare_producers,compare_geometry=compare_geometry)
     gate.checkpoint(path, report)
     try:
         devices = jax.devices()
@@ -269,6 +269,49 @@ def run(dataset, output, *, include_invstd=False, include_variance=False, use_v4
                         (output/f'variance_pair_{order}_{size}.compiled.txt').write_text(lowered.compile().as_text(),encoding='utf-8')
                         (output/f'variance_pair_{order}_{size}.stablehlo.txt').write_text(str(lowered.compiler_ir(dialect='stablehlo')),encoding='utf-8')
                         label=f'{size}_variance_{order}'
+                        if compare_geometry and order=='native' and size==16384:
+                            from benchmarks.artgor_variance_producer import separate_invstd, collect_separate
+                            dense_fixed=np.ascontiguousarray(j[:,0])
+                            mean_fixed=np.ascontiguousarray(j[:,1,0])
+                            report['geometry_inputs']=dict(dense_sha256=gate._array_sha256(dense_fixed),
+                                mean_sha256=gate._array_sha256(mean_fixed),source='validated_v4_large_capture')
+                            report['geometry_cases']={}
+                            vsharding=NamedSharding(mesh,P('core'))
+                            for transposed in (False,True):
+                                dspec=P(None,'core') if transposed else P('core',None)
+                                dsharding=NamedSharding(mesh,dspec)
+                                for arithmetic in ('fp32','original'):
+                                    call=jax.jit(jax.shard_map(lambda d,m:separate_invstd(d,m,
+                                        transposed=transposed,arithmetic=arithmetic,
+                                        epsilon=architecture.LAYER_NORM_EPSILON),mesh=mesh,
+                                        in_specs=(dspec,P('core')),out_specs=P('core'),check_vma=False))
+                                    large_result=None
+                                    for local_rows in (16384,256):
+                                        name=f'geometry_{transposed}_{arithmetic}_{local_rows}'
+                                        def prepare(d,m):
+                                            return (jax.device_put(np.ascontiguousarray(d.T if transposed else d),dsharding),
+                                                    jax.device_put(m,vsharding))
+                                        sample_d=dense_fixed.reshape(8,16384,-1)[:,:local_rows].reshape(8*local_rows,-1)
+                                        sample_m=mean_fixed.reshape(8,16384)[:,:local_rows].reshape(-1)
+                                        lowered=call.lower(*prepare(sample_d,sample_m))
+                                        (output/f'{name}.compiled.txt').write_text(lowered.compile().as_text(),encoding='utf-8')
+                                        (output/f'{name}.stablehlo.txt').write_text(str(lowered.compiler_ir(dialect='stablehlo')),encoding='utf-8')
+                                        scalar=collect_separate(dense_fixed,mean_fixed,
+                                            lambda d,m:jax.block_until_ready(call(*prepare(d,m))),chunk_rows=local_rows)
+                                        result=np.broadcast_to(scalar[:,None],j[:,3].shape)
+                                        compare(name+'_invstd',j[:,3],result)
+                                        compare(name+'_native',inv,result)
+                                        if large_result is not None:
+                                            compare(name+'_same_inputs_shape_control',large_result,result)
+                                        prefix=evaluate_aux(name+'_affine',affine_call,np.stack((j[:,0],j[:,1],result),axis=1))
+                                        compare(name+'_prefix_large_oracle',arrays['jax'],prefix)
+                                        np.savez_compressed(output/f'{name}_scalars.npz',
+                                            invstd_bf16_bits=np.ascontiguousarray(scalar).view(np.uint16),
+                                            reference_bf16_bits=np.ascontiguousarray(j[:,3,0]).view(np.uint16))
+                                        report['geometry_cases'][name]={'complete':True}
+                                        gate.checkpoint(path,report)
+                                        large_result=result
+                                        del prefix
                         if compare_producers and order=='native':
                             from benchmarks.artgor_variance_producer import centered_squares, reduce_invstd, fused_invstd
                             report.setdefault('producer_cases',{})[str(size)]={}
@@ -386,8 +429,9 @@ if __name__ == '__main__':
     parser.add_argument('--use-v4-inputs',action='store_true')
     parser.add_argument('--compare-consumers',action='store_true')
     parser.add_argument('--compare-producers',action='store_true')
+    parser.add_argument('--compare-geometry',action='store_true')
     args=parser.parse_args()
     print(json.dumps({'status':run(gate._dataset_path(args.dataset),args.output,
         include_invstd=args.include_invstd,include_variance=args.include_variance,
         use_v4_inputs=args.use_v4_inputs,compare_consumers=args.compare_consumers,
-        compare_producers=args.compare_producers)['status']}))
+        compare_producers=args.compare_producers,compare_geometry=args.compare_geometry)['status']}))

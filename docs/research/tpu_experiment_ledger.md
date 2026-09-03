@@ -1,5 +1,14 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: separate-argument geometry A/B prepared
+
+Eight variants use separate Dense/scalarmean, normal/transposed input and
+FP32/original arithmetic at16K/chunk256. BOTHbuffers fixed to largev4capture;
+originallargeoracle retained. Actualhosttranspose and sharding, but physical
+layout must be inspected, not assumed. Five new tests failed then eight
+producer tests passed. New TPU evidence pending.
+Full local regression:500passed152.37s; compileall and source diff checks pass.
+
 ## 2026-09-03: variance producer v9 complete
 
 All12JAXproducer cases complete/finite, fixedv4controlsvalid. Fusedoriginal
