@@ -1,0 +1,13 @@
+module @jit__lambda attributes {mhlo.num_partitions = 8 : i32, mhlo.num_replicas = 1 : i32} {
+  sdy.mesh @mesh = <["core"=8]> {stablehlo.mesh = {axes = [{name = "core", size = 8 : i64}]}}
+  func.func public @main(%arg0: tensor<2048x1024xbf16> {sdy.sharding = #sdy.sharding<@mesh, [{"core"}, {}]>}) -> (tensor<2048x1024xbf16> {jax.result_info = "result"}) {
+    %0 = sdy.manual_computation(%arg0) in_shardings=[<@mesh, [{"core"}, {}]>] out_shardings=[<@mesh, [{"core"}, {}]>] manual_axes={"core"} (%arg1: tensor<256x1024xbf16>) {
+      %cst = stablehlo.constant dense<1.001360e-05> : tensor<bf16>
+      %1 = stablehlo.broadcast_in_dim %cst, dims = [] : (tensor<bf16>) -> tensor<256x1024xbf16>
+      %2 = stablehlo.add %arg1, %1 : tensor<256x1024xbf16>
+      %3 = stablehlo.rsqrt %2 : tensor<256x1024xbf16>
+      sdy.return %3 : tensor<256x1024xbf16>
+    } : (tensor<2048x1024xbf16>) -> tensor<2048x1024xbf16>
+    return %0 : tensor<2048x1024xbf16>
+  }
+}

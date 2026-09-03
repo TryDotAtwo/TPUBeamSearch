@@ -1,5 +1,16 @@
 # TPUBeamSearch experiment ledger
 
+## 2026-09-03: fixed-v4 variance v6 complete
+
+Fixed-input controls and v4 mean/invstd SHA pass at both shapes. All five
+variance orders retain identical BF16 invstd (2048 differences, rows760/28870)
+and 1275 prefix differences at16K/device; chunk256 is exact. FP32 variance
+orders change scalar bits but not BF16 outputs. FP32 replay zero-controls pass.
+Extra variance capture remains invalid and separate. Next compare JAX/Pallas
+rsqrt consumers of the SAME materialized FP32 variance, including scalar vs
+broadcast layout controls. No speed/default/full-model claim.
+See [v6 report](../../test_results/artgor_variance_fixed_v4_v6/report.md).
+
 ## 2026-09-03: v5 archive verified; fixed-v4-input follow-up prepared
 
 Full D: archive verified:226files/1,293,417,572bytes/111NPZ CRC passes, no empty
