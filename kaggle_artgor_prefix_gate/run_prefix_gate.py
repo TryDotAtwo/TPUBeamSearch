@@ -5,10 +5,10 @@ import re
 import subprocess
 import sys
 
-COMMIT_SHA = 'a0389b3336bd11336a531bfeeecb338641005d2b'
+COMMIT_SHA = 'eadd7044467c92a8dcd6a3c7253a561cbb168a11'
 REPOSITORY = 'https://github.com/TryDotAtwo/TPUBeamSearch.git'
 CHECKOUT = Path('/tmp/TPUBeamSearch-artgor-prefix-gate')
-OUTPUT = Path('/kaggle/working/artgor_variance_fixed_v4')
+OUTPUT = Path('/kaggle/working/artgor_rsqrt_consumers')
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
     env.update(JAX_ENABLE_X64='True',XLA_PYTHON_CLIENT_MEM_FRACTION='0.95',
                PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))),PYTHONUNBUFFERED='1')
     OUTPUT.mkdir(parents=True,exist_ok=True)
-    command = (sys.executable,'-m','benchmarks.artgor_prefix_capture','--output',str(OUTPUT),'--use-v4-inputs')
+    command = (sys.executable,'-m','benchmarks.artgor_prefix_capture','--output',str(OUTPUT),'--compare-consumers')
     with (OUTPUT/'prefix_gate.log').open('w',encoding='utf-8') as log:
         with subprocess.Popen(command,cwd=CHECKOUT,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,bufsize=1) as process:
             for line in process.stdout:
