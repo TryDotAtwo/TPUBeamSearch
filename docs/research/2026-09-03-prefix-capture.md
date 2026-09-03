@@ -80,3 +80,22 @@ Each reduction candidate now also produces a full prefix output via the same
 Pallas affine with fixed v4 Dense/mean. All tensor counts/SHA remain exhaustive,
 but NPZ mismatch examples are limited to eight rows (`examples_only=true`).
 Complete scalar variance/invstd bits are retained for every corpus row.
+
+## Same-buffer rsqrt consumer follow-up (not yet launched)
+
+`benchmarks.artgor_rsqrt_consumers.consume_variance` supplies paired JAX/Pallas
+consumers for explicit FP32 arithmetic and a separate BF16 source-expression
+control. FP32 mode uses the original epsilon quantized to BF16 then widened,
+so differences do not silently include a new epsilon constant. Scalar 1D and
+broadcast 2D storage are separate executions; do not broadcast inside the
+scalar kernel and call it a scalar-layout experiment. Interpreter tests establish
+only shape/dtype/epsilon routing and distinguish the arithmetic modes.
+
+Integration must use the native FP32 variance returned by the validated v6
+pair producer, preserve it as a real input argument and retain v4 output/hash
+controls. Export each lowered consumer and compare JAX/Pallas directly, against
+validated invstd and through the same Pallas affine. Reconstruct scalar results
+to broadcast on the host after execution for prefix comparisons. Retain full
+scalar bits and shape-correct sharding (`P('core')` for rank one). Test the
+collector's device-major ordering before launching. No standalone consumer
+result licenses an all-Pallas or speed claim.
