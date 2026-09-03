@@ -1,5 +1,5 @@
 {
-  "id": "trydotatwo/tpu-beam-primitives",
+  "id": "trydotatwo/tpu-beam-primitive-compile-and-correctness-gate",
   "title": "TPU Beam Primitive Compile and Correctness Gate",
   "code_file": "run_beam_primitives.py",
   "language": "python",
