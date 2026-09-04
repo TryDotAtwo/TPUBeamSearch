@@ -127,6 +127,15 @@ green after the one-expression change. Targeted source parity passes; full
 local verification: 581 passed, 5 skipped in 264.60 s. The next full physical
 primitive bundle must confirm all four dedup and both split cases.
 
+V5 previous-index probe completed on all eight TPU v5 lite devices; see
+`test_results/beam_selector_probe_v5/report.md`. At the full
+`sort -> previous hash -> uniqueness` boundary for `N=128`, the existing
+`maximum(indices,1)-1` reproduces the `arith.maxui` compile failure, while both
+`where` and branchless subtraction are physically exact with zero mismatches.
+Production now uses `indices - (indices != 0).astype(uint32)`, with a structural
+regression that was observed failing before the change. This removes only the
+V8 `N=128` blocker; the independent `N=256` multi-source-vreg gather remains.
+
 Primitive gate V8 COMPLETE, all_exact=false; report:
 `test_results/beam_primitives_v8/report.md`. Both Stream3 split cases are now
 physically exact on eight TPU, proving the swap-predicate fix through complete

@@ -61,7 +61,11 @@ def pallas_threshold_dedup(words, payload, count, threshold, *, mode, interpret=
         data = jnp.concatenate((w[...], p[...], valid[None, :], indices[None, :]), axis=0)
         keys = (9, 3, 2, 1, 0, 6, 8) if mode == 'stream3' else (9, 3, 2, 1, 0, 6, 5, 4, 7)
         data = _sort(data, keys)
-        previous = _columns(data[:4], jnp.maximum(indices, 1) - 1)
+        # Both forms are logically max(indices, 1) - 1.  Mosaic 0.0.42.1
+        # cannot legalize arith.maxui for this VMEM layout, while the branchless
+        # predecessor is physically exact in the isolated eight-TPU probe.
+        previous_indices = indices - (indices != 0).astype(jnp.uint32)
+        previous = _columns(data[:4], previous_indices)
         unique = (data[9] != 0) & ((indices == 0) | jnp.any(data[:4] != previous, axis=0))
         data = jnp.concatenate((data[:9], unique[None, :].astype(jnp.uint32),
                                 indices[None, :]), axis=0)

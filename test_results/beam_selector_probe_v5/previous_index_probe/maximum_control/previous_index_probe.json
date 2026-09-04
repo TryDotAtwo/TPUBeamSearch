@@ -1,0 +1,51 @@
+{
+  "scope": "previous-index full uniqueness boundary; not performance",
+  "source_sha": "cc32842a6e3b04c0428771382bf63ecf9c09f69d",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "case": "maximum_control",
+  "status": "error",
+  "exact": false,
+  "input_sha256": [
+    "8d1ea1d55d1474dd1e08e0aea50a1db689586a3841c93f5d9adfe93fe54a16b8",
+    "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+    "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+    "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+  ],
+  "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: failed to legalize operation 'arith.maxui': %5793 = \"arith.maxui\"(%52, %47) : (vector<8x128xi32>, vector<8x128xi32>) -> vector<8x128xi32>\n\nat location: loc(\"max:\"(\"max\"(\"_call.<locals>.kernel\"(\"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_previous_index_probe.py\":33:31 to :66))))\n\nThe MLIR operation involved:\n  %5793 = \"arith.maxui\"(%52, %47) : (vector<8x128xi32>, vector<8x128xi32>) -> vector<8x128xi32>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_previous_index_probe.py\", line 88, in _run\n    executable = jax.pmap(case['fn'], devices=devices).lower(*inputs).compile()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_previous_index_probe.py\", line 33, in max\"(\"_call.<locals>.kernel\n    previous_indices = jnp.maximum(indices, jnp.uint32(1)) - jnp.uint32(1)\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: failed to legalize operation 'arith.maxui': %5793 = \"arith.maxui\"(%52, %47) : (vector<8x128xi32>, vector<8x128xi32>) -> vector<8x128xi32>\n\nThe MLIR operation involved:\n  %5793 = \"arith.maxui\"(%52, %47) : (vector<8x128xi32>, vector<8x128xi32>) -> vector<8x128xi32>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+}

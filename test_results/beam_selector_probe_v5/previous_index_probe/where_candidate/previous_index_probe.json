@@ -1,0 +1,52 @@
+{
+  "scope": "previous-index full uniqueness boundary; not performance",
+  "source_sha": "cc32842a6e3b04c0428771382bf63ecf9c09f69d",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "case": "where_candidate",
+  "status": "exact",
+  "exact": true,
+  "input_sha256": [
+    "8d1ea1d55d1474dd1e08e0aea50a1db689586a3841c93f5d9adfe93fe54a16b8",
+    "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+    "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+    "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+  ],
+  "execute_seconds": 0.0035618010000462164,
+  "mismatched_elements": 0
+}

@@ -65,6 +65,17 @@ def test_dedup_count_reduction_uses_supported_signed_arithmetic():
     assert not scalar_stores
 
 
+def test_dedup_previous_index_avoids_unsigned_maximum():
+    case = next(c for c in build_cases(interpret=True) if c['name'] == 'dedup_stream3_128')
+    graph = jax.make_jaxpr(case['fn'])(*case['args'])
+    unsigned_maximums = [
+        eq for eq in equations(graph)
+        if eq.primitive.name == 'max'
+        and any(str(var.aval.dtype) == 'uint32' for var in eq.invars)
+    ]
+    assert not unsigned_maximums
+
+
 @pytest.mark.parametrize('name', ['dedup_stream3_128', 'split_0', 'split_127'])
 def test_control_outputs_never_store_scalars_to_vmem(name):
     case = next(c for c in build_cases(interpret=True) if c['name'] == name)
