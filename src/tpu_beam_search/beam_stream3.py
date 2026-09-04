@@ -110,9 +110,11 @@ def pallas_stream3_wire_slots(remote, send_count, send_offset, *, local_rank,
             # Dynamic scalar loads from tiled [1,128] refs require an
             # unprovable 128-lane alignment. Select after an aligned load.
             amount = jnp.sum(jnp.where(
-                peer_mask, count_value[0], jnp.uint32(0)), dtype=jnp.uint32)
+                peer_mask, count_value[0], jnp.uint32(0)).astype(jnp.int32),
+                dtype=jnp.int32).astype(jnp.uint32)
             start = jnp.sum(jnp.where(
-                peer_mask, offset_value[0], jnp.uint32(0)), dtype=jnp.uint32)
+                peer_mask, offset_value[0], jnp.uint32(0)).astype(jnp.int32),
+                dtype=jnp.int32).astype(jnp.uint32)
             source_index = jnp.minimum(start + positions,
                                        jnp.uint32(capacity - 1))
             gather_index = jnp.broadcast_to(source_index[None, :],

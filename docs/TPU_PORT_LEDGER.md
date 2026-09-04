@@ -81,6 +81,11 @@ offset control vectors are now loaded as aligned blocks and device-dynamic
 peer values are selected by a one-hot mask reduction. V9 physical confirmation
 is required.
 
+Integrated V9 passed aligned control selection but Mosaic rejected reduction
+over `uint32`; see `test_results/beam_rdma_ring_v9/report.md`. The bounded
+count/offset masks now reduce as `int32` and cast back to `uint32`, matching the
+already compiled Stream3 count pattern. V10 physical confirmation is required.
+
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
