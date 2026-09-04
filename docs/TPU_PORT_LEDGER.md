@@ -12,11 +12,18 @@ comparison, not isolated kernels. No complete-port or performance claim yet.
 | Hash128 owner/shard arithmetic | beam_hash.py uint32 pairs; edge/random modulo tests and C++ oracle | physical TPU lowering, fingerprint and K1 bucket salts |
 | S3 threshold/sort/dedup | beam_dedup.py plus beam_stream3.py bounded Pallas split; source differential tests | physical split compile, HBM-scale sort and collector integration |
 | S4 threshold/sort/dedup | same primitive with score/parent64/route tie-break; C++ oracle | resident A/B collector, independent capacity/trigger, committed histogram |
-| S5 | ownership/epoch design only | remote DMA readiness/ack, zero counts, coordinated threshold, race and TPU tests |
+| S5 | beam_dma_ring.py host ordering oracle; readiness/send/recv/consume/ack, zero-count and wrap tests | Pallas remote DMA, coordinated threshold, race and physical TPU tests |
 | Three scratch overlays | design only | explicit arena plan, alias report, drain gates |
 | Final | source read, design only | exact global cap/ties, balance, request/response, padding, history, replay |
 | Stop | design only | bounded solved records, no collective deadlock, multi-rank stop |
 | Whole depth / multi-depth | not implemented | original CUDA replay and 8-TPU replay on identical fixtures |
+
+`beam_dma_ring.py` now makes the S5 slot-lifetime contract executable before
+introducing remote DMA: destination readiness precedes a nonzero start, source
+reuse follows send completion, destination reuse follows receive, consumption
+and acknowledgement, and a zero-count rank participates without waiting for a
+DMA that was never started. Four tests cover two-slot reuse across four epochs.
+This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
 
