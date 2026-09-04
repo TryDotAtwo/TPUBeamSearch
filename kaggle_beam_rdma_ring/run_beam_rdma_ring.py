@@ -6,7 +6,7 @@ import sys
 import json
 import traceback
 
-COMMIT_SHA = '676931d21d60d34fbd693ee89cc89520a03c517e'
+COMMIT_SHA = 'ba569bb05a40ad434572a1d6c4fecb3280571b9c'
 CHECKOUT = Path('/tmp/TPUBeamSearch-rdma-ring')
 OUTPUT = Path('/kaggle/working/beam_rdma_ring')
 
@@ -22,14 +22,14 @@ def main():
                XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
                PYTHONPATH=os.pathsep.join((str(CHECKOUT), str(CHECKOUT / 'src'))))
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    cases = (('all_active', ()), ('zero_alternate', ('--zero-alternate',)))
-    report = {'scope': 'isolated two-slot RDMA cases', 'source_sha': COMMIT_SHA,
+    cases = (('variable_count_stream3', ('--mode', 'variable')),)
+    report = {'scope': 'isolated variable-count Stream3 RDMA gate', 'source_sha': COMMIT_SHA,
               'cases': []}
     for name, extra in cases:
         destination = OUTPUT / name
         destination.mkdir(parents=True, exist_ok=True)
         command = (sys.executable, '-m', 'benchmarks.beam_rdma_ring_probe',
-                   '--output', str(destination), '--mode', 'slots', *extra)
+                   '--output', str(destination), *extra)
         row = {'name': name, 'status': 'started'}
         report['cases'].append(row)
         (OUTPUT / 'rdma_epoch_bundle.json').write_text(
