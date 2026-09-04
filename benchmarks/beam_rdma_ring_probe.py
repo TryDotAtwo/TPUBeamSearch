@@ -18,6 +18,11 @@ import numpy as np
 from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
 
+from tpu_beam_search.beam_stream3 import (
+    pallas_stream3_split,
+    pallas_stream3_wire_slots,
+)
+
 
 def evaluate_right_permute(actual, source):
     actual = np.asarray(actual)
@@ -88,6 +93,91 @@ def evaluate_variable_exchange(actual, actual_counts, source, send_counts):
         expected_sha256=hashlib.sha256(expected.tobytes()).hexdigest(),
         count_sha256=hashlib.sha256(actual_counts.tobytes()).hexdigest(),
         expected_count_sha256=hashlib.sha256(expected_counts.tobytes()).hexdigest(),
+    )
+
+
+def evaluate_integrated_stream3_exchange(local, local_counts, received,
+                                          received_counts, words, owners,
+                                          counts, *, wire=None,
+                                          wire_counts=None):
+    """Independent host oracle for split, route packing, and ring exchange."""
+    local = np.asarray(local)
+    local_counts = np.asarray(local_counts)
+    received = np.asarray(received)
+    received_counts = np.asarray(received_counts)
+    wire = None if wire is None else np.asarray(wire)
+    wire_counts = None if wire_counts is None else np.asarray(wire_counts)
+    words = np.asarray(words)
+    owners = np.asarray(owners)
+    counts = np.asarray(counts)
+    ranks, planes, capacity = words.shape
+    epochs = ranks - 1
+    neutral = np.zeros((planes, capacity), np.uint32)
+    neutral[6] = np.uint32(0xffffffff)
+    expected_local = np.broadcast_to(neutral, words.shape).copy()
+    expected_local_counts = np.zeros((ranks,), np.uint32)
+    outgoing = np.broadcast_to(
+        neutral, (ranks, epochs, planes, capacity)).copy()
+    outgoing_counts = np.zeros((ranks, epochs), np.uint32)
+    for rank in range(ranks):
+        local_cursor = 0
+        remote_cursors = np.zeros((epochs,), np.int64)
+        for index in range(int(counts[rank])):
+            owner = int(owners[rank, index])
+            record = words[rank, :, index].copy()
+            record[7] = np.uint32((rank << 16) | (owner << 8)
+                                  | (int(record[7]) & 255))
+            if owner == rank:
+                expected_local[rank, :, local_cursor] = record
+                local_cursor += 1
+            else:
+                epoch = (owner - rank - 1) % ranks
+                cursor = int(remote_cursors[epoch])
+                outgoing[rank, epoch, :, cursor] = record
+                remote_cursors[epoch] += 1
+        expected_local_counts[rank] = local_cursor
+        outgoing_counts[rank] = remote_cursors
+    expected_received = np.broadcast_to(
+        neutral, (ranks, epochs, planes, capacity)).copy()
+    expected_received_counts = np.zeros((ranks, epochs), np.uint32)
+    for destination in range(ranks):
+        for epoch in range(epochs):
+            sender = (destination - epoch - 1) % ranks
+            expected_received[destination, epoch] = outgoing[sender, epoch]
+            expected_received_counts[destination, epoch] = outgoing_counts[sender, epoch]
+    same_structure = (
+        local.shape == expected_local.shape
+        and local_counts.shape == expected_local_counts.shape
+        and received.shape == expected_received.shape
+        and received_counts.shape == expected_received_counts.shape
+        and all(x.dtype == np.uint32 for x in
+                (local, local_counts, received, received_counts))
+        and ((wire is None and wire_counts is None)
+             or (wire is not None and wire_counts is not None
+                 and wire.shape == outgoing.shape
+                 and wire_counts.shape == outgoing_counts.shape
+                 and wire.dtype == np.uint32
+                 and wire_counts.dtype == np.uint32)))
+    if not same_structure:
+        return dict(exact=False, mismatched_elements=None,
+                    structure_mismatch=True)
+    pairs = [
+        (local, expected_local),
+        (local_counts, expected_local_counts),
+        (received, expected_received),
+        (received_counts, expected_received_counts),
+    ]
+    if wire is not None:
+        pairs.extend(((wire, outgoing), (wire_counts, outgoing_counts)))
+    mismatches = sum(int(np.count_nonzero(a != b)) for a, b in pairs)
+    actual_bytes = b''.join(a.tobytes() for a, _ in pairs)
+    expected_bytes = b''.join(b.tobytes() for _, b in pairs)
+    return dict(
+        exact=mismatches == 0,
+        mismatched_elements=mismatches,
+        structure_mismatch=False,
+        output_sha256=hashlib.sha256(actual_bytes).hexdigest(),
+        expected_sha256=hashlib.sha256(expected_bytes).hexdigest(),
     )
 
 
@@ -220,7 +310,7 @@ def make_epoch_ring(mesh, *, epochs, zero_alternate):
     ))
 
 
-def make_variable_exchange(mesh, *, capacity=128):
+def make_variable_exchange_call(mesh, *, capacity=128):
     """Seven peer-offset epochs with a count preflight and bounded payload."""
     ranks = mesh.size
     epochs = ranks - 1
@@ -322,6 +412,11 @@ def make_variable_exchange(mesh, *, capacity=128):
         grid_spec=grid_spec,
         name='beam_stream3_variable_count_exchange',
     )
+    return call
+
+
+def make_variable_exchange(mesh, *, capacity=128):
+    call = make_variable_exchange_call(mesh, capacity=capacity)
     payload_partition = jax.sharding.PartitionSpec(None, None, 'core')
     count_partition = jax.sharding.PartitionSpec(None, 'core')
     neutral_partition = jax.sharding.PartitionSpec(None, 'core')
@@ -330,6 +425,34 @@ def make_variable_exchange(mesh, *, capacity=128):
         in_specs=(count_partition, payload_partition, count_partition,
                   neutral_partition),
         out_specs=(payload_partition, count_partition), check_vma=False))
+
+
+def make_integrated_stream3_exchange(mesh, *, capacity=128):
+    """Compile split, ring wire packing, and variable RDMA as one program."""
+    ranks = mesh.size
+    exchange_call = make_variable_exchange_call(mesh, capacity=capacity)
+
+    def local_program(words, owners, count, neutral):
+        local, remote, local_count, send_count, send_offset = pallas_stream3_split(
+            words, owners, count, local_rank=None, world_size=ranks)
+        wire, wire_counts = pallas_stream3_wire_slots(
+            remote, send_count, send_offset, local_rank=None, world_size=ranks)
+        received, received_counts = exchange_call(
+            wire_counts, wire, wire_counts, neutral)
+        return (local, local_count, wire, wire_counts,
+                received, received_counts)
+
+    words_partition = jax.sharding.PartitionSpec(None, 'core')
+    count_partition = jax.sharding.PartitionSpec('core')
+    payload_partition = jax.sharding.PartitionSpec(None, None, 'core')
+    control_partition = jax.sharding.PartitionSpec(None, 'core')
+    return jax.jit(jax.shard_map(
+        local_program, mesh=mesh,
+        in_specs=(words_partition, words_partition, count_partition,
+                  words_partition),
+        out_specs=(words_partition, control_partition, payload_partition,
+                   control_partition, payload_partition, control_partition),
+        check_vma=False))
 
 
 def build_variable_exchange_inputs(ranks=8, capacity=128):
@@ -350,6 +473,68 @@ def build_variable_exchange_inputs(ranks=8, capacity=128):
                     index * 17, rank * 31, index + epoch, (rank << 16) | index,
                 ], np.uint32)
     return payload, counts, neutral
+
+
+def build_integrated_stream3_inputs(ranks=8, capacity=128):
+    neutral = np.zeros((8, capacity), np.uint32)
+    neutral[6] = np.uint32(0xffffffff)
+    words = np.broadcast_to(neutral, (ranks, 8, capacity)).copy()
+    owners = np.zeros((ranks, capacity), np.uint32)
+    counts = np.zeros((ranks,), np.uint32)
+    for rank in range(ranks):
+        count = capacity if rank == 0 else 17 + rank
+        counts[rank] = count
+        for index in range(count):
+            owner = 1 if rank == 0 else (rank + index % 4) % ranks
+            owners[rank, index] = owner
+            words[rank, :, index] = np.array([
+                rank * 1000 + index, index * 17, rank, owner,
+                index ^ rank, rank * 31, index, index % 24,
+            ], np.uint32)
+    return words, owners, counts, neutral
+
+
+def run_integrated_stream3_exchange(args, devices, mesh):
+    ranks, capacity = len(devices), 128
+    words, owners, counts, neutral = build_integrated_stream3_inputs(
+        ranks, capacity)
+    words_global = words.transpose(1, 0, 2).reshape(8, ranks * capacity)
+    owners_global = owners.reshape(1, ranks * capacity)
+    neutral_global = np.tile(neutral, (1, ranks))
+    words_sharding = jax.sharding.NamedSharding(
+        mesh, jax.sharding.PartitionSpec(None, 'core'))
+    count_sharding = jax.sharding.NamedSharding(
+        mesh, jax.sharding.PartitionSpec('core'))
+    placed = (
+        jax.device_put(words_global, words_sharding),
+        jax.device_put(owners_global, words_sharding),
+        jax.device_put(counts, count_sharding),
+        jax.device_put(neutral_global, words_sharding),
+    )
+    fn = make_integrated_stream3_exchange(mesh, capacity=capacity)
+    started = time.perf_counter()
+    executable = fn.lower(*placed).compile()
+    compile_seconds = time.perf_counter() - started
+    (args.output / 'integrated_stream3_exchange.hlo.txt').write_text(
+        executable.as_text(), encoding='utf-8')
+    outputs = jax.block_until_ready(executable(*placed))
+    (local_global, local_count_global, wire_global, wire_count_global,
+     received_global, received_count_global) = map(np.asarray, outputs)
+    epochs = ranks - 1
+    local = local_global.reshape(8, ranks, capacity).transpose(1, 0, 2)
+    local_counts = local_count_global.reshape(1, ranks, 128).transpose(1, 0, 2)[:, 0, 0]
+    wire = wire_global.reshape(epochs, 8, ranks, capacity).transpose(2, 0, 1, 3)
+    wire_counts = wire_count_global.reshape(epochs, ranks, 128).transpose(1, 0, 2)[:, :, 0]
+    received = received_global[2:].reshape(
+        epochs, 8, ranks, capacity).transpose(2, 0, 1, 3)
+    received_counts = received_count_global.reshape(
+        epochs, ranks, 128).transpose(1, 0, 2)[:, :, 0]
+    result = evaluate_integrated_stream3_exchange(
+        local, local_counts, received, received_counts,
+        words, owners, counts, wire=wire, wire_counts=wire_counts)
+    result.update(ranks=ranks, epochs=epochs, capacity=capacity,
+                  input_counts=counts.tolist(), compile_seconds=compile_seconds)
+    return result, executable, placed
 
 
 def run_variable_exchange(args, devices, mesh):
@@ -413,7 +598,8 @@ def run_epoch_ring(args, devices, mesh):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--mode', choices=('one-hop', 'slots', 'variable'), default='one-hop')
+    parser.add_argument('--mode', choices=('one-hop', 'slots', 'variable', 'integrated'),
+                        default='one-hop')
     parser.add_argument('--zero-alternate', action='store_true')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -422,7 +608,11 @@ def main():
         raise RuntimeError('requires exactly eight real TPU devices')
 
     mesh = jax.sharding.Mesh(np.asarray(devices), ('core',))
-    if args.mode == 'variable':
+    if args.mode == 'integrated':
+        result, executable, placed = run_integrated_stream3_exchange(
+            args, devices, mesh)
+        compile_seconds = result['compile_seconds']
+    elif args.mode == 'variable':
         result, executable, placed = run_variable_exchange(args, devices, mesh)
         compile_seconds = result['compile_seconds']
     elif args.mode == 'slots':
@@ -453,11 +643,13 @@ def main():
         jax.block_until_ready(call_compiled(executable, placed))
         samples.append((time.perf_counter_ns() - start) / 1e6)
     result.update(
-        scope=('bounded Stream3 variable-count RDMA diagnostic'
+        scope=('compiled Stream3 split-to-wire-to-RDMA correctness gate'
+               if args.mode == 'integrated' else
+               ('bounded Stream3 variable-count RDMA diagnostic'
                if args.mode == 'variable' else
                ('two-slot multi-epoch eight-device Pallas RDMA diagnostic; not Stream3 exchange'
                 if args.mode == 'slots' else
-                'one-hop eight-device Pallas RDMA correctness and diagnostic timing; not S5 ring completion')),
+                'one-hop eight-device Pallas RDMA correctness and diagnostic timing; not S5 ring completion'))),
         source_sha=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         jax=jax.__version__, jaxlib=importlib.metadata.version('jaxlib'),
         libtpu=importlib.metadata.version('libtpu'),

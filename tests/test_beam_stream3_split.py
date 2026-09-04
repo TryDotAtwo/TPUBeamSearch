@@ -2,7 +2,10 @@ import jax.numpy as jnp
 import numpy as np
 import pytest
 
-from tpu_beam_search.beam_stream3 import pallas_stream3_split
+from tpu_beam_search.beam_stream3 import (
+    pallas_stream3_split,
+    pallas_stream3_wire_slots,
+)
 from tpu_beam_search.beam_types import pack_candidates
 
 
@@ -52,3 +55,40 @@ def test_stream3_split_rejects_invalid_static_topology(kwargs):
     with pytest.raises(ValueError):
         pallas_stream3_split(words, owners, jnp.zeros((1,), jnp.uint32),
                              interpret=True, **kwargs)
+
+
+@pytest.mark.parametrize('rank', range(8))
+def test_stream3_wire_slots_follow_ring_offsets_and_keep_neutral_tails(rank):
+    world, capacity = 8, 128
+    neutral = np.zeros((8, capacity), np.uint32)
+    neutral[6] = 0xffffffff
+    remote = neutral.copy()
+    counts = np.zeros((1, 128), np.uint32)
+    offsets = np.zeros((1, 128), np.uint32)
+    cursor = 0
+    for peer in range(world):
+        amount = 0 if peer == rank else (peer * 3 + rank) % 5
+        counts[0, peer] = amount
+        offsets[0, peer] = cursor
+        for index in range(amount):
+            remote[:, cursor + index] = np.array([
+                rank, peer, index, cursor + index, 0, 0, index,
+                (rank << 16) | (peer << 8) | index,
+            ], np.uint32)
+        cursor += amount
+    offsets[0, world] = cursor
+
+    slots, wire_counts = pallas_stream3_wire_slots(
+        jnp.asarray(remote), jnp.asarray(counts), jnp.asarray(offsets),
+        local_rank=rank, world_size=world, interpret=True)
+    slots, wire_counts = np.asarray(slots), np.asarray(wire_counts)
+    for epoch in range(world - 1):
+        peer = (rank + epoch + 1) % world
+        amount = int(counts[0, peer])
+        start = int(offsets[0, peer])
+        assert wire_counts[epoch, 0] == amount
+        assert np.all(wire_counts[epoch, 1:] == 0)
+        np.testing.assert_array_equal(slots[epoch, :, :amount],
+                                      remote[:, start:start + amount])
+        np.testing.assert_array_equal(slots[epoch, :, amount:],
+                                      neutral[:, amount:])
