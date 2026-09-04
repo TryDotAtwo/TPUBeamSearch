@@ -6,7 +6,7 @@ import sys
 import json
 import traceback
 
-COMMIT_SHA = 'fc8b524b61dc66528e94e177d3d216dfeed09dbc'
+COMMIT_SHA = '06431387a06e2c042733b51827a02bd5f6cd5d97'
 CHECKOUT = Path('/tmp/TPUBeamSearch-rdma-ring')
 OUTPUT = Path('/kaggle/working/beam_rdma_ring')
 
