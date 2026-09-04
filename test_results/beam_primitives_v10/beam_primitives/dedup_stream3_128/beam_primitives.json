@@ -1,0 +1,110 @@
+{
+  "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+  "source_sha": "ecca3b38ec846d716ddc2c6fa21b7ab691888e28",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "x64_enabled": false,
+  "cases": [
+    {
+      "name": "dedup_stream3_128",
+      "input_sha256": [
+        "f1428529e0056b603576a7633b1f5a308b09e17c1f58150529c42bef74f73a7e",
+        "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+        "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+        "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.8382501160000402,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "5c6f545c0e2843932ee51cfd368bdc494784f7dfcfcfe82be03c17211a57f69c",
+        "1ddcfe857be34d337dbfb77b1444745d9203a850b28181e279ff3448f2497d4a"
+      ]
+    }
+  ],
+  "timings": {
+    "other_diagnostic": {
+      "dedup_stream3_128": {
+        "samples_ms": [
+          0.657271,
+          0.686469,
+          0.653569,
+          0.66254,
+          0.688089,
+          0.66302,
+          0.592589,
+          0.68896,
+          0.681671,
+          0.63156,
+          0.645591,
+          0.6865,
+          0.65736,
+          0.70368,
+          0.651389,
+          0.607451,
+          0.661049,
+          0.6595,
+          0.61758,
+          0.669011,
+          0.675101
+        ],
+        "median_ms": 0.661049,
+        "p10_ms": 0.61758,
+        "p90_ms": 0.688089
+      }
+    }
+  },
+  "timing_protocol": {
+    "warmup": 3,
+    "repeats": 21,
+    "order": "alternating forward/reverse",
+    "scope": "complete primitive call on eight devices; no placement/compile"
+  },
+  "all_exact": true
+}

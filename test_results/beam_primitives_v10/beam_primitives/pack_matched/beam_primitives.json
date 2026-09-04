@@ -1,0 +1,255 @@
+{
+  "scope": "eight-device primitive correctness and synchronized timing, NOT complete beam or overlap proof",
+  "source_sha": "ecca3b38ec846d716ddc2c6fa21b7ab691888e28",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "x64_enabled": false,
+  "cases": [
+    {
+      "name": "pack_serial_b2",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.472132801999976,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_serial_b3",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.09581854499998599,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_pipeline_b2",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.1721742279999603,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    },
+    {
+      "name": "pack_pipeline_b3",
+      "input_sha256": [
+        "078939d860cf57be79ec9910fbf88f767ae5f645f3d552de9fa400b1fe0413d6",
+        "c982aa43e09f3d01eba118a653a7e5f6b5de9e25dc241567e05b748f957af0da",
+        "178cc275c52af6250c901e0e87fdeef104b59a237877494e828bbc1039c47fed",
+        "9f0db72e3e93875c45f288e661bcdca81aa4b1c9b49e8b66bc53c6db93705f30"
+      ],
+      "status": "exact",
+      "phase": "execute",
+      "compile_seconds": 0.20864670000003116,
+      "exact": true,
+      "mismatched_elements": 0,
+      "dtype_match": true,
+      "output_sha256": [
+        "4a396dd1f8ba5389f1dc655c7383e285ac760eff781cf1695a7afffc7ea2092a"
+      ]
+    }
+  ],
+  "timings": {
+    "pack_matched": {
+      "pack_serial_b2": {
+        "samples_ms": [
+          1.33366,
+          1.32063,
+          1.31493,
+          1.38365,
+          1.363849,
+          1.36979,
+          1.34303,
+          1.33094,
+          1.38193,
+          1.34436,
+          1.32364,
+          1.35565,
+          1.35258,
+          1.36535,
+          1.36915,
+          1.282401,
+          1.33216,
+          1.35175,
+          1.28712,
+          1.30616,
+          1.36221
+        ],
+        "median_ms": 1.34436,
+        "p10_ms": 1.30616,
+        "p90_ms": 1.36979,
+        "aggregate_candidates_per_second": 389990776.28016305,
+        "candidates_per_device": 65536
+      },
+      "pack_serial_b3": {
+        "samples_ms": [
+          1.35356,
+          1.3109,
+          1.32532,
+          1.32387,
+          1.351629,
+          1.3483,
+          1.31678,
+          1.30166,
+          1.35019,
+          1.383209,
+          1.36022,
+          1.35245,
+          1.38098,
+          1.36623,
+          1.365841,
+          1.33768,
+          1.34498,
+          1.31656,
+          1.32946,
+          1.30122,
+          1.334791
+        ],
+        "median_ms": 1.34498,
+        "p10_ms": 1.3109,
+        "p90_ms": 1.36623,
+        "aggregate_candidates_per_second": 389811000.9070767,
+        "candidates_per_device": 65536
+      },
+      "pack_pipeline_b2": {
+        "samples_ms": [
+          0.64614,
+          0.64176,
+          0.63939,
+          0.69766,
+          0.6796,
+          0.67842,
+          0.66157,
+          0.68794,
+          0.70372,
+          0.673961,
+          0.68254,
+          0.63583,
+          0.83251,
+          0.70189,
+          0.652969,
+          0.6349,
+          0.61532,
+          0.62877,
+          0.68752,
+          0.62044,
+          0.668929
+        ],
+        "median_ms": 0.668929,
+        "p10_ms": 0.62877,
+        "p90_ms": 0.70189,
+        "aggregate_candidates_per_second": 783772268.8058076,
+        "candidates_per_device": 65536
+      },
+      "pack_pipeline_b3": {
+        "samples_ms": [
+          0.59983,
+          0.63879,
+          0.6292,
+          0.62765,
+          0.635171,
+          0.623511,
+          0.58119,
+          0.64542,
+          0.58212,
+          0.59168,
+          0.61524,
+          0.62327,
+          0.65988,
+          0.62207,
+          0.63436,
+          0.657869,
+          0.59073,
+          0.59002,
+          0.63198,
+          0.61088,
+          0.61065
+        ],
+        "median_ms": 0.62327,
+        "p10_ms": 0.59002,
+        "p90_ms": 0.64542,
+        "aggregate_candidates_per_second": 841189211.7380911,
+        "candidates_per_device": 65536
+      }
+    }
+  },
+  "timing_protocol": {
+    "warmup": 3,
+    "repeats": 21,
+    "order": "alternating forward/reverse",
+    "scope": "complete primitive call on eight devices; no placement/compile"
+  },
+  "all_exact": true
+}

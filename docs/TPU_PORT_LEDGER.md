@@ -145,6 +145,15 @@ semantics. A new regression reproduced this host-oracle defect and the oracle
 now uses the aligned plane. V10 must confirm value-level exactness. `N=256`
 and both hash compiler failures are unchanged and remain separate workstreams.
 
+V10 closes the bounded `N=128` dedup gate on physical eight-device TPU; see
+`test_results/beam_primitives_v10/report.md`. Stream3 and Stream4 compile,
+execute and match their independent aligned oracles with zero element
+mismatches, including the `[1,128]` count plane. Diagnostic medians are
+0.661 and 0.672 ms respectively, but are cross-process measurements and not a
+matched A/B or complete beam claim. `N=256` still needs an HBM-scale staged
+sort/merge that avoids a two-vreg gather; the two hash lowering failures remain
+independent.
+
 Primitive gate V8 COMPLETE, all_exact=false; report:
 `test_results/beam_primitives_v8/report.md`. Both Stream3 split cases are now
 physically exact on eight TPU, proving the swap-predicate fix through complete
