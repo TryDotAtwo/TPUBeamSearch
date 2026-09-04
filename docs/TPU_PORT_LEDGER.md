@@ -39,6 +39,13 @@ alternating zero-count cases are exact with zero mismatches; zero-count epochs
 start and wait on no remote DMA. Next is a real per-edge variable-count Stream3
 exchange with explicit capacity and count metadata, not a synthetic fixed-size
 ring.
+
+Variable-count RDMA V3 failed before execution; see
+`test_results/beam_rdma_ring_v3/report.md`. Root cause is direct predicate
+loads from `pl.ANY` count references, which Mosaic correctly rejects because
+HBM must be accessed through async copies. The local send count is now scalar
+prefetched and the received count is staged into per-slot VMEM before branching.
+V4 physical confirmation is required; no Stream3 correctness claim is made yet.
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
