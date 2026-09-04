@@ -136,6 +136,15 @@ Production now uses `indices - (indices != 0).astype(uint32)`, with a structural
 regression that was observed failing before the change. This removes only the
 V8 `N=128` blocker; the independent `N=256` multi-source-vreg gather remains.
 
+V9 full primitive gate compiled and executed both `N=128` dedup modes, proving
+the `arith.maxui` blocker is removed; see
+`test_results/beam_primitives_v9/report.md`. Both were labelled structural
+mismatches because the benchmark oracle retained the pre-alignment count shape
+`[1]`, while the production ABI and TPU output are `[1,128]` with lane-zero
+semantics. A new regression reproduced this host-oracle defect and the oracle
+now uses the aligned plane. V10 must confirm value-level exactness. `N=256`
+and both hash compiler failures are unchanged and remain separate workstreams.
+
 Primitive gate V8 COMPLETE, all_exact=false; report:
 `test_results/beam_primitives_v8/report.md`. Both Stream3 split cases are now
 physically exact on eight TPU, proving the swap-predicate fix through complete

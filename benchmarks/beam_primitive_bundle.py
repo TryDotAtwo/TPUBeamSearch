@@ -93,10 +93,12 @@ def build_cases(*, interpret=False):
             out = np.zeros_like(w)
             out[6] = 0xffffffff
             out[:, :len(selected)] = w[:, selected]
+            selected_count = np.zeros((1, 128), np.uint32)
+            selected_count[0, 0] = len(selected)
             cases.append(dict(name=f'dedup_{mode}_{n}',
                 fn=functools.partial(pallas_threshold_dedup, mode=mode, interpret=interpret),
                 args=(w, payload, np.array([n - 3], np.uint32), np.array([3], np.uint32)),
-                expected=(out, np.array([len(selected)], np.uint32))))
+                expected=(out, selected_count)))
     for count in (0, 127):
         n, world, rank = 128, 8, 3
         w = rng.integers(0, 2**32, (8, n), dtype=np.uint32)

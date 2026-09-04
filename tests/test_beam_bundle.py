@@ -23,3 +23,13 @@ def test_split_cases_have_independent_complete_buffer_oracles():
     assert len(cases) == 2
     for case in cases:
         assert compare_outputs(case['fn'](*case['args']), case['expected'])['exact']
+
+
+def test_dedup_cases_have_aligned_count_plane_oracles():
+    cases = [c for c in build_cases(interpret=True) if c['name'].startswith('dedup_')]
+    assert len(cases) == 4
+    for case in cases:
+        count = case['expected'][1]
+        assert count.shape == (1, 128)
+        assert np.count_nonzero(count[0, 1:]) == 0
+        assert compare_outputs(case['fn'](*case['args']), case['expected'])['exact']
