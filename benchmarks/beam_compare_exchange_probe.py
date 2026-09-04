@@ -18,13 +18,14 @@ from tpu_beam_search.beam_dedup import _columns
 
 
 CASES = ('partner_gather', 'swap_predicate', 'select_broadcast',
-         'select_full', 'select_rowwise', 'select_arithmetic')
+         'select_full', 'select_rowwise', 'select_arithmetic',
+         'swap_boolean_logic', 'select_boolean_logic')
 KEYS = (9, 3, 2, 1, 0, 6, 8)
 
 
 def _call(source, *, variant, interpret):
     n = source.shape[1]
-    shape = (1, n) if variant == 'swap_predicate' else source.shape
+    shape = (1, n) if variant in ('swap_predicate', 'swap_boolean_logic') else source.shape
 
     def kernel(ref, out):
         data = ref[...]
@@ -42,8 +43,11 @@ def _call(source, *, variant, interpret):
             less = less | (equal & (a < b))
             equal = equal & (a == b)
         want_min = ((indices & 2) == 0) == ((indices & 1) == 0)
-        swap = jnp.where(want_min, ~less & ~equal, less)
-        if variant == 'swap_predicate':
+        if variant in ('swap_boolean_logic', 'select_boolean_logic'):
+            swap = (want_min & ~less & ~equal) | (~want_min & less)
+        else:
+            swap = jnp.where(want_min, ~less & ~equal, less)
+        if variant in ('swap_predicate', 'swap_boolean_logic'):
             out[...] = swap[None, :].astype(jnp.uint32)
         elif variant == 'select_broadcast':
             out[...] = jnp.where(swap[None, :], partner, data)
@@ -55,6 +59,8 @@ def _call(source, *, variant, interpret):
         elif variant == 'select_arithmetic':
             indicator = swap.astype(jnp.uint32)[None, :]
             out[...] = indicator * partner + (jnp.uint32(1) - indicator) * data
+        elif variant == 'select_boolean_logic':
+            out[...] = jnp.where(swap[None, :], partner, data)
 
     return pl.pallas_call(kernel, out_shape=jax.ShapeDtypeStruct(shape, jnp.uint32),
                           in_specs=(pl.BlockSpec(source.shape),), out_specs=pl.BlockSpec(shape),
@@ -88,7 +94,8 @@ def build_cases(*, interpret=False):
     partner, predicate, selected = _numpy_expected(source)
     expected = {'partner_gather': partner, 'swap_predicate': predicate,
                 'select_broadcast': selected, 'select_full': selected,
-                'select_rowwise': selected, 'select_arithmetic': selected}
+                'select_rowwise': selected, 'select_arithmetic': selected,
+                'swap_boolean_logic': predicate, 'select_boolean_logic': selected}
     return [dict(name=name,
                  fn=lambda x, name=name: _call(x, variant=name, interpret=interpret),
                  args=(source,), expected=expected[name]) for name in CASES]

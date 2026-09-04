@@ -104,6 +104,13 @@ failure precedes uniqueness, second sort, final selection and count storage.
 The next probe isolates one real compare/exchange (partner gather, predicate,
 and alternative gathered-data selection) before changing production `_sort`.
 
+Compare/exchange probe V3 COMPLETE; report:
+`test_results/beam_selector_probe_v3/report.md`. Partner gather is exact, while
+emitting the swap predicate alone reproduces the invalid-layout failure. Thus
+the root expression is the conditional `where(want_min, ~less & ~equal, less)`;
+the downstream data selector is not reached. V4 tests its equivalent pure
+boolean formula and one complete compare/exchange before production changes.
+
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
 split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts

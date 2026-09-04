@@ -1,0 +1,11 @@
+[{"stream_name":"stderr","time":13.389669976,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":15.13614055,"data":"\n"}
+,{"stream_name":"stderr","time":15.13617279,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":15.13617772,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":15.274187614,"data":"Cloning into '/tmp/TPUBeamSearch-selector-probe'...\n"}
+,{"stream_name":"stderr","time":27.054415141,"data":"HEAD is now at 0748415 Add TPU compare-exchange layout probe\n"}
+,{"stream_name":"stdout","time":31.029335328,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":31.029372339,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":145.222817119,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":147.501644806,"data":"[NbConvertApp] Writing 280748 bytes to __results__.html\n"}
+]
