@@ -1,0 +1,17 @@
+[{"stream_name":"stderr","time":20.350801911,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":21.835845171,"data":"\n"}
+,{"stream_name":"stderr","time":21.843879373,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":21.843890453,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":21.981061607,"data":"Cloning into '/tmp/TPUBeamSearch-rdma-ring'...\n"}
+,{"stream_name":"stderr","time":29.701314086,"data":"Updating files:  89% (3369/3760)\rUpdating files:  90% (3384/3760)\rUpdating files:  91% (3422/3760)\rUpdating files:  92% (3460/3760)\rUpdating files:  93% (3497/3760)\rUpdating files:  94% (3535/3760)\rUpdating files:  95% (3572/3760)\rUpdating files:  96% (3610/3760)\rUpdating files:  97% (3648/3760)\rUpdating files:  98% (3685/3760)\rUpdating files:  99% (3723/3760)\rUpdating files: 100% (3760/3760)\rUpdating files: 100% (3760/3760), done.\n"}
+,{"stream_name":"stderr","time":30.224042138,"data":"HEAD is now at d415d97 Stage Stream3 RDMA count predicates on chip\n"}
+,{"stream_name":"stdout","time":53.353286704,"data":"variable_count_stream3 error\n"}
+,{"stream_name":"stderr","time":53.353347704,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":53.353353784,"data":"  File \"/kaggle/src/script.py\", line 56, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":53.353358664,"data":"    main()\n"}
+,{"stream_name":"stderr","time":53.353363053,"data":"  File \"/kaggle/src/script.py\", line 52, in main\n"}
+,{"stream_name":"stderr","time":53.353507973,"data":"    raise RuntimeError('one or more RDMA epoch cases failed')\n"}
+,{"stream_name":"stderr","time":53.353534944,"data":"RuntimeError: one or more RDMA epoch cases failed\n"}
+,{"stream_name":"stderr","time":58.076951714,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":60.61248452,"data":"[NbConvertApp] Writing 285539 bytes to __results__.html\n"}
+]

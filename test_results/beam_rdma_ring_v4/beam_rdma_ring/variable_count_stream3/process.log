@@ -1,0 +1,24 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788537402.541482      53 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: === 
+learning/45eac/tfrc/runtime/common_lib.cc:238
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 473, in <module>
+    main()
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 442, in main
+    jax.block_until_ready(executable(placed))
+                          ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 890, in __call__
+    return self._call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1933, in aot_cache_miss
+    outs, out_flat, args_flat = stages.Compiled.call(params, *args, **kwargs)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 854, in call
+    raise TypeError('\n'.join(msg))
+TypeError: Function compiled with input pytree does not match the input pytree it was called with. There are 1 mismatches, including:
+    * at args, seen tuple of length 4 but now given tuple of length 1, so the lengths do not match

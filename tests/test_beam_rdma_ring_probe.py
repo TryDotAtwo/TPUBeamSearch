@@ -1,10 +1,24 @@
 import numpy as np
 
 from benchmarks.beam_rdma_ring_probe import (
+    call_compiled,
     evaluate_epoch_ring,
     evaluate_right_permute,
     evaluate_variable_exchange,
 )
+
+
+def test_call_compiled_splats_multi_input_placement():
+    calls = []
+
+    def executable(*args):
+        calls.append(args)
+        return args
+
+    assert call_compiled(executable, ('counts', 'payload')) == ('counts', 'payload')
+    assert calls == [('counts', 'payload')]
+    assert call_compiled(executable, 'single') == ('single',)
+    assert calls[-1] == ('single',)
 
 
 def test_right_permute_report_detects_exact_ring_and_one_wrong_word():

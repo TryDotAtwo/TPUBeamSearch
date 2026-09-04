@@ -91,6 +91,13 @@ def evaluate_variable_exchange(actual, actual_counts, source, send_counts):
     )
 
 
+def call_compiled(executable, placed):
+    """Invoke a compiled executable with its original positional arguments."""
+    if isinstance(placed, tuple):
+        return executable(*placed)
+    return executable(placed)
+
+
 def make_right_permute(mesh):
     device_count = mesh.size
 
@@ -439,11 +446,11 @@ def main():
         result = evaluate_right_permute(actual, per_device)
 
     for _ in range(3):
-        jax.block_until_ready(executable(placed))
+        jax.block_until_ready(call_compiled(executable, placed))
     samples = []
     for _ in range(21):
         start = time.perf_counter_ns()
-        jax.block_until_ready(executable(placed))
+        jax.block_until_ready(call_compiled(executable, placed))
         samples.append((time.perf_counter_ns() - start) / 1e6)
     result.update(
         scope=('bounded Stream3 variable-count RDMA diagnostic'

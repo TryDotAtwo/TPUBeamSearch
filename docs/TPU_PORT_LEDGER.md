@@ -46,6 +46,13 @@ loads from `pl.ANY` count references, which Mosaic correctly rejects because
 HBM must be accessed through async copies. The local send count is now scalar
 prefetched and the received count is staged into per-slot VMEM before branching.
 V4 physical confirmation is required; no Stream3 correctness claim is made yet.
+
+Variable-count RDMA V4 compiled but the benchmark then failed in its shared
+warmup loop; see `test_results/beam_rdma_ring_v4/report.md`. Its four-input
+compiled executable was called with one tuple argument. Invocation is now
+centralized so tuple placements are splatted while legacy single-input probes
+retain their existing call shape. V5 still requires physical correctness and
+timing confirmation.
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries

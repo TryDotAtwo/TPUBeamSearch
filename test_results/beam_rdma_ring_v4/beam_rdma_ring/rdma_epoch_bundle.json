@@ -1,0 +1,11 @@
+{
+  "scope": "isolated variable-count Stream3 RDMA gate",
+  "source_sha": "d415d9792c47873a5b4e5521d049bfa2e730e963",
+  "cases": [
+    {
+      "name": "variable_count_stream3",
+      "status": "error",
+      "returncode": 1
+    }
+  ]
+}
