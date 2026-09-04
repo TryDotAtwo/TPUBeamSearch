@@ -127,6 +127,14 @@ green after the one-expression change. Targeted source parity passes; full
 local verification: 581 passed, 5 skipped in 264.60 s. The next full physical
 primitive bundle must confirm all four dedup and both split cases.
 
+Primitive gate V8 COMPLETE, all_exact=false; report:
+`test_results/beam_primitives_v8/report.md`. Both Stream3 split cases are now
+physically exact on eight TPU, proving the swap-predicate fix through complete
+split execution. Dedup also passes that boundary: N=128 next fails at unsigned
+`maximum(indices,1)` for previous-hash addressing, while N=256 exposes a
+separate multi-vreg gather limitation. Hash failures remain unchanged. Split
+success is bounded local partition evidence, not HBM-scale or remote DMA.
+
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
 split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts
