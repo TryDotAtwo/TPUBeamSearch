@@ -1,0 +1,16 @@
+[{"stream_name":"stderr","time":21.274924257,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":25.500608297,"data":"\n"}
+,{"stream_name":"stderr","time":25.500655097,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":25.500661227,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":25.660546127,"data":"Cloning into '/tmp/TPUBeamSearch-rdma-ring'...\n"}
+,{"stream_name":"stderr","time":34.841697778,"data":"HEAD is now at 0643138 Use TPU-supported Stream3 wire gather\n"}
+,{"stream_name":"stderr","time":58.866408319,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":58.866446719,"data":"  File \"/kaggle/src/script.py\", line 56, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":58.866402939,"data":"integrated_stream3_exchange error\n"}
+,{"stream_name":"stderr","time":58.866500359,"data":"    main()\n"}
+,{"stream_name":"stderr","time":58.866515509,"data":"  File \"/kaggle/src/script.py\", line 52, in main\n"}
+,{"stream_name":"stderr","time":58.866579199,"data":"    raise RuntimeError('one or more RDMA epoch cases failed')\n"}
+,{"stream_name":"stderr","time":58.866586759,"data":"RuntimeError: one or more RDMA epoch cases failed\n"}
+,{"stream_name":"stderr","time":62.944898158,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":65.346461391,"data":"[NbConvertApp] Writing 285548 bytes to __results__.html\n"}
+]

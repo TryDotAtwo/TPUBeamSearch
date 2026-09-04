@@ -98,14 +98,21 @@ def pallas_stream3_wire_slots(remote, send_count, send_offset, *, local_rank,
         # Mosaic TPU does not allow advanced integer indexing directly on a
         # Ref. Materialize the aligned input block, then permute its value.
         remote_value = remote_ref[...]
+        count_value = count_ref[...]
+        offset_value = offset_ref[...]
         positions = jnp.arange(capacity, dtype=jnp.uint32)
         neutral = jnp.where(jnp.arange(8)[:, None] == 6,
                             jnp.uint32(0xffffffff), jnp.uint32(0))
         for epoch in range(epochs):
             peer = lax.rem(rank + jnp.uint32(epoch + 1),
                            jnp.uint32(world_size))
-            amount = count_ref[0, peer]
-            start = offset_ref[0, peer]
+            peer_mask = positions == peer
+            # Dynamic scalar loads from tiled [1,128] refs require an
+            # unprovable 128-lane alignment. Select after an aligned load.
+            amount = jnp.sum(jnp.where(
+                peer_mask, count_value[0], jnp.uint32(0)), dtype=jnp.uint32)
+            start = jnp.sum(jnp.where(
+                peer_mask, offset_value[0], jnp.uint32(0)), dtype=jnp.uint32)
             source_index = jnp.minimum(start + positions,
                                        jnp.uint32(capacity - 1))
             gather_index = jnp.broadcast_to(source_index[None, :],

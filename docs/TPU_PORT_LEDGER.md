@@ -74,6 +74,13 @@ gathers for this layout. See `test_results/beam_rdma_ring_v7/report.md`. The
 wire adapter now broadcasts the index to `[8,128]` and explicitly uses
 `take_along_axis(axis=1)`. V8 physical confirmation remains required.
 
+Integrated V8 accepted the payload gather and then failed on the dynamic
+`count_ref[0, peer]` tiled-VMEM scalar load with Mosaic E2003 unproven
+128-lane alignment; see `test_results/beam_rdma_ring_v8/report.md`. Count and
+offset control vectors are now loaded as aligned blocks and device-dynamic
+peer values are selected by a one-hot mask reduction. V9 physical confirmation
+is required.
+
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries

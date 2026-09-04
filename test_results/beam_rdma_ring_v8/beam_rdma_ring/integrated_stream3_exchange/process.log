@@ -1,0 +1,67 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788552441.792027      53 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: ===
+learning/45eac/tfrc/runtime/common_lib.cc:238
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 1 is a multiple of 128
+See https://openxla.org/xla/errors/error_2003 for more details.
+
+at location: loc("get:"("get"("pallas_stream3_wire_slots.<locals>.kernel"("/tmp/TPUBeamSearch-rdma-ring/src/tpu_beam_search/beam_stream3.py":107:21 to :39))))
+
+The MLIR operation involved:
+  %40 = "tpu.vector_load"(%24, %20, %39) <{operandSegmentSizes = array<i32: 1, 2, 0>, strides = array<i32>}> : (memref<1x128xi32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<vmem>>, index, index) -> vector<1x1xi32>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 672, in <module>
+    main()
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 612, in main
+    result, executable, placed = run_integrated_stream3_exchange(
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 516, in run_integrated_stream3_exchange
+    executable = fn.lower(*placed).compile()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+  File "/tmp/TPUBeamSearch-rdma-ring/src/tpu_beam_search/beam_stream3.py", line 107, in get"("pallas_stream3_wire_slots.<locals>.kernel
+    amount = count_ref[0, peer]
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: E2003: CompileTimeMosaicUnprovenMemoryAccessAlignment: cannot statically prove that index in dimension 1 is a multiple of 128
+See https://openxla.org/xla/errors/error_2003 for more details.
+
+The MLIR operation involved:
+  %40 = "tpu.vector_load"(%24, %20, %39) <{operandSegmentSizes = array<i32: 1, 2, 0>, strides = array<i32>}> : (memref<1x128xi32, #tpu.tiled<(1,128),[1,1]>, #tpu.memory_space<vmem>>, index, index) -> vector<1x1xi32>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
