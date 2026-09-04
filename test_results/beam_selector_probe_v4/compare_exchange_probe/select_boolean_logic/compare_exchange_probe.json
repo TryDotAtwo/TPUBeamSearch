@@ -1,0 +1,47 @@
+{
+  "scope": "one real compare/exchange lowering probe; not performance",
+  "source_sha": "eb9d12ab939b3d8e63524742788bb4cbe65af7e3",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "case": "select_boolean_logic",
+  "status": "exact",
+  "exact": true,
+  "input_sha256": "3314f04d221f02cf7ea35562086f47859fe585deaa19a6b1c4b29cb91f8d1314",
+  "compile_seconds": 0.3492746189999707,
+  "mismatched_elements": 0
+}

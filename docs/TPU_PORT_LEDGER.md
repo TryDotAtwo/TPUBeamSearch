@@ -111,6 +111,15 @@ the root expression is the conditional `where(want_min, ~less & ~equal, less)`;
 the downstream data selector is not reached. V4 tests its equivalent pure
 boolean formula and one complete compare/exchange before production changes.
 
+Compare/exchange probe V4 COMPLETE; report:
+`test_results/beam_selector_probe_v4/report.md`. The pure boolean swap identity
+and a complete gather/compare/select using it are physically exact, while the
+conditional boolean `where` remains rejected. Production `_sort` now uses the
+proven identity. The new regression was red on dedup and both split cases and
+green after the one-expression change. Targeted source parity passes; full
+local verification: 581 passed, 5 skipped in 264.60 s. The next full physical
+primitive bundle must confirm all four dedup and both split cases.
+
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
 split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts

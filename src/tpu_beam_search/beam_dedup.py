@@ -32,7 +32,10 @@ def _sort(data, key_planes):
                 less = less | (equal & (a < b))
                 equal = equal & (a == b)
             want_min = ((indices & size) == 0) == ((indices & stride) == 0)
-            swap = jnp.where(want_min, ~less & ~equal, less)
+            # Mosaic 0.0.42.1 cannot reconcile the layouts chosen for this
+            # boolean select after the partner gather.  The equivalent boolean
+            # identity is physically exact in the isolated TPU comparator.
+            swap = (want_min & ~less & ~equal) | (~want_min & less)
             data = jnp.where(swap[None, :], partner, data)
             stride //= 2
         size *= 2

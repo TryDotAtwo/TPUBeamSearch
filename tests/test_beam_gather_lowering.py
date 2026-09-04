@@ -81,3 +81,13 @@ def test_control_plane_construction_has_no_boolean_select(name):
     control_selects = [eq for eq in equations(graph) if eq.primitive.name == 'select_n'
                        and any(getattr(v.aval, 'shape', None) == (1, 128) for v in eq.outvars)]
     assert not control_selects
+
+
+@pytest.mark.parametrize('name', ['dedup_stream3_128', 'split_0', 'split_127'])
+def test_bitonic_swap_predicate_avoids_mosaic_invalid_boolean_select(name):
+    case = next(c for c in build_cases(interpret=True) if c['name'] == name)
+    graph = jax.make_jaxpr(case['fn'])(*case['args'])
+    predicate_selects = [eq for eq in equations(graph) if eq.primitive.name == 'select_n'
+                         and any(getattr(v.aval, 'shape', None) == (128,)
+                                 and str(v.aval.dtype) == 'bool' for v in eq.outvars)]
+    assert not predicate_selects

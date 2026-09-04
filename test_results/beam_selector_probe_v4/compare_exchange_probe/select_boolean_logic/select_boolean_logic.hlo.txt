@@ -1,0 +1,48 @@
+HloModule jit__fun, is_scheduled=true, entry_computation_layout={(u32[1,11,128]{2,0,1:T(1,128)})->u32[1,11,128]{2,0,1:T(1,128)}}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_compare_exchange_probe.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "_run"
+6 "build_cases.<locals>.<lambda>"
+7 "_call"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=165 end_line=165 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=145 end_line=145 column=8 end_column=8}
+5 {file_name_id=2 function_name_id=5 line=125 end_line=125 column=21 end_column=21}
+6 {file_name_id=2 function_name_id=6 line=100 end_line=100 column=41 end_column=41}
+7 {file_name_id=2 function_name_id=7 line=65 end_line=65 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+
+
+%fused_computation (param_0.1: u32[1,11,128]) -> u32[11,128] {
+  %param_0.1 = u32[1,11,128]{2,0,1:T(1,128)} parameter(0)
+  %copy.4 = u32[1,11,128]{2,1,0:T(8,128)} copy(%param_0.1)
+  ROOT %bitcast.2 = u32[11,128]{1,0:T(8,128)S(1)} bitcast(%copy.4)
+}
+
+ENTRY %main.0_spmd (param.1: u32[1,11,128]) -> u32[1,11,128] {
+  %param.1 = u32[1,11,128]{2,0,1:T(1,128)} parameter(0), sharding={devices=[8,1,1]<=[8]}, metadata={op_name="flat_args[0]"}
+  %copy_bitcast_fusion = u32[11,128]{1,0:T(8,128)S(1)} fusion(%param.1), kind=kLoop, calls=%fused_computation, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"6144"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"1828","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["2","1"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+  %beam_compare_exchange_select_boolean_logic.1 = u32[11,128]{1,0:T(8,128)S(1)} custom-call(%copy_bitcast_fusion), custom_call_target="tpu_custom_call", operand_layout_constraints={u32[11,128]{1,0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(_fun)/shard_map/beam_compare_exchange_select_boolean_logic/pallas_call" stack_frame_id=7}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"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BQsfBwNiAl4CAw0NBm4CAwEDIwcDggJ6AgMNDQaOAgMBAycLBxl7AwcDCwMGGwMDAysLBx17AwcDIQMGHwMDAy8HA08/AwUNBk8DAwMzFQdPiwMDBTUtBwNRPwMFDQZRAwMDORUHUYsDAwU7MQkHIyEDAQU3PQUGJQMBBSk/DwYpAwEFJUEJBysJAwEFNz0FBi8DAQUpRQsHGZkDBwMLAwYbAwMDSQsHHZkDBwMhAwYfAwMDTQkHIyEDAQVLTwUGJQMBBUdRDwYpAwEFQ1MJBysJAwEFS08FBi8DAQVHVwsHGZsDBwMLAwYbAwMDWwsHHZsDBwMhAwYfAwMDXwkHIyEDAQVdYQUGJQMBBVljDwYpAwEFVWUJBysJAwEFXWEFBi8DAQVZaQsHGZ0DBwMLAwYbAwMDbQsHHZ0DBwMhAwYfAwMDcQkHIyEDAQVvcwUGJQMBBWt1DwYpAwEFZ3cJBysJAwEFb3MFBi8DAQVrewsHGZ8DBwMLAwYbAwMDfwsHHZ8DBwMhAwYfAwMDgwkHIyEDAQWBhQUGJQMBBX2HDwYpAwEFeYkJBysJAwEFgYUFBi8DAQV9jQsHGaEDBwMLAwYbAwMDkQsHHaEDBwMhAwYfAwMDlQkHIyEDAQWTlwUGJQMBBY+ZDwYpAwEFi5sJBysJAwEFk5cFBi8DAQWPnwsHGaMDBwMLAwYbAwMDowsHHaMDBwMhAwYfAwMDpwkHIyEDAQWlqQUGJQMBBaGrDwYpAwEFna0JBysJAwEFpakFBi8DAQWhsQcDV1YDAwUNBlcDAwO1BQZXAwMFD7cHA24DpwMFDQarAwMDuwkHqwkDAQW5vQcDWT8DBQ0GWQMDA8EFBlkDAwUPwwcDjgOnAwUNBq8DAwPHCQevCQMBBcXJEQaiAwMBBb/LBwOzSQMBEQazAwEFzc8HA7VJAwERBrUDAQWv0wUG0gMDAQXR1QcDt0kDAREGtwMBBbPZBQb2AwMBBdfbBwO5SQMBEQa5AwEF0d8FBhoEAwEF4a8PBi4EAwEF3eMDBkIEAxMD5QMGvQMTA+cNBr0DGQPpHQZWBAMLB+shCwcDSzsDDwcDSzsDDxMGSwMLBwPv8R8FS3oECe0D7/EhAAcGAwEFAQCSEaEpCRUNJRUXFw0JHR0RIRMJCysfFxELHVcTIyEdKS0HCQ0JFQkLIRMZDyOJEw0RCw0RRQkLDRENESWZLRkjGycTFRcZFxUjOxcfFyUPDQkdEWJ1aWx0aW4Ac3RhYmxlX21vc2FpYwB0cHUAYXJpdGgAbW9kdWxlAHZlY3Rvci5zaGFwZV9jYXN0AGFyaXRoLmFuZGkAYXJpdGguY29uc3RhbnQAYXJpdGguY21waQB2ZWN0b3IuZXh0cmFjdF9zdHJpZGVkX3NsaWNlAHZlY3Rvci5icm9hZGNhc3QAYXJpdGgub3JpAGFyaXRoLnhvcmkAdmVjdG9yLmxvYWQAYXJpdGguc3ViaQBmdW5jLmZ1bmMAdHB1LmlvdGEAdHB1LmR5bmFtaWNfZ2F0aGVyAGFyaXRoLnNlbGVjdAB0cHUudmVjdG9yX3N0b3JlAGZ1bmMucmV0dXJuAF9jYWxsLjxsb2NhbHM+Lmtlcm5lbAAvdG1wL1RQVUJlYW1TZWFyY2gtc2VsZWN0b3ItcHJvYmUvYmVuY2htYXJrcy9iZWFtX2NvbXBhcmVfZXhjaGFuZ2VfcHJvYmUucHkAYnJvYWRjYXN0X2luX2RpbToAc3RyaWRlcwB2YWx1ZQBvZmZzZXRzAHNpemVzAGFuZDoAZXE6AGJyb2FkY2FzdF9pbl9kaW0vYnJvYWRjYXN0X2luX2RpbQBhbmQvYW5kAGVxL2VxAG5vdDoAbm90L25vdABpb3RhOgBfY29sdW1ucwAvdG1wL1RQVUJlYW1TZWFyY2gtc2VsZWN0b3ItcHJvYmUvc3JjL3RwdV9iZWFtX3NlYXJjaC9iZWFtX2RlZHVwLnB5AGJyb2FkY2FzdF9pbl9kaW0Ac2xpY2U6AHNsaWNlL3NsaWNlAHNxdWVlemU6AHNxdWVlemUvc3F1ZWV6ZQBzdWI6AHN1YgBwcmVkaWNhdGUAb3I6AG9yL29yAGFuZABlcQBzdGFibGVfbW9zYWljLnZlcnNpb24AZGltZW5zaW9uX3NlbWFudGljcwBmdW5jdGlvbl90eXBlAHNjYWxhcl9wcmVmZXRjaABzY3JhdGNoX29wZXJhbmRzAHN5bV9uYW1lAGJlYW1fY29tcGFyZV9leGNoYW5nZV9zZWxlY3RfYm9vbGVhbl9sb2dpYwB0cHUuY29yZV90eXBlAGdldDoAZ2V0L2dldABkaW1lbnNpb25zAGlvdGEvaW90YS9pb3RhAGlvdGEvc3F1ZWV6ZS9zcXVlZXplAHhvcjoAeG9yAHJlc2hhcGU6AHJlc2hhcGUvcmVzaGFwZQBnYXRoZXI6AGdhdGhlci9nYXRoZXIAb3ZlcmZsb3dGbGFncwBsdDoAbHQvbHQAZXEveG9yL3hvcgBlcS9ub3Qvbm90AHNlbGVjdF9uOgBzZWxlY3Rfbi9zZWxlY3RfbgBzd2FwOgBzd2FwL3N3YXAAYWRkAG9wZXJhbmRTZWdtZW50U2l6ZXMA","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"0"}]}
+  %bitcast.3 = u32[1,11,128]{2,1,0:T(8,128)S(1)} bitcast(%beam_compare_exchange_select_boolean_logic.1)
+  ROOT %copy.2 = u32[1,11,128]{2,0,1:T(1,128)} copy(%bitcast.3), metadata={op_name="jit(_fun)/shard_map/broadcast_in_dim" stack_frame_id=5}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"6144"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"1923","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["11","1","1"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+}
+
