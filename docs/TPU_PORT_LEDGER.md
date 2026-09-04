@@ -97,6 +97,13 @@ V7: the rejected layout is created by interaction with an earlier full-pipeline
 operation. The next physical probe bisects the actual dedup stages before any
 production change.
 
+Dedup stage probe V2 COMPLETE; report:
+`test_results/beam_selector_probe_v2/report.md`. Initial 11-plane construction
+is exact; the first bitonic sort is the first invalid-layout boundary. Thus the
+failure precedes uniqueness, second sort, final selection and count storage.
+The next probe isolates one real compare/exchange (partner gather, predicate,
+and alternative gathered-data selection) before changing production `_sort`.
+
 V5 COMPLETE, all_exact=false; see `test_results/beam_primitives_v5/report.md`.
 The signed reduction passed its prior lowering boundary, then all dedup and
 split cases reached `Cannot store scalars to VMEM`. V6 represents logical counts

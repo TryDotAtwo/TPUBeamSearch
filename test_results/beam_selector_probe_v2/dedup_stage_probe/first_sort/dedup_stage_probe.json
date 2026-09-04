@@ -1,0 +1,51 @@
+{
+  "scope": "real dedup stage compile/correctness probe; not beam performance",
+  "source_sha": "47b3fba8f85b385e68359884f60f021d3ba13883",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "case": "first_sort",
+  "status": "error",
+  "exact": false,
+  "input_sha256": [
+    "fed056073aaa9b1edeed86b62a20bfd7af70521995e5a1dd45c445ff8208b926",
+    "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+    "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+    "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+  ],
+  "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %123 = \"arith.extsi\"(%122) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_dedup_stage_probe.py\", line 125, in _run_case\n    executable = fn.lower(*inputs).compile()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %123 = \"arith.extsi\"(%122) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+}

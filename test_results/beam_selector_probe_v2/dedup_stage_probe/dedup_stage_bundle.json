@@ -1,0 +1,282 @@
+{
+  "scope": "isolated real dedup stage probes",
+  "cases": [
+    {
+      "name": "initial",
+      "returncode": 0,
+      "report": {
+        "scope": "real dedup stage compile/correctness probe; not beam performance",
+        "source_sha": "47b3fba8f85b385e68359884f60f021d3ba13883",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "case": "initial",
+        "status": "exact",
+        "exact": true,
+        "input_sha256": [
+          "fed056073aaa9b1edeed86b62a20bfd7af70521995e5a1dd45c445ff8208b926",
+          "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+          "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+          "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+        ],
+        "compile_seconds": 0.4347574850000342,
+        "mismatched_elements": 0,
+        "output_sha256": "025f72eba9bf95b2aa06bdc5f997d1298e554398bc90cc5ee7f1dd296ef4d3b2"
+      }
+    },
+    {
+      "name": "first_sort",
+      "returncode": 0,
+      "report": {
+        "scope": "real dedup stage compile/correctness probe; not beam performance",
+        "source_sha": "47b3fba8f85b385e68359884f60f021d3ba13883",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "case": "first_sort",
+        "status": "error",
+        "exact": false,
+        "input_sha256": [
+          "fed056073aaa9b1edeed86b62a20bfd7af70521995e5a1dd45c445ff8208b926",
+          "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+          "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+          "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+        ],
+        "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %123 = \"arith.extsi\"(%122) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_dedup_stage_probe.py\", line 125, in _run_case\n    executable = fn.lower(*inputs).compile()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %123 = \"arith.extsi\"(%122) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+      }
+    },
+    {
+      "name": "uniqueness",
+      "returncode": 0,
+      "report": {
+        "scope": "real dedup stage compile/correctness probe; not beam performance",
+        "source_sha": "47b3fba8f85b385e68359884f60f021d3ba13883",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "case": "uniqueness",
+        "status": "error",
+        "exact": false,
+        "input_sha256": [
+          "fed056073aaa9b1edeed86b62a20bfd7af70521995e5a1dd45c445ff8208b926",
+          "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+          "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+          "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+        ],
+        "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %127 = \"arith.extsi\"(%126) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_dedup_stage_probe.py\", line 125, in _run_case\n    executable = fn.lower(*inputs).compile()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %127 = \"arith.extsi\"(%126) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+      }
+    },
+    {
+      "name": "second_sort",
+      "returncode": 0,
+      "report": {
+        "scope": "real dedup stage compile/correctness probe; not beam performance",
+        "source_sha": "47b3fba8f85b385e68359884f60f021d3ba13883",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "case": "second_sort",
+        "status": "error",
+        "exact": false,
+        "input_sha256": [
+          "fed056073aaa9b1edeed86b62a20bfd7af70521995e5a1dd45c445ff8208b926",
+          "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+          "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+          "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+        ],
+        "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 353, in backend_compile_and_load\n    return backend.compile_and_load(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nat location: loc(\"select_n:\"(\"select_n/select_n\"))\n\nThe MLIR operation involved:\n  %127 = \"arith.extsi\"(%126) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_dedup_stage_probe.py\", line 125, in _run_case\n    executable = fn.lower(*inputs).compile()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 592, in compile\n    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1239, in compile\n    executable = UnloadedMeshExecutable.from_hlo(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1733, in from_hlo\n    xla_executable = _cached_compilation(\n                     ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1516, in _cached_compilation\n    xla_executable = compiler.compile_or_get_cached(\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 469, in compile_or_get_cached\n    return _compile_and_write_cache(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 737, in _compile_and_write_cache\n    executable = backend_compile_and_load(\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py\", line 362, in backend_compile_and_load\n    raise handler_result from e\njax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Invalid input layout\n\nThe MLIR operation involved:\n  %127 = \"arith.extsi\"(%126) {in_layout = [#tpu.vpad<\"1,{1,0},(8,128),-2\">], out_layout = [#tpu.vpad<\"8,{1,0},(8,128),-2\">]} : (vector<128xi1>) -> vector<128xi8>\n\nPlease report a bug at: https://github.com/jax-ml/jax/issues/new/choose\n\n"
+      }
+    },
+    {
+      "name": "final_select",
+      "returncode": 0,
+      "report": {
+        "scope": "real dedup stage compile/correctness probe; not beam performance",
+        "source_sha": "47b3fba8f85b385e68359884f60f021d3ba13883",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "case": "final_select",
+        "status": "error",
+        "exact": false,
+        "input_sha256": [
+          "fed056073aaa9b1edeed86b62a20bfd7af70521995e5a1dd45c445ff8208b926",
+          "1abb49eec50723c018c1197161b8cc46c61cab2dbfdd96287a7e3e20bbcdcc99",
+          "dd5e8ff17033e3d207902e855fc1f6d5ff1b0b34c5edfb94234d9e86078aca5a",
+          "2594b6a92ebfb1c3312deb7d01c015fb95e9fbe9bd7bc6b527af07813ec7b910"
+        ],
+        "error": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/primitives.py\", line 652, in wrap_with_transforms\n    return f(*new_args)\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_dedup_stage_probe.py\", line 50, in kernel\n    neutral = jnp.zeros((8, n), jnp.uint32).at[6, :].set(jnp.uint32(0xffffffff))\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py\", line 1208, in set\n    return scatter._scatter_update(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 90, in _scatter_update\n    return internal_scatter(x, y, dynamic_idx)\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/ops/scatter.py\", line 143, in _scatter_impl\n    out = scatter_op(\njax._src.source_info_util.JaxStackTraceBeforeTransformation: NotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n\nThe preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.\n\n--------------------\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_dedup_stage_probe.py\", line 125, in _run_case\n    executable = fn.lower(*inputs).compile()\n                 ^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pmap.py\", line 330, in lower\n    lowered = jitted_f.trace(*args_flat).lower()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/stages.py\", line 492, in lower\n    lowering = _resolve_and_lower(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1091, in _resolve_and_lower\n    return _pjit_lower(\n           ^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pjit.py\", line 1264, in _pjit_lower\n    return pxla.lower_sharding_computation(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py\", line 420, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 1123, in lower_sharding_computation\n    tuple_args, shape_poly_state) = _cached_lowering_to_hlo(\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py\", line 736, in _cached_lowering_to_hlo\n    lowering_result = mlir.lower_jaxpr_to_module(\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1403, in lower_jaxpr_to_module\n    lower_jaxpr_to_fun(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 1994, in lower_jaxpr_to_fun\n    out_vals, tokens_out = jaxpr_subcomp(\n                           ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1092, in _shard_map_lowering\n    return _shard_map_lowering_shardy(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/shard_map.py\", line 1066, in _shard_map_lowering_shardy\n    out_nodes_, tokens_out = mlir.jaxpr_subcomp(\n                             ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2166, in jaxpr_subcomp\n    cache_entry = _cached_lowering_miss(\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2235, in _cached_lowering_miss\n    cache_entry = _emit_lowering_rule_as_fun(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2373, in _emit_lowering_rule_as_fun\n    outs = lowering_rule(sub_ctx, *unflattened_args, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2408, in _uncached_lowering\n    ans = lower_per_platform(ctx, str(primitive), platform_rules, default_rule,\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 974, in _pallas_call_lowering\n    return mlir.lower_per_platform(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/mlir.py\", line 2536, in lower_per_platform\n    output = type_cast(Sequence[IrValues], rule(ctx, *rule_args, **rule_kwargs))\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py\", line 906, in tpu_lowering\n    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py\", line 405, in pallas_call_tpu_lowering_rule\n    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1014, in lower_jaxpr_to_pipelined_module\n    lower_jaxpr_into_pipelined_module(\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1113, in lower_jaxpr_into_pipelined_module\n    func_op = _lower_jaxpr_to_func_common(\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1595, in _lower_jaxpr_to_func_common\n    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py\", line 197, in decorator\n    return_values = f(*func_args, **func_kwargs)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1592, in body_func\n    return jaxpr_subcomp(lowering_context, jaxpr, *other_args)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py\", line 1839, in jaxpr_subcomp\n    raise NotImplementedError(\nNotImplementedError: Unimplemented primitive in Pallas TPU lowering for tc: scatter. Please file an issue at https://github.com/jax-ml/jax/issues/new/choose.\n"
+      }
+    }
+  ]
+}

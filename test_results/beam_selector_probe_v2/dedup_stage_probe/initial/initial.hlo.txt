@@ -1,0 +1,52 @@
+HloModule jit__fun, is_scheduled=true, entry_computation_layout={(u32[1,8,128]{2,1,0:T(8,128)}, u32[1,1,128]{2,1,0:T(1,128)}, u32[1,1]{1,0:T(1,128)}, u32[1,1]{1,0:T(1,128)})->u32[1,11,128]{2,0,1:T(1,128)}}, allow_spmd_sharding_propagation_to_parameters={false,false,false,false}, num_partitions=8, frontend_attributes={arg_layout_modes="default;default;default;default",arg_memory_spaces="0;0;0;0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-selector-probe/benchmarks/beam_dedup_stage_probe.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "_run_case"
+6 "build_cases.<locals>.<lambda>"
+7 "_pallas_stage"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=166 end_line=166 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=146 end_line=146 column=8 end_column=8}
+5 {file_name_id=2 function_name_id=5 line=125 end_line=125 column=21 end_column=21}
+6 {file_name_id=2 function_name_id=6 line=98 end_line=98 column=52 end_column=52}
+7 {file_name_id=2 function_name_id=7 line=53 end_line=53 column=11 end_column=11}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+7 {file_location_id=7 parent_frame_id=7}
+
+
+ENTRY %main.0_spmd (param.4: u32[1,8,128], param.5: u32[1,1,128], param.6: u32[1,1], param.7: u32[1,1]) -> u32[1,11,128] {
+  %param.7 = u32[1,1]{1,0:T(1,128)} parameter(3), sharding={devices=[8,1]<=[8]}, metadata={op_name="flat_args[3]"}
+  %param.6 = u32[1,1]{1,0:T(1,128)} parameter(2), sharding={devices=[8,1]<=[8]}, metadata={op_name="flat_args[2]"}
+  %param.5 = u32[1,1,128]{2,1,0:T(1,128)} parameter(1), sharding={devices=[8,1,1]<=[8]}, metadata={op_name="flat_args[1]"}
+  %param.4 = u32[1,8,128]{2,1,0:T(8,128)} parameter(0), sharding={devices=[8,1,1]<=[8]}, metadata={op_name="flat_args[0]"}
+  %copy.7 = u32[1,1]{1,0:T(1,128)} copy(%param.7), backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"scoped_memory_configs":[],"used_scoped_memory_configs":[]}
+  %copy.6 = u32[1,1]{1,0:T(1,128)} copy(%param.6), backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"scoped_memory_configs":[],"used_scoped_memory_configs":[]}
+  %copy-start = (u32[1,1,128]{2,1,0:T(1,128)S(1)}, u32[1,1,128]{2,1,0:T(1,128)}, u32[]{:S(2)}) copy-start(%param.5)
+  %copy-done = u32[1,1,128]{2,1,0:T(1,128)S(1)} copy-done(%copy-start)
+  %bitcast.8 = u32[8,128]{1,0:T(8,128)} bitcast(%param.4)
+  %bitcast.9 = u32[1,128]{1,0:T(1,128)S(1)} bitcast(%copy-done)
+  %bitcast.5 = u32[1]{0:T(128)} bitcast(%copy.6)
+  %bitcast.6 = u32[1]{0:T(128)} bitcast(%copy.7)
+  %beam_dedup_stage_initial.1 = u32[11,128]{1,0:T(8,128)S(1)} custom-call(%bitcast.8, %bitcast.9, %bitcast.5, %bitcast.6), custom_call_target="tpu_custom_call", operand_layout_constraints={u32[8,128]{1,0}, u32[1,128]{1,0}, u32[1]{0}, u32[1]{0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(_fun)/shard_map/beam_dedup_stage_initial/pallas_call" stack_frame_id=7}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"TUzvUgFNTElSMjMuMC4wZ2l0AAEtBwEDBQEDBwMbCQsNDxETFRcZGx0fIQOOAiYCHwH9CwsTBwsPDw8PhQ8PCw8PDwsPCxMPDwsPDw8PCw8PCwsPExMLDzsLCwsLZQsLCwsLEwsjDw8LDxsPDwsPDw8bCzMLDwsPGxMPEw8PDxsPDxsLDwsPGxMPDwsPCw8bDwsPCw8bDw8bDw8bDw8PGw8PDw8bEwsPDwsPCw8bCxMLBQVhTQETDxs7Cw8LUwsTAR8PBxsPFxsXIyMjEwsbGyMCDgoFIwUlAwMldx8FJx0JlR0Jxx0JzR33+WFmZmluZV9tYXA8KGQwLCBkMSkgLT4gKGQwLCBkMSk+AB0Bbx0JeQUpHQmbHQHZEQcBBSsVbRUFLQMDf4Edg4UdAYsFLx2hox0BqR0BuR0BxQUxHQHLHQHRBTMFNR0B9R0BBgIDA0dJBTcRBz0DDU1PUVNXH1kfW11f/wU5AQEFOw0dYWZmaW5lX21hcDwoZDApIC0+IChkMCk+AAU9BT8FQQVDBUUDA2NlBUcjAQMJAQAAAB0haR1rIwVJFRUVLQMHOSVjHSFzHXUjBUsRAwEdGXsdAX0tAwc7OUEFTSMHAxEAAAAAAAAAAAVPHYeJBVEVKystAwc7JUEDAy2PEQcZAwMlkxEDGR0Zlx0BmS0DBztLWR0ZnR0Bny0DBzthaQVTHaWnBVUVMTEtAwc7S2kDAy2tEQcdHbGzBVcdtbcFWRUzMy0DBzsjax29vwVbHcHDBV0VNTUtAwc7IZMdN8kVOTktAwc9QU0dN88VOzstAwc9UV0dPdUdP9cVHR0tAwc9YX0dPd0dP98VHeEdAeMtAwc9gaEDA+fpBV8RAQEd7e8FYR3x8wVjFUFBLQMHPR+1BWUd+wICBWcjdHB1Lm1lbW9yeV9zcGFjZTx2bWVtPgAjdHB1LmNvcmVfdHlwZTx0Yz4AFUNDLQMHQRkpAwcOAhICFgIaAh4CIgIFaREXAAVrIwEJIQEAAAABAAAAAgAAAAAAAAAFbSMBAQEBAgIDJwUFAgQBAQIEJwMCBAEX/QMFAVUnAwIEFxf9BSECBAETF/0FBQIEARMX/QUtAgQBEycDBQEBCScFIQIEAScFLQIEAQULDxELCxMBBE4EBQERB0UHAwEFDxEHSwcDS4sLDwcRBwsHCwcTBxEDZ2EDBQUGcQMJAwsDAxcFAwMHBhcDFQUFDwkHFycDAQMRCwYpAwkDEw0HKY0DDQUNFQMDC5EDAwMDCwUDAwcGCwMFBwEZGwUGCwMJAx0DAxsFAwMHBhsDFQUHIQkHGycDAQMjCwYvAwkDJQ0HL6sDDQUfJxMGrwMNBRcpFQa7AwkDKwMDDQUDAwMDDQUDAwcGDQMZBwEvMQUGDQMZAzMDAw8FAwMDAw8FAwMHBg8DBQcDNzkFBg8DBQM7BQbTAwUDLQUG2wMFAw0XB+vlAxsJNT0/QQMDEQUDAwMDEQUDAwcGEQMbBwlFRxkFEQoCCUMJRUcbAAcGAwEFAQBCDW8RKQkVDTEbFVUtEQsNCQ0JISsfFx0zEyMhHSktRSURFQ0NCQuPPRkjIRkXExUXIx8ZJR8PCR0RYnVpbHRpbgBzdGFibGVfbW9zYWljAHRwdQBtb2R1bGUAYXJpdGguY29uc3RhbnQAdmVjdG9yLnNoYXBlX2Nhc3QAdmVjdG9yLmxvYWQAdmVjdG9yLmV4dHJhY3QAdmVjdG9yLmJyb2FkY2FzdABhcml0aC5jbXBpAGZ1bmMuZnVuYwB0cHUuaW90YQBhcml0aC5hbmRpAGFyaXRoLmV4dHVpAHRwdS5jb25jYXRlbmF0ZQB0cHUudmVjdG9yX3N0b3JlAGZ1bmMucmV0dXJuAF9wYWxsYXNfc3RhZ2UuPGxvY2Fscz4ua2VybmVsAC90bXAvVFBVQmVhbVNlYXJjaC1zZWxlY3Rvci1wcm9iZS9iZW5jaG1hcmtzL2JlYW1fZGVkdXBfc3RhZ2VfcHJvYmUucHkAZ2V0OgBnZXQAaW90YToAdmFsdWUAcHJlZGljYXRlAGdldC9nZXQAYnJvYWRjYXN0X2luX2RpbToAYnJvYWRjYXN0X2luX2RpbS9icm9hZGNhc3RfaW5fZGltAHN0YWJsZV9tb3NhaWMudmVyc2lvbgBkaW1lbnNpb25fc2VtYW50aWNzAGZ1bmN0aW9uX3R5cGUAc2NhbGFyX3ByZWZldGNoAHNjcmF0Y2hfb3BlcmFuZHMAc3ltX25hbWUAYmVhbV9kZWR1cF9zdGFnZV9pbml0aWFsAHRwdS5jb3JlX3R5cGUAZGltZW5zaW9ucwBpb3RhL2lvdGEvaW90YQBpb3RhL3NxdWVlemUvc3F1ZWV6ZQBzdGF0aWNfcG9zaXRpb24AbHQ6AGx0L2x0AGxlOgBsZS9sZQBhbmQ6AGFuZC9hbmQAY29udmVydF9lbGVtZW50X3R5cGU6AGNvbnZlcnRfZWxlbWVudF90eXBlL2NvbnZlcnRfZWxlbWVudF90eXBlAGRpbWVuc2lvbgBjb25jYXRlbmF0ZToAY29uY2F0ZW5hdGUvY29uY2F0ZW5hdGUAc3dhcDoAc3dhcC9zd2FwAGFkZABvcGVyYW5kU2VnbWVudFNpemVzAHN0cmlkZXMA","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"5120"}]}
+  %bitcast.7 = u32[1,11,128]{2,1,0:T(8,128)S(1)} bitcast(%beam_dedup_stage_initial.1)
+  ROOT %copy.5 = u32[1,11,128]{2,0,1:T(1,128)} copy(%bitcast.7), metadata={op_name="jit(_fun)/shard_map/broadcast_in_dim" stack_frame_id=5}, backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"6144"}],"window_config":{"cost_model_type":"COST_MODEL_TYPE_INVALID","estimated_bundle_count":"0","estimated_cycles":"1923","estimated_scoped_vmem_bytes":"0","estimated_vmem_bytes":"0","input_window_bounds":[],"is_mask":false,"iteration_bounds":["1","1","1"],"kernel_window_bounds":[],"ml_estimated_microseconds":0,"output_window_bounds":["11","1","1"],"pad_input_on_minor_dim":"0","pad_output_on_minor_dim":"0"}}
+}
+

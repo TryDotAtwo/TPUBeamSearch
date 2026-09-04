@@ -1,0 +1,12 @@
+[{"stream_name":"stderr","time":22.811406268,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":25.909181342,"data":"\n"}
+,{"stream_name":"stderr","time":25.909207352,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":25.909214062,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":26.052625524,"data":"Cloning into '/tmp/TPUBeamSearch-selector-probe'...\n"}
+,{"stream_name":"stderr","time":33.100874248,"data":"Updating files:  89% (3180/3568)\rUpdating files:  90% (3212/3568)\rUpdating files:  91% (3247/3568)\rUpdating files:  92% (3283/3568)\rUpdating files:  93% (3319/3568)\rUpdating files:  94% (3354/3568)\rUpdating files:  95% (3390/3568)\rUpdating files:  96% (3426/3568)\rUpdating files:  97% (3461/3568)\rUpdating files:  98% (3497/3568)\rUpdating files:  99% (3533/3568)\rUpdating files: 100% (3568/3568)\rUpdating files: 100% (3568/3568), done.\n"}
+,{"stream_name":"stderr","time":33.690954649,"data":"HEAD is now at 47b3fba Add real dedup stage bisection probe\n"}
+,{"stream_name":"stdout","time":38.01335513,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":38.0133926,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":133.170340477,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":135.559478725,"data":"[NbConvertApp] Writing 280738 bytes to __results__.html\n"}
+]
