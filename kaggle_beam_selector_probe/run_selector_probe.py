@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = '0748415e22aebe18ccd85e3f6dad359d772d8ca3'
+COMMIT_SHA = 'eb9d12ab939b3d8e63524742788bb4cbe65af7e3'
 CHECKOUT = Path('/tmp/TPUBeamSearch-selector-probe')
 OUTPUT = Path('/kaggle/working/compare_exchange_probe')
 
