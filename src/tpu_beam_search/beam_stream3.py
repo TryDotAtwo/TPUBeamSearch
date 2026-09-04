@@ -95,6 +95,9 @@ def pallas_stream3_wire_slots(remote, send_count, send_offset, *, local_rank,
     def kernel(remote_ref, count_ref, offset_ref, slots_out, counts_out):
         rank = jnp.asarray(lax.axis_index('core') if local_rank is None
                            else local_rank, dtype=jnp.uint32)
+        # Mosaic TPU does not allow advanced integer indexing directly on a
+        # Ref. Materialize the aligned input block, then permute its value.
+        remote_value = remote_ref[...]
         positions = jnp.arange(capacity, dtype=jnp.uint32)
         neutral = jnp.where(jnp.arange(8)[:, None] == 6,
                             jnp.uint32(0xffffffff), jnp.uint32(0))
@@ -105,7 +108,7 @@ def pallas_stream3_wire_slots(remote, send_count, send_offset, *, local_rank,
             start = offset_ref[0, peer]
             source_index = jnp.minimum(start + positions,
                                        jnp.uint32(capacity - 1))
-            selected = remote_ref[:, source_index]
+            selected = remote_value[:, source_index]
             slots_out[epoch, :, :] = jnp.where(
                 positions[None, :] < amount, selected, neutral)
             counts_out[epoch, :] = jnp.where(

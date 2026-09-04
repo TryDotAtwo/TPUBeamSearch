@@ -62,6 +62,12 @@ two-slot reuse. The isolated diagnostic median is 0.6545 ms over 21 samples
 after three warmups. This validates transport only; the next gate is one
 compiled `pallas_stream3_split` output-layout to variable-exchange boundary.
 
+Integrated split-to-RDMA V6 failed during Mosaic lowering; see
+`test_results/beam_rdma_ring_v6/report.md`. The wire adapter used advanced
+integer indexing directly on a Pallas Ref, which TPU rejects. It now loads the
+whole aligned `[8,128]` block before permuting the local value. No integrated
+correctness claim is made until V7 physically compiles and matches the oracle.
+
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries

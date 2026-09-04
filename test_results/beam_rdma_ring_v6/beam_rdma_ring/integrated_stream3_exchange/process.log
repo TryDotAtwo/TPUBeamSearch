@@ -1,0 +1,78 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788545462.407933      53 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: ===
+learning/45eac/tfrc/runtime/common_lib.cc:238
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/primitives.py", line 652, in wrap_with_transforms
+    return f(*new_args)
+  File "/tmp/TPUBeamSearch-rdma-ring/src/tpu_beam_search/beam_stream3.py", line 108, in kernel
+    selected = remote_ref[:, source_index]
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/numpy/array_methods.py", line 1532, in op
+    return getattr(self.aval, f"_{name}")(self, *args)
+jax._src.source_info_util.JaxStackTraceBeforeTransformation: ValueError: Cannot do int indexing on TPU
+
+The preceding stack trace is the source of the JAX operation that, once transformed by JAX, triggered the following exception.
+
+--------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 672, in <module>
+    main()
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 612, in main
+    result, executable, placed = run_integrated_stream3_exchange(
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py", line 516, in run_integrated_stream3_exchange
+    executable = fn.lower(*placed).compile()
+                 ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 974, in _pallas_call_lowering
+    return mlir.lower_per_platform(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/pallas_call.py", line 906, in tpu_lowering
+    return mosaic_tpu_backend.pallas_call_tpu_lowering_rule(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/pallas_call_registration.py", line 405, in pallas_call_tpu_lowering_rule
+    mosaic_module = lowering.lower_jaxpr_to_pipelined_module(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1014, in lower_jaxpr_to_pipelined_module
+    lower_jaxpr_into_pipelined_module(
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1113, in lower_jaxpr_into_pipelined_module
+    func_op = _lower_jaxpr_to_func_common(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1595, in _lower_jaxpr_to_func_common
+    body: Any = func.FuncOp.from_py_func(*arg_types, name=name)(body_func)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jaxlib/mlir/dialects/func.py", line 197, in decorator
+    return_values = f(*func_args, **func_kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1592, in body_func
+    return jaxpr_subcomp(lowering_context, jaxpr, *other_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1794, in jaxpr_subcomp
+    cache_entry = _emit_pallas_lowering_rule_as_fun(
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 458, in _emit_pallas_lowering_rule_as_fun
+    return _emit_detached_func(func_name, input_types, output_types, body_builder)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 397, in _emit_detached_func
+    outs = body_builder(list(entry_block.arguments))
+  ^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 446, in body_builder
+    outs = rule(sub_ctx, *rule_args, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 1892, in _get_lowering_rule
+    return _load_lowering_rule(ctx, *args_flat, args_tree=args_tree)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 2208, in _load_lowering_rule
+    prev_transforms, idx = _canonicalize_transforms_to_indexer(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/pallas/mosaic/lowering.py", line 2200, in _canonicalize_transforms_to_indexer
+    raise ValueError("Cannot do int indexing on TPU")
+ValueError: Cannot do int indexing on TPU
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
