@@ -1,0 +1,93 @@
+{
+  "exact": true,
+  "mismatched_elements": 0,
+  "structure_mismatch": false,
+  "output_sha256": "0e1313fb22572b1dc6fd06920d3f1c84779cf792d90ac35bbb49350d19e360a3",
+  "expected_sha256": "0e1313fb22572b1dc6fd06920d3f1c84779cf792d90ac35bbb49350d19e360a3",
+  "epochs": 4,
+  "active_epochs": [
+    true,
+    false,
+    true,
+    false
+  ],
+  "slot_count": 2,
+  "compile_seconds": 0.32465108300004886,
+  "scope": "two-slot multi-epoch eight-device Pallas RDMA diagnostic; not Stream3 exchange",
+  "source_sha": "676931d21d60d34fbd693ee89cc89520a03c517e",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "timing": {
+    "warmup": 3,
+    "repeats": 21,
+    "samples_ms": [
+      0.56886,
+      0.50746,
+      0.8668,
+      0.47326,
+      0.52725,
+      0.48354,
+      0.52258,
+      0.4659,
+      0.53048,
+      0.43572,
+      0.47873,
+      0.50087,
+      0.49726,
+      0.50112,
+      0.47618,
+      0.53248,
+      0.53272,
+      0.49407,
+      0.50274,
+      0.48769,
+      0.48944
+    ],
+    "median_ms": 0.50087,
+    "p10_ms": 0.47326,
+    "p90_ms": 0.53272
+  }
+}

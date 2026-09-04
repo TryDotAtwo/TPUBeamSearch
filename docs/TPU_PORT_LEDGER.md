@@ -30,6 +30,15 @@ with distinct DMA send/receive semaphores and explicit start/send-wait/recv-wait
 matched the independent rotation oracle with zero mismatches. Median diagnostic
 call time was 0.521 ms, but this is neither a variable-count S5 exchange nor
 overlap proof. Readiness, two-slot ack/reuse and zero-count physical gates remain.
+
+The two-slot physical gate now passes on eight TPU v5 lite devices; see
+`test_results/beam_rdma_ring_v2/report.md`. Four epochs exercise one wrap of
+both HBM destination slots with readiness, separate per-slot DMA semaphores,
+receiver consumption and acknowledgement before reuse. Both all-active and
+alternating zero-count cases are exact with zero mismatches; zero-count epochs
+start and wait on no remote DMA. Next is a real per-edge variable-count Stream3
+exchange with explicit capacity and count metadata, not a synthetic fixed-size
+ring.
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries

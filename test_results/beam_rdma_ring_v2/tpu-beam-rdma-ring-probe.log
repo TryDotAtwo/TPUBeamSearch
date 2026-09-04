@@ -1,0 +1,11 @@
+[{"stream_name":"stderr","time":16.750288976,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":20.180206116,"data":"\n"}
+,{"stream_name":"stderr","time":20.180233726,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":20.180240116,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":20.328047875,"data":"Cloning into '/tmp/TPUBeamSearch-rdma-ring'...\n"}
+,{"stream_name":"stderr","time":28.511061058,"data":"HEAD is now at 676931d Add two-slot TPU RDMA epoch gate\n"}
+,{"stream_name":"stdout","time":51.574699549,"data":"all_active complete\n"}
+,{"stream_name":"stdout","time":67.998973931,"data":"zero_alternate complete\n"}
+,{"stream_name":"stderr","time":72.072821118,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":74.38350311,"data":"[NbConvertApp] Writing 285695 bytes to __results__.html\n"}
+]

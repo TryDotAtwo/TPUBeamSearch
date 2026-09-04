@@ -1,0 +1,99 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788524416.877532      53 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: ===
+learning/45eac/tfrc/runtime/common_lib.cc:238
+{
+  "exact": true,
+  "mismatched_elements": 0,
+  "structure_mismatch": false,
+  "output_sha256": "bf044fb56c657c13d6b55097e17d720c73c8a31f3b1bb445411edcc4b9e4fbdf",
+  "expected_sha256": "bf044fb56c657c13d6b55097e17d720c73c8a31f3b1bb445411edcc4b9e4fbdf",
+  "epochs": 4,
+  "active_epochs": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "slot_count": 2,
+  "compile_seconds": 0.42189981899991835,
+  "scope": "two-slot multi-epoch eight-device Pallas RDMA diagnostic; not Stream3 exchange",
+  "source_sha": "676931d21d60d34fbd693ee89cc89520a03c517e",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "timing": {
+    "warmup": 3,
+    "repeats": 21,
+    "samples_ms": [
+      0.54329,
+      0.57574,
+      0.56208,
+      0.56762,
+      0.52754,
+      0.53114,
+      0.53557,
+      0.52428,
+      0.53597,
+      0.5274,
+      0.508349,
+      0.492389,
+      0.461791,
+      0.49552,
+      0.488869,
+      0.497059,
+      0.51931,
+      0.51591,
+      0.48302,
+      0.50527,
+      0.48256
+    ],
+    "median_ms": 0.51931,
+    "p10_ms": 0.48302,
+    "p90_ms": 0.56208
+  }
+}

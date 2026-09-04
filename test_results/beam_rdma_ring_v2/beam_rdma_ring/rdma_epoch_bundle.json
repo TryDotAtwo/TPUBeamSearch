@@ -1,0 +1,16 @@
+{
+  "scope": "isolated two-slot RDMA cases",
+  "source_sha": "676931d21d60d34fbd693ee89cc89520a03c517e",
+  "cases": [
+    {
+      "name": "all_active",
+      "status": "complete",
+      "returncode": 0
+    },
+    {
+      "name": "zero_alternate",
+      "status": "complete",
+      "returncode": 0
+    }
+  ]
+}
