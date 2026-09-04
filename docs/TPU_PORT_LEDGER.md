@@ -92,6 +92,15 @@ unsigned vector minimum used to clamp gather indices; see
 minimum now run as `int32`, without changing selected lanes. V11 physical
 confirmation is required.
 
+Integrated V11 is physically exact on eight TPU v5 lite devices; see
+`test_results/beam_rdma_ring_v11/report.md`. One compiled program executes
+bounded N=128 Stream3 split, device-rank route formation, ring-ordered wire
+packing and seven-epoch variable RDMA. Local, wire and received payload/count
+outputs match the independent oracle with zero mismatches, including a
+capacity-128 edge, zero edges and neutral tails. Median diagnostic latency is
+0.80834 ms over 21 samples after three warmups. This closes bounded
+split-plus-transport correctness only; HBM-scale Stream3 remains open.
+
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries

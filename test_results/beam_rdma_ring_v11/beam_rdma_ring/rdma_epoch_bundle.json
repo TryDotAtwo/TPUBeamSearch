@@ -1,0 +1,11 @@
+{
+  "scope": "compiled Stream3 split-to-wire-to-RDMA gate",
+  "source_sha": "2a36db2797f02d1d0f646a65e96c09f9989f32ec",
+  "cases": [
+    {
+      "name": "integrated_stream3_exchange",
+      "status": "complete",
+      "returncode": 0
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[{"stream_name":"stderr","time":22.292338754,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":26.173886154,"data":"\n"}
+,{"stream_name":"stderr","time":26.173920274,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":26.173927584,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":26.313603965,"data":"Cloning into '/tmp/TPUBeamSearch-rdma-ring'...\n"}
+,{"stream_name":"stderr","time":31.02280278,"data":"Updating files:  96% (3650/3791)\rUpdating files:  97% (3678/3791)\rUpdating files:  98% (3716/3791)\rUpdating files:  99% (3754/3791)\rUpdating files: 100% (3791/3791)\rUpdating files: 100% (3791/3791), done.\n"}
+,{"stream_name":"stderr","time":31.887985538,"data":"HEAD is now at 2a36db2 Clamp Stream3 wire indices with signed arithmetic\n"}
+,{"stream_name":"stdout","time":55.223620368,"data":"integrated_stream3_exchange complete\n"}
+,{"stream_name":"stderr","time":59.711810653,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":62.18697877,"data":"[NbConvertApp] Writing 285548 bytes to __results__.html\n"}
+]
