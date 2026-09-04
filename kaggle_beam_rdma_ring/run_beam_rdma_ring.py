@@ -6,7 +6,7 @@ import sys
 import json
 import traceback
 
-COMMIT_SHA = '2f4cb6fa70194282e68e763ae957bb6bd3c0dd07'
+COMMIT_SHA = '3074225c5bb308e295ca8bd074a221e077486819'
 CHECKOUT = Path('/tmp/TPUBeamSearch-rdma-ring')
 OUTPUT = Path('/kaggle/working/beam_rdma_ring')
 
@@ -22,8 +22,8 @@ def main():
                XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
                PYTHONPATH=os.pathsep.join((str(CHECKOUT), str(CHECKOUT / 'src'))))
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    cases = (('variable_count_stream3', ('--mode', 'variable')),)
-    report = {'scope': 'isolated variable-count Stream3 RDMA gate', 'source_sha': COMMIT_SHA,
+    cases = (('integrated_stream3_exchange', ('--mode', 'integrated')),)
+    report = {'scope': 'compiled Stream3 split-to-wire-to-RDMA gate', 'source_sha': COMMIT_SHA,
               'cases': []}
     for name, extra in cases:
         destination = OUTPUT / name
