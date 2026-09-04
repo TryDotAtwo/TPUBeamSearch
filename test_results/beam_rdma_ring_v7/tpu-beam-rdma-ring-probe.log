@@ -1,0 +1,17 @@
+[{"stream_name":"stderr","time":19.579696928,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":24.061875373,"data":"\n"}
+,{"stream_name":"stderr","time":24.061900333,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":24.061906483,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":24.21352279,"data":"Cloning into '/tmp/TPUBeamSearch-rdma-ring'...\n"}
+,{"stream_name":"stderr","time":31.103950285,"data":"Updating files:  96% (3649/3775)\rUpdating files:  97% (3662/3775)\rUpdating files:  98% (3700/3775)\rUpdating files:  99% (3738/3775)\rUpdating files: 100% (3775/3775)\rUpdating files: 100% (3775/3775), done.\n"}
+,{"stream_name":"stderr","time":33.992814188,"data":"HEAD is now at fc8b524 Stage Stream3 wire gather through local value\n"}
+,{"stream_name":"stdout","time":56.967963699,"data":"integrated_stream3_exchange error\n"}
+,{"stream_name":"stderr","time":56.968019759,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":56.968028509,"data":"  File \"/kaggle/src/script.py\", line 56, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":56.968037229,"data":"    main()\n"}
+,{"stream_name":"stderr","time":56.968044559,"data":"  File \"/kaggle/src/script.py\", line 52, in main\n"}
+,{"stream_name":"stderr","time":56.968053689,"data":"    raise RuntimeError('one or more RDMA epoch cases failed')\n"}
+,{"stream_name":"stderr","time":56.968060499,"data":"RuntimeError: one or more RDMA epoch cases failed\n"}
+,{"stream_name":"stderr","time":61.220135349,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":64.158793871,"data":"[NbConvertApp] Writing 285548 bytes to __results__.html\n"}
+]

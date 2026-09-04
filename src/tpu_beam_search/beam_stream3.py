@@ -108,7 +108,10 @@ def pallas_stream3_wire_slots(remote, send_count, send_offset, *, local_rank,
             start = offset_ref[0, peer]
             source_index = jnp.minimum(start + positions,
                                        jnp.uint32(capacity - 1))
-            selected = remote_value[:, source_index]
+            gather_index = jnp.broadcast_to(source_index[None, :],
+                                            remote_value.shape)
+            selected = jnp.take_along_axis(
+                remote_value, gather_index, axis=1)
             slots_out[epoch, :, :] = jnp.where(
                 positions[None, :] < amount, selected, neutral)
             counts_out[epoch, :] = jnp.where(

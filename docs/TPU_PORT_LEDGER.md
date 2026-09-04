@@ -68,6 +68,12 @@ integer indexing directly on a Pallas Ref, which TPU rejects. It now loads the
 whole aligned `[8,128]` block before permuting the local value. No integrated
 correctness claim is made until V7 physically compiles and matches the oracle.
 
+Integrated V7 reached the next lowering boundary: array advanced indexing
+became a general gather, while Mosaic supports only take-along-axis-shaped
+gathers for this layout. See `test_results/beam_rdma_ring_v7/report.md`. The
+wire adapter now broadcasts the index to `[8,128]` and explicitly uses
+`take_along_axis(axis=1)`. V8 physical confirmation remains required.
+
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
