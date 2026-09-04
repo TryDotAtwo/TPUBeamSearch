@@ -3,8 +3,10 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import json
+import traceback
 
-COMMIT_SHA = '67a9a40d7030bb865a57acf77d8cfe7e229e738b'
+COMMIT_SHA = '676931d21d60d34fbd693ee89cc89520a03c517e'
 CHECKOUT = Path('/tmp/TPUBeamSearch-rdma-ring')
 OUTPUT = Path('/kaggle/working/beam_rdma_ring')
 
@@ -20,20 +22,35 @@ def main():
                XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
                PYTHONPATH=os.pathsep.join((str(CHECKOUT), str(CHECKOUT / 'src'))))
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    command = (sys.executable, '-m', 'benchmarks.beam_rdma_ring_probe',
-               '--output', str(OUTPUT))
-    with (OUTPUT / 'probe.log').open('w', encoding='utf-8') as log:
-        with subprocess.Popen(command, cwd=CHECKOUT, env=env, stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT, text=True, bufsize=1) as process:
-            for line in process.stdout:
-                print(line, end='', flush=True)
-                log.write(line)
-                log.flush()
-            code = process.wait()
-    if code:
-        raise subprocess.CalledProcessError(code, command)
+    cases = (('all_active', ()), ('zero_alternate', ('--zero-alternate',)))
+    report = {'scope': 'isolated two-slot RDMA cases', 'source_sha': COMMIT_SHA,
+              'cases': []}
+    for name, extra in cases:
+        destination = OUTPUT / name
+        destination.mkdir(parents=True, exist_ok=True)
+        command = (sys.executable, '-m', 'benchmarks.beam_rdma_ring_probe',
+                   '--output', str(destination), '--mode', 'slots', *extra)
+        row = {'name': name, 'status': 'started'}
+        report['cases'].append(row)
+        (OUTPUT / 'rdma_epoch_bundle.json').write_text(
+            json.dumps(report, indent=2), encoding='utf-8')
+        try:
+            with (destination / 'process.log').open('w', encoding='utf-8') as log:
+                completed = subprocess.run(
+                    command, cwd=CHECKOUT, env=env, stdout=log,
+                    stderr=subprocess.STDOUT, text=True, timeout=120)
+            row.update(status='complete' if completed.returncode == 0 else 'error',
+                       returncode=completed.returncode)
+        except subprocess.TimeoutExpired:
+            row.update(status='timeout', error=traceback.format_exc())
+        except Exception:
+            row.update(status='error', error=traceback.format_exc())
+        (OUTPUT / 'rdma_epoch_bundle.json').write_text(
+            json.dumps(report, indent=2), encoding='utf-8')
+        print(name, row['status'], flush=True)
+    if not all(row['status'] == 'complete' for row in report['cases']):
+        raise RuntimeError('one or more RDMA epoch cases failed')
 
 
 if __name__ == '__main__':
     main()
-
