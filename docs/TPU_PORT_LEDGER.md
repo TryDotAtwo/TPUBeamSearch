@@ -86,6 +86,12 @@ over `uint32`; see `test_results/beam_rdma_ring_v9/report.md`. The bounded
 count/offset masks now reduce as `int32` and cast back to `uint32`, matching the
 already compiled Stream3 count pattern. V10 physical confirmation is required.
 
+Integrated V10 passed control reductions but Mosaic could not legalize the
+unsigned vector minimum used to clamp gather indices; see
+`test_results/beam_rdma_ring_v10/report.md`. The bounded index arithmetic and
+minimum now run as `int32`, without changing selected lanes. V11 physical
+confirmation is required.
+
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
