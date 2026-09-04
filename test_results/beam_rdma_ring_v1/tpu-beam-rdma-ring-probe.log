@@ -1,0 +1,102 @@
+[{"stream_name":"stderr","time":18.02809125,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":18.146196511,"data":"\n"}
+,{"stream_name":"stderr","time":18.1462098,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":18.1462143,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":18.281493612,"data":"Cloning into '/tmp/TPUBeamSearch-rdma-ring'...\n"}
+,{"stream_name":"stderr","time":27.677486965,"data":"Updating files:  89% (3351/3742)\rUpdating files:  90% (3368/3742)\rUpdating files:  91% (3406/3742)\rUpdating files:  92% (3443/3742)\rUpdating files:  93% (3481/3742)\rUpdating files:  94% (3518/3742)\rUpdating files:  95% (3555/3742)\rUpdating files:  96% (3593/3742)\rUpdating files:  97% (3630/3742)\rUpdating files:  98% (3668/3742)\rUpdating files:  99% (3705/3742)\rUpdating files: 100% (3742/3742)\rUpdating files: 100% (3742/3742), done.\n"}
+,{"stream_name":"stderr","time":28.610202746,"data":"HEAD is now at 67a9a40 Add physical TPU RDMA ring probe\n"}
+,{"stream_name":"stdout","time":32.666961314,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stdout","time":32.667006684,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":37.708394749,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stdout","time":37.708423819,"data":"E0000 00:00:1788521566.436893      53 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stdout","time":37.708432769,"data":"=== Source Location Trace: ===\n"}
+,{"stream_name":"stdout","time":37.708438549,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":47.146440092,"data":"{\n"}
+,{"stream_name":"stdout","time":47.146474482,"data":"  \"exact\": true,\n"}
+,{"stream_name":"stdout","time":47.146480502,"data":"  \"mismatched_elements\": 0,\n"}
+,{"stream_name":"stdout","time":47.146485522,"data":"  \"structure_mismatch\": false,\n"}
+,{"stream_name":"stdout","time":47.146498532,"data":"  \"input_sha256\": \"3fb79697ad762292d86a946223bbe3407f56763092cd00972f5125c49cec340f\",\n"}
+,{"stream_name":"stdout","time":47.146503512,"data":"  \"output_sha256\": \"87d2de5180e75f396afc13237d2565880a4dccb239f08bc21aa1b4a83219975a\",\n"}
+,{"stream_name":"stdout","time":47.146508752,"data":"  \"expected_sha256\": \"87d2de5180e75f396afc13237d2565880a4dccb239f08bc21aa1b4a83219975a\",\n"}
+,{"stream_name":"stdout","time":47.146513432,"data":"  \"scope\": \"one-hop eight-device Pallas RDMA correctness and diagnostic timing; not S5 ring completion\",\n"}
+,{"stream_name":"stdout","time":47.146518122,"data":"  \"source_sha\": \"67a9a40d7030bb865a57acf77d8cfe7e229e738b\",\n"}
+,{"stream_name":"stdout","time":47.146522692,"data":"  \"jax\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":47.146527282,"data":"  \"jaxlib\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":47.146531722,"data":"  \"libtpu\": \"0.0.42.1\",\n"}
+,{"stream_name":"stdout","time":47.146548692,"data":"  \"devices\": [\n"}
+,{"stream_name":"stdout","time":47.146552082,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146555192,"data":"      \"id\": 0,\n"}
+,{"stream_name":"stdout","time":47.146558702,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146561752,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146564842,"data":"    },\n"}
+,{"stream_name":"stdout","time":47.146567652,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146574382,"data":"      \"id\": 1,\n"}
+,{"stream_name":"stdout","time":47.146577322,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146580412,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146583352,"data":"    },\n"}
+,{"stream_name":"stdout","time":47.146586182,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146589072,"data":"      \"id\": 2,\n"}
+,{"stream_name":"stdout","time":47.146592062,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146594942,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146597812,"data":"    },\n"}
+,{"stream_name":"stdout","time":47.146600652,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146603552,"data":"      \"id\": 3,\n"}
+,{"stream_name":"stdout","time":47.146606402,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146609312,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146612202,"data":"    },\n"}
+,{"stream_name":"stdout","time":47.146614972,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146696112,"data":"      \"id\": 4,\n"}
+,{"stream_name":"stdout","time":47.146714142,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146719102,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146722822,"data":"    },\n"}
+,{"stream_name":"stdout","time":47.146726062,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146729212,"data":"      \"id\": 5,\n"}
+,{"stream_name":"stdout","time":47.146732462,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146736592,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146740232,"data":"    },\n"}
+,{"stream_name":"stdout","time":47.146743702,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146747042,"data":"      \"id\": 6,\n"}
+,{"stream_name":"stdout","time":47.146750832,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146754272,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146757152,"data":"    },\n"}
+,{"stream_name":"stdout","time":47.146760002,"data":"    {\n"}
+,{"stream_name":"stdout","time":47.146770982,"data":"      \"id\": 7,\n"}
+,{"stream_name":"stdout","time":47.146774482,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":47.146777612,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":47.146780712,"data":"    }\n"}
+,{"stream_name":"stdout","time":47.146784002,"data":"  ],\n"}
+,{"stream_name":"stdout","time":47.146786852,"data":"  \"compile_seconds\": 0.4146883010000124,\n"}
+,{"stream_name":"stdout","time":47.146789882,"data":"  \"timing\": {\n"}
+,{"stream_name":"stdout","time":47.146792832,"data":"    \"warmup\": 3,\n"}
+,{"stream_name":"stdout","time":47.146806372,"data":"    \"repeats\": 21,\n"}
+,{"stream_name":"stdout","time":47.146809932,"data":"    \"samples_ms\": [\n"}
+,{"stream_name":"stdout","time":47.146823132,"data":"      0.6051,\n"}
+,{"stream_name":"stdout","time":47.146828852,"data":"      0.576069,\n"}
+,{"stream_name":"stdout","time":47.146832132,"data":"      0.571579,\n"}
+,{"stream_name":"stdout","time":47.146834952,"data":"      0.54888,\n"}
+,{"stream_name":"stdout","time":47.146838072,"data":"      0.49461,\n"}
+,{"stream_name":"stdout","time":47.146840912,"data":"      0.506759,\n"}
+,{"stream_name":"stdout","time":47.146844322,"data":"      0.54052,\n"}
+,{"stream_name":"stdout","time":47.146847322,"data":"      0.5211,\n"}
+,{"stream_name":"stdout","time":47.146850492,"data":"      0.52738,\n"}
+,{"stream_name":"stdout","time":47.146855052,"data":"      0.474179,\n"}
+,{"stream_name":"stdout","time":47.146858222,"data":"      0.587029,\n"}
+,{"stream_name":"stdout","time":47.146861432,"data":"      0.64088,\n"}
+,{"stream_name":"stdout","time":47.146880082,"data":"      0.52148,\n"}
+,{"stream_name":"stdout","time":47.146887692,"data":"      0.53917,\n"}
+,{"stream_name":"stdout","time":47.146891152,"data":"      0.48724,\n"}
+,{"stream_name":"stdout","time":47.146906412,"data":"      0.49969,\n"}
+,{"stream_name":"stdout","time":47.146935972,"data":"      0.48419,\n"}
+,{"stream_name":"stdout","time":47.146939692,"data":"      0.522449,\n"}
+,{"stream_name":"stdout","time":47.146942512,"data":"      0.50989,\n"}
+,{"stream_name":"stdout","time":47.146948002,"data":"      0.49019,\n"}
+,{"stream_name":"stdout","time":47.146950722,"data":"      0.47696\n"}
+,{"stream_name":"stdout","time":47.146972772,"data":"    ],\n"}
+,{"stream_name":"stdout","time":47.146982812,"data":"    \"median_ms\": 0.52148,\n"}
+,{"stream_name":"stdout","time":47.146990672,"data":"    \"p10_ms\": 0.48419,\n"}
+,{"stream_name":"stdout","time":47.147048272,"data":"    \"p90_ms\": 0.587029\n"}
+,{"stream_name":"stdout","time":47.147057572,"data":"  }\n"}
+,{"stream_name":"stdout","time":47.147061952,"data":"}\n"}
+,{"stream_name":"stderr","time":55.265349811,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":57.518819402,"data":"[NbConvertApp] Writing 280745 bytes to __results__.html\n"}
+]

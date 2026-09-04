@@ -1,0 +1,33 @@
+HloModule jit_wrapped, is_scheduled=true, entry_computation_layout={(u32[8,128]{1,0:T(8,128)})->u32[8,128]{1,0:T(8,128)}}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-rdma-ring/benchmarks/beam_rdma_ring_probe.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=133 end_line=133 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=97 end_line=97 column=17 end_column=17}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+
+
+ENTRY %main.0_spmd (param.1: u32[8,128]) -> u32[8,128] {
+  %param.1 = u32[8,128]{1,0:T(8,128)} parameter(0), sharding={devices=[1,8]<=[8]}, metadata={op_name="args[0]"}
+  %beam_rdma_right_permute.1 = u32[8,128]{1,0:T(8,128)S(1)} custom-call(%param.1), custom_call_target="tpu_custom_call", operand_layout_constraints={u32[8,128]{1,0}}, frontend_attributes={kernel_metadata={
+"mesh_axes":"[\"core\"]"
+}}, metadata={op_name="jit(wrapped)/shard_map/beam_rdma_right_permute/pallas_call" stack_frame_id=4}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"TUzvUgFNTElSMjMuMC4wZ2l0AAEpCQEDBQcBAwkDFQsNDxETFRcZGx0D4bsPAbMHCwsPExMLCwsPEwsLDw8PEw8PDw8PDw8LDw8PDxMLDzsLCwsLhVULDwsPCwsLCw8LDxsPDwsPCw8bCwsPCw8bDwsbDwsjgwsPDwsPDxsbYw8LGw8LG2MPDwUHXYVNBwNZAQ0PIxcPHwsFA00CeggfBR8FIR1dXwMDdbkDAw9pBSMFJQUnFSkpAwMPKwUpBSsRCwAVNzcdA2UDAw9nHWttHXd5HRGBHQOFEQEBHRGHHQ2XBS0dA5sdDaEdA6UdDacDAz0/BS8RBz0DDUNFR0lPUVNVV1lbtwUxAQEFMw0JYWZmaW5lX21hcDwoZDAsIGQxKSAtPiAoZDAsIGQxKT4AYWZmaW5lX21hcDwoKSAtPiAoKT4ABTURBwEFNxEHCQU5BTsFPQU/HWFjBUEVHx8tBQdZIU0RASERAQUFQx1vcQVFHQNzLQUHW0NVBUcFSR17fQVLHQN/LQUHWzNzHYMTBU0tBQdtESkdiRMFTwMHF42PKxkbIwEPOQEAAAABAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAFUR0Rkx2VEwVTHTGZFTMzLQUHbxExAwUXnxkbIwELKQEAAAABAAAAAQAAAAEAAAABAAAAHaMdBVUtBQdxETEdqR0FVwMFF60ZGyMBCykBAAAAAQAAAAEAAAABAAAAAAAAAB0NsR0xHSN0cHUubWVtb3J5X3NwYWNlPGFueT4AI3RwdS5tZW1vcnlfc3BhY2U8c2VtYXBob3JlX21lbT4AI3RwdS5jb3JlX3R5cGU8dGM+ACNhcml0aC5vdmVyZmxvdzxub25lPgABAgIXswUhAgQBSxe1AQ1NAQIEBQkDAwUFAQEJIXRwdS5kbWFfc2VtYXBob3JlAATqAgUBEQE7BwMBBQ0RAUEHAy1bCQMBAwEFAQUBDwIHAwEDAwchAwEDAwcLAwERBgcDAQUJDQcGBwMBBQ8LAwMjCwMBBQcjCQMBBRETAwMlIQMBBwYlAwEFFRcDAycLAwEJBycJAwEFGRsDAy0VAwEFBy0JAwEFHx0TBZGLCwEFAwchAwMvFQMBCwUvnQsFAwEjIwMDNQsDAQkHNQkDAQUZJQMDORUDAQUHOQkDAQUpJwsFr6sJBwEDKxUAAQYDAQUBAJIKWRsbKRMdHQkLHQkLLRkdMRMjIR0pLSUhKRcNFYFHGSEZHRUdFxkXHw8NCR0RYnVpbHRpbgBzdGFibGVfbW9zYWljAHRwdQBhcml0aABtb2R1bGUAYXJpdGguY29uc3RhbnQAYXJpdGguYWRkaQBhcml0aC5yZW1zaQBhcml0aC5tdWxpAHRwdS53YWl0X2RtYTIAZnVuYy5mdW5jAHRwdS5kZXZpY2VfaWQAYXJpdGguZGl2c2kAdHB1LmVucXVldWVfZG1hAGZ1bmMucmV0dXJuAG1ha2VfcmlnaHRfcGVybXV0ZS48bG9jYWxzPi5rZXJuZWwAL3RtcC9UUFVCZWFtU2VhcmNoLXJkbWEtcmluZy9iZW5jaG1hcmtzL2JlYW1fcmRtYV9yaW5nX3Byb2JlLnB5AGRtYV93YWl0OgB2YWx1ZQBkbWFfc3RhcnQ6AG9wZXJhbmRTZWdtZW50U2l6ZXMAc3RyaWN0X29yZGVyaW5nAGRtYV93YWl0L2RtYV93YWl0AHN0YWJsZV9tb3NhaWMudmVyc2lvbgBkaW1lbnNpb25fc2VtYW50aWNzAGZ1bmN0aW9uX3R5cGUAc2NhbGFyX3ByZWZldGNoAHNjcmF0Y2hfb3BlcmFuZHMAc3ltX25hbWUAYmVhbV9yZG1hX3JpZ2h0X3Blcm11dGUAdHB1LmNvcmVfdHlwZQBheGlzX2luZGV4OgBheGlzX2luZGV4L2F4aXNfaW5kZXgAYWRkOgBhZGQAb3ZlcmZsb3dGbGFncwByZW06AHJlbQBkbWFfc3RhcnQvbXVsAGRtYV9zdGFydC9hZGQAcHJpb3JpdHkAZG1hX3N0YXJ0L2RtYV9zdGFydABkbWFfd2FpdC9tdWwAZG1hX3dhaXQvYWRkAA==","has_communication":true,"input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"0"}]}
+  ROOT %copy.3 = u32[8,128]{1,0:T(8,128)} copy(%beam_rdma_right_permute.1), backend_config={"aliasing_operands":{"lists":[]},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"0"}]}
+}
+

@@ -23,6 +23,13 @@ introducing remote DMA: destination readiness precedes a nonzero start, source
 reuse follows send completion, destination reuse follows receive, consumption
 and acknowledgement, and a zero-count rank participates without waiting for a
 DMA that was never started. Four tests cover two-slot reuse across four epochs.
+
+The first physical Pallas RDMA gate is exact on eight TPU v5 lite devices; see
+`test_results/beam_rdma_ring_v1/report.md`. A 32 KiB/device right-neighbor push
+with distinct DMA send/receive semaphores and explicit start/send-wait/recv-wait
+matched the independent rotation oracle with zero mismatches. Median diagnostic
+call time was 0.521 ms, but this is neither a variable-count S5 exchange nor
+overlap proof. Readiness, two-slot ack/reuse and zero-count physical gates remain.
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries

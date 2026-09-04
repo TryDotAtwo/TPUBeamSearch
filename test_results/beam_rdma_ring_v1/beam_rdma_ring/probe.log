@@ -1,0 +1,92 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788521566.436893      53 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: ===
+learning/45eac/tfrc/runtime/common_lib.cc:238
+{
+  "exact": true,
+  "mismatched_elements": 0,
+  "structure_mismatch": false,
+  "input_sha256": "3fb79697ad762292d86a946223bbe3407f56763092cd00972f5125c49cec340f",
+  "output_sha256": "87d2de5180e75f396afc13237d2565880a4dccb239f08bc21aa1b4a83219975a",
+  "expected_sha256": "87d2de5180e75f396afc13237d2565880a4dccb239f08bc21aa1b4a83219975a",
+  "scope": "one-hop eight-device Pallas RDMA correctness and diagnostic timing; not S5 ring completion",
+  "source_sha": "67a9a40d7030bb865a57acf77d8cfe7e229e738b",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "compile_seconds": 0.4146883010000124,
+  "timing": {
+    "warmup": 3,
+    "repeats": 21,
+    "samples_ms": [
+      0.6051,
+      0.576069,
+      0.571579,
+      0.54888,
+      0.49461,
+      0.506759,
+      0.54052,
+      0.5211,
+      0.52738,
+      0.474179,
+      0.587029,
+      0.64088,
+      0.52148,
+      0.53917,
+      0.48724,
+      0.49969,
+      0.48419,
+      0.522449,
+      0.50989,
+      0.49019,
+      0.47696
+    ],
+    "median_ms": 0.52148,
+    "p10_ms": 0.48419,
+    "p90_ms": 0.587029
+  }
+}
