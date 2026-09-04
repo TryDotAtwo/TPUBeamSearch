@@ -1,0 +1,164 @@
+{
+  "exact": true,
+  "mismatched_elements": 0,
+  "structure_mismatch": false,
+  "output_sha256": "d5403510a2c9fa4070a04aa61c9f4f861a64eba1588122eae3f5629b838f6f60",
+  "expected_sha256": "d5403510a2c9fa4070a04aa61c9f4f861a64eba1588122eae3f5629b838f6f60",
+  "count_sha256": "7de7183a87f82547c0424dfaeab45c859b963447083b8b045d2706788f14f0d9",
+  "expected_count_sha256": "7de7183a87f82547c0424dfaeab45c859b963447083b8b045d2706788f14f0d9",
+  "ranks": 8,
+  "epochs": 7,
+  "capacity": 128,
+  "send_counts": [
+    [
+      5,
+      4,
+      3,
+      2,
+      1,
+      0,
+      128
+    ],
+    [
+      2,
+      1,
+      0,
+      5,
+      4,
+      3,
+      2
+    ],
+    [
+      5,
+      4,
+      3,
+      2,
+      1,
+      0,
+      5
+    ],
+    [
+      2,
+      1,
+      0,
+      5,
+      4,
+      3,
+      2
+    ],
+    [
+      5,
+      4,
+      3,
+      2,
+      1,
+      0,
+      5
+    ],
+    [
+      2,
+      1,
+      0,
+      5,
+      4,
+      3,
+      2
+    ],
+    [
+      5,
+      4,
+      3,
+      2,
+      1,
+      0,
+      5
+    ],
+    [
+      2,
+      1,
+      0,
+      5,
+      4,
+      3,
+      2
+    ]
+  ],
+  "compile_seconds": 0.46896196300002657,
+  "scope": "bounded Stream3 variable-count RDMA diagnostic",
+  "source_sha": "2f4cb6fa70194282e68e763ae957bb6bd3c0dd07",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "timing": {
+    "warmup": 3,
+    "repeats": 21,
+    "samples_ms": [
+      0.7064,
+      0.693469,
+      0.720641,
+      0.7551,
+      0.65673,
+      0.66625,
+      0.6545,
+      0.69517,
+      0.70378,
+      0.63933,
+      0.64579,
+      0.61215,
+      0.62932,
+      0.65578,
+      0.61965,
+      0.64536,
+      0.64848,
+      0.67668,
+      0.60882,
+      0.64031,
+      0.61693
+    ],
+    "median_ms": 0.6545,
+    "p10_ms": 0.61693,
+    "p90_ms": 0.7064
+  }
+}

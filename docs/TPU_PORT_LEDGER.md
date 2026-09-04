@@ -53,6 +53,15 @@ compiled executable was called with one tuple argument. Invocation is now
 centralized so tuple placements are splatted while legacy single-input probes
 retain their existing call shape. V5 still requires physical correctness and
 timing confirmation.
+
+Variable-count RDMA V5 is physically exact on eight TPU v5 lite devices; see
+`test_results/beam_rdma_ring_v5/report.md`. Across all seven peer offsets it
+matches independent payload and count hashes with zero mismatches, including
+zero-count epochs, a capacity-128 boundary, neutral fixed-slot tails and
+two-slot reuse. The isolated diagnostic median is 0.6545 ms over 21 samples
+after three warmups. This validates transport only; the next gate is one
+compiled `pallas_stream3_split` output-layout to variable-exchange boundary.
+
 This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries

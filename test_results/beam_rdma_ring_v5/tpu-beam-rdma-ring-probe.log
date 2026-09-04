@@ -1,0 +1,11 @@
+[{"stream_name":"stderr","time":24.531065999,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":26.294571673,"data":"\n"}
+,{"stream_name":"stderr","time":26.294599643,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":26.294603553,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":26.447614892,"data":"Cloning into '/tmp/TPUBeamSearch-rdma-ring'...\n"}
+,{"stream_name":"stderr","time":35.958898347,"data":"Updating files:  90% (3411/3765)\rUpdating files:  91% (3427/3765)\rUpdating files:  92% (3464/3765)\rUpdating files:  93% (3502/3765)\rUpdating files:  94% (3540/3765)\rUpdating files:  95% (3577/3765)\rUpdating files:  96% (3615/3765)\rUpdating files:  97% (3653/3765)\rUpdating files:  98% (3690/3765)\rUpdating files:  99% (3728/3765)\rUpdating files: 100% (3765/3765)\rUpdating files: 100% (3765/3765), done.\n"}
+,{"stream_name":"stderr","time":36.998274703999996,"data":"HEAD is now at 2f4cb6f Fix multi-input RDMA benchmark invocation\n"}
+,{"stream_name":"stdout","time":59.943563245,"data":"variable_count_stream3 complete\n"}
+,{"stream_name":"stderr","time":64.738266725,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":67.403953319,"data":"[NbConvertApp] Writing 285539 bytes to __results__.html\n"}
+]
