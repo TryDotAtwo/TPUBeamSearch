@@ -197,9 +197,11 @@ def pallas_external_stream3_dedup(words, payload, count, threshold, *,
 
     result, counts = pl.pallas_call(finish,
         out_shape=(jax.ShapeDtypeStruct((8, n), jnp.uint32),
-                   jax.ShapeDtypeStruct((tiles, 128), jnp.uint32)),
+                   jax.ShapeDtypeStruct((1, tiles * 128), jnp.uint32)),
         in_specs=(data_spec,),
-        out_specs=(word_spec, pl.BlockSpec((1, 128), lambda b: (b, 0))),
+        # A one-row block is legal only when it spans the array's row axis.
+        # Store tile counts in aligned column segments, not separate rows.
+        out_specs=(word_spec, pl.BlockSpec((1, 128), lambda b: (0, b))),
         grid=(tiles,), interpret=interpret, name='beam_external_neutral_counts')(data)
 
     def total_count(c, out):

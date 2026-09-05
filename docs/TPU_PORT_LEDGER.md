@@ -105,6 +105,12 @@ This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
 
+External dedup V2 passed shape validation, then TPU lowering rejected the
+count output block (1,128) over (2,128). See
+`test_results/beam_external_dedup_v2/report.md`. Tile count scratch is now
+[1,tiles*128] with aligned column blocks; external count/storage semantics
+remain unchanged. V3 physical acceptance is required; V2 has no timings.
+
 External dedup V1 failed before TPU lowering: the benchmark passed [1,1]
 count/threshold controls to the primitive's [1] contract. See
 `test_results/beam_external_dedup_v1/report.md`. A failing per-shard eval_shape
