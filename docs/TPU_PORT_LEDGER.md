@@ -11,7 +11,11 @@ fixed with broadcast indices plus take_along_axis. Fifteen related local tests
 pass. The next sequential single/group/full collector bundle is prepared.
 Final regression including scatter, gather correction and harness: 664 passed
 in 435.19 s, zero skips/errors/failures, with source CPU oracle enabled; XML
-`test_results/local_collector_bundle_regression.xml`. No V2 launch yet.
+`test_results/local_collector_bundle_regression.xml`. Private collector V2
+submitted and confirmed QUEUED: source `bad92c169a1001878ccb625f609c6cb634585b53`,
+launcher `7743d33`. It runs isolated single/group/full checks sequentially.
+Download terminal output to `test_results/beam_collector_v2/`; inspect bundle
+and every nested JSON/log. Pending is not physical acceptance.
 
 Hash-to-shard collector grouping now has an interpreter baseline: stable
 metadata partition, counts/offsets, and actual independent Hash128 shard salt.
