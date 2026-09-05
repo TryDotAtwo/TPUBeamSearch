@@ -3,6 +3,22 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Serialized collector work in progress: `beam_collector.py` now has a Pallas
+functional append for one A/B pair and a group of at most 128 records. Five
+initial interpreter tests passed (6.63 s); physical lowering is unverified.
+It preserves other records, uses clean+dirty offset, prefers writable current
+then sibling, and latches fatal instead of dropping a group. This is NOT the
+final resident collector: it returns whole buffers, has no proven donation,
+and requires waiting for the entire tuple before publishing control. The
+control call has no record-store dependency on its own; a concurrent consumer
+must not observe it independently. Production integration needs explicit
+commit ordering, grouped multi-tile reservations, shard selection and DMA
+lifetime checks. No overlap or allocation-efficiency claim is made.
+Full local run: 642 passed in 540.06 s. Additional repeated-arrival/sticky-fatal
+coverage passes with all six collector tests (21.93 s), and the later physical
+harness adapter test passes (4.88 s). Those additions were checked separately
+from the already running full suite. No physical collector result yet.
+
 Composed external S3 V1 is physically exact at N256/512 on eight TPU v5 lite,
 source `bb6c38a`, launcher `9619cdc`; see
 `test_results/beam_external_stream3_v1/report.md`. Threshold/dedup/actual owner/
