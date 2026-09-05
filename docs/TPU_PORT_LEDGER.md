@@ -660,3 +660,12 @@ One targeted two-tile interpreter test passed in3.15 s
 (`local_final_request.xml`). This is wire assembly only, not validation,
 cap/ties/balance, request exchange, response generation or final acceptance.
 The source types and ARCHITECTURE_NEED final section were read-only inspected.
+
+`beam_final_validation.pallas_validate_final_requests` now emits per-request
+parent1/target2/move4/local-slot8 reason bits, matching the inspected CUDA debug
+validator. Parent bounds compare both uint32 words. Local-slot checking is
+optional because grouped remote requests need not target their input position.
+Padding is excluded by count. Two targeted interpreter tests passed in3.46 s
+(`local_final_validation.xml`). Error aggregation, return-rank validation and
+gating materialization remain caller responsibilities; no invalid-batch stop
+or physical/CUDA acceptance is claimed.
