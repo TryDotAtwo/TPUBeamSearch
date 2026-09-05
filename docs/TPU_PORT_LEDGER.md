@@ -538,3 +538,21 @@ It is not yet the full K2 hashing/lookup loop or bounded solved collector.
 `local_suffix_hit_regression.xml`: 5 targeted tests passed in 11.37 s, including
 the Stream2/K1 composition. CPU interpreter only; no physical compilation,
 CUDA execution, whole-suite regression, or performance claim for this addition.
+
+### K1/K2 diagnostic Stream2 composition — 2026-09-06
+
+`beam_stream2_k2.pallas_hash_k2_goal` now composes suffix source indices with
+each immediate generator, hashes the resulting child without materializing its
+state, performs K1 membership, and merges first-hit metadata. Return values
+keep immediate beam hashes separate from solution hashes and suffix IDs.
+The enabled K1-table contract includes central. Bounded solved collection is
+still absent; K1-disabled exact-central mode is not this wrapper's interface.
+
+`local_stream2_k2_regression.xml`: 10 targeted tests passed in 44.10 s.
+The independent state-permutation oracle covers noncommuting radius-two
+suffixes, no solution, immediate priority, zero parents, K2 radius zero and
+padding. Only CPU TPU-interpreter evidence; no CUDA/physical-TPU acceptance.
+The Python static suffix loop expands dispatches and loads projection in VMEM;
+it is a diagnostic baseline, not a scalable production K2 implementation.
+Next integration must replace it with bounded device iteration and connect the
+solved-capacity/overflow/stop protocol before claiming full Stream2 acceptance.
