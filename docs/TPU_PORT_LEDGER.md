@@ -3,6 +3,14 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Composed external S3 V1 is physically exact at N256/512 on eight TPU v5 lite,
+source `bb6c38a`, launcher `9619cdc`; see
+`test_results/beam_external_stream3_v1/report.md`. Threshold/dedup/actual owner/
+split match recorded original CPU C++ fixture outputs for all five arrays.
+Diagnostic medians 0.77270/0.83023 ms are not beam speedups. Source fixture
+checkout was dirty, with actual file hashes retained; CPU parity is not CUDA.
+Collector/RDMA and ring payload restoration remain outside this gate.
+
 Composed external S3 now executes threshold/dedup -> actual Hash128 owner ->
 external split in `pallas_external_stream3`. An original C++ Stream3 oracle
 fixture (N256, world8, rank3, threshold5, reverse payload tie priority and

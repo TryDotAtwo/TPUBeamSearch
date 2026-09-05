@@ -1,0 +1,159 @@
+{
+  "source_sha": "bb6c38a9b8be1c2678e6136a316382a9831fc458",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "fixture_manifest_sha256": "11dd69b84e41bc6a9b2dd6164333c3b199af56f749db213259659c5d5c3b3a0d",
+  "provenance": {
+    "scope": "CPU original Stream3 oracle; not CUDA",
+    "source_commit": "b5fcf6b0ee3247a1f189e6da79a1641d2304bd1c",
+    "source_dirty": true,
+    "adapter_sha256": "5ae1227e69ee064f8504e96415697041489ad285a7bcd2485aedfd3738c569e3",
+    "executable_sha256": "3be54a89e166ab5a843dec86557fe123122a36d257ac8b8347b4e6511b14d120",
+    "source_files": {
+      "config.hpp": "91329b4d68b3e3fe6be2e88defdd90e5b293a22c7083391ee69a5ba67e04ba52",
+      "frontier_cpu.hpp": "360d27441ee564aee182ae36634bb693f488b3ba1782e4e28d8e68eb0f7ece73",
+      "hash.hpp": "361756fe2de60ae9393f0e60f6be80c697e9b84c58fbaedbc75d1c5d8162016c",
+      "history.hpp": "0221ba1a9ce1dd061671434cf3cdbd118eec5ef612a23b5bd02fc869ad6f0753",
+      "state.hpp": "e8f5e54396bf617a36edf5ef41a0db5f992b63ef18a96a98826288db379db446",
+      "stream3.hpp": "25d5c4a88fa779c6dac1656e84e8e1f9efb8cc7879d2c56534539aa5f27366f8",
+      "stream4.hpp": "041c355de4f28f7613946e727e17d5a046b97884668571e2c2f801120fc7542e",
+      "types.hpp": "504c54cf72870da281d13e4a68871ccf1a4f061755d7acfdf456818cf7e98a5f",
+      "hash.cpp": "369b34d3eaa526b002b553ee4bf2e9ee1eccd69861c6cac7f1d06a5162b65136",
+      "state.cpp": "7094caed55c9876eb496a4e5c705b814309b5d3807b7e935712b78d09614406c",
+      "stream3.cpp": "584d37e0c96d581174359932a2fe04df76cbfdfca12b44b0a5df75c3aec1d2b5",
+      "stream4.cpp": "d233acefb23c030057de8a92f6de1fda55617ef925d757a49d7742b736bb72f2"
+    },
+    "cases": [
+      {
+        "capacity": 256,
+        "file": "stream3_256.npz",
+        "sha256": "a9cab64a65af5f5f9c1fcaa062902a39dbbcf6af5a720dd728b9ab5954a5b315",
+        "seed": 6837
+      },
+      {
+        "capacity": 512,
+        "file": "stream3_512.npz",
+        "sha256": "62e5d4703f0ca0ff1f424feecff97220ab3e5702f9cc926a1e95da6c14c49b51",
+        "seed": 7093
+      }
+    ]
+  },
+  "cases": [
+    {
+      "capacity": 256,
+      "fixture_sha256": "a9cab64a65af5f5f9c1fcaa062902a39dbbcf6af5a720dd728b9ab5954a5b315",
+      "input_sha256": "18b44ab62b0a15299e806a43e69ef173a457ab7a0e749f1bd4c5fe7b22998e3d",
+      "expected_sha256": "0443577c3c0a9edf7d7cee5a595811d639743635563697bd89fb7d5e85378c14",
+      "compile_seconds": 2.662434253000015,
+      "mismatches": 0,
+      "exact": true,
+      "output_sha256": "0443577c3c0a9edf7d7cee5a595811d639743635563697bd89fb7d5e85378c14",
+      "timing": {
+        "warmup": 3,
+        "repeats": 21,
+        "samples_ms": [
+          0.81266,
+          0.76863,
+          0.821509,
+          0.825629,
+          0.789389,
+          0.816319,
+          0.849919,
+          0.79399,
+          0.763329,
+          0.7727,
+          0.782549,
+          0.72003,
+          0.723859,
+          0.76067,
+          0.780519,
+          0.722199,
+          0.726519,
+          0.72775,
+          0.80747,
+          0.752289,
+          0.736
+        ],
+        "median_ms": 0.7727,
+        "p10_ms": 0.723859,
+        "p90_ms": 0.821509
+      }
+    },
+    {
+      "capacity": 512,
+      "fixture_sha256": "62e5d4703f0ca0ff1f424feecff97220ab3e5702f9cc926a1e95da6c14c49b51",
+      "input_sha256": "a90704a9ac03abc6301ee61f9162cba5f0c06d0a4d08abbe1b55757c7f11144a",
+      "expected_sha256": "b3bff1031567a0aa2aab00603d0862fb0a2b288bdd39f0c540ba9d78d6207cb7",
+      "compile_seconds": 2.6377867589999937,
+      "mismatches": 0,
+      "exact": true,
+      "output_sha256": "b3bff1031567a0aa2aab00603d0862fb0a2b288bdd39f0c540ba9d78d6207cb7",
+      "timing": {
+        "warmup": 3,
+        "repeats": 21,
+        "samples_ms": [
+          0.86286,
+          0.814209,
+          0.861029,
+          0.86087,
+          0.840509,
+          0.83023,
+          0.845289,
+          0.82915,
+          0.830999,
+          0.84215,
+          0.814179,
+          0.78137,
+          0.797159,
+          0.831539,
+          0.81195,
+          0.832119,
+          0.80734,
+          0.80456,
+          0.83483,
+          0.78282,
+          0.77144
+        ],
+        "median_ms": 0.83023,
+        "p10_ms": 0.78282,
+        "p90_ms": 0.86087
+      }
+    }
+  ],
+  "scope": "composed S3 before collector/RDMA; CPU source oracle, not CUDA"
+}
