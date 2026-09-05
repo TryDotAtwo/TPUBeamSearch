@@ -86,3 +86,17 @@ manual two-move order,24/30-move counts14425/27931, padding and bounds. Artifact
 preparation, not execution of the original C++ builder, not a Pallas suffix
 scan, and not K1/K2 CUDA/TPU acceptance. Device lookup, first-hit selection and
 full reconstructed-solution replay remain outstanding.
+
+`pallas_suffix_projection` now composes source-index permutations from those
+tables, using the existing Stream2 gather helper. It reverses suffix step
+indices, yielding the same forward state transformation; the immediate move
+must still be composed afterwards by Stream2. Output is transposed int32
+`[state_width,suffix_capacity]`, with zero invalid columns. Validated generator
+indices and length<=3 are caller contracts. This prepares the optional composed
+backend; it does not search for hits or change immediate-child hashes.
+
+After a missing-module red test, noncommuting two-move and radius3/156-suffix
+cross-tile interpreter cases pass against explicit forward NumPy application.
+The combined table/projection suite passes10 tests in3.53 s:
+`test_results/local_suffix_projection_regression.xml`. Physical Mosaic
+compilation, real24/30-move memory/timing and K1/K2 integration remain open.
