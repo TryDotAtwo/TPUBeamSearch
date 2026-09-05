@@ -1,0 +1,56 @@
+{
+  "groups": [
+    {
+      "name": "full",
+      "exact": false,
+      "status": "returned",
+      "returncode": 1,
+      "report": {
+        "source_sha": "12aae5b085a58ff81eec60ac1eb73009cae927c0",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "scope": "functional hash collector, three shards/rank; not resident, RDMA or full beam",
+        "input_sha256": "24b304f4b9a47e55c62ba4ab3eb9d494adbb669b5903d0aeec7c419010ed67e7",
+        "expected_sha256": "0e8cceecd17b09ba0444d96e71a8027f65a2a73cf17450bc82c1af09b546e0c3",
+        "exact": false
+      }
+    }
+  ],
+  "all_exact": false,
+  "scope": "full collector then conditional integrated gate; no matched speed claim"
+}
