@@ -11,8 +11,21 @@ A failing structural regression catches the exact scalar load; aligned vector
 selection/reduction fixes it locally. Six gather/scatter tests pass in8.81 s.
 Physical full-collector confirmation is still required before the integrated
 S3/RDMA/collector gate. The earlier full run completed704 tests with zero
-failures/errors/skips in1227.68 s; it predates this correction. The current
-full run includes it and writes `test_results/local_collector_v3_regression.xml`.
+failures/errors/skips in1227.68 s; it predates this correction. The corrected
+full run completed712 tests in1033.87 s with zero failures/errors/skips:
+`test_results/local_collector_v3_regression.xml`.
+Collector V3 is submitted and QUEUED (source12aae5b085a58ff81eec60ac1eb73009cae927c0,
+launcher7c54e20fd1c68135a888ec0dcf1d54f3accdd701). Its recovery coordinator runs
+full first and integrated S3 only after exact success. Download terminal outputs
+into `test_results/beam_collector_v3/`; inspect every nested process/report.
+
+The next standalone physical S4 gate is prepared in `benchmarks/beam_s4_probe.py`,
+not submitted. It checks a reserved128 job across eight devices, including both
+histogram slots and empty/nonempty outputs, before diagnostic3/21 timing. Four
+fixture/operator interpreter tests pass in59.79 s (missing-module tests were
+red first); XML: `test_results/local_s4_probe_regression.xml`. It intentionally
+does not claim ready-queue integration, production307201-bin scalability,
+global S5, concurrent snapshot safety or beam performance.
 
 Post-da90c64 local work (not yet physically accepted): external S4 dedup retains
 score/parent64/route winners without a shard cap; CPU source comparisons pass.
