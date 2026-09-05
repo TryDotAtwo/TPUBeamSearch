@@ -10,6 +10,7 @@ import numpy as np
 from benchmarks.beam_external_dedup_probe import digest
 from tpu_beam_search.beam_s5_request import make_s5_request_call
 from tpu_beam_search.beam_s5_histogram_exchange import make_s5_histogram_call
+from tpu_beam_search.beam_histogram_pair_sum import pallas_sum_histogram_pairs
 
 
 def fixtures():
@@ -47,10 +48,23 @@ def histogram_fixtures():
     return cases
 
 
+def recovery_fixtures(kind):
+    base = histogram_fixtures()
+    cases = []
+    for repeat in range(2):
+        for step,index in enumerate((1,0,1,2)):
+            _,source,total = base[index]
+            wire = np.stack([np.concatenate([source[(rank-offset)%8] for offset in range(8)],axis=0)
+                             for rank in range(8)])
+            request,expected = (source,wire) if kind == 'wire' else (wire,total) if kind == 'reduction' else (source,total)
+            cases.append((f'recovery{repeat}_{step}',request,expected))
+    return cases
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output',required=True,type=Path)
-    parser.add_argument('--kind',choices=('request','histogram'),default='request')
+    parser.add_argument('--kind',choices=('request','histogram','wire','reduction','combined'),default='request')
     args = parser.parse_args()
     output = args.output
     output.mkdir(parents=True,exist_ok=True)
@@ -70,11 +84,13 @@ def main():
     spec = jax.sharding.PartitionSpec('core',None,None)
     sharding = jax.sharding.NamedSharding(mesh,spec)
     call = (make_s5_request_call(mesh) if args.kind == 'request'
-            else make_s5_histogram_call(mesh,width=256))
+            else pallas_sum_histogram_pairs if args.kind == 'reduction'
+            else make_s5_histogram_call(mesh,width=256,return_wire=args.kind == 'wire'))
     def local(request):
         return call(request[0])[None]
     fn = jax.jit(jax.shard_map(local,mesh=mesh,in_specs=spec,out_specs=spec,check_vma=False))
-    cases = fixtures() if args.kind == 'request' else histogram_fixtures()
+    cases = (fixtures() if args.kind == 'request' else histogram_fixtures()
+             if args.kind == 'histogram' else recovery_fixtures(args.kind))
     argument = jax.device_put(cases[0][1],sharding)
     start = time.perf_counter()
     exe = fn.lower(argument).compile()

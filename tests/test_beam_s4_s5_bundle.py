@@ -23,3 +23,16 @@ def test_bundle_preserves_failed_process_and_runs_remaining_independent_groups(t
     assert report['all_exact'] == (failure is None)
     assert [r['exact'] for r in report['groups']] == [n != failure for n in calls]
     assert json.loads((tmp_path/'s4_s5_bundle.json').read_text()) == report
+
+
+def test_recovery_isolates_four_s5_groups_without_repeating_s4(tmp_path):
+    from benchmarks.beam_s4_s5_bundle import run_bundle
+    calls = []
+    def runner(command,**kwargs):
+        folder = Path(command[command.index('--output')+1])
+        calls.append(folder.name)
+        (folder/f's5_{folder.name}.json').write_text(json.dumps({'exact':True}))
+        return SimpleNamespace(returncode=1 if folder.name == 'wire' else 0)
+    report = run_bundle(tmp_path,runner=runner,recovery=True)
+    assert calls == ['request','wire','reduction','combined']
+    assert not report['all_exact']

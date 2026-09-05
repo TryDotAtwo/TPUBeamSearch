@@ -7,7 +7,7 @@ from jax.experimental.pallas import tpu as pltpu
 from .beam_histogram_pair_sum import pallas_sum_histogram_pairs
 
 
-def make_s5_histogram_call(mesh,*,width,interpret=False):
+def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False):
     """All ranks enter after the common request decision with frozen local sums.
 
     Uses 2*ranks*width uint32 HBM scratch, not a ring reduce-scatter. The local
@@ -54,5 +54,7 @@ def make_s5_histogram_call(mesh,*,width,interpret=False):
     def call(histogram):
         if histogram.shape != (2,width) or histogram.dtype != jnp.uint32:
             raise ValueError('local histogram must be uint32 low/high [2,width]')
-        return pallas_sum_histogram_pairs(wire_call(histogram),interpret=interpret)
+        wire = wire_call(histogram)
+        # Diagnostic-only exposure distinguishes transport from reduction.
+        return wire if return_wire else pallas_sum_histogram_pairs(wire,interpret=interpret)
     return call

@@ -6,17 +6,21 @@ import subprocess
 import sys
 
 
-def run_bundle(output,*,runner=subprocess.run):
+def run_bundle(output,*,runner=subprocess.run,recovery=False):
     output = Path(output)
     output.mkdir(parents=True,exist_ok=True)
     report = dict(groups=[],all_exact=False,scope='independent primitives; not integrated S5 or beam')
     def save():
         (output/'s4_s5_bundle.json').write_text(json.dumps(report,indent=2))
     save()
-    for name,module,flags,filename in (
+    groups = (
         ('s4','benchmarks.beam_s4_probe',(),'s4_reserved.json'),
         ('request','benchmarks.beam_s5_request_probe',('--kind','request'),'s5_request.json'),
-        ('histogram','benchmarks.beam_s5_request_probe',('--kind','histogram'),'s5_histogram.json')):
+        ('histogram','benchmarks.beam_s5_request_probe',('--kind','histogram'),'s5_histogram.json'))
+    if recovery:
+        groups = tuple((name,'benchmarks.beam_s5_request_probe',('--kind',name),f's5_{name}.json')
+                       for name in ('request','wire','reduction','combined'))
+    for name,module,flags,filename in groups:
         folder = output/name
         folder.mkdir(parents=True,exist_ok=True)
         row = dict(name=name,exact=False,status='running')
@@ -42,5 +46,7 @@ def run_bundle(output,*,runner=subprocess.run):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--output',required=True,type=Path)
-    result = run_bundle(parser.parse_args().output)
+    parser.add_argument('--recovery',action='store_true')
+    args = parser.parse_args()
+    result = run_bundle(args.output,recovery=args.recovery)
     raise SystemExit(0 if result['all_exact'] else 1)

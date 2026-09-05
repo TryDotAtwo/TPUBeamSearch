@@ -702,6 +702,16 @@ histogram zero case passes but mixed case returns all zeros (4096 mismatches).
 See research/2026-09-06-s4-s5-v1-results.md. No active TPU session remains;
 do not rerun accepted S4 or launch integrated epoch before S5 recovery.
 
+S5 recovery preparation: request unsigned MAX now uses sign-bit remapping and
+signed MAX (red structural test reproduced the rejected dtype). Histogram
+factory can expose raw wire without reduction; driver isolates wire, synthetic
+reduction and combined modes with nonzero/zero/nonzero/singleton inputs twice.
+Recovery coordinator runs request/wire/reduction/combined separately and does
+not repeat accepted S4. Nine targeted checks passed in3.15 s. Full regression
+passed: 808 tests in1056.62 s (`local_s5_recovery_full.xml`, session59539,
+exit0). Recovery is ready for scoped publication and a pinned TPU V2 run;
+no new TPU run submitted yet. Histogram source cause remains unknown.
+
 `pallas_scatter_final_responses` decodes/clears response padding, checks target
 bounds, then writes aliased HBM frontier rows by target index with DMA waits.
 Any overflow rejects all writes. Caller must guarantee unique targets, valid

@@ -22,3 +22,11 @@ def test_eight_rank_histogram_exchange_traces_full_pair_width():
     traced = jax.make_jaxpr(fn,axis_env=[('core',8)])(
         jax.ShapeDtypeStruct((2,256),jnp.uint32))
     assert tuple(x.shape for x in traced.out_avals) == ((2,256),)
+
+
+def test_raw_wire_diagnostic_preserves_single_rank_payload():
+    from tpu_beam_search.beam_s5_histogram_exchange import make_s5_histogram_call
+    values = np.arange(512,dtype=np.uint32).reshape(2,256)
+    fn = make_s5_histogram_call(SimpleNamespace(size=1),width=256,return_wire=True,
+        interpret=pltpu.InterpretParams(detect_races=True))
+    np.testing.assert_array_equal(fn(jnp.asarray(values)),values)

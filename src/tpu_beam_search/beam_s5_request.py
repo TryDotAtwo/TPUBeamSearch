@@ -47,7 +47,11 @@ def make_s5_request_call(mesh,*,interpret=False):
             pltpu.VMEM((1,128),jnp.uint32)),
         interpret=interpret,name='beam_s5_request_exchange')
     def maximum(wire,out):
-        value = jnp.max(wire[...],axis=0)[None]
+        # Mosaic lacks unsigned reductions. Flip the sign bit to preserve
+        # uint32 ordering in signed int32, then invert after signed MAX.
+        sign = jnp.uint32(0x80000000)
+        signed = (wire[...] ^ sign).astype(jnp.int32)
+        value = (jnp.max(signed,axis=0).astype(jnp.uint32) ^ sign)[None]
         out[...] = jnp.where(jnp.arange(128)[None] == 0,value,jnp.uint32(0))
     reduce_call = pl.pallas_call(maximum,
         out_shape=jax.ShapeDtypeStruct((1,128),jnp.uint32),
