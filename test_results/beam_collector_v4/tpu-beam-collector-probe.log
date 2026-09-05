@@ -1,0 +1,10 @@
+[{"stream_name":"stderr","time":19.202977631,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":23.431726816,"data":"\n"}
+,{"stream_name":"stderr","time":23.431752396,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":23.431757636,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":23.568011841,"data":"Cloning into '/tmp/TPUBeamSearch-collector'...\n"}
+,{"stream_name":"stderr","time":31.314085846,"data":"Updating files:  94% (3770/3985)\rUpdating files:  95% (3786/3985)\rUpdating files:  96% (3826/3985)\rUpdating files:  97% (3866/3985)\rUpdating files:  98% (3906/3985)\rUpdating files:  99% (3946/3985)\rUpdating files: 100% (3985/3985)\rUpdating files: 100% (3985/3985), done.\n"}
+,{"stream_name":"stderr","time":31.615939027,"data":"HEAD is now at 147361e Bank collector gathers and add tested K1 table and lookup preparation\n"}
+,{"stream_name":"stderr","time":79.740204313,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":82.032983592,"data":"[NbConvertApp] Writing 278147 bytes to __results__.html\n"}
+]

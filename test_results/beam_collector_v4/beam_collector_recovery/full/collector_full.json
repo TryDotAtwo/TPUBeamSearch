@@ -1,0 +1,82 @@
+{
+  "source_sha": "147361e6b61e22cddbba22be9c3275a1b3b5c755",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "functional hash collector, three shards/rank; not resident, RDMA or full beam",
+  "input_sha256": "24b304f4b9a47e55c62ba4ab3eb9d494adbb669b5903d0aeec7c419010ed67e7",
+  "expected_sha256": "0e8cceecd17b09ba0444d96e71a8027f65a2a73cf17450bc82c1af09b546e0c3",
+  "exact": true,
+  "compile_seconds": 1.207967913999994,
+  "mismatches": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "output_sha256": "0e8cceecd17b09ba0444d96e71a8027f65a2a73cf17450bc82c1af09b546e0c3",
+  "timing": {
+    "warmup": 3,
+    "repeats": 21,
+    "samples_ms": [
+      0.789611,
+      0.79332,
+      0.758,
+      0.72003,
+      0.756481,
+      0.69254,
+      0.710861,
+      0.70553,
+      0.6833,
+      0.73012,
+      0.7076,
+      0.693771,
+      0.67411,
+      0.820821,
+      0.79037,
+      0.71891,
+      0.74075,
+      0.716341,
+      0.64665,
+      0.72179,
+      0.65839
+    ],
+    "median_ms": 0.71891,
+    "p10_ms": 0.67411,
+    "p90_ms": 0.79037
+  }
+}

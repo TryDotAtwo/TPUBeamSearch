@@ -590,3 +590,13 @@ second explicit x64 parameter. Full regression is terminal: 785 passed in
 1102.53 s, zero failures/errors/skips, including both explicit x64 modes.
 Artifact: `local_solved_path_full_regression.xml`. Physical TPU/CUDA and
 concurrent publication remain unverified; defaults unchanged.
+
+### Collector V4 physical result — 2026-09-06
+
+V4 is COMPLETE and both nested processes returned0/exact=true on eight TPU
+v5 lite devices. Full collector and bounded S3/snapshot-RDMA/collector output
+hashes match their references, with zero mismatches. Expected fatal ranks3/5
+also match. See `research/2026-09-06-collector-v4-results.md` and complete
+`test_results/beam_collector_v4/` artifacts. Medians0.718910/0.913981 ms are
+different diagnostic workloads, not matched A/B or full-beam throughput.
+Do not rerun V4; next physical gate is the prepared S4/S5 isolated bundle.
