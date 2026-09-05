@@ -1,0 +1,47 @@
+{
+  "source_sha": "6d303eb2698b15e6a2bce925c3adc141735bafa8",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "cases": [
+    {
+      "input_sha256": "7a8b6be403fb7902ba7a0d824844a96a709520072f57c71c75d1f0a1ef355ad3",
+      "expected_sha256": "7a962c09faf869888f3de094fe9d15f212775402e22ef59baadf1aaebced821c"
+    }
+  ],
+  "scope": "serialized functional one-shard collector; no concurrency/alias/overlap"
+}

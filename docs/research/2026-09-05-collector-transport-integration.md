@@ -93,3 +93,46 @@ Two interpreter tests were red before implementation and now pass (6.89 s):
 exact-full admission with sibling selection, and late-shard overflow cancelling
 an earlier otherwise valid group. Metadata scatter and dirty publication are
 not yet attached. Full control-field rollback is not asserted against CUDA.
+
+The next functional stage is now attached by `pallas_collector_scatter` and
+`pallas_collect`: actual Hash128 shard grouping -> all-shard preflight ->
+metadata scatter -> next control values. The caller must await all returned
+arrays before exposing controls. This is not an in-place resident protocol:
+buffers are functional outputs and the full grouped input is a VMEM window
+for each destination tile. That deliberately transparent baseline needs
+physical compilation, then tiled DMA/alias work before production scaling.
+
+TDD evidence for this attachment: three scatter tests failed on the missing
+entrypoint and pass in 5.75 s (unaligned source/destination, late overflow,
+empty/busy input). The full hash collector test failed before implementation
+and passes in 25.74 s: three shards fill A, then B, then reject a third complete
+input without metadata/dirty mutations. Independent Python uint64 hashing
+determines expected membership. These are interpreter results only; full
+regression for this attachment plus the gather correction and physical harness
+completed: 664 passed in 435.19 s with source CPU oracle enabled, no skips.
+Saved XML: `test_results/local_collector_bundle_regression.xml`.
+
+## Dispatcher publication and receive admission boundary
+
+Read-only `cuda/dispatcher.cu` SHA-256
+`45ccfe9ddd27886acbb90ebb30ab67ef96a0557e2c7577043ac9aa3fc1b6027b`:
+the normal local ring records `stream3_done` after its graph; host completion
+queries/synchronizes that event before exposing its ready queue (3552,
+3638..3668). The inspected remote path synchronizes stream5 payload exchange,
+then calls `stream3_collect_remote_recv_cuda` once with the complete
+`recv_total_64`, synchronizes stream3, checks fatal, and appends its ready queue
+(3186..3240). This is evidence of a completion boundary, not lock-free dirty
+counter publication from inside the scatter kernel.
+
+Consequently TPU per-peer epoch snapshots must be compacted into one receive
+partition for the corresponding exchange round before admission. Calling
+collector separately on each snapshot would change group sizes, A/B choices
+and fatal-overflow behavior relative to this source. Local-input admission is
+still a separate invocation. Preserve explicit batch boundaries in replay.
+
+The source ready-queue kernel marks the selected physical shard processing
+before enqueueing it and redirects collector writes to another writable
+sibling (`cuda/stream3.cu`, 903..930). The host also guards at most one running
+S4 job per logical shard. A TPU resident implementation needs equivalent
+exclusive ownership and a complete-write publication boundary; the current
+functional full-tuple wait is only the serialized reference version.

@@ -78,7 +78,8 @@ def pallas_collector_append(a, b, incoming, control, count, *, interpret=False):
         for old,out,offset,chosen in ((ar,ao,ua,ca),(br,bo,ub,cb)):
             relative = index-offset
             # Safe modulo addressing for masked-off lanes; incoming is one tile.
-            values = jnp.take(ir[...],(relative & 127).astype(jnp.int32),axis=1)
+            indices = jnp.broadcast_to((relative & 127).astype(jnp.int32)[None],(8,128))
+            values = jnp.take_along_axis(ir[...],indices,axis=1)
             mask = chosen & (index >= offset) & (relative < amount)
             out[...] = jnp.where(mask[None],values,old[...])
 
@@ -271,3 +272,69 @@ def pallas_collector_preflight(controls,counts,*,capacity,interpret=False):
         in_specs=(pl.BlockSpec(controls.shape),pl.BlockSpec(counts.shape)),
         out_specs=(pl.BlockSpec(shape),pl.BlockSpec((1,128))),grid=(),
         interpret=interpret,name='beam_collector_partition_preflight')(controls,counts)
+
+
+def pallas_collector_scatter(a,b,grouped,controls,counts,offsets,*,interpret=False):
+    """Functional all-shard scatter, gated by whole-partition admission.
+
+    Valid grouped counts/exclusive offsets are required. Full input windows
+    make this a diagnostic baseline, not scalable resident DMA scatter.
+    Await ALL outputs before publishing controls to a consumer; this does not
+    establish overlapping S4 access, aliases, or store-before-count ordering.
+    """
+    import jax
+    import jax.numpy as jnp
+    from jax.experimental import pallas as pl
+    if (a.ndim != 3 or a.shape[1] != 8 or b.shape != a.shape
+            or a.shape[2] < 128 or a.shape[2] % 128
+            or controls.shape != (a.shape[0],8,128)
+            or grouped.ndim != 2 or grouped.shape[0] != 8
+            or grouped.shape[1] < 128 or grouped.shape[1] > 16384
+            or grouped.shape[1] & (grouped.shape[1]-1)
+            or offsets.shape != counts.shape):
+        raise ValueError('invalid partition scatter geometry')
+    if any(x.dtype != jnp.uint32 for x in (a,b,grouped,controls,counts,offsets)):
+        raise ValueError('scatter requires uint32')
+    shards,_,capacity = a.shape
+    plan,fatal = pallas_collector_preflight(controls,counts,capacity=capacity,interpret=interpret)
+    def scatter(ar,br,g,p,o,ao,bo):
+        sibling,dest,amount,enabled = (p[0,i,0] for i in range(4))
+        index = (pl.program_id(1)*128+jnp.arange(128,dtype=jnp.int32)).astype(jnp.uint32)
+        relative = index-dest
+        source = o[0,pl.program_id(0)]+relative
+        indices = jnp.broadcast_to((source & (grouped.shape[1]-1)).astype(jnp.int32)[None],(8,128))
+        values = jnp.take_along_axis(g[...],indices,axis=1)
+        valid = (enabled != 0)&(index >= dest)&(relative < amount)
+        ao[...] = jnp.where((valid&(sibling == 0))[None,None],values[None],ar[...])
+        bo[...] = jnp.where((valid&(sibling == 1))[None,None],values[None],br[...])
+    spec = pl.BlockSpec((1,8,128),lambda s,t:(s,0,t))
+    aa,bb = pl.pallas_call(scatter,
+        out_shape=(jax.ShapeDtypeStruct(a.shape,jnp.uint32),)*2,
+        in_specs=(spec,spec,pl.BlockSpec(grouped.shape),
+                  pl.BlockSpec((1,4,128),lambda s,t:(s,0,0)),pl.BlockSpec(offsets.shape)),
+        out_specs=(spec,spec),grid=(shards,capacity//128),interpret=interpret,
+        name='beam_collector_partition_scatter')(a,b,grouped,plan,offsets)
+    def control_kernel(c,p,f,out):
+        sibling,_,amount,enabled = (p[0,i,0] for i in range(4))
+        rows = jnp.arange(8,dtype=jnp.int32)[None,:,None]
+        lane = jnp.arange(128,dtype=jnp.int32)[None,None] == 0
+        result = c[...]+((rows == (2+sibling))&lane).astype(jnp.uint32)*amount*enabled
+        result = jnp.where((rows == 6)&lane&(enabled != 0),sibling,result)
+        out[...] = jnp.where((rows == 7)&lane,f[0,0],result)
+    cs = pl.BlockSpec((1,8,128),lambda s:(s,0,0))
+    cc = pl.pallas_call(control_kernel,out_shape=jax.ShapeDtypeStruct(controls.shape,jnp.uint32),
+        in_specs=(cs,pl.BlockSpec((1,4,128),lambda s:(s,0,0)),pl.BlockSpec(fatal.shape)),
+        out_specs=cs,grid=(shards,),interpret=interpret,
+        name='beam_collector_partition_next_control')(controls,plan,fatal)
+    return aa,bb,cc,fatal
+
+
+def pallas_collect(a,b,words,controls,count,*,interpret=False):
+    """Owner-local input to functional hash-sharded A/B collector baseline.
+
+    The caller owns transport/local input lifetime and must await the full
+    result before consumer publication. No S4 scheduling or RDMA ACK here.
+    """
+    grouped,counts,offsets = pallas_collector_hash_partition(
+        words,count,shard_count=a.shape[0],interpret=interpret)
+    return pallas_collector_scatter(a,b,grouped,controls,counts,offsets,interpret=interpret)

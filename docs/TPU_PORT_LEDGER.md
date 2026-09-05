@@ -3,6 +3,16 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Collector V1 terminated with a Mosaic gather lowering rejection on eight TPU
+v5 lite devices: `Only take_along_axis-like gathers supported`. No device
+correctness or timing was produced; see `test_results/beam_collector_v1/report.md`.
+The concrete JAXPR index-shape mismatch is reproduced for append/scatter and
+fixed with broadcast indices plus take_along_axis. Fifteen related local tests
+pass. The next sequential single/group/full collector bundle is prepared.
+Final regression including scatter, gather correction and harness: 664 passed
+in 435.19 s, zero skips/errors/failures, with source CPU oracle enabled; XML
+`test_results/local_collector_bundle_regression.xml`. No V2 launch yet.
+
 Hash-to-shard collector grouping now has an interpreter baseline: stable
 metadata partition, counts/offsets, and actual independent Hash128 shard salt.
 Three supplied-ID cases and one independent uint64 hash-composition case pass.
