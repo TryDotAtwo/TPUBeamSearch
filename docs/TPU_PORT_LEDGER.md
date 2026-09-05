@@ -525,3 +525,16 @@ Regression: `local_stream2_k1_regression.xml`, 14 passed in 19.94 s, covering
 zero/partial/full parent counts plus lookup and neighborhood preparation.
 This is CPU TPU-interpreter evidence, not physical TPU compilation or speed.
 Collector V4 remains QUEUED at this checkpoint and was not restarted.
+
+### K2 first-hit selection — local only, 2026-09-06
+
+`beam_suffix_hit.pallas_merge_suffix_hit` selects the first successful suffix
+when called in ascending BFS suffix order. An immediate/K1 hit (suffix zero)
+has priority. Projected solution hashes are separate from unchanged beam
+hashes; invalid candidates do not acquire hits. This follows the control order
+in read-only `cuda/stream2.cu` (`!found` guard and ascending suffix loop).
+It is not yet the full K2 hashing/lookup loop or bounded solved collector.
+
+`local_suffix_hit_regression.xml`: 5 targeted tests passed in 11.37 s, including
+the Stream2/K1 composition. CPU interpreter only; no physical compilation,
+CUDA execution, whole-suite regression, or performance claim for this addition.
