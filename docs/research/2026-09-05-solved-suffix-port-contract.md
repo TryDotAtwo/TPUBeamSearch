@@ -115,3 +115,48 @@ fingerprint preimage. The combined new/source parity tests pass9 in32.23 s:
 `test_results/local_k1_keys_regression.xml`. This is original C++ on CPU versus
 Pallas interpreter, not CUDA or physical TPU execution. Actual four-slot,
 two-bucket lookup and full Hash128 collision checking still need implementation.
+
+## Bounded lookup and fixed table preparation
+
+`pallas_k1_contains` now reads aligned128-slot windows from HBM into a5x128
+uint32 scratch window and checks exactly four slots of each source bucket.
+Fingerprint equality must be followed by all four Hash128 words matching.
+Query count masks padding; it uses two serialized table reads per valid query,
+not an optimized coalesced lookup. Seven interpreter cases pass in12.35 s,
+covering both bucket paths, fingerprint collision, all four slots and exclusion
+of DMA-window slots outside the bucket. Tests require TPU InterpretParams;
+generic interpret=True failed on CPU program_id lowering. No physical TPU
+lookup acceptance is claimed. The module is included in regression82378.
+
+`prepare_k1_table` implements source fixed-arena placement: first empty slot of
+bucket0, then bucket1, preserving entry order. It raises on failure, never grows
+or drops entries. Three host tests pass in4.99 s, including a bucket collision
+with unused global slots; artifact `test_results/local_k1_table_regression.xml`.
+Placement is checked with Pallas keys already compared to original C++ helpers;
+the original host packing function itself was inspected, not executed. This
+new table module was added after regression82378 collection. Inverse-neighborhood
+BFS, suffix-by-hash storage and reconstructed-solution replay remain pending.
+
+The fixed table and HBM lookup are now tested together, including a legitimate
+zero Hash128 and an empty table. All11 table/lookup tests pass; the recorded
+artifact is `test_results/local_k1_integration_regression.xml`. This does not
+replace the missing inverse-neighborhood builder or physical lookup gate.
+
+`prepare_k1_neighborhood` now builds the inverse BFS, clears state padding,
+retains first visits by Hash128 and prepends the move to the suffix chain.
+It returns an immutable suffix mapping and fixed K1 table. Two initial host
+tests pass in2.86 s after a missing-module red test: six manually enumerated
+states/first suffixes, replay to central, max-entry failure, disabled radius0,
+and forced Hash128 collision deduplication. Artifact:
+`test_results/local_k1_neighborhood_regression.xml`. This is not original C++
+builder execution or physical K1/K2 acceptance. Radius<=12 and five-bit move
+IDs are validated; device hit selection/solved collection still need wiring.
+This module and table preparation were added after regression82378 collection.
+
+The combined K1 keys/lookup/table/neighborhood and K2 table/projection suite
+passes26 tests in22.04 s with the original-source CPU oracle enabled for keys:
+`test_results/local_k1_k2_preparation_regression.xml`. The additional generated
+neighborhood-to-Pallas-lookup test then passed in the three-test neighborhood
+suite (5.18 s), including rejection of an outsider. Full collector regression
+82378 completed764 tests in1066.95 s, no failures/errors/skips; later table/BFS
+additions have the separate evidence above. Physical acceptance remains pending.

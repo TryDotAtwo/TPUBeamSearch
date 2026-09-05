@@ -61,3 +61,12 @@ def test_scatter_has_no_dynamic_scalar_vmem_offset_load():
            and eqn.outvars[0].aval.shape == ()
            and any(not hasattr(v,'val') for v in eqn.invars[1:])]
     assert not bad, bad
+
+
+def test_scatter_gathers_do_not_span_multiple_source_lane_registers():
+    shapes = ((2,8,512),(2,8,512),(8,512),(2,8,128),(1,128),(1,128))
+    traced = jax.make_jaxpr(pallas_collector_scatter)(
+        *(jax.ShapeDtypeStruct(s,jnp.uint32) for s in shapes))
+    gathers = list(gather_equations(traced))
+    assert gathers
+    assert all(eqn.invars[0].aval.shape[1] <= 128 for eqn in gathers)

@@ -14,10 +14,14 @@ S3/RDMA/collector gate. The earlier full run completed704 tests with zero
 failures/errors/skips in1227.68 s; it predates this correction. The corrected
 full run completed712 tests in1033.87 s with zero failures/errors/skips:
 `test_results/local_collector_v3_regression.xml`.
-Collector V3 is submitted and QUEUED (source12aae5b085a58ff81eec60ac1eb73009cae927c0,
+Collector V3 is terminal ERROR (source12aae5b085a58ff81eec60ac1eb73009cae927c0,
 launcher7c54e20fd1c68135a888ec0dcf1d54f3accdd701). Its recovery coordinator runs
-full first and integrated S3 only after exact success. Download terminal outputs
-into `test_results/beam_collector_v3/`; inspect every nested process/report.
+full first and integrated S3 only after exact success. Outputs are downloaded
+into `test_results/beam_collector_v3/`: full compile rejects8x256->8x128 gather
+across multiple source vregs; integrated was not started, no timings exist.
+Candidate128-column banked gather passes7 local tests; full regression82378
+completed764 tests in1066.95 s with zero failures/errors/skips:
+`test_results/local_collector_v4_regression.xml`. Physical V4 remains pending.
 
 The next standalone physical S4 gate is prepared in `benchmarks/beam_s4_probe.py`,
 not submitted. It checks a reserved128 job across eight devices, including both

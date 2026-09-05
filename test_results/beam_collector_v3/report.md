@@ -27,5 +27,6 @@ Input SHA256:
 `24b304f4b9a47e55c62ba4ab3eb9d494adbb669b5903d0aeec7c419010ed67e7`.
 Expected SHA256:
 `0e8cceecd17b09ba0444d96e71a8027f65a2a73cf17450bc82c1af09b546e0c3`.
-Neither is an actual-output hash. Full local regression82378 is running before
-publication/pinning of the next collector source. Do not resubmit while it runs.
+Neither is an actual-output hash. Full local regression82378 completed764 tests
+in1066.95 s with no failures/errors/skips before next-source publication/pinning.
+See `test_results/local_collector_v4_regression.xml`; physical V4 is still pending.

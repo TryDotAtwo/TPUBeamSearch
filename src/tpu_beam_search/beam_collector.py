@@ -307,7 +307,13 @@ def pallas_collector_scatter(a,b,grouped,controls,counts,offsets,*,interpret=Fal
             == pl.program_id(0),o[0],jnp.uint32(0)).astype(jnp.int32)).astype(jnp.uint32)
         source = offset+relative
         indices = jnp.broadcast_to((source & (grouped.shape[1]-1)).astype(jnp.int32)[None],(8,128))
-        values = jnp.take_along_axis(g[...],indices,axis=1)
+        # V3 Mosaic cannot gather across multiple source lane registers.
+        # Keep every gather source at128 columns, then select the source bank.
+        values = jnp.zeros((8,128),jnp.uint32)
+        local_indices = indices&jnp.int32(127)
+        for bank in range(grouped.shape[1]//128):
+            part = jnp.take_along_axis(g[:,bank*128:(bank+1)*128],local_indices,axis=1)
+            values = jnp.where((indices//128) == bank,part,values)
         valid = (enabled != 0)&(index >= dest)&(relative < amount)
         ao[...] = jnp.where((valid&(sibling == 0))[None,None],values[None],ar[...])
         bo[...] = jnp.where((valid&(sibling == 1))[None,None],values[None],br[...])
