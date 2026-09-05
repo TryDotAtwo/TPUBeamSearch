@@ -35,6 +35,30 @@ def test_serialized_epoch_no_request_then_forced_publication():
     np.testing.assert_array_equal(np.asarray(again[3])[:,0],[0,2,0,0])
 
 
+def test_epoch_reads_selected_histogram_version_and_never_relaxes_threshold():
+    from tpu_beam_search.beam_s5_epoch import make_s5_epoch_call
+    fn = make_s5_epoch_call(SimpleNamespace(size=1),bins=128,period=1,
+        interpret=pltpu.InterpretParams(detect_races=True))
+    hist_a,hist_b = np.zeros((2,128),np.uint32),np.zeros((2,128),np.uint32)
+    # Combining both selected shards requires a low-word carry for beam2**32.
+    hist_a[:,20] = 0xffffffff
+    hist_b[:,3] = 0xffffffff
+    versions = np.zeros((1,128),np.uint32)
+    beam = np.zeros((2,128),np.uint32)
+    beam[1,0] = 1
+    slots = (jnp.zeros((2,128),jnp.uint32),jnp.zeros((2,128),jnp.uint32),
+             jnp.zeros((1,128),jnp.uint32))
+    state = jnp.zeros((4,128),jnp.uint32)
+    for epoch,(selected,expected) in enumerate(((0,20),(1,3),(0,3))):
+        versions[0,:2] = selected
+        result = fn(jnp.asarray(hist_a),jnp.asarray(hist_b),jnp.asarray(versions),
+            *slots,jnp.asarray(beam),state,jnp.array([1],jnp.uint32))
+        slots,state = result[:3],result[3]
+        active = int(slots[2][0,0])
+        np.testing.assert_array_equal(np.asarray(slots[active])[:,0],[expected,1])
+        assert int(state[1,0]) == epoch+1
+
+
 def test_eight_rank_epoch_traces_one_conditional_and_expected_outputs():
     from tpu_beam_search.beam_s5_epoch import make_s5_epoch_call
     fn = make_s5_epoch_call(SimpleNamespace(size=8),bins=128,period=3)

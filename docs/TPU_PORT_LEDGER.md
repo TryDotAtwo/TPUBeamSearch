@@ -641,3 +641,10 @@ Three local fixture/integration/trace tests passed in7.91 s
 (`local_s5_epoch_probe.xml`). This probe is prepared but not submitted and is
 not part of queued S4/S5 V1. It tests frozen/serialized epochs, not concurrent
 S4 writers, reader lifetime overlap, final drain wiring or whole-beam speed.
+
+S5 composition supplement: `local_s5_epoch_versions.xml`,10 tests passed
+in13.25 s. Three successive epochs switch committed histogram A -> B -> A;
+the selected threshold changes20 ->3 ->3. Two UINT32_MAX shard contributions
+and beam2**32 exercise local snapshot carry through threshold selection.
+This rejects stale-version reads and periodic relaxation locally, not actual
+concurrent writer races or distributed TPU behavior.
