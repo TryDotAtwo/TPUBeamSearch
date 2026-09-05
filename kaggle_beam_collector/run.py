@@ -1,10 +1,10 @@
-"""Pinned private collector recovery V3, conditional integrated S3 gate."""
+"""Pinned private collector recovery V4, conditional integrated S3 gate."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = '12aae5b085a58ff81eec60ac1eb73009cae927c0'
+COMMIT_SHA = '147361e6b61e22cddbba22be9c3275a1b3b5c755'
 CHECKOUT = Path('/tmp/TPUBeamSearch-collector')
 OUTPUT = Path('/kaggle/working/beam_collector_recovery')
 
