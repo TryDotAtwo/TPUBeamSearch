@@ -512,3 +512,16 @@ COMPLETE Kaggle status. Cross-process results are not matched latency ratios.
 6. Compare whole GPU/TPU depths, selected identities, hashes, parents/routes,
    history replay, overflows, ties, valid counts and solutions; separately measure
    runtime and overlap. Record any allowed layout/scheduling changes explicitly.
+
+### Stream2 K1 composition — local only, 2026-09-06
+
+`beam_stream2_k1.pallas_hash_k1_goal` preserves immediate-child hashes and
+validity, then replaces exact-central flags with full-Hash128 K1 membership.
+Parent-to-child count conversion is a Pallas dispatch. The existing Stream2
+default remains unchanged. Caller supplies an enabled K1 table containing the
+central state; K2 projections and solved-record collection are not included.
+
+Regression: `local_stream2_k1_regression.xml`, 14 passed in 19.94 s, covering
+zero/partial/full parent counts plus lookup and neighborhood preparation.
+This is CPU TPU-interpreter evidence, not physical TPU compilation or speed.
+Collector V4 remains QUEUED at this checkpoint and was not restarted.
