@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = '163c88cbf83d8adce89192b5e01db20a66c0ee0a'
+COMMIT_SHA = '503043b0375a4b78bb761da41156823d125d9a90'
 CHECKOUT = Path('/tmp/TPUBeamSearch-external-dedup')
 OUTPUT = Path('/kaggle/working/beam_external_dedup')
 
