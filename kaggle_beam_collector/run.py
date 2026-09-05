@@ -1,12 +1,12 @@
-"""Pinned private serialized collector gate."""
+"""Pinned private sequential collector bundle V2."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = '6d303eb2698b15e6a2bce925c3adc141735bafa8'
+COMMIT_SHA = 'bad92c169a1001878ccb625f609c6cb634585b53'
 CHECKOUT = Path('/tmp/TPUBeamSearch-collector')
-OUTPUT = Path('/kaggle/working/beam_collector')
+OUTPUT = Path('/kaggle/working/beam_collector_bundle')
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
         XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
         PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))))
     OUTPUT.mkdir(parents=True,exist_ok=True)
-    subprocess.run((sys.executable,'-m','benchmarks.beam_collector_probe',
+    subprocess.run((sys.executable,'-m','benchmarks.beam_collector_bundle',
         '--output',str(OUTPUT)),cwd=CHECKOUT,env=env,check=True)
 
 
