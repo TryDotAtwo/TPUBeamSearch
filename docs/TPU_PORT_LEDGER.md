@@ -3,6 +3,14 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Variable-count snapshot transport has been extracted from the diagnostic
+benchmark into `beam_remote_exchange.py`. The function body is unchanged
+(compared directly with the prior Git version); the benchmark imports it.
+Eleven related local tests pass (1.70 s), including a new traced output-ABI
+test that was red before extraction. This is not fresh physical execution.
+Nonzero copies still transfer full capacity and keep one snapshot per epoch;
+neither direct collector integration nor count-proportional traffic is proved.
+
 Multi-tile collector extension is under local validation:
 `pallas_collector_append_group` preflights the entire group against one sibling
 before any per-tile append, so insufficient whole-group capacity cannot produce
