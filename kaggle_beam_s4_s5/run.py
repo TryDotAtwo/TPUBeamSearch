@@ -1,10 +1,10 @@
-"""Pinned private S4/S5 isolated physical gates, V1."""
+"""Pinned private S5 isolated recovery gates, V2; accepted S4 is not repeated."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = 'c35734079bb117322fbaaee72fd1d4e20191eab8'
+COMMIT_SHA = '03823936c339a7a57305474e35f938b3b0a556ef'
 CHECKOUT = Path('/tmp/TPUBeamSearch-s4-s5')
 OUTPUT = Path('/kaggle/working/beam_s4_s5')
 
@@ -20,7 +20,7 @@ def main():
         PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))))
     OUTPUT.mkdir(parents=True,exist_ok=True)
     subprocess.run((sys.executable,'-m','benchmarks.beam_s4_s5_bundle',
-        '--output',str(OUTPUT)),cwd=CHECKOUT,env=env,check=True)
+        '--output',str(OUTPUT),'--recovery'),cwd=CHECKOUT,env=env,check=True)
 
 
 if __name__ == '__main__':
