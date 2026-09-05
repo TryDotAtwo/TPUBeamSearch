@@ -733,3 +733,10 @@ return zero validity/rank/local; modulo low-word subtraction is exact only
 under the explicit per-target uint32 capacity contract. Boundary construction,
 global cap/prefix collectives and integration remain separate unfinished work.
 This primitive supports up to127 ranks and has no physical TPU acceptance yet.
+
+`pallas_final_plan` composes balance and request construction without JAX
+arithmetic. Six local tests passed in4.49s (`local_final_plan.xml`), including
+a JIT composition with distinct source6/owner4/variable return rank and
+nonzero high parent word. Validity is explicit: inactive request words must
+not be sent; compaction/exchange and upstream exact-cap indices remain
+caller responsibilities, not implemented by this composition.
