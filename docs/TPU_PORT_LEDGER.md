@@ -684,3 +684,14 @@ logical/tile widths and targets with high bits set:2 passed in3.23 s
 compaction to persistent16-byte-aligned width remains separate. Parent move
 materialization, response exchange and indexed frontier scatter are absent.
 Only CPU interpreter evidence, not a physical byte-layout compile acceptance.
+
+`pallas_materialize_final` connects validation/summary to conditional parent
+HBM DMA, move application and target-byte response packing. Any invalid request
+blocks parent reads for the entire batch and returns zero wire plus errors.
+Local parent capacity fits signed32; comparison still rejects nonzero high
+parent words before indexing. Eight targeted final tests passed in8.49 s
+(`local_final_materialize.xml`), including race-interpreted valid output and
+invalid-high-parent rejection. Caller still validates return ranks and count
+bounds, gates sending, and owns parent lifetime. One DMA/request and tile-padded
+responses are diagnostic; no physical compile, exchange, frontier scatter or
+whole final acceptance is claimed.
