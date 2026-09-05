@@ -1,12 +1,12 @@
-"""Pinned private sequential collector bundle V2."""
+"""Pinned private collector recovery V3, conditional integrated S3 gate."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = 'bad92c169a1001878ccb625f609c6cb634585b53'
+COMMIT_SHA = '12aae5b085a58ff81eec60ac1eb73009cae927c0'
 CHECKOUT = Path('/tmp/TPUBeamSearch-collector')
-OUTPUT = Path('/kaggle/working/beam_collector_bundle')
+OUTPUT = Path('/kaggle/working/beam_collector_recovery')
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
         XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
         PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))))
     OUTPUT.mkdir(parents=True,exist_ok=True)
-    subprocess.run((sys.executable,'-m','benchmarks.beam_collector_bundle',
+    subprocess.run((sys.executable,'-m','benchmarks.beam_collector_recovery_bundle',
         '--output',str(OUTPUT)),cwd=CHECKOUT,env=env,check=True)
 
 
