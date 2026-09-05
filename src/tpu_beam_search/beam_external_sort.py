@@ -213,3 +213,86 @@ def pallas_external_stream3_dedup(words, payload, count, threshold, *,
         in_specs=(pl.BlockSpec(counts.shape),), out_specs=pl.BlockSpec((1, 128)),
         grid=(), interpret=interpret, name='beam_external_total_count')(counts)
     return result, total
+
+
+def pallas_external_stream3_split(words, owners, count, *, local_rank,
+                                  world_size, interpret=False):
+    """External stable partition with supplied valid owners; no owner hash/cap.
+
+    Count is aligned [1,128], lane zero; owners must be < world_size.
+    This diagnostic baseline performs two HBM sorts, not a scalable scatter.
+    """
+    if not isinstance(world_size, int) or not 1 <= world_size <= 256:
+        raise ValueError('invalid world_size')
+    if local_rank is not None and not 0 <= local_rank < world_size:
+        raise ValueError('invalid local_rank')
+    if words.ndim != 2 or words.shape[0] != 8 or words.dtype != jnp.uint32:
+        raise ValueError('words must be uint32 [8,N]')
+    n = words.shape[1]
+    if n < 128 or n > 16384 or n & (n-1):
+        raise ValueError('capacity must be power of two in [128,16384]')
+    if owners.shape != (1, n) or owners.dtype != jnp.uint32:
+        raise ValueError('owners must be uint32 [1,N]')
+    if count.shape != (1, 128) or count.dtype != jnp.uint32:
+        raise ValueError('count must be uint32 [1,128]')
+    tiles = n // 128
+    width = ((world_size + 128) // 128) * 128
+    ws = pl.BlockSpec((8, 128), lambda b: (0, b))
+    ds = pl.BlockSpec((11, 128), lambda b: (0, b))
+    cs = pl.BlockSpec((world_size+1, 128), lambda b: (0, b))
+
+    def prepare(w, o, c, lo, ro, totals):
+        rank = jnp.asarray(jax.lax.axis_index('core') if local_rank is None
+                           else local_rank, jnp.uint32)
+        index = (pl.program_id(0)*128 + jnp.arange(128)).astype(jnp.uint32)
+        valid = index < c[0, 0]
+        owner = o[0]
+        local = valid & (owner == rank)
+        remote = valid & (owner != rank)
+        route = (rank << 16) | (owner << 8) | (w[7] & 255)
+        records = jnp.concatenate((w[:7], route[None]), axis=0)
+        lo[...] = jnp.concatenate((records, o[...], local[None].astype(jnp.uint32), index[None]))
+        ro[...] = jnp.concatenate((records, o[...], remote[None].astype(jnp.uint32), index[None]))
+        amounts = [jnp.sum(local.astype(jnp.int32)).astype(jnp.uint32)]
+        for peer in range(world_size):
+            amounts.append(jnp.sum((remote & (owner == peer)).astype(jnp.int32)).astype(jnp.uint32))
+        totals[...] = jnp.stack(amounts)[:, None] * (jnp.arange(128)[None] == 0).astype(jnp.uint32)
+
+    lo, ro, totals = pl.pallas_call(prepare,
+        out_shape=(jax.ShapeDtypeStruct((11, n), jnp.uint32),
+                   jax.ShapeDtypeStruct((11, n), jnp.uint32),
+                   jax.ShapeDtypeStruct((world_size+1, n), jnp.uint32)),
+        in_specs=(ws, pl.BlockSpec((1,128), lambda b: (0,b)), pl.BlockSpec(count.shape)),
+        out_specs=(ds, ds, cs), grid=(tiles,), interpret=interpret,
+        name='beam_external_split_prepare')(words, owners, count)
+    lo = pallas_external_bitonic_sort(lo, key_planes=(9,10), validity_plane=9, interpret=interpret)
+    ro = pallas_external_bitonic_sort(ro, key_planes=(9,8,10), validity_plane=9, interpret=interpret)
+
+    def finish(data, out):
+        neutral = jnp.where(jnp.arange(8)[:,None] == 6, jnp.uint32(0xffffffff), jnp.uint32(0))
+        out[...] = jnp.where(data[9:10] != 0, data[:8], neutral)
+
+    def strip(data):
+        return pl.pallas_call(finish, out_shape=jax.ShapeDtypeStruct((8,n),jnp.uint32),
+            in_specs=(ds,), out_specs=ws, grid=(tiles,), interpret=interpret,
+            name='beam_external_split_finish')(data)
+
+    def controls(t, lc, counts, offsets):
+        positions = jnp.arange(width)[None]
+        lc[...] = (positions == 0).astype(jnp.uint32) * jnp.sum(t[0].astype(jnp.int32)).astype(jnp.uint32)
+        counts_value = jnp.zeros((1,width), jnp.uint32)
+        offsets_value = jnp.zeros((1,width), jnp.uint32)
+        running = jnp.uint32(0)
+        for peer in range(world_size):
+            amount = jnp.sum(t[peer+1].astype(jnp.int32)).astype(jnp.uint32)
+            counts_value += (positions == peer).astype(jnp.uint32)*amount
+            running += amount
+            offsets_value += (positions == peer+1).astype(jnp.uint32)*running
+        counts[...] = counts_value
+        offsets[...] = offsets_value
+
+    shape = jax.ShapeDtypeStruct((1,width),jnp.uint32)
+    lc, counts, offsets = pl.pallas_call(controls, out_shape=(shape,shape,shape),
+        in_specs=(pl.BlockSpec(totals.shape),), out_specs=(pl.BlockSpec(shape.shape),)*3,
+        grid=(), interpret=interpret, name='beam_external_split_controls')(totals)
+    return strip(lo), strip(ro), lc, counts, offsets

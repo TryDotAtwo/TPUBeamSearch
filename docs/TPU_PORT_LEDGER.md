@@ -10,6 +10,18 @@ mismatches and equal output hashes, diagnostic medians 0.72310/0.76190 ms.
 This closes the external dedup scratch-layout gate only. Routing after dedup,
 collector integration, larger-N efficiency and whole GPU/TPU replay remain open.
 
+External S3 split now has a diagnostic Pallas implementation in
+`beam_external_sort.py`, using tiled external sorts instead of whole-N gather.
+It consumes supplied owners and aligned `[1,128]` counts, preserving stable
+local/owner-grouped remote order, route fields, parent high words and neutral
+tails. Four N256 tests were observed red before implementation and then passed
+in 64.17 s. Full local suite including original CPU C++ oracle: 626 passed in
+422.43 s. This is not physical split evidence or composed source-owner parity.
+The `(world_size+1,N)` count scratch still uses a whole-window reduction and
+must be checked for physical lowering/VMEM limits; it is not an efficiency claim.
+After the full run, coverage was extended to mixed N512: all five split tests
+passed in 75.84 s. No production code changed after that full run.
+
 | Contract | Implementation/evidence | Remaining acceptance |
 |---|---|---|
 | Logical types / uint32 SoA | beam_types.py; high-word and padding tests | all consumers, physical TPU |
