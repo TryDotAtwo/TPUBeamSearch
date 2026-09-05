@@ -648,3 +648,15 @@ the selected threshold changes20 ->3 ->3. Two UINT32_MAX shard contributions
 and beam2**32 exercise local snapshot carry through threshold selection.
 This rejects stale-version reads and periodic relaxation locally, not actual
 concurrent writer races or distributed TPU behavior.
+
+### Final request wire assembly — 2026-09-06
+
+`beam_final_request.pallas_final_requests` creates four uint32 request planes
+matching FinalRequest's parent64/target32/return16/move8/pad8 fields and a
+separate source-rank plane for grouping. It retains parent high words and
+does not confuse source, owner and return ranks. Inputs require validated
+targets/parents/return ranks and a separate valid count before sending.
+One targeted two-tile interpreter test passed in3.15 s
+(`local_final_request.xml`). This is wire assembly only, not validation,
+cap/ties/balance, request exchange, response generation or final acceptance.
+The source types and ARCHITECTURE_NEED final section were read-only inspected.
