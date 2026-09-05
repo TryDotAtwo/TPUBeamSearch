@@ -178,3 +178,25 @@ including missing/malformed reports and native-abort return codes retaining
 partial logs without promoting the integrated gate. This is local evidence,
 not physical TPU confirmation. Collector V3 will first retry the full collector
 and only then run integrated S3 in a sequential child process if full is exact.
+
+## Periodic threshold publication
+
+`pallas_publish_periodic_threshold` adds aliased threshold A/B slots, each
+containing threshold and initialized in lane0, with a separate active index.
+It preserves the old active slot, writes and waits for the inactive value/init,
+then switches the active index via a waited control DMA. Like the source
+periodic branch, it flips even when the selected value is unchanged; initialized
+thresholds never relax. Final selection has different semantics and cannot use
+this periodic publisher.
+
+The missing-module test failed before implementation; all10 cases then passed
+TPU interpreter race detection in5.36 s. Evidence:
+`test_results/local_threshold_publish_regression.xml`. Physical compilation,
+SPMD request/reduction, and reader ownership across repeated slot reuse remain
+unverified. The caller must serialize publishers and finish captured reads
+before reusing an inactive slot; this function alone does not enforce that.
+
+Full local regression including this addition completed as session48457:
+732 passed in1064.69 s, zero failures/errors/skips. Artifact:
+`test_results/local_threshold_publish_full_regression.xml`. Later S5 modules
+are separately covered by the21-test supplement, not by that full run.
