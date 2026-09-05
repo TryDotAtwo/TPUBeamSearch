@@ -1,0 +1,35 @@
+{
+  "scope": "CPU original Stream3 oracle; not CUDA",
+  "source_commit": "b5fcf6b0ee3247a1f189e6da79a1641d2304bd1c",
+  "source_dirty": true,
+  "adapter_sha256": "5ae1227e69ee064f8504e96415697041489ad285a7bcd2485aedfd3738c569e3",
+  "executable_sha256": "3be54a89e166ab5a843dec86557fe123122a36d257ac8b8347b4e6511b14d120",
+  "source_files": {
+    "config.hpp": "91329b4d68b3e3fe6be2e88defdd90e5b293a22c7083391ee69a5ba67e04ba52",
+    "frontier_cpu.hpp": "360d27441ee564aee182ae36634bb693f488b3ba1782e4e28d8e68eb0f7ece73",
+    "hash.hpp": "361756fe2de60ae9393f0e60f6be80c697e9b84c58fbaedbc75d1c5d8162016c",
+    "history.hpp": "0221ba1a9ce1dd061671434cf3cdbd118eec5ef612a23b5bd02fc869ad6f0753",
+    "state.hpp": "e8f5e54396bf617a36edf5ef41a0db5f992b63ef18a96a98826288db379db446",
+    "stream3.hpp": "25d5c4a88fa779c6dac1656e84e8e1f9efb8cc7879d2c56534539aa5f27366f8",
+    "stream4.hpp": "041c355de4f28f7613946e727e17d5a046b97884668571e2c2f801120fc7542e",
+    "types.hpp": "504c54cf72870da281d13e4a68871ccf1a4f061755d7acfdf456818cf7e98a5f",
+    "hash.cpp": "369b34d3eaa526b002b553ee4bf2e9ee1eccd69861c6cac7f1d06a5162b65136",
+    "state.cpp": "7094caed55c9876eb496a4e5c705b814309b5d3807b7e935712b78d09614406c",
+    "stream3.cpp": "584d37e0c96d581174359932a2fe04df76cbfdfca12b44b0a5df75c3aec1d2b5",
+    "stream4.cpp": "d233acefb23c030057de8a92f6de1fda55617ef925d757a49d7742b736bb72f2"
+  },
+  "cases": [
+    {
+      "capacity": 256,
+      "file": "stream3_256.npz",
+      "sha256": "a9cab64a65af5f5f9c1fcaa062902a39dbbcf6af5a720dd728b9ab5954a5b315",
+      "seed": 6837
+    },
+    {
+      "capacity": 512,
+      "file": "stream3_512.npz",
+      "sha256": "62e5d4703f0ca0ff1f424feecff97220ab3e5702f9cc926a1e95da6c14c49b51",
+      "seed": 7093
+    }
+  ]
+}
