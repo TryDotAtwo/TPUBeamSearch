@@ -627,3 +627,17 @@ trace does not prove branch uniformity or distributed execution. Physical
 S4/S5 V1 contains primitives only, not this composition. Full regression785
 predates these additions. The multi-rank epoch and pre-final caller wiring
 remain pending physical acceptance.
+
+### Prepared state-carrying S5 epoch probe — 2026-09-06
+
+`benchmarks.beam_s5_epoch_probe` executes20 epochs on one eight-TPU executable:
+zero, each singleton requester, all requesters, repeated. Only rank5 has a
+nonzero committed histogram. Actual device threshold slots/active/counters
+feed the next call; host expected state is used only for comparison. Partial
+JSON records each input/expected/output hash and mismatch; runtime, source,
+device inventory and compiled HLO are retained. Non-TPU execution is rejected.
+
+Three local fixture/integration/trace tests passed in7.91 s
+(`local_s5_epoch_probe.xml`). This probe is prepared but not submitted and is
+not part of queued S4/S5 V1. It tests frozen/serialized epochs, not concurrent
+S4 writers, reader lifetime overlap, final drain wiring or whole-beam speed.
