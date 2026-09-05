@@ -747,3 +747,9 @@ required order is phase -> rank -> shard/slot, not score-sort order. The
 dispatcher requires L<=K; integration must fail explicitly if threshold
 violates it. Stable phase compaction and collective pair-word prefixes remain
 the next missing inputs to final_plan; no source execution claim is added.
+
+`pallas_final_phase_masks` marks less/equal phases over clean shard prefixes,
+preserving shard/slot layout and unsigned score comparisons. One local test
+with three thresholds passed in3.55s (`local_final_phase.xml`), including
+dirty padding and UINT32_MAX keys. Counts/scan/compaction are still pending;
+no physical TPU acceptance is claimed. S5 recovery V2 observed RUNNING.
