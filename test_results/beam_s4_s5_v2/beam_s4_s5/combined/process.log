@@ -1,0 +1,15 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788652089.068943    2950 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: === 
+learning/45eac/tfrc/runtime/common_lib.cc:238
+recovery0_0
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/TPUBeamSearch-s4-s5/benchmarks/beam_s5_request_probe.py", line 117, in <module>
+    main()
+  File "/tmp/TPUBeamSearch-s4-s5/benchmarks/beam_s5_request_probe.py", line 110, in main
+    raise RuntimeError(f'{name}: {args.kind} mismatch')
+RuntimeError: recovery0_0: combined mismatch

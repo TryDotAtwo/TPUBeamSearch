@@ -753,3 +753,10 @@ preserving shard/slot layout and unsigned score comparisons. One local test
 with three thresholds passed in3.55s (`local_final_phase.xml`), including
 dirty padding and UINT32_MAX keys. Counts/scan/compaction are still pending;
 no physical TPU acceptance is claimed. S5 recovery V2 observed RUNNING.
+
+S5 V2 subsequently terminal ERROR, full output downloaded to beam_s4_s5_v2.
+Request20/20 and synthetic reduction8/8 exact; raw wire first nonzero input
+32704 mismatches, combined4096. Wire output matches all-zero fixture SHA.
+Failure isolated before pair reduction, not yet a concrete source cause.
+See research/2026-09-06-s4-s5-v2-results.md. No active TPU session remains;
+do not rerun accepted groups before planning the next transport isolation.

@@ -1,0 +1,22 @@
+[{"stream_name":"stderr","time":21.260197904,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":22.579379043,"data":"\n"}
+,{"stream_name":"stderr","time":22.579401883,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":22.579407033,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":22.721367426,"data":"Cloning into '/tmp/TPUBeamSearch-s4-s5'...\n"}
+,{"stream_name":"stderr","time":33.140897076,"data":"Updating files:  93% (3776/4053)\rUpdating files:  94% (3810/4053)\rUpdating files:  95% (3851/4053)\rUpdating files:  96% (3891/4053)\rUpdating files:  97% (3932/4053)\rUpdating files:  98% (3972/4053)\rUpdating files:  99% (4013/4053)\rUpdating files: 100% (4053/4053)\rUpdating files: 100% (4053/4053), done.\n"}
+,{"stream_name":"stderr","time":36.638247394,"data":"HEAD is now at 0382393 Fix S5 unsigned request reduction and isolate histogram recovery\n"}
+,{"stream_name":"stdout","time":36.685484079,"data":"GROUP request\n"}
+,{"stream_name":"stdout","time":60.173532082,"data":"GROUP wire\n"}
+,{"stream_name":"stdout","time":76.341077875,"data":"GROUP reduction\n"}
+,{"stream_name":"stdout","time":94.148542902,"data":"GROUP combined\n"}
+,{"stream_name":"stderr","time":113.901613135,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":113.901664095,"data":"  File \"/kaggle/src/script.py\", line 27, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":113.901695735,"data":"    main()\n"}
+,{"stream_name":"stderr","time":113.901703315,"data":"  File \"/kaggle/src/script.py\", line 22, in main\n"}
+,{"stream_name":"stderr","time":113.901800915,"data":"    subprocess.run((sys.executable,'-m','benchmarks.beam_s4_s5_bundle',\n"}
+,{"stream_name":"stderr","time":113.901817095,"data":"  File \"/usr/local/lib/python3.12/subprocess.py\", line 571, in run\n"}
+,{"stream_name":"stderr","time":113.904824675,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":113.904861055,"data":"subprocess.CalledProcessError: Command '('/usr/local/bin/python', '-m', 'benchmarks.beam_s4_s5_bundle', '--output', '/kaggle/working/beam_s4_s5', '--recovery')' returned non-zero exit status 1.\n"}
+,{"stream_name":"stderr","time":118.230593558,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":120.480415236,"data":"[NbConvertApp] Writing 278183 bytes to __results__.html\n"}
+]
