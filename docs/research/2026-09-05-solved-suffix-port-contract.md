@@ -69,3 +69,20 @@ check move<32; decoding masks5bits. Reject MOVE_COUNT>32 for the TPU packed
 suffix ABI instead of truncating, unless a wider representation is explicitly
 designed and tested. This startup guard does not modify read-only CUDA source.
 Current24/30-move workloads fit.
+
+## Immutable TPU table preparation
+
+`prepare_k2_suffix_table` now prepares three128-aligned uint32 planes: packed
+moves low/high and length, with an explicit valid count. Padding is never an
+additional empty suffix. Entries preserve source BFS chain order (no state
+dedup), and the first move occupies the lowest5bits. Geometry checks reject
+MOVE_COUNT>32 and direct radius>3 before allocation. The max-count guard checks
+the exact geometric count before allocating. Radius0 returns one canonical
+empty entry; runtime disabling remains a separate caller decision.
+
+The missing-module test was red; eight host tests pass in2.97 s, including
+manual two-move order,24/30-move counts14425/27931, padding and bounds. Artifact:
+`test_results/local_suffix_table_regression.xml`. This is source-inspected host
+preparation, not execution of the original C++ builder, not a Pallas suffix
+scan, and not K1/K2 CUDA/TPU acceptance. Device lookup, first-hit selection and
+full reconstructed-solution replay remain outstanding.
