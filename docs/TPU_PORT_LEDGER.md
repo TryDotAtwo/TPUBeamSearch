@@ -676,3 +676,11 @@ ordered output state. Four targeted summary/validation tests passed in4.29 s
 (`local_final_error_summary.xml`), including errors across tile127/128 and255.
 This CPU-interpreter evidence does not validate physical ordered scheduling or
 wire up the materialization gate; no parent memory is read by this primitive.
+
+`beam_final_response` packs target_local_idx little-endian at logical STATE_LEN
+and decodes it while clearing all state padding. Tests cover120/128 and150/256
+logical/tile widths and targets with high bits set:2 passed in3.23 s
+(`local_final_response.xml`). These are uint8 TPU tile-padded rows; transport
+compaction to persistent16-byte-aligned width remains separate. Parent move
+materialization, response exchange and indexed frontier scatter are absent.
+Only CPU interpreter evidence, not a physical byte-layout compile acceptance.
