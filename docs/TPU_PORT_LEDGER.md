@@ -669,3 +669,10 @@ Padding is excluded by count. Two targeted interpreter tests passed in3.46 s
 (`local_final_validation.xml`). Error aggregation, return-rank validation and
 gating materialization remain caller responsibilities; no invalid-batch stop
 or physical/CUDA acceptance is claimed.
+
+`pallas_final_error_summary` aggregates masked reason tiles into invalid count
+and first index (UINT32_MAX for none) with bounded128-lane reads and shared
+ordered output state. Four targeted summary/validation tests passed in4.29 s
+(`local_final_error_summary.xml`), including errors across tile127/128 and255.
+This CPU-interpreter evidence does not validate physical ordered scheduling or
+wire up the materialization gate; no parent memory is read by this primitive.
