@@ -105,6 +105,18 @@ This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
 
+External S3 threshold/dedup now has a tiled Pallas candidate implementation in
+`beam_external_sort.py`: inclusive threshold, Hash128/score/payload sorting,
+predecessor comparison across tiles, stable compaction and neutral/count output.
+Routing remains after dedup. It retains parent high words and applies no cap.
+Eight focused interpreter tests pass; physical TPU acceptance is pending.
+Full regression: 614 passed, 5 skipped in 360.46s; the five optional original
+C++ checks passed separately with BEAM_SOURCE_ORACLE set. A subsequently added
+256-record original Stream3 C++ comparison also passed (four new-file tests).
+The compiled C++ adapter is a CPU oracle, not CUDA execution evidence.
+The temporary N<=16384 bound limits count scratch; 36/45-pass sorts at N256/512
+and a second compaction sort are diagnostic, not the final scalable algorithm.
+
 External HBM sort V1 is physically exact on eight TPU v5 lite devices; see
 `test_results/beam_external_sort_v1/report.md`. N=256 with 128-column tiles
 matches all 11 uint32 planes and output SHA256. Median diagnostic latency is
