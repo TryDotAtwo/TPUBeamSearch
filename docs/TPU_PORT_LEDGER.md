@@ -556,3 +556,21 @@ The Python static suffix loop expands dispatches and loads projection in VMEM;
 it is a diagnostic baseline, not a scalable production K2 implementation.
 Next integration must replace it with bounded device iteration and connect the
 solved-capacity/overflow/stop protocol before claiming full Stream2 acceptance.
+
+### Solved collection functional baseline — 2026-09-06
+
+`beam_solved_collect.pallas_collect_solved` accepts ten prepared record planes
+(eight CandidateMeta, depth, suffix ID) and found flags. It preserves existing
+arena entries, increments attempted count even after capacity exhaustion,
+sets sticky overflow and solved flags, and sets stop only on the first solved
+transition when enabled. Caller guarantees the uint32 counter does not wrap.
+This follows inspected `cuda/stream2.cu` control semantics, not CUDA execution.
+
+`local_solved_collect_regression.xml`: 4 targeted tests passed in 6.73 s.
+Empty, partial/full/over-capacity counts, stop disabled, and preexisting solved
+flag are covered. CPU interpreter only. Deterministic candidate-order append
+is a serialized baseline (CUDA atomics do not promise ordering). Full arenas
+are in VMEM and outputs are functional, not aliased publication: caller awaits
+the whole call before exposing results. HBM-scale compaction, metadata wiring,
+concurrent publication and coordinated stop remain outstanding. No timing or
+full-suite/physical acceptance claim is made for this addition.
