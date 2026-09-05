@@ -600,3 +600,14 @@ also match. See `research/2026-09-06-collector-v4-results.md` and complete
 `test_results/beam_collector_v4/` artifacts. Medians0.718910/0.913981 ms are
 different diagnostic workloads, not matched A/B or full-beam throughput.
 Do not rerun V4; next physical gate is the prepared S4/S5 isolated bundle.
+
+### S5 local epoch state — 2026-09-06
+
+`beam_s5_epoch_state` forms forced/periodic request from completed jobs and
+updates counters only when passed a publication-complete flag. Zero preserves
+state; successful publication increments updates and clears jobs/requests.
+Six targeted interpreter tests passed in4.09 s (`local_s5_epoch_state.xml`).
+This is not a DMA fence or full coordinated epoch: caller must establish common
+publication completion and exclusive ownership. These tests postdate the785
+test full regression. Physical S4/S5 V1 is queued at source c357340; this new
+local helper is not part of that remote run. No defaults changed.
