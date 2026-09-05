@@ -296,3 +296,19 @@ def pallas_external_stream3_split(words, owners, count, *, local_rank,
         in_specs=(pl.BlockSpec(totals.shape),), out_specs=(pl.BlockSpec(shape.shape),)*3,
         grid=(), interpret=interpret, name='beam_external_split_controls')(totals)
     return strip(lo), strip(ro), lc, counts, offsets
+
+
+def pallas_external_stream3(words, payload, count, threshold, *, local_rank,
+                            world_size, interpret=False):
+    """S3 threshold/dedup then real owner and split, before collector/RDMA.
+
+    Candidate parent/move metadata must already correspond to each payload.
+    Slices are static ABI views; all score/hash/partition arithmetic is Pallas.
+    """
+    from .beam_hash import pallas_route_hashes
+    unique, amount = pallas_external_stream3_dedup(
+        words, payload, count, threshold, interpret=interpret)
+    routing = pallas_route_hashes(unique[:4], world_size=world_size,
+                                  shard_count=1, interpret=interpret)
+    return pallas_external_stream3_split(unique, routing[:1], amount,
+        local_rank=local_rank, world_size=world_size, interpret=interpret)

@@ -3,6 +3,16 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Composed external S3 now executes threshold/dedup -> actual Hash128 owner ->
+external split in `pallas_external_stream3`. An original C++ Stream3 oracle
+fixture (N256, world8, rank3, threshold5, reverse payload tie priority and
+nonzero parent high words) was red before implementation, then passed in
+35.11 s. It checks local/remote metadata, counts, offsets and neutral tails.
+Full local regression: 629 passed in 428.54 s with CPU C++ oracle enabled.
+This is interpreter/source parity, not physical composed TPU or CUDA evidence.
+Metadata must already correspond to payload IDs; ring payload restoration,
+collector and transport are not implemented by this composition wrapper.
+
 External S3 split V1 is physically exact at N256/512/1024 on eight TPU v5 lite;
 see `test_results/beam_external_split_v1/report.md`. All five output arrays
 match independent partition expectations and hashes. Diagnostic medians are
