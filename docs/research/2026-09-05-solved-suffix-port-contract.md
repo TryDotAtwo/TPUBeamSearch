@@ -100,3 +100,18 @@ cross-tile interpreter cases pass against explicit forward NumPy application.
 The combined table/projection suite passes10 tests in3.53 s:
 `test_results/local_suffix_projection_regression.xml`. Physical Mosaic
 compilation, real24/30-move memory/timing and K1/K2 integration remain open.
+
+## K1 fingerprint and bucket keys
+
+`pallas_k1_keys` reuses the uint32-pair distribution arithmetic with the source
+fingerprint/bucket salts. Fingerprint is low XOR high, mapping0 to1; both bucket
+keys take low32 and mask by bucket_count-1. Original `src/hash.hpp` SHA256:
+`361756fe2de60ae9393f0e60f6be80c697e9b84c58fbaedbc75d1c5d8162016c`.
+
+The local C++ oracle adapter now exposes `k1keys` calling those original inline
+functions, without modifying D:/100XH100. After a missing-module red test,
+256 edge/random hashes match for1/32/1024 buckets, including a constructed zero
+fingerprint preimage. The combined new/source parity tests pass9 in32.23 s:
+`test_results/local_k1_keys_regression.xml`. This is original C++ on CPU versus
+Pallas interpreter, not CUDA or physical TPU execution. Actual four-slot,
+two-bucket lookup and full Hash128 collision checking still need implementation.

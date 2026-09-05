@@ -9,6 +9,21 @@
 #include <vector>
 
 int main(int argc, char** argv) {
+    if (argc == 2 && std::string(argv[1]) == "k1keys") {
+        unsigned count, buckets;
+        if (!(std::cin >> count >> buckets) || buckets == 0
+            || (buckets & (buckets - 1)) != 0 || buckets > (1U << 30)) return 2;
+        for (unsigned i = 0; i < count; ++i) {
+            std::uint64_t w[4];
+            for (auto& x : w) std::cin >> x;
+            if (!std::cin) return 3;
+            const beam::Hash128 hash{w[0] | (w[1] << 32), w[2] | (w[3] << 32)};
+            std::cout << beam::hash128_fingerprint32(hash) << ' '
+                      << (static_cast<std::uint32_t>(beam::hash128_bucket_key_0(hash)) & (buckets - 1)) << ' '
+                      << (static_cast<std::uint32_t>(beam::hash128_bucket_key_1(hash)) & (buckets - 1)) << '\n';
+        }
+        return 0;
+    }
     if (argc == 2 && std::string(argv[1]) == "route") {
         unsigned count, world, shards;
         if (!(std::cin >> count >> world >> shards)
