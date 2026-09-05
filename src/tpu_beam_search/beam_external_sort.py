@@ -143,6 +143,22 @@ def pallas_external_bitonic_sort(data, *, key_planes, tile_candidates=128,
 
 def pallas_external_stream3_dedup(words, payload, count, threshold, *,
                                   tile_candidates=128, interpret=False):
+    return _pallas_external_dedup(words,payload,count,threshold,
+        mode='stream3',tile_candidates=tile_candidates,interpret=interpret)
+
+
+def pallas_external_stream4_dedup(words,count,threshold,*,tile_candidates=128,interpret=False):
+    """HBM-staged S4 semantics, no shard cap; not resident publication yet.
+
+    The unused payload plane borrows a metadata view. S4 winner keys never
+    inspect it: score, full uint64 parent, then route choose the winner.
+    """
+    return _pallas_external_dedup(words,words[:1],count,threshold,
+        mode='stream4',tile_candidates=tile_candidates,interpret=interpret)
+
+
+def _pallas_external_dedup(words,payload,count,threshold,*,mode,
+                          tile_candidates=128,interpret=False):
     """HBM-staged S3 threshold/sort/unique/compact baseline, before routing.
 
     Count must be in [0,N]; payload IDs identify source records. No beam cap
@@ -178,8 +194,10 @@ def pallas_external_stream3_dedup(words, payload, count, threshold, *,
                   pl.BlockSpec((1,), lambda b: (0,))),
         out_specs=data_spec, grid=(tiles,), interpret=interpret,
         name='beam_external_threshold')(words, payload, count, threshold)
+    keys = ((9,3,2,1,0,6,8,10) if mode == 'stream3'
+            else (9,3,2,1,0,6,5,4,7,10))
     data = pallas_external_bitonic_sort(data,
-        key_planes=(9, 3, 2, 1, 0, 6, 8, 10), validity_plane=9,
+        key_planes=keys, validity_plane=9,
         tile_candidates=tile_candidates, interpret=interpret)
     data = pallas_mark_sorted_unique(data, tile_candidates=tile_candidates,
                                      interpret=interpret)

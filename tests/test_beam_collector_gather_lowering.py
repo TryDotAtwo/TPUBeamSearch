@@ -37,3 +37,27 @@ def test_collector_gathers_meet_mosaic_take_along_axis_shape_contract(kind):
         result = eqn.outvars[0].aval.shape
         assert len(operand) == len(result)
         assert indices == (*result,1), (operand,indices,result)
+
+
+def test_scatter_has_no_dynamic_scalar_vmem_offset_load():
+    shapes = ((2,8,512),(2,8,512),(8,512),(2,8,128),(1,128),(1,128))
+    traced = jax.make_jaxpr(pallas_collector_scatter)(
+        *(jax.ShapeDtypeStruct(s,jnp.uint32) for s in shapes))
+    def walk(node):
+        if hasattr(node,'jaxpr'):
+            yield from walk(node.jaxpr)
+        elif hasattr(node,'eqns'):
+            for eqn in node.eqns:
+                yield eqn
+                yield from walk(eqn.params)
+        elif isinstance(node,dict):
+            for value in node.values():
+                yield from walk(value)
+        elif isinstance(node,(tuple,list)):
+            for value in node:
+                yield from walk(value)
+    bad = [eqn for eqn in walk(traced) if eqn.primitive.name == 'get'
+           and getattr(eqn.invars[0].aval,'shape',None) == (1,128)
+           and eqn.outvars[0].aval.shape == ()
+           and any(not hasattr(v,'val') for v in eqn.invars[1:])]
+    assert not bad, bad

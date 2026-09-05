@@ -3,6 +3,30 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Collector V2 is now terminal ERROR, not pending. Single and grouped append are
+exact on eight TPU v5 lite devices; full collector fails compilation at dynamic
+VMEM offsets[0,shard_id] (E2003 alignment). Complete outputs are retained in
+`test_results/beam_collector_v2/`; see report.md for scoped timings and hashes.
+A failing structural regression catches the exact scalar load; aligned vector
+selection/reduction fixes it locally. Six gather/scatter tests pass in8.81 s.
+Physical full-collector confirmation is still required before the integrated
+S3/RDMA/collector gate. The earlier full run completed704 tests with zero
+failures/errors/skips in1227.68 s; it predates this correction. The current
+full run includes it and writes `test_results/local_collector_v3_regression.xml`.
+
+Post-da90c64 local work (not yet physically accepted): external S4 dedup retains
+score/parent64/route winners without a shard cap; CPU source comparisons pass.
+Sorted-score histogram and explicit DMA publication primitives pass interpreter
+checks. One reserved physical S4 job composes clean+dirty count, threshold,
+dedup, histogram and aliased record/histogram/control commit. Two sequential
+jobs verify empty-result clearing and histogram flip-back. It still needs
+logical A/B scheduler integration, bounded production scratch, full source
+replay and compiled alias/memory/profile evidence. Local committed-histogram
+snapshot returns uint32 low/high pairs and passes a carry test; concurrent
+snapshot ownership and coordinated S5 request/reduce epochs are not implemented.
+Details and individual test scopes are in
+`docs/research/2026-09-05-resident-s4-publication-contract.md`.
+
 The bounded128 S3/snapshot-exchange/collector composition now has a saved
 eight-rank source-backed fixture and a physical TPU gate harness. Local replay
 checks every A/B/control/fatal element with a simulated network and passes

@@ -100,3 +100,81 @@ busy B, and unequal sibling capacity. The complete selection test file now
 passes 21 cases in 8.95 s (zero skips/failures/errors), with XML at
 `test_results/local_s4_ready_regression.xml`. This remains interpreter/host
 evidence and is explicitly separate from the earlier full-suite snapshot.
+
+## External S4 record path
+
+`pallas_external_stream4_dedup` shares the HBM-staged sort/unique/compact
+machinery, selecting Hash128, score, parent high/low and route keys instead of
+S3 payload tie-break. The original S3 API retains its keys. Capacity remains
+bounded to16384 by this baseline; no top-k is applied.
+The missing-entrypoint test failed first; the new S4 tie test plus existing
+external dedup tests pass together (5 tests, 46.46 s). Subsequent original CPU
+C++ comparisons cover empty and duplicate-heavy partial input with non-neutral
+unused storage. All three S4 tests pass in47.46 s. This is not CUDA/TPU
+execution; histogram commit, resident writes and physical composition remain.
+
+## Histogram and explicit DMA commit experiments
+
+The bounded score-sort/range-search histogram handles valid count, score-domain
+exclusion and aligned zero padding. Three interpreter cases pass in24.64 s,
+including empty and one-run-across-all-tiles inputs. Source SCORE_BIN_COUNT is
+307201; the implementation avoids an NxBins comparison matrix but retains a
+whole sorted-score search window and needs physical sizing/performance tests.
+
+`pallas_commit_histogram` aliases histogram A/B and publication control outputs.
+It copies each inactive histogram tile through VMEM with explicit DMA waits,
+then flips active and clears processing in a final control DMA which is also
+waited. Two missing-module tests failed before implementation; both A/B
+directions pass TPU interpreter race detection (2 tests, 4.13 s), preserving
+the previously active histogram. This requires prior clean-record completion
+and caller exclusion of concurrent inactive readers/writers. It is not a
+coordinated S5 snapshot or physical alias/memory-report proof. The physical
+collector V2 remains on its older pinned source, unaffected by these changes.
+
+The stronger `pallas_commit_s4` also writes clean metadata before histogram DMA
+and only then publishes clean/dirty/processing/active control. Its initial
+missing-module test was red; a three-tile histogram/two-tile metadata case
+passes race detection (7.20 s). `pallas_run_reserved_s4` composes count capture,
+external S4 dedup, matching histogram and that commit without CPU count reads.
+Its red-before-implementation test passes in26.52 s, checking clean/dirty
+duplicates, threshold rejection, exact output histogram and inactive-slot flip.
+Both were added after full-regression12711 collection; they have separate
+evidence only. Reservation/queue integration, sibling concurrency, scratch
+preallocation, physical alias reports and complete TPU execution remain open.
+
+The reserved-job test now reuses returned resident/histogram versions for a
+second job with an empty result: it verifies flip-back, clearing the newly
+inactive histogram and preservation of the former active histogram. This
+expanded test passes in45.44 s. Reservation is explicitly simulated in the
+test; it is not a device ready-queue implementation or concurrent S5 proof.
+
+## Local committed snapshot arithmetic
+
+`pallas_sum_committed_histograms` selects each physical shard's active A/B
+histogram and sums into low/high uint32 planes with explicit carry. Its test
+failed before the module existed, then passed in5.59 s: eight UINT32_MAX
+contributions give low=0xfffffff8/high=7, while inactive poison is excluded.
+The control ABI currently permits128 physical shards. The caller must freeze
+selected histogram versions through snapshot completion; independent active
+loads are not a concurrency protocol. Global reduction, threshold request
+coordination and monotonic threshold publication remain separate missing work.
+
+Periodic threshold arithmetic was checked against the source branch contract
+in `cuda/threshold.cu` (SHA256
+`caa1e743369760a3616f0485dbd3b7b33484f23461e211755e730ebe91720975`).
+The Pallas tiled carry-prefix implementation finds the first inclusive prefix
+at least beam. Four tests pass in8.27 s after a shape-broadcast correction,
+covering first initialization, insufficient total and non-relaxation of an
+initialized threshold. This returns a candidate publication value only; it
+does not itself implement S5 request reduction or active-slot publication.
+
+## Regression checkpoint
+
+The combined local regression completed with712 passed in1033.87 s; artifact:
+`test_results/local_collector_v3_regression.xml`. This includes the S4 job,
+snapshot/threshold arithmetic and collector aligned-offset correction.
+The later recovery coordinator has six separate passing tests (0.27 s),
+including missing/malformed reports and native-abort return codes retaining
+partial logs without promoting the integrated gate. This is local evidence,
+not physical TPU confirmation. Collector V3 will first retry the full collector
+and only then run integrated S3 in a sequential child process if full is exact.

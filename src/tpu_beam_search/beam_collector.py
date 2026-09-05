@@ -301,7 +301,11 @@ def pallas_collector_scatter(a,b,grouped,controls,counts,offsets,*,interpret=Fal
         sibling,dest,amount,enabled = (p[0,i,0] for i in range(4))
         index = (pl.program_id(1)*128+jnp.arange(128,dtype=jnp.int32)).astype(jnp.uint32)
         relative = index-dest
-        source = o[0,pl.program_id(0)]+relative
+        # V2 Mosaic rejects dynamic scalar VMEM column loads: shard_id is not
+        # provably128-aligned. Read the aligned vector and select/reduce instead.
+        offset = jnp.sum(jnp.where(jnp.arange(offsets.shape[1],dtype=jnp.int32)
+            == pl.program_id(0),o[0],jnp.uint32(0)).astype(jnp.int32)).astype(jnp.uint32)
+        source = offset+relative
         indices = jnp.broadcast_to((source & (grouped.shape[1]-1)).astype(jnp.int32)[None],(8,128))
         values = jnp.take_along_axis(g[...],indices,axis=1)
         valid = (enabled != 0)&(index >= dest)&(relative < amount)
