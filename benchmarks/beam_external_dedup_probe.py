@@ -39,6 +39,11 @@ def digest(arrays):
     return h.hexdigest()
 
 
+def local_dedup(w, v, c, t):
+    result, amount = pallas_external_stream3_dedup(w[0], v[0], c[0, 0], t[0, 0])
+    return result[None], amount[None]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
@@ -76,11 +81,7 @@ def main():
         args = tuple(jax.device_put(x, sharding) for x in
                      (words, payload, counts[:, None, None], thresholds[:, None, None]))
 
-        def local(w, v, c, t):
-            result, amount = pallas_external_stream3_dedup(w[0], v[0], c[0], t[0])
-            return result[None], amount[None]
-
-        fn = jax.jit(jax.shard_map(local, mesh=mesh, in_specs=(p, p, p, p),
+        fn = jax.jit(jax.shard_map(local_dedup, mesh=mesh, in_specs=(p, p, p, p),
                                   out_specs=(p, p), check_vma=False))
         print(json.dumps(dict(event='compile_start', capacity=n, seed=seed,
                               input_sha256=digest((words, payload, counts, thresholds)))),

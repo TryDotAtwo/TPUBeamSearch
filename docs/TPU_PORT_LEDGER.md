@@ -105,6 +105,12 @@ This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
 
+External dedup V1 failed before TPU lowering: the benchmark passed [1,1]
+count/threshold controls to the primitive's [1] contract. See
+`test_results/beam_external_dedup_v1/report.md`. A failing per-shard eval_shape
+regression reproduces the error; the adapter now removes both singleton axes.
+Production Pallas is unchanged; physical V2 acceptance remains open.
+
 External S3 threshold/dedup now has a tiled Pallas candidate implementation in
 `beam_external_sort.py`: inclusive threshold, Hash128/score/payload sorting,
 predecessor comparison across tiles, stable compaction and neutral/count output.
