@@ -740,3 +740,10 @@ a JIT composition with distinct source6/owner4/variable return rank and
 nonzero high parent word. Validity is explicit: inactive request words must
 not be sent; compaction/exchange and upstream exact-cap indices remain
 caller responsibilities, not implemented by this composition.
+
+Final-cap source audit is recorded in
+`research/2026-09-06-final-cap-source-contract.md` with source hashes. The
+required order is phase -> rank -> shard/slot, not score-sort order. The
+dispatcher requires L<=K; integration must fail explicitly if threshold
+violates it. Stable phase compaction and collective pair-word prefixes remain
+the next missing inputs to final_plan; no source execution claim is added.
