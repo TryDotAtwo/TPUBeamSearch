@@ -3,13 +3,28 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Hash-to-shard collector grouping now has an interpreter baseline: stable
+metadata partition, counts/offsets, and actual independent Hash128 shard salt.
+Three supplied-ID cases and one independent uint64 hash-composition case pass.
+Physical compilation and resident scatter/publication remain unverified.
+Full regression: 654 passed in 466.33 s, no skips, with original source CPU
+oracle enabled; XML in `test_results/local_collector_routing_regression.xml`.
+The subsequently added all-shard preflight passed its two separate interpreter
+tests. See the collector/transport integration note for CUDA batch-fatal scope.
+
 Variable-count snapshot transport has been extracted from the diagnostic
 benchmark into `beam_remote_exchange.py`. The function body is unchanged
-(compared directly with the prior Git version); the benchmark imports it.
+(at extraction, compared directly with the prior Git version); the benchmark imports it.
 Eleven related local tests pass (1.70 s), including a new traced output-ABI
 test that was red before extraction. This is not fresh physical execution.
 Nonzero copies still transfer full capacity and keep one snapshot per epoch;
 neither direct collector integration nor count-proportional traffic is proved.
+
+The next full suite reported 651 passed / 1 failed: RDMA `lax.rem(epoch,2)`
+mixed an int32 program ID with an int64 Python literal when x64 was enabled.
+A two-mode ABI trace reproduced that failure only with x64 enabled. Explicit
+int32 remainder constants fix it without changing the DMA ordering; 12 related
+tests now pass. The full 654-test regression above also passes after this fix.
 
 Multi-tile collector extension is under local validation:
 `pallas_collector_append_group` preflights the entire group against one sibling

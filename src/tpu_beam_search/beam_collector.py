@@ -1,6 +1,6 @@
-"""Host reference for serialized collector reservation, not TPU execution.
+"""Serialized collector reference and experimental Pallas building blocks.
 
-One logical shard has two resident siblings. This reference does not publish
+One logical shard has two resident siblings. This module does not publish
 dirty counts to concurrent consumers; a device implementation must complete
 record stores before committing counts. No group splitting or spill fallback.
 """
@@ -155,3 +155,119 @@ def pallas_collector_append_group(a,b,incoming,control,count,*,interpret=False):
         a,b,control = pallas_collector_append(a,b,incoming[:,offset:offset+128],
                                              control,amount,interpret=interpret)
     return a,b,control
+
+
+def pallas_collector_partition(words,shards,count,*,shard_count,interpret=False):
+    """Stable shard grouping with supplied shard IDs; metadata is unchanged.
+
+    Diagnostic external-sort baseline; caller supplies valid IDs and count.
+    """
+    import jax
+    import jax.numpy as jnp
+    from jax.experimental import pallas as pl
+    from .beam_external_sort import pallas_external_bitonic_sort
+    if (words.ndim != 2 or words.shape[0] != 8 or words.shape[1] < 128
+            or words.shape[1] > 16384 or words.shape[1] & (words.shape[1]-1)
+            or shards.shape != (1,words.shape[1]) or count.shape != (1,128)
+            or not isinstance(shard_count,int) or not 1 <= shard_count <= 256):
+        raise ValueError('invalid partition geometry')
+    if any(x.dtype != jnp.uint32 for x in (words,shards,count)):
+        raise ValueError('partition requires uint32')
+    n = words.shape[1]
+    width = ((shard_count+128)//128)*128
+    ws = pl.BlockSpec((8,128),lambda b:(0,b))
+    ds = pl.BlockSpec((11,128),lambda b:(0,b))
+    def prepare(w,s,c,out):
+        idx = (pl.program_id(0)*128+jnp.arange(128)).astype(jnp.uint32)
+        valid = idx < c[0,0]
+        out[...] = jnp.concatenate((w[...],s[...],valid[None].astype(jnp.uint32),idx[None]))
+    data = pl.pallas_call(prepare,out_shape=jax.ShapeDtypeStruct((11,n),jnp.uint32),
+        in_specs=(ws,pl.BlockSpec((1,128),lambda b:(0,b)),pl.BlockSpec(count.shape)),
+        out_specs=ds,grid=(n//128,),interpret=interpret,
+        name='beam_collector_partition_prepare')(words,shards,count)
+    data = pallas_external_bitonic_sort(data,key_planes=(9,8,10),validity_plane=9,interpret=interpret)
+    def finish(d,out,totals):
+        valid = d[9] != 0
+        neutral = jnp.where(jnp.arange(8)[:,None] == 6,jnp.uint32(0xffffffff),jnp.uint32(0))
+        out[...] = jnp.where(valid[None],d[:8],neutral)
+        amounts = [jnp.sum((valid&(d[8] == s)).astype(jnp.int32)).astype(jnp.uint32)
+                   for s in range(shard_count)]
+        totals[...] = jnp.stack(amounts)[:,None]*(jnp.arange(128)[None] == 0).astype(jnp.uint32)
+    grouped,totals = pl.pallas_call(finish,
+        out_shape=(jax.ShapeDtypeStruct((8,n),jnp.uint32),jax.ShapeDtypeStruct((shard_count,n),jnp.uint32)),
+        in_specs=(ds,),out_specs=(ws,pl.BlockSpec((shard_count,128),lambda b:(0,b))),
+        grid=(n//128,),interpret=interpret,name='beam_collector_partition_finish')(data)
+    def reduce(t,c,o):
+        pos = jnp.arange(width)[None]
+        counts,offsets = jnp.zeros((1,width),jnp.uint32),jnp.zeros((1,width),jnp.uint32)
+        running = jnp.uint32(0)
+        for s in range(shard_count):
+            amount = jnp.sum(t[s].astype(jnp.int32)).astype(jnp.uint32)
+            counts += (pos == s).astype(jnp.uint32)*amount
+            running += amount
+            offsets += (pos == s+1).astype(jnp.uint32)*running
+        c[...],o[...] = counts,offsets
+    shape = jax.ShapeDtypeStruct((1,width),jnp.uint32)
+    counts,offsets = pl.pallas_call(reduce,out_shape=(shape,shape),
+        in_specs=(pl.BlockSpec(totals.shape),),out_specs=(pl.BlockSpec(shape.shape),)*2,
+        grid=(),interpret=interpret,name='beam_collector_partition_counts')(totals)
+    return grouped,counts,offsets
+
+
+def pallas_collector_hash_partition(words,count,*,shard_count,interpret=False):
+    """Group already owner-routed metadata by the independent Hash128 shard salt.
+
+    No owner/source/move payload is rewritten. This is a functional baseline,
+    not concurrent collector publication or an in-place resident scatter.
+    """
+    from .beam_hash import pallas_route_hashes
+    routing = pallas_route_hashes(words[:4],world_size=1,
+                                  shard_count=shard_count,interpret=interpret)
+    return pallas_collector_partition(words,routing[1:2],count,
+                                      shard_count=shard_count,interpret=interpret)
+
+
+def pallas_collector_preflight(controls,counts,*,capacity,interpret=False):
+    """Read-only admission for an entire partition; no dirty publication.
+
+    Controls are [shards,8,128] in the single-shard ABI. Counts are aligned
+    [1,W]. Plan [shards,4,128] lane zero holds sibling, offset, amount, enabled.
+    Any overflow/prior fatal zeros ALL plans. Consumers must depend on this
+    complete result before writes. Valid resident counts are a caller contract.
+    """
+    import jax
+    import jax.numpy as jnp
+    from jax.experimental import pallas as pl
+    if (controls.ndim != 3 or controls.shape[1:] != (8,128)
+            or not 1 <= controls.shape[0] <= 256
+            or counts.ndim != 2 or counts.shape[0] != 1
+            or counts.shape[1] < controls.shape[0] or counts.shape[1] % 128
+            or not isinstance(capacity,int) or not 0 < capacity <= 0xffffffff
+            or capacity % 128):
+        raise ValueError('invalid partition admission geometry')
+    if controls.dtype != jnp.uint32 or counts.dtype != jnp.uint32:
+        raise ValueError('admission requires uint32')
+    shard_count = controls.shape[0]
+    def kernel(c,n,out,status):
+        failed = jnp.bool_(False)
+        plans = []
+        for s in range(shard_count):
+            ua,ub = c[s,0,0]+c[s,2,0],c[s,1,0]+c[s,3,0]
+            amount = n[0,s]
+            fa = (c[s,4,0] == 0)&(ua <= capacity)&(amount <= capacity-ua)
+            fb = (c[s,5,0] == 0)&(ub <= capacity)&(amount <= capacity-ub)
+            active = amount != 0
+            ca = fa&((c[s,6,0] == 0)|~fb)
+            failed |= (c[s,7,0] != 0)|(active&~fa&~fb)
+            entry = jnp.stack((jnp.where(ca,jnp.uint32(0),jnp.uint32(1)),
+                               jnp.where(ca,ua,ub),amount,active.astype(jnp.uint32)))
+            plans.append(jnp.where(active,entry,jnp.uint32(0)))
+        lane = (jnp.arange(128,dtype=jnp.int32) == 0).astype(jnp.uint32)
+        out[...] = jnp.where(failed,jnp.uint32(0),jnp.stack(plans)[:,:,None]*lane)
+        status[...] = failed.astype(jnp.uint32)*lane[None]
+    shape = (shard_count,4,128)
+    return pl.pallas_call(kernel,
+        out_shape=(jax.ShapeDtypeStruct(shape,jnp.uint32),jax.ShapeDtypeStruct((1,128),jnp.uint32)),
+        in_specs=(pl.BlockSpec(controls.shape),pl.BlockSpec(counts.shape)),
+        out_specs=(pl.BlockSpec(shape),pl.BlockSpec((1,128))),grid=(),
+        interpret=interpret,name='beam_collector_partition_preflight')(controls,counts)

@@ -21,11 +21,11 @@ def make_variable_exchange_call(mesh, *, capacity=128):
                payload_send_sems, payload_recv_sems, ready_sems, ack_sems,
                count_vmem):
         epoch = pl.program_id(0)
-        slot = lax.rem(epoch, 2)
+        slot = lax.rem(epoch, jnp.int32(2))
         offset = epoch + 1
         my_id = lax.axis_index('core')
-        right = lax.rem(my_id + offset, ranks)
-        left = lax.rem(my_id - offset + ranks, ranks)
+        right = lax.rem(my_id + offset, jnp.int32(ranks))
+        left = lax.rem(my_id - offset + ranks, jnp.int32(ranks))
 
         # A receiver releases exactly the source that targets it this epoch.
         pl.semaphore_signal(ready_sems.at[slot], inc=1, device_id=(left,),
@@ -113,4 +113,3 @@ def make_variable_exchange_call(mesh, *, capacity=128):
         name='beam_stream3_variable_count_exchange',
     )
     return call
-
