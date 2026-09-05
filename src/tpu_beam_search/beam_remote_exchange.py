@@ -113,3 +113,48 @@ def make_variable_exchange_call(mesh, *, capacity=128):
         name='beam_stream3_variable_count_exchange',
     )
     return call
+
+
+def make_exchange_collect_call(mesh,*,capacity=128):
+    """Connect real snapshot RDMA to one aggregate remote collector admission.
+
+    Local-owner collection remains a separate invocation. Every rank still
+    executes all exchange epochs even if its collector already has fatal set.
+    This functional composition needs physical validation and coordinated-stop
+    integration; it does not promise aliases or concurrent S4 publication.
+    """
+    from .beam_receive_batch import pallas_collect_received
+    exchange = make_variable_exchange_call(mesh,capacity=capacity)
+    def rank_kernel(out):
+        rank = lax.axis_index('core').astype(jnp.uint32)
+        out[...] = (jnp.arange(128,dtype=jnp.int32)[None] == 0).astype(jnp.uint32)*rank
+    rank_call = pl.pallas_call(rank_kernel,
+        out_shape=jax.ShapeDtypeStruct((1,128),jnp.uint32),
+        out_specs=pl.BlockSpec((1,128)),grid=(),name='beam_receive_rank_control')
+    def local_program(a,b,controls,wire,counts,neutral):
+        snapshots,received_counts = exchange(counts,wire,counts,neutral)
+        return pallas_collect_received(a,b,snapshots,controls,received_counts,rank_call())
+    return local_program
+
+
+def make_stream3_collect_call(mesh):
+    """Bounded128 S3 threshold/dedup/owner/split -> local collect -> exchange.
+
+    Metadata must already carry the correct parent/source/move for its payload.
+    Does not restore S1/S2 ring payloads or implement coordinated fatal stop.
+    Wire packing is deliberately limited to its physically exercised128 ABI.
+    """
+    from .beam_external_sort import pallas_external_stream3
+    from .beam_stream3 import pallas_stream3_wire_slots
+    from .beam_collector import pallas_collect
+    exchange_collect = make_exchange_collect_call(mesh,capacity=128)
+    def local_program(a,b,controls,words,payload,count,threshold,neutral):
+        if words.shape != (8,128) or neutral.shape != (8,128):
+            raise ValueError('integrated wire gate currently requires128 candidates')
+        local,remote,local_count,send_count,send_offset = pallas_external_stream3(
+            words,payload,count,threshold,local_rank=None,world_size=mesh.size)
+        a,b,controls,_ = pallas_collect(a,b,local,controls,local_count)
+        wire,wire_counts = pallas_stream3_wire_slots(
+            remote,send_count,send_offset,local_rank=None,world_size=mesh.size)
+        return exchange_collect(a,b,controls,wire,wire_counts,neutral)
+    return local_program

@@ -3,6 +3,23 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+The bounded128 S3/snapshot-exchange/collector composition now has a saved
+eight-rank source-backed fixture and a physical TPU gate harness. Local replay
+checks every A/B/control/fatal element with a simulated network and passes
+(with its ABI test: 2 passed in 353.12 s). Remote snapshots are assembled in
+ascending source order and admitted as one batch, separately from local input,
+matching the audited CUDA dispatcher boundary. Functional copies, retained
+snapshots, coordinated stop and physical composition remain open. This is not
+CUDA execution, real RDMA, overlap or full-beam performance evidence. See
+`docs/research/2026-09-05-collector-transport-integration.md`.
+
+Full composition regression: 675 passed in 921.58 s, with source and route CPU
+oracles enabled; `test_results/local_stream3_collector_regression.xml`.
+The later S4 ready selector has 21 separate passing tests in 8.95 s, recorded
+in `test_results/local_s4_ready_regression.xml`; it was not collected in that
+full run. See the resident S4 publication audit for remaining residency,
+histogram completion, queue integration and physical validation requirements.
+
 Collector V1 terminated with a Mosaic gather lowering rejection on eight TPU
 v5 lite devices: `Only take_along_axis-like gathers supported`. No device
 correctness or timing was produced; see `test_results/beam_collector_v1/report.md`.

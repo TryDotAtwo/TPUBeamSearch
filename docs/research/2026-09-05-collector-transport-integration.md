@@ -136,3 +136,64 @@ sibling (`cuda/stream3.cu`, 903..930). The host also guards at most one running
 S4 job per logical shard. A TPU resident implementation needs equivalent
 exclusive ownership and a complete-write publication boundary; the current
 functional full-tuple wait is only the serialized reference version.
+
+## Receive snapshot assembly
+
+`beam_receive_batch.py` adds the experimental `pallas_compact_received`:
+mask each epoch by its received count, restore ascending sender order using
+`sender=(receiver_rank-epoch-1)%world_size`, and compact all epochs into one
+power-of-two input. The CUDA host receive-offset prefix iterates ascending
+peer (dispatcher lines 3150..3165); remote send-to-self is excluded here because
+the local-owner input is a separate collector invocation.
+
+`pallas_collect_received` consumes the transport ABI's snapshots at indices
+2 onward, not its reusable slots 0/1, then performs one aggregate admission.
+The external-sort baseline is bounded to 16384 padded records. It retains
+snapshots and functional outputs, so it does not establish a two-slot-only
+memory budget, direct resident DMA, or overlap.
+
+The packing test was red before implementation; uneven seven-peer counts and
+empty exchange pass in 21.57 s in the interpreter. The end-to-end snapshot
+collector test additionally distinguishes aggregate140 overflow from two
+independent70 appends into two128 siblings, and checks exact-full64+64 input.
+These tests are not physical RDMA execution or a TPU profile.
+
+The RDMA module now exposes `make_exchange_collect_call` connecting the real
+snapshot transport to aggregate collection, and `make_stream3_collect_call`
+adding threshold/dedup/owner/split, local admission and wire packing. The latter
+is explicitly bounded to128 input records because the existing wire packer's
+physical evidence/128-wide control ABI does not establish general larger-N
+support. Both new entrypoints failed their missing-function tests first and
+then pass two axis-environment JAXPR output-ABI tests (7.92 s). This is not an
+executed multi-rank replay. Parent/source/move metadata must already match each
+payload; S1/S2 ring restoration and coordinated fatal/stop remain outstanding.
+All ranks execute transport even if local admission returns fatal, so this
+composition does not introduce an early-return deadlock before exchange.
+
+Receive assembly/collector full regression: 668 passed in 547.10 s, saved as
+`test_results/local_receive_collector_regression.xml`. The two composition ABI
+tests were added after that run's collection and have separate evidence above.
+The local C++ adapter also now supports `route` for arbitrary metadata hashes,
+using the unmodified original `hash.hpp`. Its missing-mode test failed with
+returncode3 before the adapter change; a separately built executable passes
+17 arbitrary/zero/all-one hash checks against independent uint64 arithmetic
+(1.80 s). This prepares source-backed routing in future integrated fixtures;
+it does not turn the CPU adapter into CUDA execution.
+
+The integrated fixture builder now queries that C++ adapter for both S3 and
+arbitrary-hash shard IDs, applies local admission and one ascending-source
+remote admission, and saves every expected A/B/control/fatal element for8ranks.
+`tests/fixtures/stream3_collector/manifest.json` records actual source hashes,
+dirty source checkout, adapter/executable/NPZ hashes and per-peer receive counts.
+`beam_stream3_collector_probe.py` consumes the pinned fixture on8physicalTPUs;
+timings are diagnostic mixed-success/fatal, not successful beam throughput.
+The fixture's initial extra scalar axis was rejected by the local interface
+test before any TPU launch and corrected in the generator to global `[8,1]`.
+The local ABI and CPU-interpreted eight-rank replay pass (2 tests, 353.12 s).
+Every A/B/control/fatal output matches the saved source-backed fixture,
+including mixed expected fatal ranks. The network is explicitly simulated;
+this cannot establish physical RDMA correctness. Full regression follows
+before publication and any physical submission. That full regression completed:
+675 passed in 921.58 s, with both source and route CPU oracles enabled,
+`test_results/local_stream3_collector_regression.xml`. The later S4 ready
+selector is covered by its separate 21-test result, not this full-run snapshot.

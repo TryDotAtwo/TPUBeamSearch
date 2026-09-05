@@ -1,0 +1,112 @@
+{
+  "scope": "CPU original C++ S3/routing and source-audited Python admission; not CUDA",
+  "source_commit": "b5fcf6b0ee3247a1f189e6da79a1641d2304bd1c",
+  "source_dirty": true,
+  "source_files": {
+    "src/hash.hpp": "361756fe2de60ae9393f0e60f6be80c697e9b84c58fbaedbc75d1c5d8162016c",
+    "src/hash.cpp": "369b34d3eaa526b002b553ee4bf2e9ee1eccd69861c6cac7f1d06a5162b65136",
+    "src/stream3.hpp": "25d5c4a88fa779c6dac1656e84e8e1f9efb8cc7879d2c56534539aa5f27366f8",
+    "src/stream3.cpp": "584d37e0c96d581174359932a2fe04df76cbfdfca12b44b0a5df75c3aec1d2b5",
+    "src/types.hpp": "504c54cf72870da281d13e4a68871ccf1a4f061755d7acfdf456818cf7e98a5f",
+    "src/config.hpp": "91329b4d68b3e3fe6be2e88defdd90e5b293a22c7083391ee69a5ba67e04ba52",
+    "cuda/stream3.cu": "935d8ca7b81982281cafa8b2aa2218b6cb87471dad6e564535bb9dea687bb1fd",
+    "cuda/dispatcher.cu": "45ccfe9ddd27886acbb90ebb30ab67ef96a0557e2c7577043ac9aa3fc1b6027b"
+  },
+  "adapter_sha256": "7f7a1fd4f9f1eb55fbaa4d33c4cbc3db376f2c4f6b3bdc09893479094aa41d8d",
+  "executable_sha256": "70421f8d031bcee6aee61f5b4a815f4c068ee242bed83d33c0eed605438bd0d7",
+  "file": "stream3_collector_128.npz",
+  "sha256": "36e0e21e713b3837460265fee6e64fa86628ca139bdaae3ddba73ee4929af08c",
+  "seed": 9851,
+  "receive_counts": [
+    [
+      0,
+      4,
+      1,
+      0,
+      4,
+      2,
+      2,
+      3
+    ],
+    [
+      0,
+      0,
+      1,
+      1,
+      7,
+      4,
+      5,
+      7
+    ],
+    [
+      0,
+      6,
+      0,
+      0,
+      10,
+      6,
+      6,
+      7
+    ],
+    [
+      0,
+      10,
+      3,
+      0,
+      14,
+      7,
+      9,
+      8
+    ],
+    [
+      0,
+      7,
+      4,
+      0,
+      0,
+      4,
+      6,
+      7
+    ],
+    [
+      0,
+      7,
+      0,
+      0,
+      5,
+      0,
+      3,
+      6
+    ],
+    [
+      0,
+      3,
+      2,
+      0,
+      5,
+      1,
+      0,
+      4
+    ],
+    [
+      0,
+      8,
+      2,
+      0,
+      8,
+      6,
+      5,
+      0
+    ]
+  ],
+  "expected_fatal": [
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0
+  ]
+}

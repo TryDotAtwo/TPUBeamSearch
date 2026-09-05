@@ -9,6 +9,20 @@
 #include <vector>
 
 int main(int argc, char** argv) {
+    if (argc == 2 && std::string(argv[1]) == "route") {
+        unsigned count, world, shards;
+        if (!(std::cin >> count >> world >> shards)
+            || world == 0 || world > 256 || shards == 0) return 2;
+        for (unsigned i = 0; i < count; ++i) {
+            std::uint64_t w[4];
+            for (auto& x : w) std::cin >> x;
+            if (!std::cin) return 3;
+            const beam::Hash128 hash{w[0] | (w[1] << 32), w[2] | (w[3] << 32)};
+            std::cout << unsigned(beam::owner_from_hash128(hash, world)) << ' '
+                      << beam::shard_from_hash128(hash, shards) << '\n';
+        }
+        return 0;
+    }
     if (argc == 2 && std::string(argv[1]) == "stream3") {
         unsigned count, threshold, rank, world;
         if (!(std::cin >> count >> threshold >> rank >> world)
