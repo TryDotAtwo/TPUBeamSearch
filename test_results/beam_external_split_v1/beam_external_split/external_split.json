@@ -1,0 +1,160 @@
+{
+  "source_sha": "c73f601bc2a1a0133535b18de6f9e816704ed350",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "cases": [
+    {
+      "capacity": 256,
+      "input_sha256": "d5bd1f3a45bb69915ac7be8ee2039db13cf79d69f7b50c9efb199e0b63082c2c",
+      "compile_seconds": 1.5682056549999857,
+      "mismatches": 0,
+      "exact": true,
+      "output_sha256": "4cf8f93b30d3e9affeb9f6c1cac71f6279f4cfa501859fc37f6bf28b93308776",
+      "expected_sha256": "4cf8f93b30d3e9affeb9f6c1cac71f6279f4cfa501859fc37f6bf28b93308776",
+      "timing": {
+        "warmup": 3,
+        "repeats": 21,
+        "samples_ms": [
+          0.78174,
+          0.78407,
+          0.75502,
+          0.73802,
+          0.77678,
+          0.763,
+          0.73959,
+          0.725691,
+          0.72869,
+          0.71354,
+          0.73612,
+          0.722,
+          0.732141,
+          0.73925,
+          0.75184,
+          0.72676,
+          0.74872,
+          0.712971,
+          0.73779,
+          0.75175,
+          0.79426
+        ],
+        "median_ms": 0.73925,
+        "p10_ms": 0.722,
+        "p90_ms": 0.78174
+      }
+    },
+    {
+      "capacity": 512,
+      "input_sha256": "1df8276b3e09ab834ec85706784ab8688764952bbbbe444bafbc2c59834c23b9",
+      "compile_seconds": 1.4238626119999935,
+      "mismatches": 0,
+      "exact": true,
+      "output_sha256": "871f83e899d1f5ea1f7231a8d59ee9f8ba898f550bca4b3359beb44a67b21a80",
+      "expected_sha256": "871f83e899d1f5ea1f7231a8d59ee9f8ba898f550bca4b3359beb44a67b21a80",
+      "timing": {
+        "warmup": 3,
+        "repeats": 21,
+        "samples_ms": [
+          0.819691,
+          0.764441,
+          0.77488,
+          0.78265,
+          0.76976,
+          0.733561,
+          0.75711,
+          0.74898,
+          0.74717,
+          0.73296,
+          0.770931,
+          0.78149,
+          0.76852,
+          0.72312,
+          0.767731,
+          0.75874,
+          0.68367,
+          0.72182,
+          0.74056,
+          0.76854,
+          0.74762
+        ],
+        "median_ms": 0.75874,
+        "p10_ms": 0.72312,
+        "p90_ms": 0.78149
+      }
+    },
+    {
+      "capacity": 1024,
+      "input_sha256": "0c179d6dc5f692a635748ccdc1f1f9bcce4498b2765e6477c4b703c17d518a6c",
+      "compile_seconds": 1.6650811650000037,
+      "mismatches": 0,
+      "exact": true,
+      "output_sha256": "26b30cfdebc559ad4fe3c8daa41a0680ef080f3a56689bc8f3f402ee87880543",
+      "expected_sha256": "26b30cfdebc559ad4fe3c8daa41a0680ef080f3a56689bc8f3f402ee87880543",
+      "timing": {
+        "warmup": 3,
+        "repeats": 21,
+        "samples_ms": [
+          0.90018,
+          0.88511,
+          0.938631,
+          0.8361,
+          0.81973,
+          0.84714,
+          0.864521,
+          0.826811,
+          0.84125,
+          0.86314,
+          0.861171,
+          0.83946,
+          0.82395,
+          0.78484,
+          0.804281,
+          0.82583,
+          0.82144,
+          0.80708,
+          0.818841,
+          0.82799,
+          0.79884
+        ],
+        "median_ms": 0.82799,
+        "p10_ms": 0.804281,
+        "p90_ms": 0.88511
+      }
+    }
+  ],
+  "scope": "external split with supplied owners; no dedup/hash/RDMA/collector"
+}

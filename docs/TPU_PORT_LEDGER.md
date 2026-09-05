@@ -3,6 +3,13 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+External S3 split V1 is physically exact at N256/512/1024 on eight TPU v5 lite;
+see `test_results/beam_external_split_v1/report.md`. All five output arrays
+match independent partition expectations and hashes. Diagnostic medians are
+0.73925/0.75874/0.82799 ms. Supplied-owner split and its whole count scratch
+are validated at these shapes only; real owner-after-dedup composition and
+collector/RDMA integration remain pending. Source `c73f601`, launcher `fc6a7f5`.
+
 External Stream3 dedup V3 is physically exact at N=256 and N=512 on all eight
 TPU v5 lite devices, source `5e08ff60f3d470cef6ccdf0fc173510a827aecd3`.
 See `test_results/beam_external_dedup_v3/report.md`: zero metadata/count
