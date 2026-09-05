@@ -3,6 +3,18 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+Multi-tile collector extension is under local validation:
+`pallas_collector_append_group` preflights the entire group against one sibling
+before any per-tile append, so insufficient whole-group capacity cannot produce
+a partial write or distribute the group across siblings. Three red tests then
+passed (10.09 s), including 256/257 records and exact-full. All sixteen related
+collector/adapter tests pass (17.27 s). This still uses functional buffer copies
+and a whole-tuple completion boundary, not resident aliasing or concurrent
+count publication. Physical collector V1 remains pinned to the prior single-tile
+source; this extension is not included in that pending result.
+Full local regression for this extension: 647 passed in 412.75 s, with the
+original CPU C++ oracle enabled. Physical multi-tile confirmation remains open.
+
 Serialized collector work in progress: `beam_collector.py` now has a Pallas
 functional append for one A/B pair and a group of at most 128 records. Five
 initial interpreter tests passed (6.63 s); physical lowering is unverified.

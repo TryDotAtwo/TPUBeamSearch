@@ -105,3 +105,53 @@ def pallas_collector_append(a, b, incoming, control, count, *, interpret=False):
         out_specs=pl.BlockSpec(control.shape),grid=(),interpret=interpret,
         name='beam_collector_next_control')(control,count)
     return aa,bb,updated
+
+
+def pallas_collector_append_group(a,b,incoming,control,count,*,interpret=False):
+    """Serialized multi-tile group: preflight the whole group before appending.
+
+    Functional correctness implementation, not an in-place resident scheduler.
+    The full returned tuple must complete before publication to any consumer.
+    """
+    import jax
+    import jax.numpy as jnp
+    from jax.experimental import pallas as pl
+    if (incoming.ndim != 2 or incoming.shape[0] != 8
+            or incoming.shape[1] < 128 or incoming.shape[1] % 128
+            or control.shape != (8,128) or count.shape != (1,128)
+            or a.ndim != 2 or a.shape[0] != 8 or b.shape != a.shape
+            or a.shape[1] < 128 or a.shape[1] % 128):
+        raise ValueError('invalid group geometry')
+    if any(x.dtype != jnp.uint32 for x in (a,b,incoming,control,count)):
+        raise ValueError('collector requires uint32')
+    capacity = a.shape[1]
+
+    def reserve(c,n,out):
+        amount = n[0,0]
+        ua,ub = c[0,0]+c[2,0],c[1,0]+c[3,0]
+        fa = (c[4,0] == 0)&(ua <= capacity)&(amount <= capacity-ua)
+        fb = (c[5,0] == 0)&(ub <= capacity)&(amount <= capacity-ub)
+        active = (amount != 0)&(c[7,0] == 0)
+        ca = fa&((c[6,0] == 0)|~fb)
+        chosen = jnp.where(ca,jnp.uint32(0),jnp.uint32(1))
+        failed = (c[7,0] != 0)|(amount > incoming.shape[1])|(active&~fa&~fb)
+        rows, lane = jnp.arange(8)[:,None],jnp.arange(128)[None] == 0
+        result = jnp.where((rows == 6)&lane&active&~failed,chosen,c[...])
+        out[...] = jnp.where((rows == 7)&lane,failed.astype(jnp.uint32),result)
+
+    control = pl.pallas_call(reserve,out_shape=jax.ShapeDtypeStruct(control.shape,jnp.uint32),
+        in_specs=(pl.BlockSpec(control.shape),pl.BlockSpec(count.shape)),
+        out_specs=pl.BlockSpec(control.shape),grid=(),interpret=interpret,
+        name='beam_collector_reserve_whole_group')(control,count)
+    for offset in range(0,incoming.shape[1],128):
+        def tile_amount(n,out,offset=offset):
+            # Signed clamping avoids unsigned underflow for exhausted tiles.
+            remaining = n[0,0].astype(jnp.int32)-offset
+            amount = jnp.minimum(jnp.maximum(remaining,0),128).astype(jnp.uint32)
+            out[...] = (jnp.arange(128)[None] == 0).astype(jnp.uint32)*amount
+        amount = pl.pallas_call(tile_amount,out_shape=jax.ShapeDtypeStruct((1,128),jnp.uint32),
+            in_specs=(pl.BlockSpec(count.shape),),out_specs=pl.BlockSpec(count.shape),
+            grid=(),interpret=interpret,name='beam_collector_tile_count')(count)
+        a,b,control = pallas_collector_append(a,b,incoming[:,offset:offset+128],
+                                             control,amount,interpret=interpret)
+    return a,b,control
