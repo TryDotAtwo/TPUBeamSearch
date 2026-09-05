@@ -1,0 +1,123 @@
+{
+  "source_sha": "5e08ff60f3d470cef6ccdf0fc173510a827aecd3",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "cases": [
+    {
+      "capacity": 256,
+      "seed": 20261161,
+      "mismatches": 0,
+      "input_sha256": "46344ae881389763985e8672c596b38f206835cf1886db2e7041d67b9f241b99",
+      "output_sha256": "562a5dd6fc8628a9339cb64e9e93d2af0be6603162fef2e26131ac9ecb88c96e",
+      "expected_sha256": "562a5dd6fc8628a9339cb64e9e93d2af0be6603162fef2e26131ac9ecb88c96e",
+      "compile_seconds": 1.6743355219999785,
+      "exact": true,
+      "timing": {
+        "warmup": 3,
+        "repeats": 21,
+        "samples_ms": [
+          0.785759,
+          0.901291,
+          1.11235,
+          0.76072,
+          0.78547,
+          0.72036,
+          0.70678,
+          0.69402,
+          0.73397,
+          0.71311,
+          0.71188,
+          0.71943,
+          0.67107,
+          0.70038,
+          0.74052,
+          0.82041,
+          0.673131,
+          0.7231,
+          0.73228,
+          0.71969,
+          0.76599
+        ],
+        "median_ms": 0.7231,
+        "p10_ms": 0.69402,
+        "p90_ms": 0.82041
+      }
+    },
+    {
+      "capacity": 512,
+      "seed": 20261417,
+      "mismatches": 0,
+      "input_sha256": "b49152033e246cc41122e3dfa2cd8b84507157eb42330f1f763a1de912d7fb04",
+      "output_sha256": "ac2470d80f7352602b7e2b3b0e837e82715112850ae237c2638f2a2d36479852",
+      "expected_sha256": "ac2470d80f7352602b7e2b3b0e837e82715112850ae237c2638f2a2d36479852",
+      "compile_seconds": 1.535922333999963,
+      "exact": true,
+      "timing": {
+        "warmup": 3,
+        "repeats": 21,
+        "samples_ms": [
+          0.79793,
+          0.848799,
+          0.726449,
+          0.7811,
+          0.806689,
+          0.77871,
+          0.75582,
+          0.7619,
+          0.77349,
+          0.77076,
+          0.77826,
+          0.75777,
+          0.74206,
+          0.76544,
+          0.76614,
+          0.69088,
+          0.716469,
+          0.73694,
+          0.698831,
+          0.724431,
+          0.683669
+        ],
+        "median_ms": 0.7619,
+        "p10_ms": 0.698831,
+        "p90_ms": 0.79793
+      }
+    }
+  ],
+  "scope": "independent eight-device external S3 dedup, before owner routing"
+}

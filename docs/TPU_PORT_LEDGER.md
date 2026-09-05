@@ -3,6 +3,13 @@
 The user's completion condition is the whole architecture plus a GPU/TPU
 comparison, not isolated kernels. No complete-port or performance claim yet.
 
+External Stream3 dedup V3 is physically exact at N=256 and N=512 on all eight
+TPU v5 lite devices, source `5e08ff60f3d470cef6ccdf0fc173510a827aecd3`.
+See `test_results/beam_external_dedup_v3/report.md`: zero metadata/count
+mismatches and equal output hashes, diagnostic medians 0.72310/0.76190 ms.
+This closes the external dedup scratch-layout gate only. Routing after dedup,
+collector integration, larger-N efficiency and whole GPU/TPU replay remain open.
+
 | Contract | Implementation/evidence | Remaining acceptance |
 |---|---|---|
 | Logical types / uint32 SoA | beam_types.py; high-word and padding tests | all consumers, physical TPU |
