@@ -611,3 +611,19 @@ This is not a DMA fence or full coordinated epoch: caller must establish common
 publication completion and exclusive ownership. These tests postdate the785
 test full regression. Physical S4/S5 V1 is queued at source c357340; this new
 local helper is not part of that remote run. No defaults changed.
+
+### Serialized S5 composition — local acceptance only, 2026-09-06
+
+`make_s5_epoch_call` connects request MAX, committed histogram snapshot,
+global pair SUM, periodic choice, aliased A/B publication and counter update.
+Only the common request result controls the JAX conditional. Local state
+completion consumes the published active-slot output. Caller must drain S4
+writers/readers, freeze inputs and serialize ownership; no overlap claim.
+
+Eight targeted tests passed in8.33 s (`local_s5_epoch_integration.xml`): local
+no-request preservation, forced publication, repeated A/B flips with tighter
+threshold, state helpers and eight-rank JAXPR shape/conditional trace. The
+trace does not prove branch uniformity or distributed execution. Physical
+S4/S5 V1 contains primitives only, not this composition. Full regression785
+predates these additions. The multi-rank epoch and pre-final caller wiring
+remain pending physical acceptance.
