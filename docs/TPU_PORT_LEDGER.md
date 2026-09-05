@@ -695,3 +695,12 @@ invalid-high-parent rejection. Caller still validates return ranks and count
 bounds, gates sending, and owns parent lifetime. One DMA/request and tile-padded
 responses are diagnostic; no physical compile, exchange, frontier scatter or
 whole final acceptance is claimed.
+
+`pallas_scatter_final_responses` decodes/clears response padding, checks target
+bounds, then writes aliased HBM frontier rows by target index with DMA waits.
+Any overflow rejects all writes. Caller must guarantee unique targets, valid
+count and exclusive frontier lifetime; duplicates/missing targets are not yet
+diagnosed. Four local race-interpreter/final-response tests passed in11.98 s
+(`local_final_scatter.xml`), including materialization -> response -> frontier
+integration and out-of-capacity rejection. No remote response transport or
+physical TPU byte-DMA acceptance; this is not completed final search.

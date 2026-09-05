@@ -23,6 +23,14 @@ def test_materialize_valid_and_reject_entire_invalid_batch():
     want[0,:120],want[1,:120] = parents[1,g[1]][:120],parents[0,:120]
     want[0,120],want[1,120] = 7,5
     np.testing.assert_array_equal(wire,want)
+    from tpu_beam_search.beam_final_scatter import pallas_scatter_final_responses
+    frontier,scatter_errors = pallas_scatter_final_responses(jnp.zeros((8,128),jnp.uint8),
+        wire,jnp.array([2],jnp.uint32),state_len=120,
+        interpret=pltpu.InterpretParams(detect_races=True))
+    expected_frontier = np.zeros((8,128),np.uint8)
+    expected_frontier[7,:120],expected_frontier[5,:120] = want[0,:120],want[1,:120]
+    np.testing.assert_array_equal(frontier,expected_frontier)
+    assert int(scatter_errors[0,0]) == 0
     requests[1,1] = 1 # Out-of-range high parent word: must not read it.
     wire,errors = run(requests)
     np.testing.assert_array_equal(wire,0)
