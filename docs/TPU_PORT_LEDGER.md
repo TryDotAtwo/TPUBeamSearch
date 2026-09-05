@@ -720,3 +720,16 @@ diagnosed. Four local race-interpreter/final-response tests passed in11.98 s
 (`local_final_scatter.xml`), including materialization -> response -> frontier
 integration and out-of-capacity rejection. No remote response transport or
 physical TPU byte-DMA acceptance; this is not completed final search.
+
+S5 recovery V2 submitted and observed QUEUED, public source0382393 and
+launcherb0d60f7. Full local regression808 passed before submission. Monitor
+now targets four recovery groups, not the accepted S4 case.
+
+`pallas_final_balance` assigns exact uint64 global indices (two uint32 words)
+to agreed ceil(rank*keep/world) boundaries from final_materialize.cu. Four
+local interpreter cases passed in4.80s (`local_final_balance.xml`): zero,
+underfilled world, uneven count, and count above2^32. Invalid indices >=keep
+return zero validity/rank/local; modulo low-word subtraction is exact only
+under the explicit per-target uint32 capacity contract. Boundary construction,
+global cap/prefix collectives and integration remain separate unfinished work.
+This primitive supports up to127 ranks and has no physical TPU acceptance yet.
