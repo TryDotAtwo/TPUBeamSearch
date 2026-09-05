@@ -43,3 +43,22 @@ def test_complete_diagnostic_k2_preserves_hashes_and_first_suffix(parent_count,r
         assert np.any(ids != 0)
     for got,want in zip(actual,(hashes,hit,valid,found_hash,ids),strict=True):
         np.testing.assert_array_equal(got,want)
+    from tpu_beam_search.beam_solved_records import pallas_solved_records
+    from tpu_beam_search.beam_solved_collect import pallas_collect_solved
+    records = pallas_solved_records(actual[3],actual[4],
+        jnp.array([0xffffffff,2],jnp.uint32),jnp.array([8],jnp.uint32),
+        move_count=2,local_rank=3,interpret=True)
+    collected,control = pallas_collect_solved(jnp.zeros((10,128),jnp.uint32),
+        jnp.zeros((4,128),jnp.uint32),records,actual[1],
+        stop_on_found=True,interpret=True)
+    selected = np.flatnonzero(hit[0])
+    expected = np.zeros((10,128),np.uint32)
+    for out,index in enumerate(selected):
+        parent = (2<<32)+0xffffffff+int(index)//2
+        expected[:4,out] = found_hash[:,index]
+        expected[4,out],expected[5,out] = parent&0xffffffff,parent>>32
+        expected[7,out] = (3<<16)|(3<<8)|(int(index)%2)
+        expected[8,out],expected[9,out] = 8,ids[0,index]
+    np.testing.assert_array_equal(collected,expected)
+    np.testing.assert_array_equal(np.asarray(control)[:,0],
+        [len(selected),0,int(bool(len(selected))),int(bool(len(selected)))])

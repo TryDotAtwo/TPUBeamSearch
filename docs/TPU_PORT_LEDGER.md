@@ -574,3 +574,19 @@ are in VMEM and outputs are functional, not aliased publication: caller awaits
 the whole call before exposing results. HBM-scale compaction, metadata wiring,
 concurrent publication and coordinated stop remain outstanding. No timing or
 full-suite/physical acceptance claim is made for this addition.
+
+### Solved metadata and integration — local regression passed, 2026-09-06
+
+`beam_solved_records.pallas_solved_records` assembles full parent low/high
+words, goal score zero, local/local/move route, depth and suffix ID. Explicit
+uint32 lane/addition prevents losing the carry before parent high-word update.
+The boundary-crossing test initially failed and passed after this fix; test
+coverage now explicitly includes both JAX x64 modes.
+
+The integrated K1/K2 -> metadata -> bounded solved collector test compares
+records against independently replayed state permutations and Python uint64
+parent arithmetic. Eight targeted tests passed in 40.71 s before adding the
+second explicit x64 parameter. Full regression is terminal: 785 passed in
+1102.53 s, zero failures/errors/skips, including both explicit x64 modes.
+Artifact: `local_solved_path_full_regression.xml`. Physical TPU/CUDA and
+concurrent publication remain unverified; defaults unchanged.

@@ -33,9 +33,38 @@ requires separate ownership and a physical profile.
 - Reset job/request counters only after successful common publication.
 - Include the unconditional pre-final boundary epoch in multi-depth replay.
 
-Current local snapshot, threshold arithmetic and DMA publisher cover pieces of
-step3 only. Request reduction, rank coordination, snapshot reader ownership and
-counter lifecycle are still missing; a passing local publisher is not S5.
+Local snapshot, threshold arithmetic and DMA publisher cover pieces of step3.
+Request MAX and histogram transport primitives now exist (see below), but
+their integrated rank coordination, snapshot reader ownership and counter
+lifecycle remain missing; a passing local publisher is not S5.
+
+## Integration audit during solved-path regression
+
+Read-only dispatcher rechecked at lines2993..3087 and3738..3748. Multi-rank
+periodic due uses `max(1, storage_shard_count)`, not the configurable single-rank
+period. Completed S4 jobs, not launched/reserved jobs, drive this counter.
+The pre-final request occurs before `drain_pending_stream4_shards`; moving it
+after the drain changes the source ordering and needs separate justification.
+
+Next serialized epoch must compose the existing functions in this order:
+
+1. Form local request from force or completed-job period; all ranks enter
+   `make_s5_request_call`, including empty ranks.
+2. Branch only on the common MAX result. Zero preserves job counters, threshold
+   slots and update count; it must not invoke histogram transport/publication.
+3. With S4 writers and threshold readers drained, snapshot selected committed
+   versions, run `make_s5_histogram_call`, select periodic threshold and await
+   inactive-slot DMA publication. Keep histogram inputs alive through send waits.
+4. Only after publication completion increment update count and clear jobs and
+   request state. A rank-local error is not permission to silently clear state
+   or exit a collective; failure recovery is a separate coordinated protocol.
+
+The initial caller may deliberately serialize writers/readers, matching a
+conservative source schedule. This does not establish overlap. Required tests
+include zero decision preserving nonzero jobs, a remote-only request resetting
+local jobs after publication, repeated epochs, and unconditional boundary
+entry before drain. Physical eight-rank acceptance remains required even if
+single-rank interpreter and eight-rank tracing pass.
 
 ## Request primitive under test
 
