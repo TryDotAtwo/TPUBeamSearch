@@ -1,0 +1,102 @@
+[{"stream_name":"stderr","time":20.261700704,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":23.317841379,"data":"\n"}
+,{"stream_name":"stderr","time":23.317871079,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":23.317877589,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":23.480343197,"data":"Cloning into '/tmp/TPUBeamSearch-external-sort'...\n"}
+,{"stream_name":"stderr","time":29.546588898,"data":"HEAD is now at 42037f4 Add HBM-staged global compare-exchange sort\n"}
+,{"stream_name":"stderr","time":33.541496157,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stderr","time":33.541529487,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":39.056586846,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stderr","time":39.056630146,"data":"E0000 00:00:1788595077.137915      53 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stderr","time":39.056639746,"data":"=== Source Location Trace: === \n"}
+,{"stream_name":"stderr","time":39.056644826,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stdout","time":49.273639589,"data":"{\n"}
+,{"stream_name":"stdout","time":49.273678679,"data":"  \"exact\": true,\n"}
+,{"stream_name":"stdout","time":49.273683659,"data":"  \"mismatched_elements\": 0,\n"}
+,{"stream_name":"stdout","time":49.273687769,"data":"  \"capacity\": 256,\n"}
+,{"stream_name":"stdout","time":49.273691709,"data":"  \"tile_candidates\": 128,\n"}
+,{"stream_name":"stdout","time":49.273695429,"data":"  \"runs\": 2,\n"}
+,{"stream_name":"stdout","time":49.273698919,"data":"  \"output_sha256\": \"bfa5428263d9e4ccc0cd51999e3c1af5b43f4e43f7a26b14c9d5b1bf73f5e655\",\n"}
+,{"stream_name":"stdout","time":49.273702929,"data":"  \"expected_sha256\": \"bfa5428263d9e4ccc0cd51999e3c1af5b43f4e43f7a26b14c9d5b1bf73f5e655\",\n"}
+,{"stream_name":"stdout","time":49.273706449,"data":"  \"compile_seconds\": 1.065036751999969,\n"}
+,{"stream_name":"stdout","time":49.273709889,"data":"  \"source_sha\": \"42037f44ea24e2303ae60464d00cfba33e30fd28\",\n"}
+,{"stream_name":"stdout","time":49.273713369,"data":"  \"jax\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":49.273716899,"data":"  \"jaxlib\": \"0.10.2\",\n"}
+,{"stream_name":"stdout","time":49.273720549,"data":"  \"libtpu\": \"0.0.42.1\",\n"}
+,{"stream_name":"stdout","time":49.273724039,"data":"  \"devices\": [\n"}
+,{"stream_name":"stdout","time":49.273727489,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273730839,"data":"      \"id\": 0,\n"}
+,{"stream_name":"stdout","time":49.273734229,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273737749,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273741139,"data":"    },\n"}
+,{"stream_name":"stdout","time":49.273754659,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273757409,"data":"      \"id\": 1,\n"}
+,{"stream_name":"stdout","time":49.273759839,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273762189,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273764519,"data":"    },\n"}
+,{"stream_name":"stdout","time":49.273766779,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273769029,"data":"      \"id\": 2,\n"}
+,{"stream_name":"stdout","time":49.273771299,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273773599,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273775919,"data":"    },\n"}
+,{"stream_name":"stdout","time":49.273778159,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273780409,"data":"      \"id\": 3,\n"}
+,{"stream_name":"stdout","time":49.273782679,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273784999,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273787289,"data":"    },\n"}
+,{"stream_name":"stdout","time":49.273789679,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273791929,"data":"      \"id\": 4,\n"}
+,{"stream_name":"stdout","time":49.273794379,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273796889,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273799169,"data":"    },\n"}
+,{"stream_name":"stdout","time":49.273801439,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273803659,"data":"      \"id\": 5,\n"}
+,{"stream_name":"stdout","time":49.273806119,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273808429,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273810879,"data":"    },\n"}
+,{"stream_name":"stdout","time":49.273813289,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273815819,"data":"      \"id\": 6,\n"}
+,{"stream_name":"stdout","time":49.273818099,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273820619,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273822929,"data":"    },\n"}
+,{"stream_name":"stdout","time":49.273825189,"data":"    {\n"}
+,{"stream_name":"stdout","time":49.273827439,"data":"      \"id\": 7,\n"}
+,{"stream_name":"stdout","time":49.273829719,"data":"      \"kind\": \"TPU v5 lite\",\n"}
+,{"stream_name":"stdout","time":49.273832429,"data":"      \"process_index\": 0\n"}
+,{"stream_name":"stdout","time":49.273835259,"data":"    }\n"}
+,{"stream_name":"stdout","time":49.273837989,"data":"  ],\n"}
+,{"stream_name":"stdout","time":49.273840258999996,"data":"  \"timing\": {\n"}
+,{"stream_name":"stdout","time":49.273842579,"data":"    \"warmup\": 3,\n"}
+,{"stream_name":"stdout","time":49.273844889,"data":"    \"repeats\": 21,\n"}
+,{"stream_name":"stdout","time":49.273847249,"data":"    \"samples_ms\": [\n"}
+,{"stream_name":"stdout","time":49.273849559,"data":"      0.53632,\n"}
+,{"stream_name":"stdout","time":49.273852269,"data":"      0.48991,\n"}
+,{"stream_name":"stdout","time":49.273855079,"data":"      0.50743,\n"}
+,{"stream_name":"stdout","time":49.273857349,"data":"      0.49921,\n"}
+,{"stream_name":"stdout","time":49.273859579,"data":"      0.58115,\n"}
+,{"stream_name":"stdout","time":49.273861849,"data":"      0.53411,\n"}
+,{"stream_name":"stdout","time":49.273864079,"data":"      0.50668,\n"}
+,{"stream_name":"stdout","time":49.273869559,"data":"      0.51009,\n"}
+,{"stream_name":"stdout","time":49.273872049,"data":"      0.49191,\n"}
+,{"stream_name":"stdout","time":49.273875239,"data":"      0.48823,\n"}
+,{"stream_name":"stdout","time":49.273877879,"data":"      0.47889,\n"}
+,{"stream_name":"stdout","time":49.273880159,"data":"      0.4899,\n"}
+,{"stream_name":"stdout","time":49.273882399,"data":"      0.46455,\n"}
+,{"stream_name":"stdout","time":49.273884639,"data":"      0.49739,\n"}
+,{"stream_name":"stdout","time":49.273886869,"data":"      0.48528,\n"}
+,{"stream_name":"stdout","time":49.273889099,"data":"      0.46301,\n"}
+,{"stream_name":"stdout","time":49.273891329,"data":"      0.47965,\n"}
+,{"stream_name":"stdout","time":49.273893989,"data":"      0.44476,\n"}
+,{"stream_name":"stdout","time":49.273896279,"data":"      0.48374,\n"}
+,{"stream_name":"stdout","time":49.273898529,"data":"      0.44279,\n"}
+,{"stream_name":"stdout","time":49.273900959,"data":"      0.48332\n"}
+,{"stream_name":"stdout","time":49.273903249,"data":"    ],\n"}
+,{"stream_name":"stdout","time":49.273905549,"data":"    \"median_ms\": 0.4899,\n"}
+,{"stream_name":"stdout","time":49.273907889,"data":"    \"p10_ms\": 0.46301,\n"}
+,{"stream_name":"stdout","time":49.273910729,"data":"    \"p90_ms\": 0.53411\n"}
+,{"stream_name":"stdout","time":49.273913489,"data":"  },\n"}
+,{"stream_name":"stdout","time":49.273915789,"data":"  \"scope\": \"N=256 HBM-staged global bitonic sort gate; not dedup/beam\"\n"}
+,{"stream_name":"stdout","time":49.273919039,"data":"}\n"}
+,{"stream_name":"stderr","time":57.612495378,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":60.314377805,"data":"[NbConvertApp] Writing 278370 bytes to __results__.html\n"}
+]

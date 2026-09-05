@@ -1,0 +1,87 @@
+{
+  "exact": true,
+  "mismatched_elements": 0,
+  "capacity": 256,
+  "tile_candidates": 128,
+  "runs": 2,
+  "output_sha256": "bfa5428263d9e4ccc0cd51999e3c1af5b43f4e43f7a26b14c9d5b1bf73f5e655",
+  "expected_sha256": "bfa5428263d9e4ccc0cd51999e3c1af5b43f4e43f7a26b14c9d5b1bf73f5e655",
+  "compile_seconds": 1.065036751999969,
+  "source_sha": "42037f44ea24e2303ae60464d00cfba33e30fd28",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite",
+      "process_index": 0
+    }
+  ],
+  "timing": {
+    "warmup": 3,
+    "repeats": 21,
+    "samples_ms": [
+      0.53632,
+      0.48991,
+      0.50743,
+      0.49921,
+      0.58115,
+      0.53411,
+      0.50668,
+      0.51009,
+      0.49191,
+      0.48823,
+      0.47889,
+      0.4899,
+      0.46455,
+      0.49739,
+      0.48528,
+      0.46301,
+      0.47965,
+      0.44476,
+      0.48374,
+      0.44279,
+      0.48332
+    ],
+    "median_ms": 0.4899,
+    "p10_ms": 0.46301,
+    "p90_ms": 0.53411
+  },
+  "scope": "N=256 HBM-staged global bitonic sort gate; not dedup/beam"
+}

@@ -105,6 +105,14 @@ This is a host race oracle, not a Pallas implementation or TPU evidence.
 
 ## Evidence boundaries
 
+External HBM sort V1 is physically exact on eight TPU v5 lite devices; see
+`test_results/beam_external_sort_v1/report.md`. N=256 with 128-column tiles
+matches all 11 uint32 planes and output SHA256. Median diagnostic latency is
+0.48990 ms (3 warmups, 21 samples; p10/p90 0.46301/0.53411 ms). This is a
+36-pass bitonic correctness baseline, not an efficient large-N implementation
+or a beam speedup. The JSON `runs=2` means tiles, not independent correctness
+trials. Threshold/cross-tile dedup/compaction/count and larger-N gates remain.
+
 2026-09-03 local verification: 535 tests passed in 158.84 s with
 BEAM_SOURCE_ORACLE enabled, including both original C++ differential tests.
 No skips in this run. JAX 0.10.1 CPU interpretation; no physical TPU or CUDA
