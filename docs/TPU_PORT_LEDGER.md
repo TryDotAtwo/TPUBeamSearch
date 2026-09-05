@@ -696,6 +696,12 @@ bounds, gates sending, and owns parent lifetime. One DMA/request and tile-padded
 responses are diagnostic; no physical compile, exchange, frontier scatter or
 whole final acceptance is claimed.
 
+S4/S5 V1 is terminal ERROR; all outputs are saved under beam_s4_s5_v1.
+S4 exact on eight TPU (median0.667710 ms), request fails unsigned MAX lowering,
+histogram zero case passes but mixed case returns all zeros (4096 mismatches).
+See research/2026-09-06-s4-s5-v1-results.md. No active TPU session remains;
+do not rerun accepted S4 or launch integrated epoch before S5 recovery.
+
 `pallas_scatter_final_responses` decodes/clears response padding, checks target
 bounds, then writes aliased HBM frontier rows by target index with DMA waits.
 Any overflow rejects all writes. Caller must guarantee unique targets, valid
