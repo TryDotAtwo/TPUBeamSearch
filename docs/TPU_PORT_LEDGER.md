@@ -782,3 +782,10 @@ ordered phase/shard/tile grids. Two local tests passed in5.07s
 tile boundaries. Counts are uint32 with explicit capacity bound; unselected
 ordinals UINT32_MAX. This serialized scan is not scalable parallel-prefix
 acceptance or physical TPU evidence. Global prefixes and compaction remain.
+
+`pallas_final_prefixes` computes exact less/equal rank prefixes and global
+totals from an already agreed uint32 count snapshot using pair-word scans.
+One local test passed in4.22s (`local_final_prefix.xml`) across carry and
+nonzero padded lanes. Equal prefix includes global-less offset. Snapshot
+exchange, cap gate, boundaries and compaction remain unintegrated; no physical
+TPU acceptance or complete distributed-final claim.
