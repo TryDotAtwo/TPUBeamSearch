@@ -891,3 +891,8 @@ history tests passed1.68s (`local_history_store.xml`), including reconstruction
 across three relocated rank histories. This host component is not wired to
 TPU FinalHistory transport, has no concurrent writers or dead-branch GC, and
 does not establish complete solution replay. No changes to V5 pinned source.
+
+V5 terminalERROR downloaded completely to beam_s4_s5_v5. Initialized remote
+firstcase still32704mismatch/allzero NPZ, later7notrun, runtime8TPUv5lite
+sourcecf66f40. See research/2026-09-06-s4-s5-v5-results.md. No restart yet.
+Initialization alone is not sufficient; exact source cause remains unknown.
