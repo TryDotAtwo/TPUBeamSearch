@@ -849,3 +849,26 @@ Packed final-plan adapter now maps invalid compacted rows to terminal index K
 inside Pallas before balancing. This prevents zero-filled padding from becoming
 global index 0. Seven targeted interpreter tests passed in6.02s after the new
 API test failed. This is not TPU validation or request transport acceptance.
+
+Pending initialized-remote control: `initialize_wire=True` fills every full
+wire slot using local DMA, then runs the unchanged readiness/remote transfers.
+Production default remains false. Driver `initialized` compares peer-offset
+wire identities; coordinator `--initialized-control` runs only this group.
+18 targeted checks passed in2.98s after failing API/coordinator tests.
+Full regression session99562 remains active, XML local_s5_initialized_full.xml.
+Its environment omitted source-oracle variables: skipped checks are covered
+separately by session63030, terminal20passed158.09s, XML
+local_s5_initialized_source.xml, with both explicit local C++ oracle paths.
+Do not count this CPU source differential result as CUDA execution.
+Do not launch V5 until regression is terminal and reviewed.
+
+HLO distinction and distributed history caller audit are recorded in
+research/2026-09-06-s5-wire-hlo-difference.md and
+research/2026-09-06-final-history-handoff.md. The latter resolves prior-layer
+lookup to source_rank/local parent index, not the balanced record owner.
+
+Session99562 terminal exit0:818passed16skipped in1071.97s. XML contains834
+tests, zero failures/errors. All16 skipped classname::name identities are
+present and passing in separate source XML (20passed,zero skips/errors).
+Thus all834 collected identities have passing local coverage across the two
+runs, not a single zero-skip run. No physical remote acceptance yet.

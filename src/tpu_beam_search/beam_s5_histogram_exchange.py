@@ -7,7 +7,7 @@ from jax.experimental.pallas import tpu as pltpu
 from .beam_histogram_pair_sum import pallas_sum_histogram_pairs
 
 
-def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_only=False,local_replicate=False):
+def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_only=False,local_replicate=False,initialize_wire=False):
     """All ranks enter after the common request decision with frozen local sums.
 
     Uses 2*ranks*width uint32 HBM scratch, not a ring reduce-scatter. The local
@@ -21,6 +21,8 @@ def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_on
     ranks = mesh.size
     if own_only and local_replicate:
         raise ValueError('own_only and local_replicate are mutually exclusive')
+    if initialize_wire and (own_only or local_replicate):
+        raise ValueError('initialize_wire requires remote exchange')
     if (not isinstance(ranks,int) or not 1 <= ranks <= 128
             or not isinstance(width,int) or width <= 0 or width%128):
         raise ValueError('invalid S5 histogram exchange geometry')
@@ -30,7 +32,8 @@ def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_on
             load = pltpu.make_async_copy(source.at[:,section],staging,local_sem)
             load.start()
             load.wait()
-            for destination in range(ranks if local_replicate else 1):
+            # Diagnostic initialization retains the remote path unchanged.
+            for destination in range(ranks if local_replicate or initialize_wire else 1):
                 store = pltpu.make_async_copy(staging,out.at[pl.ds(2*destination,2),section],local_sem)
                 store.start()
                 store.wait()

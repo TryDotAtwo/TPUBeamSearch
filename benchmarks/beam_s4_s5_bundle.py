@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-def run_bundle(output,*,runner=subprocess.run,recovery=False,transport=False,layout_control=False):
+def run_bundle(output,*,runner=subprocess.run,recovery=False,transport=False,layout_control=False,initialized_control=False):
     output = Path(output)
     output.mkdir(parents=True,exist_ok=True)
     report = dict(groups=[],all_exact=False,scope='independent primitives; not integrated S5 or beam')
@@ -25,6 +25,8 @@ def run_bundle(output,*,runner=subprocess.run,recovery=False,transport=False,lay
                        for name in ('own','wire'))
     if layout_control:
         groups = (('replicate','benchmarks.beam_s5_request_probe',('--kind','replicate'),'s5_replicate.json'),)
+    if initialized_control:
+        groups = (('initialized','benchmarks.beam_s5_request_probe',('--kind','initialized'),'s5_initialized.json'),)
     for name,module,flags,filename in groups:
         folder = output/name
         folder.mkdir(parents=True,exist_ok=True)
@@ -54,6 +56,7 @@ if __name__ == '__main__':
     parser.add_argument('--recovery',action='store_true')
     parser.add_argument('--transport',action='store_true')
     parser.add_argument('--layout-control',action='store_true')
+    parser.add_argument('--initialized-control',action='store_true')
     args = parser.parse_args()
-    result = run_bundle(args.output,recovery=args.recovery,transport=args.transport,layout_control=args.layout_control)
+    result = run_bundle(args.output,recovery=args.recovery,transport=args.transport,layout_control=args.layout_control,initialized_control=args.initialized_control)
     raise SystemExit(0 if result['all_exact'] else 1)

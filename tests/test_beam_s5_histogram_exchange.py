@@ -46,3 +46,12 @@ def test_full_shape_local_replication_initializes_every_pair_without_remote():
     fn = make_s5_histogram_call(SimpleNamespace(size=8),width=256,local_replicate=True,
         interpret=pltpu.InterpretParams(detect_races=True))
     np.testing.assert_array_equal(fn(jnp.asarray(values)),np.tile(values,(8,1)))
+
+
+def test_initialized_wire_traces_remote_full_output():
+    from tpu_beam_search.beam_s5_histogram_exchange import make_s5_histogram_call
+    fn = make_s5_histogram_call(SimpleNamespace(size=8),width=256,
+        return_wire=True,initialize_wire=True)
+    traced = jax.make_jaxpr(fn,axis_env=[('core',8)])(
+        jax.ShapeDtypeStruct((2,256),jnp.uint32))
+    assert tuple(x.shape for x in traced.out_avals) == ((16,256),)
