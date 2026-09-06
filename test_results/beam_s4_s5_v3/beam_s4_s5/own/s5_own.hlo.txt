@@ -1,0 +1,39 @@
+HloModule jit_local, is_scheduled=true, entry_computation_layout={(u32[1,2,256]{2,1,0:T(2,128)})->u32[1,2,256]{2,1,0:T(2,128)}}, allow_spmd_sharding_propagation_to_output={true}, num_partitions=8, frontend_attributes={arg_layout_modes="default",arg_memory_spaces="0",out_layout_modes="default",out_memory_spaces="0"}
+
+FileNames
+1 "<frozen runpy>"
+2 "/tmp/TPUBeamSearch-s4-s5/benchmarks/beam_s5_request_probe.py"
+3 "/tmp/TPUBeamSearch-s4-s5/src/tpu_beam_search/beam_s5_histogram_exchange.py"
+
+FunctionNames
+1 "_run_module_as_main"
+2 "_run_code"
+3 "<module>"
+4 "main"
+5 "main.<locals>.local"
+6 "make_s5_histogram_call.<locals>.call"
+
+FileLocations
+1 {file_name_id=1 function_name_id=1 line=198 end_line=198 column=11 end_column=11}
+2 {file_name_id=1 function_name_id=2 line=88 end_line=88 column=4 end_column=4}
+3 {file_name_id=2 function_name_id=3 line=127 end_line=127 column=4 end_column=4}
+4 {file_name_id=2 function_name_id=4 line=104 end_line=104 column=10 end_column=10}
+5 {file_name_id=2 function_name_id=5 line=98 end_line=98 column=15 end_column=15}
+6 {file_name_id=3 function_name_id=6 line=59 end_line=59 column=15 end_column=15}
+
+StackFrames
+1 {file_location_id=1 parent_frame_id=1}
+2 {file_location_id=2 parent_frame_id=2}
+3 {file_location_id=3 parent_frame_id=3}
+4 {file_location_id=4 parent_frame_id=4}
+5 {file_location_id=5 parent_frame_id=5}
+6 {file_location_id=6 parent_frame_id=6}
+
+
+ENTRY %main.0_spmd (param.1: u32[1,2,256]) -> u32[1,2,256] {
+  %param.1 = u32[1,2,256]{2,1,0:T(2,128)} parameter(0), sharding={devices=[8,1,1]<=[8]}, metadata={op_name="request"}
+  %bitcast.2 = u32[2,256]{1,0:T(2,128)} bitcast(%param.1)
+  %beam_s5_histogram_exchange.1 = u32[2,256]{1,0:T(2,128)} custom-call(%bitcast.2), custom_call_target="tpu_custom_call", operand_layout_constraints={u32[2,256]{1,0}}, frontend_attributes={kernel_metadata={}}, metadata={op_name="jit(local)/shard_map/beam_s5_histogram_exchange/pallas_call" stack_frame_id=6}, backend_config={"aliasing_operands":{"lists":[]},"custom_call_config":{"allow_input_fusion":[],"body":"TUzvUgFNTElSMjMuMC4wZ2l0AAEpCQEDBQcBAwkDFQsNDxETFRcZGx0D2akZAZ8HDwsTCwsThQ8LDw8PZQ8TEw8LCw8jCw8LCw8bDw8TCw87CwsLC1ULDwsPCwsLCw8LDwsbDwsTDxMTCw8LDxsPDxtDgwsPDxtjDw8bDw8bBQmFXWFNBwNZARUPIxsjDxcbIysLBQVNPQJmCR8dXV8FHwMDCx0FIQUjAwMThWFmZmluZV9tYXA8KGQwLCBkMSkgLT4gKGQwLCBkMSk+AB0lfwUlHTGLHSWTHTGZYWZmaW5lX21hcDwoZDApIC0+IChkMCk+ABEBAQMDC2kDA2unHXV3BScFKR0JgwMHE4eJHS0vBSsREwAFLQUvHQmPAwUTkS0vHQmXHQmdAwM/QQUxEQk9Aw1FR0lLT1FTVVdZW6UFMwEBBTUNEWFmZmluZV9tYXA8KCkgLT4gKCk+AAU3EQkBBTkRCRUFOwU9BT8FQR1hYwVDHWVnBUUtBQdBEWMRAQkFRwMDC28RAQUDAwtzEQECBAVJHXl7BUsdCX0tBQczOUMdJ4EVKSktBQc3GTEjAQcZAQAAAAIAAAAAAAAAIwEPOQEAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAFTR0zjRU1NS0FBzkZLyMBCykBAAAAAQAAAAEAAAAAAAAAAAAAAB0nlRU5OS0FBz0ZMx0zmxU7Oy0FBz8ZMSN0cHUubWVtb3J5X3NwYWNlPHNlbWFwaG9yZV9tZW0+ACN0cHUubWVtb3J5X3NwYWNlPGhibT4AI3RwdS5tZW1vcnlfc3BhY2U8dm1lbT4AI3RwdS5jb3JlX3R5cGU8dGM+ACNhcml0aC5vdmVyZmxvdzxub25lPgABAgIXoQUJAggBDxefAx0VGxehBQkCBAEPAQIEF58BFU0XnwMdFxsXowUJAgQBDwUPAwMLBQUNDwEBCSF0cHUuZG1hX3NlbWFwaG9yZQAhdHB1LnNlbWFwaG9yZQAEEgMFAREBPQcDAQULEQFDBwMZHw8DAQMBCwEFAQUBDQEPAQMDAwcDAQMDAx8DAQ0HAyEDAQUPEQMDA20DAQ8UAwcPExUFAxc/AwEDAwMjcQMBEwcjIQMBBRkbAwMRBwMBBQcRDQMHBwEfHQcFESsHIQ0FAwMVBwMBBQcVDQMHBwEjHQkFFTcHBSUNAwMXBwMBBQcXDQMHBwMnHQcFFysHDSkFAwMZBwMBBQcZDQMHBwMrHQkFGTcHBQ0tFQADAwMDHwMBEQABBgMBBQEAVgpPEwkLHVMLDR03EyMhHSktJRUhKRcpDXeXFRcZERcVHSEjHw8NCR0RYnVpbHRpbgBzdGFibGVfbW9zYWljAHRwdQBhcml0aABtb2R1bGUAYXJpdGguY29uc3RhbnQAdHB1Lm1lbXJlZl9zbGljZQB0cHUuZW5xdWV1ZV9kbWEAdHB1LndhaXRfZG1hMgBmdW5jLmZ1bmMAYXJpdGguYWRkaQBzY2YuZm9yAGZ1bmMucmV0dXJuAGFyaXRoLm11bGkAc2NmLnlpZWxkAC90bXAvVFBVQmVhbVNlYXJjaC1zNC1zNS9zcmMvdHB1X2JlYW1fc2VhcmNoL2JlYW1fczVfaGlzdG9ncmFtX2V4Y2hhbmdlLnB5AG1ha2VfczVfaGlzdG9ncmFtX2NhbGwuPGxvY2Fscz4uZXhjaGFuZ2UuPGxvY2Fscz4ub3duX3RpbGUAdmFsdWUAb3BlcmFuZFNlZ21lbnRTaXplcwBkbWFfc3RhcnQ6AGRtYV9zdGFydC9kbWFfc3RhcnQAc3RyaWN0X29yZGVyaW5nAGRtYV93YWl0OgBkbWFfd2FpdC9kbWFfd2FpdABzdGFibGVfbW9zYWljLnZlcnNpb24AZGltZW5zaW9uX3NlbWFudGljcwBmdW5jdGlvbl90eXBlAHNjYWxhcl9wcmVmZXRjaABzY3JhdGNoX29wZXJhbmRzAHN5bV9uYW1lAGJlYW1fczVfaGlzdG9ncmFtX2V4Y2hhbmdlAHRwdS5jb3JlX3R5cGUAc2NhbjoAc2NhbgBtYWtlX3M1X2hpc3RvZ3JhbV9jYWxsLjxsb2NhbHM+LmV4Y2hhbmdlAG92ZXJmbG93RmxhZ3MAbXVsOgBtdWwAcHJpb3JpdHkA","input_memory_space_colors":[],"needs_layout_passes":true,"output_memory_colors":[],"output_memory_space_colors":[],"serialization_format":"1"},"flag_configs":[],"retry_config":{"retry_count":"0"},"scoped_memory_configs":[],"used_scoped_memory_configs":[{"memory_space":"1","offset":"0","size":"1024"}]}
+  ROOT %bitcast.1 = u32[1,2,256]{2,1,0:T(2,128)} bitcast(%beam_s5_histogram_exchange.1), metadata={op_name="jit(local)/shard_map/broadcast_in_dim" stack_frame_id=5}
+}
+

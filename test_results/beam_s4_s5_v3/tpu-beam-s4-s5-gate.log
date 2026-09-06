@@ -1,0 +1,20 @@
+[{"stream_name":"stderr","time":21.051382459,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":22.547155219,"data":"\n"}
+,{"stream_name":"stderr","time":22.547186519,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":22.547192079,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":22.702628703,"data":"Cloning into '/tmp/TPUBeamSearch-s4-s5'...\n"}
+,{"stream_name":"stderr","time":33.929750195,"data":"Updating files:  93% (3812/4088)\rUpdating files:  94% (3843/4088)\rUpdating files:  95% (3884/4088)\rUpdating files:  96% (3925/4088)\rUpdating files:  97% (3966/4088)\rUpdating files:  98% (4007/4088)\rUpdating files:  99% (4048/4088)\rUpdating files: 100% (4088/4088)\rUpdating files: 100% (4088/4088), done.\n"}
+,{"stream_name":"stderr","time":34.837209498,"data":"HEAD is now at 63cd100 Isolate S5 own-copy transport and retain mismatch arrays\n"}
+,{"stream_name":"stdout","time":34.875788299,"data":"GROUP own\n"}
+,{"stream_name":"stdout","time":57.657950854,"data":"GROUP wire\n"}
+,{"stream_name":"stderr","time":74.424198894,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":74.424232434,"data":"  File \"/kaggle/src/script.py\", line 27, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":74.424287354,"data":"    main()\n"}
+,{"stream_name":"stderr","time":74.424299824,"data":"  File \"/kaggle/src/script.py\", line 22, in main\n"}
+,{"stream_name":"stderr","time":74.424366174,"data":"    subprocess.run((sys.executable,'-m','benchmarks.beam_s4_s5_bundle',\n"}
+,{"stream_name":"stderr","time":74.424373403,"data":"  File \"/usr/local/lib/python3.12/subprocess.py\", line 571, in run\n"}
+,{"stream_name":"stderr","time":74.427691523,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":74.427700323,"data":"subprocess.CalledProcessError: Command '('/usr/local/bin/python', '-m', 'benchmarks.beam_s4_s5_bundle', '--output', '/kaggle/working/beam_s4_s5', '--transport')' returned non-zero exit status 1.\n"}
+,{"stream_name":"stderr","time":78.360895618,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":80.774420316,"data":"[NbConvertApp] Writing 278184 bytes to __results__.html\n"}
+]

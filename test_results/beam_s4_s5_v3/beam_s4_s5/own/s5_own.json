@@ -1,0 +1,109 @@
+{
+  "source_sha": "63cd100c0c0c7266acc5f2b82368b07f3d035322",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "own only; repeated same executable; no full S5/ownership or timing claim",
+  "cases": [
+    {
+      "name": "recovery0_0",
+      "input_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "expected_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43"
+    },
+    {
+      "name": "recovery0_1",
+      "input_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+      "expected_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe"
+    },
+    {
+      "name": "recovery0_2",
+      "input_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "expected_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43"
+    },
+    {
+      "name": "recovery0_3",
+      "input_sha256": "4846c637d0fe5795d711d3f2f588a840af2679fc523d9a201bac5495713429df",
+      "expected_sha256": "4846c637d0fe5795d711d3f2f588a840af2679fc523d9a201bac5495713429df",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "4846c637d0fe5795d711d3f2f588a840af2679fc523d9a201bac5495713429df"
+    },
+    {
+      "name": "recovery1_0",
+      "input_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "expected_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43"
+    },
+    {
+      "name": "recovery1_1",
+      "input_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+      "expected_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe"
+    },
+    {
+      "name": "recovery1_2",
+      "input_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "expected_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "e62f4960e1347d34222397feafbebaf44d8e73aa26d0a4c2a13a76b41adcdb43"
+    },
+    {
+      "name": "recovery1_3",
+      "input_sha256": "4846c637d0fe5795d711d3f2f588a840af2679fc523d9a201bac5495713429df",
+      "expected_sha256": "4846c637d0fe5795d711d3f2f588a840af2679fc523d9a201bac5495713429df",
+      "exact": true,
+      "mismatches": 0,
+      "output_sha256": "4846c637d0fe5795d711d3f2f588a840af2679fc523d9a201bac5495713429df"
+    }
+  ],
+  "exact": true,
+  "compile_seconds": 0.41469644200003586
+}

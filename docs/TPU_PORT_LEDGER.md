@@ -808,3 +808,9 @@ Eight logical-rank local interpreter selection-chain test passed in11.75s
 snapshot->prefix->cap->indices, exact selected identities in phase/rank/shard/
 slot order, with an empty rank and dirty padding. No actual collective or
 metadata compaction is exercised; this does not constitute GPU/8TPU replay.
+
+V3 terminal ERROR, complete output in beam_s4_s5_v3. Own-copy8/8 exact;
+wirefirstcase32704mismatch. NPZ actualallzero atallrankrows, includingown.
+Own-only outputshape differs, so remoteDMA vs full-outputlayout remains
+confounded. Next probe must hold fullshape fixed withoutremote, initialized
+allregions. See research/2026-09-06-s4-s5-v3-results.md. NoactiveTPUsession.
