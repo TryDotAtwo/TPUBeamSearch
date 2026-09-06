@@ -795,3 +795,10 @@ Six cap/prefix local tests passed in4.89s (`local_final_cap.xml`), covering
 zero, underfilled beam, carry and invalid threshold. Caller must stop on error;
 this gate is not yet wired into materialization. Sum-fit-uint64 is required.
 No physical TPU or complete final-selection acceptance is claimed.
+
+`pallas_final_indices` adds rank prefixes to local phase ordinals with carry,
+applies exact K and rejects every output-valid lane on cap error. Seven local
+indices/cap/prefix tests passed in6.29s (`local_final_indices.xml`). UINT32_MAX
+ordinal is invalid; invalid zero index words MUST NOT be sent to balance
+without validity compaction. This closes the arithmetic selection mask, not
+metadata compaction/materialization or collective epoch integration.
