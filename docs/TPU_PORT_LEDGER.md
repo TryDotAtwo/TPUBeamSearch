@@ -826,3 +826,15 @@ regression session62209 passed829 tests in1124.00s, exit0
 (`local_s5_layout_full.xml`). Publish scoped changes/results, pin V4
 launcher with new public SHA and --layout-control, then submit same private
 slug. V3 is already terminal/downloaded; do not repeat it.
+
+V4 layout-control submitted: source89b4d3c, launcherd364d4c, observedQUEUED.
+Full62209 terminal829passed; do not poll that completed handle.
+
+`pallas_final_compact` is an HBM bitonic baseline preserving metadata8 and
+global-index2 plus validity. No 16K wrapper bound; signed32 tile indexing bound
+remains. Scratch capacity is nextpow2(2*shards*capacity), with O(N log^2 N)
+passes, not a linear compactor. Two local tests passed in29.39s
+(`local_final_compact_extended.xml`): high-word indices, three shards,
+power-of-two padding and empty output. Whole frontier is not staged in VMEM.
+No physical compilation/performance, source CUDA replay or integrated final
+transport acceptance. Unique global indices and same-epoch inputs required.
