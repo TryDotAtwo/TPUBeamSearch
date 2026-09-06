@@ -802,3 +802,9 @@ indices/cap/prefix tests passed in6.29s (`local_final_indices.xml`). UINT32_MAX
 ordinal is invalid; invalid zero index words MUST NOT be sent to balance
 without validity compaction. This closes the arithmetic selection mask, not
 metadata compaction/materialization or collective epoch integration.
+
+Eight logical-rank local interpreter selection-chain test passed in11.75s
+(`local_final_selection_chain.xml`): masks->scan->host assembled count
+snapshot->prefix->cap->indices, exact selected identities in phase/rank/shard/
+slot order, with an empty rank and dirty padding. No actual collective or
+metadata compaction is exercised; this does not constitute GPU/8TPU replay.
