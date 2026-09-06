@@ -36,3 +36,16 @@ def test_recovery_isolates_four_s5_groups_without_repeating_s4(tmp_path):
     report = run_bundle(tmp_path,runner=runner,recovery=True)
     assert calls == ['request','wire','reduction','combined']
     assert not report['all_exact']
+
+
+def test_transport_isolation_runs_own_and_wire_even_after_failure(tmp_path):
+    from benchmarks.beam_s4_s5_bundle import run_bundle
+    calls = []
+    def runner(command,**kwargs):
+        folder = Path(command[command.index('--output')+1])
+        calls.append(folder.name)
+        (folder/f's5_{folder.name}.json').write_text(json.dumps({'exact':False}))
+        return SimpleNamespace(returncode=1)
+    report = run_bundle(tmp_path,runner=runner,transport=True)
+    assert calls == ['own','wire']
+    assert not report['all_exact']

@@ -7,12 +7,14 @@ from jax.experimental.pallas import tpu as pltpu
 from .beam_histogram_pair_sum import pallas_sum_histogram_pairs
 
 
-def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False):
+def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_only=False):
     """All ranks enter after the common request decision with frozen local sums.
 
     Uses 2*ranks*width uint32 HBM scratch, not a ring reduce-scatter. The local
     input stays immutable until all sends complete. Each offset owns a distinct
     destination; no receive-slot reuse. Physical multi-rank validation pending.
+    own_only isolates the unchanged local tile loop and returns [2,width],
+    without remote transfers or reduction; diagnostic only.
     """
     ranks = mesh.size
     if (not isinstance(ranks,int) or not 1 <= ranks <= 128
@@ -28,7 +30,7 @@ def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False):
             store.start()
             store.wait()
         lax.fori_loop(0,width//128,own_tile,None)
-        for offset in range(1,ranks):
+        for offset in range(1,1 if own_only else ranks):
             rank = lax.axis_index('core')
             right = lax.rem(rank+offset,jnp.int32(ranks))
             left = lax.rem(rank-offset+ranks,jnp.int32(ranks))
@@ -43,7 +45,7 @@ def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False):
             transfer.wait_recv()
     hbm = pl.BlockSpec(memory_space=pltpu.HBM)
     wire_call = pl.pallas_call(exchange,
-        out_shape=jax.ShapeDtypeStruct((2*ranks,width),jnp.uint32),
+        out_shape=jax.ShapeDtypeStruct((2 if own_only else 2*ranks,width),jnp.uint32),
         in_specs=(hbm,),out_specs=hbm,
         scratch_shapes=(pltpu.SemaphoreType.DMA,
             pltpu.SemaphoreType.DMA((max(1,ranks-1),)),
@@ -56,5 +58,5 @@ def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False):
             raise ValueError('local histogram must be uint32 low/high [2,width]')
         wire = wire_call(histogram)
         # Diagnostic-only exposure distinguishes transport from reduction.
-        return wire if return_wire else pallas_sum_histogram_pairs(wire,interpret=interpret)
+        return wire if return_wire or own_only else pallas_sum_histogram_pairs(wire,interpret=interpret)
     return call

@@ -16,3 +16,18 @@ def test_wire_and_reduction_recovery_are_matched_nonzero_first():
         summed = values.sum(axis=1,dtype=np.uint64)
         np.testing.assert_array_equal(total[:,0],summed.astype(np.uint32))
         np.testing.assert_array_equal(total[:,1],(summed>>np.uint64(32)).astype(np.uint32))
+
+
+def test_own_copy_cases_expect_identity_and_save_failure_arrays(tmp_path):
+    from benchmarks.beam_s5_request_probe import recovery_fixtures, save_failure_arrays
+    cases = recovery_fixtures('own')
+    assert len(cases) == 8 and np.any(cases[0][1])
+    for _,source,expected in cases:
+        np.testing.assert_array_equal(source,expected)
+    name,source,expected = cases[0]
+    actual = np.zeros_like(expected)
+    path = save_failure_arrays(tmp_path,name,source,expected,actual)
+    with np.load(path) as data:
+        np.testing.assert_array_equal(data['input'],source)
+        np.testing.assert_array_equal(data['expected'],expected)
+        np.testing.assert_array_equal(data['actual'],actual)

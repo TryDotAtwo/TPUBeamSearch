@@ -30,3 +30,11 @@ def test_raw_wire_diagnostic_preserves_single_rank_payload():
     fn = make_s5_histogram_call(SimpleNamespace(size=1),width=256,return_wire=True,
         interpret=pltpu.InterpretParams(detect_races=True))
     np.testing.assert_array_equal(fn(jnp.asarray(values)),values)
+
+
+def test_own_only_diagnostic_has_no_remote_axis_requirement():
+    from tpu_beam_search.beam_s5_histogram_exchange import make_s5_histogram_call
+    values = np.arange(512,dtype=np.uint32).reshape(2,256)
+    fn = make_s5_histogram_call(SimpleNamespace(size=8),width=256,own_only=True,
+        interpret=pltpu.InterpretParams(detect_races=True))
+    np.testing.assert_array_equal(fn(jnp.asarray(values)),values)

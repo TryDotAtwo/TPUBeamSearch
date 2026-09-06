@@ -57,14 +57,22 @@ def recovery_fixtures(kind):
             wire = np.stack([np.concatenate([source[(rank-offset)%8] for offset in range(8)],axis=0)
                              for rank in range(8)])
             request,expected = (source,wire) if kind == 'wire' else (wire,total) if kind == 'reduction' else (source,total)
+            if kind == 'own':
+                request,expected = source,source.copy()
             cases.append((f'recovery{repeat}_{step}',request,expected))
     return cases
+
+
+def save_failure_arrays(output,name,request,expected,actual):
+    path = Path(output)/f'{name}_failure.npz'
+    np.savez_compressed(path,input=request,expected=expected,actual=actual)
+    return path
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output',required=True,type=Path)
-    parser.add_argument('--kind',choices=('request','histogram','wire','reduction','combined'),default='request')
+    parser.add_argument('--kind',choices=('request','histogram','wire','reduction','combined','own'),default='request')
     args = parser.parse_args()
     output = args.output
     output.mkdir(parents=True,exist_ok=True)
@@ -85,7 +93,7 @@ def main():
     sharding = jax.sharding.NamedSharding(mesh,spec)
     call = (make_s5_request_call(mesh) if args.kind == 'request'
             else pallas_sum_histogram_pairs if args.kind == 'reduction'
-            else make_s5_histogram_call(mesh,width=256,return_wire=args.kind == 'wire'))
+            else make_s5_histogram_call(mesh,width=256,return_wire=args.kind == 'wire',own_only=args.kind == 'own'))
     def local(request):
         return call(request[0])[None]
     fn = jax.jit(jax.shard_map(local,mesh=mesh,in_specs=spec,out_specs=spec,check_vma=False))
@@ -105,6 +113,8 @@ def main():
         actual = np.asarray(jax.block_until_ready(exe(jax.device_put(request,sharding))))
         mismatches = int(np.count_nonzero(actual != expected))
         row.update(mismatches=mismatches,exact=mismatches == 0,output_sha256=digest((actual,)))
+        if mismatches:
+            row['failure_arrays'] = save_failure_arrays(output,name,request,expected,actual).name
         save()
         if mismatches:
             raise RuntimeError(f'{name}: {args.kind} mismatch')

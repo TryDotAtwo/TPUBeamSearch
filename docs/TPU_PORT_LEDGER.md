@@ -760,3 +760,15 @@ Request20/20 and synthetic reduction8/8 exact; raw wire first nonzero input
 Failure isolated before pair reduction, not yet a concrete source cause.
 See research/2026-09-06-s4-s5-v2-results.md. No active TPU session remains;
 do not rerun accepted groups before planning the next transport isolation.
+
+Pending local transport isolation: histogram factory `own_only=True` returns
+the unchanged local tile-copy path with remote transfers/reduction omitted.
+Four local tests passed in2.41s (`local_s5_own_copy.xml`) after a failing API
+test. Driver now supports own-copy identity fixtures and saves input/expected/
+actual NPZ on failure. Coordinator --transport runs own and wire separately,
+continuing after failure, without accepted request/reduction/S4 repeats.
+Eleven targeted checks passed in2.93s (`local_s5_transport_bundle.xml`). Full
+regression session33177 passed817 tests in1119.25s, exit0 and zero skips
+(`local_s5_transport_full.xml`). This is diagnostic, not a fix; no new kernel
+has been submitted yet. Publish and pin V3 launcher to new source SHA
+with --transport instead of --recovery.
