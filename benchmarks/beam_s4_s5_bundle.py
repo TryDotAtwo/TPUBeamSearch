@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-def run_bundle(output,*,runner=subprocess.run,recovery=False,transport=False,layout_control=False,initialized_control=False,hbm_control=False,epoch_control=False):
+def run_bundle(output,*,runner=subprocess.run,recovery=False,transport=False,layout_control=False,initialized_control=False,hbm_control=False,epoch_control=False,epoch_only=False):
     output = Path(output)
     output.mkdir(parents=True,exist_ok=True)
     report = dict(groups=[],all_exact=False,scope='independent primitives; not integrated S5 or beam')
@@ -35,6 +35,9 @@ def run_bundle(output,*,runner=subprocess.run,recovery=False,transport=False,lay
         groups = (
             ('hbm_combined','benchmarks.beam_s5_request_probe',('--kind','hbm_combined'),'s5_hbm_combined.json'),
             ('epoch','benchmarks.beam_s5_epoch_probe',('--explicit-hbm-output',),'s5_epoch.json'))
+    if epoch_only:
+        report['scope'] = 'serialized S5 epoch only; combined histogram already accepted separately'
+        groups = (('epoch','benchmarks.beam_s5_epoch_probe',('--explicit-hbm-output',),'s5_epoch.json'),)
     for name,module,flags,filename in groups:
         folder = output/name
         folder.mkdir(parents=True,exist_ok=True)
@@ -67,6 +70,7 @@ if __name__ == '__main__':
     parser.add_argument('--initialized-control',action='store_true')
     parser.add_argument('--hbm-control',action='store_true')
     parser.add_argument('--epoch-control',action='store_true')
+    parser.add_argument('--epoch-only',action='store_true')
     args = parser.parse_args()
-    result = run_bundle(args.output,recovery=args.recovery,transport=args.transport,layout_control=args.layout_control,initialized_control=args.initialized_control,hbm_control=args.hbm_control,epoch_control=args.epoch_control)
+    result = run_bundle(args.output,recovery=args.recovery,transport=args.transport,layout_control=args.layout_control,initialized_control=args.initialized_control,hbm_control=args.hbm_control,epoch_control=args.epoch_control,epoch_only=args.epoch_only)
     raise SystemExit(0 if result['all_exact'] else 1)

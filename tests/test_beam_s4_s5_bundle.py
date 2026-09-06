@@ -5,6 +5,19 @@ from types import SimpleNamespace
 import pytest
 
 
+def test_epoch_only_does_not_repeat_accepted_combined(tmp_path):
+    from benchmarks.beam_s4_s5_bundle import run_bundle
+    calls=[]
+    def runner(command,**kwargs):
+        folder=Path(command[command.index('--output')+1])
+        calls.append(folder.name)
+        assert '--explicit-hbm-output' in command
+        (folder/'s5_epoch.json').write_text(json.dumps({'exact':True}))
+        return SimpleNamespace(returncode=0)
+    assert run_bundle(tmp_path,runner=runner,epoch_only=True)['all_exact']
+    assert calls==['epoch']
+
+
 def test_epoch_control_runs_composition_after_failed_combined(tmp_path):
     from benchmarks.beam_s4_s5_bundle import run_bundle
     calls = []

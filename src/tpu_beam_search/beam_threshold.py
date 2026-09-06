@@ -27,7 +27,14 @@ def pallas_periodic_threshold(histogram,beam,prior,*,bins,interpret=False):
             out[...] = jnp.where(rows == 2,jnp.uint32(0x7fffffff),jnp.uint32(0))
         index = pl.program_id(0)*128+lanes
         values = jnp.where((index < bins)[None],h[...],jnp.uint32(0))
-        low,high = lax.associative_scan(add,(values[0],values[1]))
+        # Tuple associative_scan recursively emits uint32[0] slices. Mosaic
+        # rejects those before execution (physical V7). Keep all scan stages
+        # width128 and preserve carry-aware integer addition exactly.
+        low,high = values[0],values[1]
+        for distance in (1,2,4,8,16,32,64):
+            shifted_low = jnp.concatenate((jnp.zeros((distance,),jnp.uint32),low[:-distance]))
+            shifted_high = jnp.concatenate((jnp.zeros((distance,),jnp.uint32),high[:-distance]))
+            low,high = add((low,high),(shifted_low,shifted_high))
         low,high = add((low,high),(out[0,0],out[1,0]))
         reached = (high > target[1,0])|((high == target[1,0])&(low >= target[0,0]))
         first = jnp.min(jnp.where(reached&(index < bins),index,jnp.int32(0x7fffffff)))

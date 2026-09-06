@@ -965,3 +965,70 @@ The interval suite now also consumes actual Pallas-grouped sparse records:
 all three tests pass14.12s (`local_final_intervals.xml`), preserving payload
 identity/high parent word and empty-rank intervals. This is interpreter
 composition, still not remote exchange or target-hardware acceptance.
+
+V7 source6c3fc5936616b7c22bf502030477eead523c356b, launcher e68300f,
+submitted successfully and observedQUEUED. Do not restart it.
+
+`pallas_pack_final_chunk` now packs one dynamic128-record chunk per recipient
+from grouped HBM payload plus rank intervals. At most two aligned source tiles
+cover an unaligned interval; waits precede scratch reads; tails are zero.
+Any local invalid range/rank error blocks all peer payload DMA in this call.
+Six focused tests pass5.99s (`local_final_chunk.xml`): nonaligned/tail/empty,
+chunkUINT32_MAX and bounds/rank failures. This module postdates the855-test
+regression and is not in V7. Collective error agreement, remote transport,
+physical compile and profiling remain required; no overlap claim.
+
+Separate `make_final_chunk_exchange` now has destination-major input and
+source-major retained snapshots, capacity128 and configurable uint32 planes.
+A common request-MAX error gate precedes payload exchange; count controls
+still execute for zero peers, payload send/receive are conditional. Two
+semaphore slots are reused only after waits/ACK; snapshots are distinct and
+remain live for the caller. S3 transport is unchanged. Thirteen focused tests
+pass20.55s (`local_final_exchange_foundation.xml`): packing/interval composition,
+single-rank race-checked exchange, zero count/error gating and eight-rank
+JAXPR output placement. No multi-rank DMA was executed; physical readiness,
+zero-peer agreement, cross-rank error handling and final caller integration
+are still pending. This is a serialized snapshot baseline, not overlap.
+
+`beam_final_exchange_probe` prepares16 physical cases (two rounds of empty,
+self, one-to-all, all-to-one, uneven, full128, bad count, single-rank error).
+Expected snapshots transpose destination/source ownership; common failures
+must zero every payload/count and report error on every rank. JSON/HLO and
+failure NPZ are retained. Fourteen local foundation/fixture tests pass20.94s
+(`local_final_exchange_probe.xml`); the actual eight-TPU probe has not run.
+V7 S5 is stillQUEUED, so no additional TPU session was started.
+
+`pallas_compact_final_received` removes holes between source snapshots before
+the dense request materializer. It preserves source/slot order, masks tails,
+zeroes invalid output and carries total/error controls. Two interpreter tests
+pass19.01s (`local_final_receive.xml`), including three-source power-of-two
+padding and common-error suppression. This additional module/test pair was
+added after collection of the in-flight `local_final_exchange_full.xml` suite
+(handle94947); it is separate evidence. Physical compile/transport composition
+and performance are pending; compaction currently uses HBM bitonic sorting.
+
+Receive composition now feeds the packed requests/device count directly into
+validated parent materialization. It returns the packed requests too, preserving
+return-rank/move for later response routing. Three local tests pass25.39s
+(`local_final_receive.xml`), comparing generated states and target bytes without
+host filtering. Validation first-index UINT32_MAX is the no-error sentinel;
+the gate is invalid-count lane0, not `any(summary)`. This composition still
+needs collective error gating and response exchange before frontier publication.
+
+V7 is now terminalERROR, downloaded/published868bbaa. Combined histogram
+exchange+sum is8/8exact on8TPUv5lite, matching SHA. Epoch compilation rejected
+uint32[0] produced by tuple associative_scan at beam_threshold.py:30; no epoch
+executed. Local JAXPR reproduces empty slices. Candidate fixed-width carry scan
+passes13focusedtests17.85s including randomized uint64/bin boundaries.
+`--epoch-only` coordinator mode avoids rerunning accepted combined work;
+10 coordinator tests passed. V8 is not submitted. Full94947 remains live but
+predates these changes; a fresh unchanged-snapshot full run is required after
+it terminates before publishing the candidate/new pinned physical launch.
+
+The fresh unchanged Python snapshot regression91546 has TERMINATED:
+878passed1151.33s, zero failures/errors/skips (`local_s5_v8_full.xml`). Both
+source C++ oracle paths were enabled. Previous94947 also terminated869passed;
+neither handle should be polled again. The878-run includes final chunk,
+exchange/probe/receive composition and fixed-width threshold scan/epoch-only
+mode. Actual single-GPU original final smoke and six full-byte CUDA-vs-Pallas
+interpreter fixtures are separately publishedfd5e649; not physical TPU replay.
