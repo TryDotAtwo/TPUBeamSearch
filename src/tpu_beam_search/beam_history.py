@@ -64,6 +64,28 @@ class RankHistoryStore:
             raise ValueError('missing history target')
         layers.append((parents,routes))
 
+    def append_all_rank_layer(self, records_by_rank, *, target_counts, depth):
+        """Publish one validated host depth across all ranks, or change nothing.
+
+        Single-host, single-writer operation after completed transfers and a
+        successful distributed decision. This does not perform either wait.
+        Existing layer arrays are shared; only rank layer lists are copied.
+        Mixing with rank-local appends requires every rank at the same depth.
+        """
+        if (not isinstance(depth,int) or depth < 0
+                or any(len(layers) != depth for layers in self._layers)):
+            raise ValueError('history publication depth mismatch')
+        records_by_rank, target_counts = tuple(records_by_rank), tuple(target_counts)
+        if len(records_by_rank) != len(self._layers) or len(target_counts) != len(self._layers):
+            raise ValueError('history publication must include every rank')
+        staged = RankHistoryStore(world_size=len(self._layers))
+        for rank,(records,count) in enumerate(zip(records_by_rank,target_counts,strict=True)):
+            staged.append_rank_layer(rank,records,target_count=count)
+        # Build the complete replacement before publishing, including any
+        # allocation failures. Do not append incrementally into live layers.
+        replacement = [layers + staged._layers[rank] for rank,layers in enumerate(self._layers)]
+        self._layers = replacement
+
     def read_entry(self, rank, layer, index):
         layers = self._rank(rank)
         if not isinstance(layer,int) or not 0 <= layer < len(layers):

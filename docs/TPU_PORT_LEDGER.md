@@ -1149,3 +1149,20 @@ three destinations include an empty receiver, sparse valid slots, high-bit
 64-bit parents and reversed target/receive order. Literal expected records
 check original route preservation. No production changes, physical DMA,
 multi-rank atomic publication or consumer-drain claim.
+
+Local host history publication candidate adds append_all_rank_layer: validate
+all rank records in staged storage, check a common expected depth, then replace
+all rank-layer lists at once. Three tests failed before the missing API was
+implemented;14 focused history tests now pass1.55s (`local_history_publication.xml`).
+Late-rank duplicates, generator failure, stale depth and missing ranks cannot
+partially publish; retry works. This is single-host/single-writer atomicity,
+not DMA completion or distributed agreement. Existing layer arrays are shared,
+rank lists copied. Full regression36041 is RUNNING with both C++ oracles,
+`local_history_publication_full.xml`; keep this Python snapshot unchanged.
+Final TPU gate V1 remains the sole queued session with its older pinned source.
+
+Full36041 has TERMINATED:913passed988.01s, zero failures/errors/skips,
+`local_history_publication_full.xml`, both C++ oracles enabled. The host atomic
+publication change is locally regression-verified. Do not poll/repeat36041.
+It still requires the integrated caller to establish distributed acceptance,
+completed history transfers and frontier/scratch ordering before invoking it.
