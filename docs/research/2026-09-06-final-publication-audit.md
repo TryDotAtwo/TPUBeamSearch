@@ -44,3 +44,25 @@ Tests must exercise count0, capacity, capacity+1 and UINT32_MAX. On overflow:
 materialization produces zero wire; scatter preserves the entire frontier;
 both expose an error. This does not replace cross-chunk count accounting,
 target uniqueness or the final coordinated publication barrier.
+
+## Scratch transition must preserve a common prefix
+
+Read-only `ARCHITECTURE_NEED.md:638-650` requires one static pool with three
+exclusive layouts. Selection outputs consumed by materialization occupy a
+common prefix: a phase change must not overwrite them with exchange temporaries.
+Selection filter temporaries and materialization exchange temporaries can alias
+only outside that live prefix. Persistent stream survivor/count/histogram
+storage begins after the reserved final budget. Current frontier and solved/
+stop storage are outside the pool.
+
+`ARCHITECTURE_NEED.md:1588-1617` requires clearing response padding, scattering
+to temporary next frontier, finishing all responses, copying into current
+frontier and only then releasing final storage for streams. The TPU caller
+must additionally await every consumer of common-prefix history data before
+reuse. Python reference replacement does not establish this lifetime, nor
+does a local scatter completion establish a multi-rank drain.
+
+Acceptance evidence remains missing: actual donated/aliased HBM buffer report,
+per-phase high-water sizes, and a full-depth profile proving no overlap of
+incompatible layouts. The current separate-array primitives do not establish
+the required single-pool implementation.

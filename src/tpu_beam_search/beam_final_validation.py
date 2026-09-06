@@ -8,8 +8,8 @@ def pallas_validate_final_requests(requests,count,frontier_size,target_count,*,
                                    move_count,require_local_slot=False,interpret=False):
     """Bits parent1, target2, move4, local-slot8; padding reasons are zero.
 
-    frontier_size is low/high uint32. Caller ensures count<=capacity, all
-    return ranks valid, then aggregates reasons and gates materialization.
+    frontier_size is low/high uint32. TPU-only bit16 at index0 reports count
+    overflow. Caller validates return ranks, aggregates reasons and gates DMA.
     Slot equality applies only to local indexed requests, not arbitrary grouped
     remote requests. This does not itself report/stop an invalid batch.
     """
@@ -27,6 +27,7 @@ def pallas_validate_final_requests(requests,count,frontier_size,target_count,*,
         reason = parent.astype(jnp.uint32) | (target.astype(jnp.uint32)*2) | (move.astype(jnp.uint32)*4)
         if require_local_slot:
             reason |= (r[2] != index).astype(jnp.uint32)*8
+        reason |= ((n[0] > requests.shape[1]) & (index == 0)).astype(jnp.uint32)*16
         out[...] = jnp.where(index < n[0],reason,jnp.uint32(0))[None]
     return pl.pallas_call(kernel,out_shape=jax.ShapeDtypeStruct((1,requests.shape[1]),jnp.uint32),
         in_specs=(pl.BlockSpec((4,128),lambda i:(0,i)),pl.BlockSpec((1,)),

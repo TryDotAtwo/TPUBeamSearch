@@ -32,7 +32,7 @@ def make_s5_epoch_call(mesh,*,bins,period,interpret=False,explicit_hbm_output=Fa
     def completed(active,out):
         # Consumes the actual output of threshold publication; nonzero for
         # either valid active slot. Not a cross-rank completion barrier.
-        out[0] = active[0,0]+jnp.uint32(1)
+        out[...] = jnp.broadcast_to(active[0,0]+jnp.uint32(1),(1,))
     complete_call = pl.pallas_call(completed,
         out_shape=jax.ShapeDtypeStruct((1,),jnp.uint32),
         interpret=interpret,name='beam_s5_publication_dependency')

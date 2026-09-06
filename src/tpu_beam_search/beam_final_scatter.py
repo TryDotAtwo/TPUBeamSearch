@@ -20,7 +20,8 @@ def pallas_scatter_final_responses(frontier,wire,count,*,state_len,interpret=Fal
     n,width = wire.shape
     def bounds(t,c,out):
         index = pl.program_id(0).astype(jnp.uint32)*128+jnp.arange(128,dtype=jnp.uint32)
-        out[...] = ((index[None] < c[0]) & (t[...] >= frontier.shape[0])).astype(jnp.uint32)
+        out[...] = (((index[None] < c[0]) & (t[...] >= frontier.shape[0]))
+                    | ((c[0] > n) & (index[None] == 0))).astype(jnp.uint32)
     reason = pl.pallas_call(bounds,out_shape=jax.ShapeDtypeStruct((1,n),jnp.uint32),
         in_specs=(pl.BlockSpec((1,128),lambda i:(0,i)),pl.BlockSpec((1,))),
         out_specs=pl.BlockSpec((1,128),lambda i:(0,i)),grid=(n//128,),

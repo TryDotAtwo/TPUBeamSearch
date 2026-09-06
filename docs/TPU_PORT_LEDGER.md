@@ -1050,3 +1050,24 @@ empty, subprocess rc1. Compiler rejects scalar VMEM store in publication
 dependency at beam_s5_epoch.py:35. No timing or epoch acceptance. See
 `docs/research/2026-09-06-s4-s5-v8-results.md`. Local83193 remains running on its
 unchanged Python snapshot; fix and new launch follow its terminal result.
+
+Local83193 has TERMINATED successfully: 891 passed, zero failures/errors/skips,
+11934.15s wall time, `local_final_transport_full.xml`. This snapshot includes
+the response byte/SoA adapter but predates the following fixes. Do not poll it.
+The much longer wall time is not a TPU performance measurement.
+
+Candidate V9 fixes are now local: publication dependency stores a vector[1]
+instead of a scalar; a nested-JAXPR regression failed on scalar swap shape()
+before the change. Final request validation adds TPU capacity bit16 at index0;
+scatter rejects an oversized batch before any frontier DMA. Overflow tests
+failed before the fix. Count0/128/129/UINT32_MAX and serialized epoch checks
+pass (`local_v9_boundaries.xml`:9passed16.12s; `local_v9_fixes.xml`:9passed16.97s).
+New full regression85379 is RUNNING with both C++ oracle paths enabled,
+output `local_v9_full.xml`. Its Python snapshot is frozen. No V9 TPU submission
+yet; physical compilation and all20epoch acceptance remain unverified.
+
+Regression85379 has TERMINATED: 896 passed1367.89s, zero failures/errors/skips
+(`local_v9_full.xml`), both C++ oracle paths enabled. The snapshot includes
+the S5 vector-store fix, final count guards and response transport adapter.
+Do not poll or repeat this completed run. V9 physical epoch acceptance remains
+pending; interpreter/JAXPR checks do not establish TPU compilation.
