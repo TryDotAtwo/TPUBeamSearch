@@ -42,7 +42,9 @@ def fixtures():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output',required=True,type=Path)
-    output = parser.parse_args().output
+    parser.add_argument('--explicit-hbm-output',action='store_true')
+    options = parser.parse_args()
+    output = options.output
     output.mkdir(parents=True,exist_ok=True)
     devices = jax.devices()
     if len(devices) != 8 or any(d.platform != 'tpu' for d in devices):
@@ -52,7 +54,7 @@ def main():
         libtpu=importlib.metadata.version('libtpu'),
         devices=[dict(id=d.id,kind=d.device_kind) for d in devices],
         scope='serialized S5 state-carry epochs, frozen histograms; not concurrent writer/reader or full beam',
-        exact=False,cases=[])
+        explicit_hbm_output=options.explicit_hbm_output,exact=False,cases=[])
     def save():
         (output/'s5_epoch.json').write_text(json.dumps(report,indent=2))
     save()
@@ -60,7 +62,8 @@ def main():
     mesh = jax.sharding.Mesh(np.asarray(devices),('core',))
     p = jax.sharding.PartitionSpec
     specs = tuple(p('core',*(None for _ in x.shape[1:])) for x in (*initial,steps[0][0]))
-    call = make_s5_epoch_call(mesh,bins=128,period=3)
+    call = make_s5_epoch_call(mesh,bins=128,period=3,
+        explicit_hbm_output=options.explicit_hbm_output)
     def local(*args):
         return tuple(x[None] for x in call(*(x[0] for x in args)))
     fn = jax.jit(jax.shard_map(local,mesh=mesh,in_specs=specs,

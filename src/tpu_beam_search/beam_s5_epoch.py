@@ -10,7 +10,7 @@ from .beam_threshold_publish import pallas_publish_periodic_threshold
 from .beam_s5_epoch_state import pallas_s5_local_request,pallas_s5_complete_epoch
 
 
-def make_s5_epoch_call(mesh,*,bins,period,interpret=False):
+def make_s5_epoch_call(mesh,*,bins,period,interpret=False,explicit_hbm_output=False):
     """All ranks call under a common core mesh; never branch on local request.
 
     Caller drains S4 writers and threshold readers before entry, freezes selected
@@ -20,7 +20,8 @@ def make_s5_epoch_call(mesh,*,bins,period,interpret=False):
     """
     request_call = make_s5_request_call(mesh,interpret=interpret)
     width = ((bins+127)//128)*128
-    histogram_call = make_s5_histogram_call(mesh,width=width,interpret=interpret)
+    histogram_call = make_s5_histogram_call(mesh,width=width,interpret=interpret,
+        explicit_hbm_output=explicit_hbm_output)
 
     def select(a,b,active,out):
         out[...] = jnp.where(active[0,0] == 0,a[...],b[...])

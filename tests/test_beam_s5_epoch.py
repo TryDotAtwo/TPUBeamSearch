@@ -67,3 +67,15 @@ def test_eight_rank_epoch_traces_one_conditional_and_expected_outputs():
         *(jax.ShapeDtypeStruct(shape,jnp.uint32) for shape in shapes))
     assert tuple(x.shape for x in traced.out_avals) == ((2,128),(2,128),(1,128),(4,128))
     assert sum(e.primitive.name == 'cond' for e in traced.jaxpr.eqns) == 1
+def test_epoch_forwards_explicit_hbm_constraint(monkeypatch):
+    from types import SimpleNamespace
+    import tpu_beam_search.beam_s5_epoch as module
+    captured=[]
+    original=module.make_s5_histogram_call
+    def capture(*args,**kwargs):
+        captured.append(kwargs)
+        return original(*args,**kwargs)
+    monkeypatch.setattr(module,'make_s5_histogram_call',capture)
+    module.make_s5_epoch_call(SimpleNamespace(size=1),bins=128,period=3,
+        explicit_hbm_output=True)
+    assert captured[0]['explicit_hbm_output'] is True

@@ -940,3 +940,28 @@ ordinal tie-break. Two tests passed20.31s (local_final_group.xml), including
 cross-tile sparse/empty; final logical replay using Pallas-grouped requests
 passed10.33s (local_final_group_replay.xml). Still host transport adapter,
 O(Nlog^2N) baseline and power-of-two capacity; no DMA/performance acceptance.
+
+S5 explicit-HBM composition is prepared as `--epoch-control`: combined
+exchange/reduction plus twenty state-carrying serialized epochs. Thirteen
+focused tests pass; full regression `local_s5_epoch_hbm_full.xml` is still
+running, so no new physical launch or acceptance is recorded here.
+
+Final rank intervals now have a separate Pallas ordered tiled reduction:
+exclusive per-rank starts/counts and a live-invalid-rank error count. Input
+must be the grouped valid prefix; invalid padding is ignored. Two interpreter
+tests initially passed6.74s, covering129 records across a tile
+boundary, empty ranks/all-empty and invalid live rank. These new tests were
+added after the in-flight full suite collected; they are separate evidence,
+not part of that suite's count. Physical compile, chunk packing and actual
+request/response/history transport remain unverified.
+
+Full S5 composition regression has now terminated:855passed1210.77s, zero
+failures/errors/skips in local_s5_epoch_hbm_full.xml, both CPU C++ oracle paths
+enabled. Handle89961 is terminal; do not poll it again. Separate final interval
+tests remain additional3passed14.12s. This authorizes source publication and
+the next pinned physical gate, not a claim that S5 already works on TPU.
+
+The interval suite now also consumes actual Pallas-grouped sparse records:
+all three tests pass14.12s (`local_final_intervals.xml`), preserving payload
+identity/high parent word and empty-rank intervals. This is interpreter
+composition, still not remote exchange or target-hardware acceptance.

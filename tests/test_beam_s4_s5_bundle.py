@@ -5,6 +5,20 @@ from types import SimpleNamespace
 import pytest
 
 
+def test_epoch_control_runs_composition_after_failed_combined(tmp_path):
+    from benchmarks.beam_s4_s5_bundle import run_bundle
+    calls = []
+    def runner(command, **kwargs):
+        folder = Path(command[command.index('--output')+1])
+        calls.append(folder.name)
+        if folder.name == 'epoch':
+            assert '--explicit-hbm-output' in command
+        (folder/f's5_{folder.name}.json').write_text(json.dumps({'exact':True}))
+        return SimpleNamespace(returncode=1 if folder.name == 'hbm_combined' else 0)
+    assert not run_bundle(tmp_path,runner=runner,epoch_control=True)['all_exact']
+    assert calls == ['hbm_combined','epoch']
+
+
 @pytest.mark.parametrize('failure',[None,'s4','request'])
 def test_bundle_preserves_failed_process_and_runs_remaining_independent_groups(tmp_path,failure):
     assert importlib.util.find_spec('benchmarks.beam_s4_s5_bundle') is not None
