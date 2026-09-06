@@ -772,3 +772,13 @@ regression session33177 passed817 tests in1119.25s, exit0 and zero skips
 (`local_s5_transport_full.xml`). This is diagnostic, not a fix; no new kernel
 has been submitted yet. Publish and pin V3 launcher to new source SHA
 with --transport instead of --recovery.
+
+V3 transport diagnostic submitted, source63cd100 and launcher196a9d1,
+observed QUEUED; monitor updated. Full33177 terminal817passed, do not poll.
+
+`pallas_final_phase_scan` supplies stable local phase ordinals/counts over
+ordered phase/shard/tile grids. Two local tests passed in5.07s
+(`local_final_scan.xml`), including empty masks, full masks, shard gaps and
+tile boundaries. Counts are uint32 with explicit capacity bound; unselected
+ordinals UINT32_MAX. This serialized scan is not scalable parallel-prefix
+acceptance or physical TPU evidence. Global prefixes and compaction remain.
