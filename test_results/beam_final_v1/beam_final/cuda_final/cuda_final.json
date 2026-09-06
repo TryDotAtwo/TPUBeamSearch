@@ -1,0 +1,50 @@
+{
+  "source_sha": "0e98b90310bc897a941f61bbd5e5bf2cbccfc9c7",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "same CUDA fixtures on each TPU; materialization only, not exchange or full beam",
+  "all_exact": false,
+  "cases": [
+    {
+      "name": "count0_remote",
+      "input_sha256": "2d6b29de899bdecb0b367deabe49658c344255a1c8cf12a0d03b7c807de96a95",
+      "cuda_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exact": false
+    }
+  ]
+}

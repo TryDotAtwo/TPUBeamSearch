@@ -3,6 +3,22 @@ import jax.numpy as jnp
 from jax.experimental.pallas import tpu as pltpu
 
 
+def test_materialize_output_avoids_illegal_single_row_pipeline_block():
+    """Structural regression for the V1 TPU rejection, not TPU acceptance."""
+    import jax
+    from tpu_beam_search.beam_final_materialize import pallas_materialize_final
+    args = (jnp.zeros((2,128),jnp.uint8),
+            jnp.tile(jnp.arange(128,dtype=jnp.int32),(2,1)),
+            jnp.zeros((4,128),jnp.uint32),jnp.zeros((1,),jnp.uint32),
+            jnp.ones((1,),jnp.uint32))
+    traced = jax.make_jaxpr(lambda *xs: pallas_materialize_final(
+        *xs,state_len=120,interpret=True))(*args)
+    calls = [eq for eq in traced.jaxpr.eqns if eq.primitive.name == 'pallas_call']
+    mapping = calls[-1].params['grid_mapping'].block_mappings[-1]
+    sizes = tuple(getattr(dim,'block_size',dim) for dim in mapping.block_shape)
+    assert sizes[0] == 128 or sizes[0] % 8 == 0, sizes
+
+
 def test_materialize_valid_and_reject_entire_invalid_batch():
     from tpu_beam_search.beam_final_materialize import pallas_materialize_final
     parents = np.zeros((2,128),np.uint8)

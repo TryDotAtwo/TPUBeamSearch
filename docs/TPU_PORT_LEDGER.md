@@ -1203,3 +1203,51 @@ Full87992 has TERMINATED:931passed920.50s, zero failures/errors/skips,
 diagnostic Pallas read/write adapters are locally regression-verified. Do not
 poll/repeat87992. Production refs, physical donation and phase-drain enforcement
 remain missing; the copy-reading adapter does not establish a single HBM pool.
+
+Pending beam_history_arena now computes history directly between nonoverlapping
+CandidateMeta8xN and History5xN regions of one aliased HBM arena. No intermediate
+HBM history output; uint32x128 VMEM row stages are reused only after DMA waits.
+Two missing-module tests failed first;2passed2.50s (`local_history_arena.xml`)
+after implementation. N256 plane-major offsets, high parent bits, sparse masks
+and untouched canary regions checked; overlapping regions rejected. This is
+an isolated operator integration, not yet a depth caller or physical alias proof.
+No full regression for this new operator yet; previous931full is terminal.
+
+Expanded history-arena focused run17passed3.70s
+(`local_history_arena_expanded.xml`): N128/256/512, nonboolean nonzero validity
+normalizes to1, parent high bits and all canary regions preserved. New full
+regression started with both C++ oracle paths, `local_history_arena_full.xml`.
+Full session60619 is active; do not change its Python snapshot. Physical final
+gate remains QUEUED. Previous87992 is terminal931passed and must not be polled.
+
+Recovery update:60619 lost its process handle, no Python process or final XML
+remained; its outcome is unverified, NOT a pass. Replacement34655 ran the same
+snapshot with both C++ oracles and TERMINATED:935passed1274.33s, zero
+failures/errors/skips (`local_history_arena_full.xml`). Do not poll either handle.
+
+Final gate V1 is terminal ERROR; output downloaded to `test_results/beam_final_v1`.
+Nested reports identify source0e98b90310bc897a941f61bbd5e5bf2cbccfc9c7,
+JAX/jaxlib0.10.2, libtpu0.0.42.1, eight TPU v5 lite devices.
+Exchange16/16 and coverage7/7 cases are exact, both subprocesses return0.
+CUDA-fixture materialization returns1 during compilation of count0_remote:
+`beam_final_materialize.py:49` output BlockSpec(1,128) for array(128,128)
+violates TPU block dimensions (first must divide by8 or equal full dimension).
+No materialization case executed; remaining five were not reached. This is
+a lowering rejection, not numerical mismatch or native abort. No timings or
+full-beam claim. No restart yet; regression test and minimal layout correction
+are next, followed by full checks and a new public source SHA.
+
+V1 materialization layout regression now reproduced locally via traced actual
+output block mapping: assertion failed on(1,128). Minimal candidate changes only
+the output to whole-HBM BlockSpec and explicit serialized one-row DMA, reusing
+the parent staging buffer after its read wait; output store is waited before
+the next grid iteration. Invalid rows are explicitly zeroed and stored.
+Focused materialization tests2passed7.32s including race-detecting interpreter
+and invalid-whole-batch behavior. This removes the structural rejected window;
+it is NOT physical TPU compilation acceptance. Full regression started with
+both C++ oracles, `local_final_dma_output_full.xml`; keep Python snapshot frozen.
+
+Full13332 TERMINATED:936passed1210.32s, zero failures/errors/skips, both C++
+oracles enabled (`local_final_dma_output_full.xml`). Do not poll or repeat.
+This includes history-arena and materialization output-DMA candidate. Physical
+acceptance remains pending; V1 report is `docs/research/2026-09-06-final-v1-results.md`.

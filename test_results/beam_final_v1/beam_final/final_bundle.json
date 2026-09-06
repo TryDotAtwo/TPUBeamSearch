@@ -1,0 +1,474 @@
+{
+  "all_exact": false,
+  "groups": [
+    {
+      "name": "cuda_final",
+      "exact": false,
+      "status": "returned",
+      "returncode": 1,
+      "report": {
+        "source_sha": "0e98b90310bc897a941f61bbd5e5bf2cbccfc9c7",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "scope": "same CUDA fixtures on each TPU; materialization only, not exchange or full beam",
+        "all_exact": false,
+        "cases": [
+          {
+            "name": "count0_remote",
+            "input_sha256": "2d6b29de899bdecb0b367deabe49658c344255a1c8cf12a0d03b7c807de96a95",
+            "cuda_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "exact": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "final_exchange",
+      "exact": true,
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "source_sha": "0e98b90310bc897a941f61bbd5e5bf2cbccfc9c7",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "scope": "repeated final chunk exchange snapshots, not full final or beam; no timing claim",
+        "exact": true,
+        "cases": [
+          {
+            "name": "round0_empty",
+            "input_sha256": "3381de4ca9f3a477f25989dfc8b744e7916046b7aa369f61a9a2f7dc0963ec9e",
+            "expected_sha256": "8c3e3138985ffc730fe68c1b53f215cb6f363fcd55c56763f6761b0dd7bcd1ee",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "8c3e3138985ffc730fe68c1b53f215cb6f363fcd55c56763f6761b0dd7bcd1ee"
+          },
+          {
+            "name": "round0_self",
+            "input_sha256": "d40bb7e3b0a3c47134d799e5b81597b0ed3e253aad80afd09611b6aa24ba0298",
+            "expected_sha256": "3374653a78f1a2f899626ab41d48eb4cca34f754016f9bad928a542c9c29144c",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "3374653a78f1a2f899626ab41d48eb4cca34f754016f9bad928a542c9c29144c"
+          },
+          {
+            "name": "round0_one_to_all",
+            "input_sha256": "92787479e96976d89999d98e18984520bf05686845f4f5fe7fc4bbd1b3ad8a45",
+            "expected_sha256": "2e435ba5f714145c530faf5490d6e1c2d531c8a1fd017a6389d4e809d4fae28c",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "2e435ba5f714145c530faf5490d6e1c2d531c8a1fd017a6389d4e809d4fae28c"
+          },
+          {
+            "name": "round0_all_to_one",
+            "input_sha256": "a707893ffb334da0e99d4871c6ca6beb0f548cda6a95d3ed066b760a5206a7fb",
+            "expected_sha256": "aa3de4956a240d9e32bececd2a2553db4e8f9a3b1547a0d6bf52495f44e093b6",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "aa3de4956a240d9e32bececd2a2553db4e8f9a3b1547a0d6bf52495f44e093b6"
+          },
+          {
+            "name": "round0_uneven",
+            "input_sha256": "fc10713b192df7753931b73f87e32d8912fe30e008644ce1728fdb23fdcacd44",
+            "expected_sha256": "ae16365c073e686e4d85b867652888160af9ed76830b3223b6146413bba3e19d",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "ae16365c073e686e4d85b867652888160af9ed76830b3223b6146413bba3e19d"
+          },
+          {
+            "name": "round0_full",
+            "input_sha256": "131db43e0069a1ec311fc4ba86f2aa9172a841debca1911480a9fb35ddd8a5b7",
+            "expected_sha256": "830ee850cce1369f5364ccf89e008189ef6b7f08abef00e7affe2963d837cfa6",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "830ee850cce1369f5364ccf89e008189ef6b7f08abef00e7affe2963d837cfa6"
+          },
+          {
+            "name": "round0_bad_count",
+            "input_sha256": "78446a23df0169ea839be6db9ad7c3b9715ac5b17e1fd56ad5ab1e6cbfe92a0f",
+            "expected_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542"
+          },
+          {
+            "name": "round0_error",
+            "input_sha256": "9f4c681cdcc8c2822106c9c7a33e511970a191346ce9062c9bd683143571ccfc",
+            "expected_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542"
+          },
+          {
+            "name": "round1_empty",
+            "input_sha256": "3381de4ca9f3a477f25989dfc8b744e7916046b7aa369f61a9a2f7dc0963ec9e",
+            "expected_sha256": "8c3e3138985ffc730fe68c1b53f215cb6f363fcd55c56763f6761b0dd7bcd1ee",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "8c3e3138985ffc730fe68c1b53f215cb6f363fcd55c56763f6761b0dd7bcd1ee"
+          },
+          {
+            "name": "round1_self",
+            "input_sha256": "d8014feae05863ae412aac6d33e7108bbd8846954163c6579f4efef2accebd76",
+            "expected_sha256": "2d4f236f849be5207d6feefd5d6acff5f50048f9cf4706b4bc6f0126a57fb316",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "2d4f236f849be5207d6feefd5d6acff5f50048f9cf4706b4bc6f0126a57fb316"
+          },
+          {
+            "name": "round1_one_to_all",
+            "input_sha256": "377c5d35cac98dd58e8cd5fb9643b79b34fb22515213299533110eb90561b768",
+            "expected_sha256": "970b20bd9d8704778614bd13b3e4860f6de6100b929c65420c143e02b8e8fa03",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "970b20bd9d8704778614bd13b3e4860f6de6100b929c65420c143e02b8e8fa03"
+          },
+          {
+            "name": "round1_all_to_one",
+            "input_sha256": "54c5c69f229c13d0cc93a214e385e85ff40a4ae6d66bdbb1c6653c12ef596f9d",
+            "expected_sha256": "68f997800219c54a72b961b0f04d3fcb228b65a7a593b23d83237b8b5b4b8a06",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "68f997800219c54a72b961b0f04d3fcb228b65a7a593b23d83237b8b5b4b8a06"
+          },
+          {
+            "name": "round1_uneven",
+            "input_sha256": "51b95a99e196781ce4174fc0fd3499608526b6d76f8db0bf27f8777b3e340d53",
+            "expected_sha256": "c2ae5d4dd52176c1e8d0fc8307ac94886a6583bc78c124de51938aca08b27ff5",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "c2ae5d4dd52176c1e8d0fc8307ac94886a6583bc78c124de51938aca08b27ff5"
+          },
+          {
+            "name": "round1_full",
+            "input_sha256": "7525c24112c4057f427a22c13e4c915b5f9bab9fe4391eaa4e99d4e129318a37",
+            "expected_sha256": "9c966ef28582f85463b26b2e0bb0e2f9b2b6e304f793c79b1171ce8ce6b6504b",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "9c966ef28582f85463b26b2e0bb0e2f9b2b6e304f793c79b1171ce8ce6b6504b"
+          },
+          {
+            "name": "round1_bad_count",
+            "input_sha256": "bb0a73e2fc65a3d63982610d9c854fd9245ad3c31257721a1848cf820724bd05",
+            "expected_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542"
+          },
+          {
+            "name": "round1_error",
+            "input_sha256": "326e0c7a489b13254332dedea1c624c39920f7e2008f4180959290903475a588",
+            "expected_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542",
+            "exact": true,
+            "mismatches": [
+              0,
+              0,
+              0
+            ],
+            "output_sha256": "493bcc3bc8a4ffe5225b100461e10283770e7064814cba4afe618939481fd542"
+          }
+        ],
+        "compile_seconds": 0.5378564730000335
+      }
+    },
+    {
+      "name": "final_coverage",
+      "exact": true,
+      "status": "returned",
+      "returncode": 0,
+      "report": {
+        "source_sha": "0e98b90310bc897a941f61bbd5e5bf2cbccfc9c7",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "exact": true,
+        "cases": [
+          {
+            "name": "empty",
+            "input_sha256": "d4d0eb1a86a949168a798ee54a4a2b4451af84bd930e44aee510d860c62ee040",
+            "expected_common_error": 0,
+            "exact": true,
+            "output_sha256": "610ee33029f92ccef6e8ee64531b83150e5f97f4f9365ac7e9a5237f2e5ebd20",
+            "invalid_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "uneven",
+            "input_sha256": "0c8e5892ce842bedf51fab7d1f7b5cccf116cb50df0246272f7f4b67c51786eb",
+            "expected_common_error": 0,
+            "exact": true,
+            "output_sha256": "610ee33029f92ccef6e8ee64531b83150e5f97f4f9365ac7e9a5237f2e5ebd20",
+            "invalid_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "duplicate",
+            "input_sha256": "3c4b3ec1b331fdffbde1174a9722304609729d4fbb6062732a74e4efc453bbb4",
+            "expected_common_error": 1,
+            "exact": true,
+            "output_sha256": "200b2c102efd1f7ff93c229b4e904801830d3ce21a40ae16952533d668d06a12",
+            "invalid_counts": [
+              0,
+              0,
+              0,
+              0,
+              62,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "missing",
+            "input_sha256": "9b79ed7284136ac4675e3e67b0a285b61eaffed805d0681a539da9ae584b7eea",
+            "expected_common_error": 1,
+            "exact": true,
+            "output_sha256": "03af00d50aa114cf26c7c832427c48d0fa2494ab725438a622f30d30c30d758d",
+            "invalid_counts": [
+              0,
+              0,
+              0,
+              0,
+              89,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "extra",
+            "input_sha256": "b7c4233f95b79078df952104cc292ae9fcafa85c06b5a52d988056fb60e790da",
+            "expected_common_error": 1,
+            "exact": true,
+            "output_sha256": "ddcc0cc5444896bc78a4a77414373e58d67f6dafa8d37a3d1137c8b17d132a0e",
+            "invalid_counts": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "overflow",
+            "input_sha256": "d46c1543b503cca85ae6a54e87260b9f8616620900c5752e2e8ccc28b436287b",
+            "expected_common_error": 1,
+            "exact": true,
+            "output_sha256": "ccb31b31c686181fe308e62cebff18c0d0a3f494622f5d95ed47089011164ce9",
+            "invalid_counts": [
+              0,
+              0,
+              0,
+              0,
+              128,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "prior_error",
+            "input_sha256": "eb6363ad39ce5ac9fda62b484ad8b886104a1d9af15c31c1f0e08080b2da32a5",
+            "expected_common_error": 1,
+            "exact": true,
+            "output_sha256": "bc0feae2070a267da1edf8eb6b2b86b7532532d37569f9c15023d42a04be24d6",
+            "invalid_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "scope": "coverage common-error only; not frontier publication, DMA drain or full beam"
+      }
+    }
+  ],
+  "scope": "materialization and exchange separately; not full beam"
+}
