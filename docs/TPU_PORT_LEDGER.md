@@ -1108,3 +1108,28 @@ ranks must see the same error while only the offending local summary is bad.
 Four coordinator/fixture tests pass3.25s (`local_final_bundle_expanded.xml`).
 This benchmark-only change follows the907 production regression. None of
 these new physical groups has run yet; V9 remains the sole queued session.
+
+Pending final agreement extension now preserves accumulated transport/history
+errors through optional uint32[1,128] prior_error lane0, normalized before MAX.
+Valid target coverage must not hide a prior high-bit error. Focused checks:
+4passed16.04s (`local_final_prior_error.xml`) and expanded seven-case coverage
+fixture/bundle checks 8passed16.42s (`local_final_prior_bundle.xml`). Prepared
+bundle expects 6+16+7 cases; the launcher still pins the older six-case source
+and must be refreshed after verified publication. Full regression95887 is
+RUNNING (`local_final_prior_full.xml`) with both C++ oracle paths; do not
+duplicate it or alter its Python snapshot. V9 is still QUEUED; no restart.
+Complete final drain/publication, scratch reuse and physical acceptance remain
+open; this common error flag does not establish any of those obligations.
+
+Latest authoritative Kaggle status for S5 V9 is RUNNING (supersedes QUEUED
+above). Pinned source remains f9a8bee57b8d3bd075d78ff2d37cab2fdd300b94.
+No restart or second session; all20 epoch results remain unverified until
+terminal output inspection. Local regression95887 is also still live.
+
+S5 V9 is now COMPLETE and accepted within its serialized scope. All20 epochs
+on eight TPU v5 lite devices have four zero mismatches and matching expected/
+actual SHA256; nested exact and bundle all_exact true, subprocess rc0.
+Source/runtime match. Full output is `test_results/beam_s4_s5_v9`; report
+`docs/research/2026-09-06-s4-s5-v9-results.md`. No timing/overlap or concurrent
+writer proof. Do not rerun V9. Final gate awaits verified seven-case source pin;
+local regression95887 remains running and its Python snapshot is unchanged.

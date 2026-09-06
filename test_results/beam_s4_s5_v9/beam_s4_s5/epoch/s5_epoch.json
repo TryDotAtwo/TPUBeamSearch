@@ -1,0 +1,306 @@
+{
+  "source_sha": "f9a8bee57b8d3bd075d78ff2d37cab2fdd300b94",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "serialized S5 state-carry epochs, frozen histograms; not concurrent writer/reader or full beam",
+  "explicit_hbm_output": true,
+  "exact": true,
+  "cases": [
+    {
+      "index": 0,
+      "input_sha256": "887b1333f109ad29f9627c32605c7a5657beabaf84e1ebe7651be95b4dba0b9c",
+      "expected_sha256": "1c0273095382988333e2f2b5ae487cea460737ed9be65cbad9c5de537f95bf75",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "1c0273095382988333e2f2b5ae487cea460737ed9be65cbad9c5de537f95bf75"
+    },
+    {
+      "index": 1,
+      "input_sha256": "c76eaa689ae8c9693aefba4694f7ea74a598b8c54fce86c138b8e4eb2cd45ea7",
+      "expected_sha256": "d8c854d0b1bc66d4f3fb9641f007a7715c704045023031e463f58d49c47935a2",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "d8c854d0b1bc66d4f3fb9641f007a7715c704045023031e463f58d49c47935a2"
+    },
+    {
+      "index": 2,
+      "input_sha256": "3af865f5e1a2c5bfe42ff50bf3398360c1196ab9249d35309b78354471193fd9",
+      "expected_sha256": "9e2ef9f2efe5876bcd5f84dfb413ffc0700300b67ed16223efeab2acba7f742d",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "9e2ef9f2efe5876bcd5f84dfb413ffc0700300b67ed16223efeab2acba7f742d"
+    },
+    {
+      "index": 3,
+      "input_sha256": "464305e6d39ef164d1e35bfc7ebd19014df1109185fbf5a70acf9a4c2b6b6304",
+      "expected_sha256": "dba62166b9b80c829882bafef9618591c171061e031750451a596c7c949e99b0",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "dba62166b9b80c829882bafef9618591c171061e031750451a596c7c949e99b0"
+    },
+    {
+      "index": 4,
+      "input_sha256": "79eb634100006c846981f3ca5b6bb6823a433c772b6bd65eecb40ff64cf7db5e",
+      "expected_sha256": "62402189f0168ba2ea01ff6cf363fd86747c8a54258a54bffab091b7bb5dd2be",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "62402189f0168ba2ea01ff6cf363fd86747c8a54258a54bffab091b7bb5dd2be"
+    },
+    {
+      "index": 5,
+      "input_sha256": "2c7e323d685900a269db826fe19cdbe4aaeea3079e29b9f4390ea16e82a000a4",
+      "expected_sha256": "d8f8d4905f1a07d7bf8f95ccc8d3ca415195815b9b5f4cebb7d31d22af8f6012",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "d8f8d4905f1a07d7bf8f95ccc8d3ca415195815b9b5f4cebb7d31d22af8f6012"
+    },
+    {
+      "index": 6,
+      "input_sha256": "5d3520de8abb62495f55f48be7cfe471881055583ef4dbd943bfc678996f6acd",
+      "expected_sha256": "8aca619877acac229d5f702901e3e82d840c40846e8f16519ff8c22a403f7e5b",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "8aca619877acac229d5f702901e3e82d840c40846e8f16519ff8c22a403f7e5b"
+    },
+    {
+      "index": 7,
+      "input_sha256": "c62227f1edfc53eace6155c1da5941161abc92924ae7e89d2029a08d7e08c47d",
+      "expected_sha256": "fd5d1a5063fe74a3c9d241df57c902ee13bf607a1def9724a7e7a5f5aa2f9691",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "fd5d1a5063fe74a3c9d241df57c902ee13bf607a1def9724a7e7a5f5aa2f9691"
+    },
+    {
+      "index": 8,
+      "input_sha256": "887453d8237e103875d5e69f552fca285e4d0b0cce0fea7543d360ecd110c60d",
+      "expected_sha256": "295e653e86babcf609f155c28e1d627ce4ebbb2f9e44b51b13812f2b526d2d00",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "295e653e86babcf609f155c28e1d627ce4ebbb2f9e44b51b13812f2b526d2d00"
+    },
+    {
+      "index": 9,
+      "input_sha256": "57223eafa8ec5513396b6f8ec8cd9ea60c63f50443ea80835bdcf11f61e8d7e1",
+      "expected_sha256": "e0f498ae0ce16ea9688b103ead8a7ee3ff1f42364d6f5885a07209e03f7f6cf0",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "e0f498ae0ce16ea9688b103ead8a7ee3ff1f42364d6f5885a07209e03f7f6cf0"
+    },
+    {
+      "index": 10,
+      "input_sha256": "5ac77bfe27a5f4c8594e0caef6f87ca72f14c10de0df6921219bb8981fdcddb0",
+      "expected_sha256": "e0f498ae0ce16ea9688b103ead8a7ee3ff1f42364d6f5885a07209e03f7f6cf0",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "e0f498ae0ce16ea9688b103ead8a7ee3ff1f42364d6f5885a07209e03f7f6cf0"
+    },
+    {
+      "index": 11,
+      "input_sha256": "2151c4cd70703b7fff54b07380b746035c23f57a8441bba3eb678df63bb72be2",
+      "expected_sha256": "7fefac5cb41c35beaa797aa6e363c069667a9bfa520191d220b61cf3d97da3dd",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "7fefac5cb41c35beaa797aa6e363c069667a9bfa520191d220b61cf3d97da3dd"
+    },
+    {
+      "index": 12,
+      "input_sha256": "d2a9044ac2c3a9f252ea8045060d560a9ca73feb402fdfa858bf22e34366f0f9",
+      "expected_sha256": "da74ce968fded4ce4880317ce3502d73d8119ef8a3eb622102ae10cc399eb817",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "da74ce968fded4ce4880317ce3502d73d8119ef8a3eb622102ae10cc399eb817"
+    },
+    {
+      "index": 13,
+      "input_sha256": "b50e3a821ed29b08da030fa7c1dc8d99c3ea28f798263472f67949b767a2b099",
+      "expected_sha256": "78a5de019b6a2de039f3dc64c2c56e74b23fda22e61ac9017478cc25e989d9ec",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "78a5de019b6a2de039f3dc64c2c56e74b23fda22e61ac9017478cc25e989d9ec"
+    },
+    {
+      "index": 14,
+      "input_sha256": "bbc267564a544de75f9f9d46b9ed73f17e26302095f97eb0fa63db90f6bf7bc4",
+      "expected_sha256": "e3b642c0428ce0f6d580a63edbe80724191634c9f3ace6d2fe367212ba016dee",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "e3b642c0428ce0f6d580a63edbe80724191634c9f3ace6d2fe367212ba016dee"
+    },
+    {
+      "index": 15,
+      "input_sha256": "08dcf57af30c1a7dedc0563075f6ead83035728c80ee5401b476efde62d1a2c3",
+      "expected_sha256": "b9e0cce011b727080243f2481e71ac532041da4c54a35e3b3dd9b1a0678ff120",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "b9e0cce011b727080243f2481e71ac532041da4c54a35e3b3dd9b1a0678ff120"
+    },
+    {
+      "index": 16,
+      "input_sha256": "f0f2257baf98b21a45e0403e6d849f3cdb055cd48bf24c40b39e835ac384b83e",
+      "expected_sha256": "e305ec2ebb0958b92a75a34b4120388134a2b777102eeaf7cda80dc66800ce8b",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "e305ec2ebb0958b92a75a34b4120388134a2b777102eeaf7cda80dc66800ce8b"
+    },
+    {
+      "index": 17,
+      "input_sha256": "d85da87c1ab4453a0029e03b40612e7b931a61003eba200f9a4f9c43ef7828f4",
+      "expected_sha256": "8edd5183be0cc3bbec01d538c54b24f847a2f00a5a91745c8b764bd723a84a03",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "8edd5183be0cc3bbec01d538c54b24f847a2f00a5a91745c8b764bd723a84a03"
+    },
+    {
+      "index": 18,
+      "input_sha256": "5ac5169e4af911526afaabf64d21cfcb7152c24f3ab0f6ad9fc53e19c194d6b6",
+      "expected_sha256": "748637ae60fccb12e68ede592bb5280acc7181c64a3c6d2c1168c586e7879683",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "748637ae60fccb12e68ede592bb5280acc7181c64a3c6d2c1168c586e7879683"
+    },
+    {
+      "index": 19,
+      "input_sha256": "4d0580a48b82318e3ea57dc7218d931380981c4b7d8ace1942086ab457d97831",
+      "expected_sha256": "b5d69574472dc7f472f8ffecea12afa7fd2d96dd79ccad8d5ae97834c5f0e1cb",
+      "exact": true,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": "b5d69574472dc7f472f8ffecea12afa7fd2d96dd79ccad8d5ae97834c5f0e1cb"
+    }
+  ],
+  "compile_seconds": 0.7404239979999829
+}

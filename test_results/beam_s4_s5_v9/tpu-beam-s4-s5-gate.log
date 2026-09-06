@@ -1,0 +1,11 @@
+[{"stream_name":"stderr","time":20.682448297,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":20.806981587,"data":"\n"}
+,{"stream_name":"stderr","time":20.807004577,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":20.807008227,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":20.987222252,"data":"Cloning into '/tmp/TPUBeamSearch-s4-s5'...\n"}
+,{"stream_name":"stderr","time":34.016950083,"data":"Updating files:  91% (3904/4246)\rUpdating files:  92% (3907/4246)\rUpdating files:  93% (3949/4246)\rUpdating files:  94% (3992/4246)\rUpdating files:  95% (4034/4246)\rUpdating files:  96% (4077/4246)\rUpdating files:  97% (4119/4246)\rUpdating files:  98% (4162/4246)\rUpdating files:  99% (4204/4246)\rUpdating files: 100% (4246/4246)\rUpdating files: 100% (4246/4246), done.\n"}
+,{"stream_name":"stderr","time":35.034728147,"data":"HEAD is now at f9a8bee Fix S5 publication store and final batch capacity guards\n"}
+,{"stream_name":"stdout","time":35.075957171,"data":"GROUP epoch\n"}
+,{"stream_name":"stderr","time":62.418678714,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":65.116478737,"data":"[NbConvertApp] Writing 278179 bytes to __results__.html\n"}
+]
