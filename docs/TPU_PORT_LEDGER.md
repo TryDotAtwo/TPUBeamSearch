@@ -1166,3 +1166,40 @@ Full36041 has TERMINATED:913passed988.01s, zero failures/errors/skips,
 publication change is locally regression-verified. Do not poll/repeat36041.
 It still requires the integrated caller to establish distributed acceptance,
 completed history transfers and frontier/scratch ordering before invoking it.
+
+Next local candidate: beam_scratch.plan_scratch calculates three exclusive
+layouts with common selection/materialization prefix. Stream persistent offset
+is max(final_budget,stream_temp), not merely final_budget: streams may exceed
+that reserved prefix. All regions use a chosen512-byte uint32x128 arena granule,
+not an asserted universal TPU alignment rule. Six tests failed before the
+missing module and pass after implementation (`local_scratch_layout.xml`,1.62s).
+No full regression for this candidate yet. No HBM allocation, physical alias,
+Pallas region access or lifetime enforcement is established by this host plan.
+The previous full36041=913pass is terminal and must not be polled again.
+
+Scratch candidate now includes pallas_write_scratch_region: explicit HBM
+input/output alias, serialized128-word row DMA with waits, preserve untouched
+arena. Five missing-API tests failed first; combined11 layout/access tests pass
+2.91s (`local_scratch_access.xml`). Invalid offsets/sizes/bounds are rejected.
+Two sequential exclusive-region writes preserve the common prefix and stream
+persistent tail. Full regression and physical donated-buffer evidence pending;
+helper does not enforce phase lifetimes or integrate production stage refs.
+
+Pallas scratch read adapter added after five missing-API failures;16 combined
+layout/read/write tests pass3.12s (`local_scratch_read_write.xml`). Explicit HBM
+DMA copies the selected region into a separate output. This is NOT zero-copy
+stage integration and must not be used as evidence for a single physical pool.
+No full regression is currently running. Scratch candidate remains unpublished.
+
+Scratch boundary coverage now18passed5.05s (`local_scratch_boundaries.xml`):
+zero-size read/write is empty/noop without empty DMA grid; mismatched payload
+capacity is rejected. New full regression has been started with both C++ oracle
+paths, output `local_scratch_full.xml`. Keep its Python snapshot unchanged.
+New full session is87992. Previous history full36041 is terminal913passed,
+not this new run; do not poll or restart36041.
+
+Full87992 has TERMINATED:931passed920.50s, zero failures/errors/skips,
+`local_scratch_full.xml`, both C++ oracle paths enabled. Scratch layout and
+diagnostic Pallas read/write adapters are locally regression-verified. Do not
+poll/repeat87992. Production refs, physical donation and phase-drain enforcement
+remain missing; the copy-reading adapter does not establish a single HBM pool.
