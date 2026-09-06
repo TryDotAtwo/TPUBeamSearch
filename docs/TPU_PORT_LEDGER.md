@@ -838,3 +838,14 @@ passes, not a linear compactor. Two local tests passed in29.39s
 power-of-two padding and empty output. Whole frontier is not staged in VMEM.
 No physical compilation/performance, source CUDA replay or integrated final
 transport acceptance. Unique global indices and same-epoch inputs required.
+
+V4 is terminal COMPLETE and downloaded to `test_results/beam_s4_s5_v4`.
+Replicate subprocess returned 0; all eight cases exact on eight TPU v5 lite
+devices, source89b4d3c. Full-shape local replication works. Remote-path cause
+is still unresolved; next isolate full initialization followed by unchanged
+remote transfers. See research/2026-09-06-s4-s5-v4-results.md. No timing claim.
+
+Packed final-plan adapter now maps invalid compacted rows to terminal index K
+inside Pallas before balancing. This prevents zero-filled padding from becoming
+global index 0. Seven targeted interpreter tests passed in6.02s after the new
+API test failed. This is not TPU validation or request transport acceptance.

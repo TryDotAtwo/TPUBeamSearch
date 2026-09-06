@@ -1,0 +1,11 @@
+[{"stream_name":"stderr","time":20.879098679,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":26.351093897,"data":"\n"}
+,{"stream_name":"stderr","time":26.351123027,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":26.351129287,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":26.511214422,"data":"Cloning into '/tmp/TPUBeamSearch-s4-s5'...\n"}
+,{"stream_name":"stderr","time":32.019959985,"data":"Updating files:  96% (3973/4108)\rUpdating files:  97% (3985/4108)\rUpdating files:  98% (4026/4108)\rUpdating files:  99% (4067/4108)\rUpdating files: 100% (4108/4108)\rUpdating files: 100% (4108/4108), done.\n"}
+,{"stream_name":"stderr","time":32.310268022,"data":"HEAD is now at 89b4d3c Add full-shape local-copy control for S5 transport\n"}
+,{"stream_name":"stdout","time":32.348634076,"data":"GROUP replicate\n"}
+,{"stream_name":"stderr","time":58.680849708,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":61.104116142,"data":"[NbConvertApp] Writing 278166 bytes to __results__.html\n"}
+]
