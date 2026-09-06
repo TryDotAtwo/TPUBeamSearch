@@ -872,3 +872,13 @@ tests, zero failures/errors. All16 skipped classname::name identities are
 present and passing in separate source XML (20passed,zero skips/errors).
 Thus all834 collected identities have passing local coverage across the two
 runs, not a single zero-skip run. No physical remote acceptance yet.
+
+V5 submitted and observed QUEUED: sourcecf66f40, launcherfa9391c, only
+initialized remote-wire group. No running local regression handles remain.
+
+Host `beam_history.reconstruct_history` follows source-rank/previous-layer/
+uint64-parent through a supplied reader; immutable compact HistoryEntry stores
+parent and route only. Nine focused tests passed1.81s after initial missing
+module failures (`local_history_reconstruction.xml`): cross-rank chain, high
+parent word, root/empty, invalid move/rank/word ranges. No distributed history
+transport, storage integration, suffix replay or actual puzzle replay yet.
