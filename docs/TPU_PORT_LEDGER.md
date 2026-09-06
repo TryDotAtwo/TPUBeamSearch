@@ -1079,3 +1079,10 @@ byte restore -> response unpack preserves logical state, high-bit target_idx,
 rank and valid prefix (`local_final_response_grouping.xml`,1passed14.19s).
 This adds test-only evidence after the896-run; production code is unchanged.
 Actual request/response exchange and complete final publication remain pending.
+
+Response composition now extends through rank intervals and peer-chunk DMA
+packing: ten logical destinations include two empty peers; all valid response
+words retain original stable order, count controls match, tails are zero, and
+the following empty chunk has zero payload/control. One interpreter test passes
+16.41s (`local_final_response_chunks.xml`). These are local logical peers, not
+ten TPU devices or remote communication. Production kernels are unchanged.

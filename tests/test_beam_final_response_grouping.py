@@ -23,3 +23,21 @@ def test_grouped_response_transport_preserves_target_and_valid_prefix():
     np.testing.assert_array_equal(grouped[32,:live],ranks[0,order])
     np.testing.assert_array_equal(grouped[34],valid[0])
     assert not np.asarray(actual[:,120:]).any()
+
+    from tpu_beam_search.beam_final_intervals import pallas_final_rank_intervals
+    from tpu_beam_search.beam_final_chunk import pallas_pack_final_chunk
+    # Include empty destinations 8 and 9 without changing live return ranks.
+    intervals = pallas_final_rank_intervals(grouped[32:33],grouped[34:35],world_size=10,interpret=True)
+    chunks, controls = pallas_pack_final_chunk(grouped[:32],intervals,jnp.array([0],jnp.uint32),
+        world_size=10,interpret=True)
+    assert not np.asarray(controls[:,1]).any()
+    for rank in range(10):
+        original = np.flatnonzero(ranks[0,:live] == rank)
+        count = int(controls[rank,0,0])
+        assert count == len(original)
+        np.testing.assert_array_equal(chunks[rank,:,:count],np.asarray(planes)[:,original])
+        assert not np.asarray(chunks[rank,:,count:]).any()
+    empty, controls = pallas_pack_final_chunk(grouped[:32],intervals,jnp.array([1],jnp.uint32),
+        world_size=10,interpret=True)
+    assert not np.asarray(empty).any()
+    assert not np.asarray(controls).any()
