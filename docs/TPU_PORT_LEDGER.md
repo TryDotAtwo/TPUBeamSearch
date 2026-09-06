@@ -1086,3 +1086,17 @@ words retain original stable order, count controls match, tails are zero, and
 the following empty chunk has zero payload/control. One interpreter test passes
 16.41s (`local_final_response_chunks.xml`). These are local logical peers, not
 ten TPU devices or remote communication. Production kernels are unchanged.
+
+Local final target coverage and agreement modules are now added, not yet
+published or physically accepted. Coverage sorts all local targets and checks
+the exact expected range, including duplicate/missing pairs; seven tests pass
+53.98s. Agreement maps local summary to the existing collective MAX; three
+tests pass13.82s, including eight-rank JAXPR tracing, not TPU execution.
+See `docs/research/2026-09-06-final-coverage-gate.md`. Fresh full regression98963
+is RUNNING with both C++ oracle paths, `local_final_coverage_full.xml`.
+Do not duplicate or change its Python snapshot. V9 remains QUEUED separately.
+
+Full98963 has TERMINATED:907passed1522.85s, zero failures/errors/skips,
+`local_final_coverage_full.xml`, both C++ oracle paths enabled. Coverage and
+agreement modules are locally regression-verified, not physically TPU-accepted.
+Do not poll the completed handle. Full final drain/publication remains open.
