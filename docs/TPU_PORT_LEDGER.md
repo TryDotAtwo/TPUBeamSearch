@@ -920,3 +920,11 @@ target-local and validity agree. Fifteen focused tests passed6.17s
 (`local_final_history_plan.xml`), including interpreter outputs transferred
 explicitly to host and inserted into two rank-local histories. No remote DMA,
 actual CUDA/TPU replay or integrated asynchronous lifetime acceptance yet.
+
+Two-logical-rank final replay fixture now connects plan->source-routed request
+->Pallas materialize->destination response->Pallas scatter->host history.
+Expected states are independently permuted from parent/source/move; metadata
+history points to the exact resulting frontier indices and padding is zero.
+14 focused checks passed12.26s (`local_final_logical_replay.xml`). Host routing
+and Pallas interpretation are explicit: no actual inter-device DMA, multi-depth
+beam selection, CUDA oracle, or performance evidence is claimed.
