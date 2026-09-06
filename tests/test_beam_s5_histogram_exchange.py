@@ -55,3 +55,14 @@ def test_initialized_wire_traces_remote_full_output():
     traced = jax.make_jaxpr(fn,axis_env=[('core',8)])(
         jax.ShapeDtypeStruct((2,256),jnp.uint32))
     assert tuple(x.shape for x in traced.out_avals) == ((16,256),)
+
+
+def test_explicit_hbm_wire_has_output_memory_constraint():
+    from tpu_beam_search.beam_s5_histogram_exchange import make_s5_histogram_call
+    fn = make_s5_histogram_call(SimpleNamespace(size=8),width=256,
+        return_wire=True,explicit_hbm_output=True)
+    traced = jax.make_jaxpr(fn,axis_env=[('core',8)])(
+        jax.ShapeDtypeStruct((2,256),jnp.uint32))
+    assert tuple(x.shape for x in traced.out_avals) == ((16,256),)
+    call = next(e for e in traced.jaxpr.eqns if e.primitive.name == 'pallas_call')
+    assert call.params['out_avals'][0].memory_space == pltpu.HBM

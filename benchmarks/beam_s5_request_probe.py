@@ -56,7 +56,7 @@ def recovery_fixtures(kind):
             _,source,total = base[index]
             wire = np.stack([np.concatenate([source[(rank-offset)%8] for offset in range(8)],axis=0)
                              for rank in range(8)])
-            request,expected = (source,wire) if kind in ('wire','initialized') else (wire,total) if kind == 'reduction' else (source,total)
+            request,expected = (source,wire) if kind in ('wire','initialized','hbm','hbm_initialized') else (wire,total) if kind == 'reduction' else (source,total)
             if kind == 'own':
                 request,expected = source,source.copy()
             if kind == 'replicate':
@@ -74,7 +74,7 @@ def save_failure_arrays(output,name,request,expected,actual):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output',required=True,type=Path)
-    parser.add_argument('--kind',choices=('request','histogram','wire','reduction','combined','own','replicate','initialized'),default='request')
+    parser.add_argument('--kind',choices=('request','histogram','wire','reduction','combined','own','replicate','initialized','hbm','hbm_initialized'),default='request')
     args = parser.parse_args()
     output = args.output
     output.mkdir(parents=True,exist_ok=True)
@@ -95,8 +95,9 @@ def main():
     sharding = jax.sharding.NamedSharding(mesh,spec)
     call = (make_s5_request_call(mesh) if args.kind == 'request'
             else pallas_sum_histogram_pairs if args.kind == 'reduction'
-            else make_s5_histogram_call(mesh,width=256,return_wire=args.kind in ('wire','initialized'),own_only=args.kind == 'own',
-                                        local_replicate=args.kind == 'replicate',initialize_wire=args.kind == 'initialized'))
+            else make_s5_histogram_call(mesh,width=256,return_wire=args.kind in ('wire','initialized','hbm','hbm_initialized'),own_only=args.kind == 'own',
+                                        local_replicate=args.kind == 'replicate',initialize_wire=args.kind in ('initialized','hbm_initialized'),
+                                        explicit_hbm_output=args.kind in ('hbm','hbm_initialized')))
     def local(request):
         return call(request[0])[None]
     fn = jax.jit(jax.shard_map(local,mesh=mesh,in_specs=spec,out_specs=spec,check_vma=False))

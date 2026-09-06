@@ -896,3 +896,17 @@ V5 terminalERROR downloaded completely to beam_s4_s5_v5. Initialized remote
 firstcase still32704mismatch/allzero NPZ, later7notrun, runtime8TPUv5lite
 sourcecf66f40. See research/2026-09-06-s4-s5-v5-results.md. No restart yet.
 Initialization alone is not sufficient; exact source cause remains unknown.
+
+Explicit HBM output diagnostic ready: pltpu.HBM out_shape constrains custom-call
+out_avals independently of BlockSpec. hbm/hbm_initialized groups compare the
+same eight wire fixtures with/without initialization; production default stays
+unchanged.31targetedpassed3.61s; full session25104 terminal849passed1225.65s
+with both C++ oracle variables set, zero skips/failures/errors (local_hbm_full.xml).
+See research/2026-09-06-s5-explicit-hbm-protocol.md. Pin and submit V6 only
+after scoped publication. No TPU acceptance for this new variant yet.
+
+Pallas final history projection emits parent low/high, original route,
+target-local index and validity; all invalid records zeroed. Included in the
+849-test run. Still not connected to inter-rank FinalHistory transport or host
+completion/lifetime handling; the scalar host history service does not imply
+the entire beam has been integrated.

@@ -73,3 +73,15 @@ def test_initialized_control_runs_only_new_case(tmp_path):
         return SimpleNamespace(returncode=0)
     assert run_bundle(tmp_path,runner=runner,initialized_control=True)['all_exact']
     assert calls == ['initialized']
+
+
+def test_hbm_controls_continue_after_first_failure(tmp_path):
+    from benchmarks.beam_s4_s5_bundle import run_bundle
+    calls=[]
+    def runner(command,**kwargs):
+        folder=Path(command[command.index('--output')+1])
+        calls.append(folder.name)
+        (folder/f's5_{folder.name}.json').write_text(json.dumps({'exact':folder.name!='hbm'}))
+        return SimpleNamespace(returncode=1 if folder.name=='hbm' else 0)
+    assert not run_bundle(tmp_path,runner=runner,hbm_control=True)['all_exact']
+    assert calls == ['hbm','hbm_initialized']

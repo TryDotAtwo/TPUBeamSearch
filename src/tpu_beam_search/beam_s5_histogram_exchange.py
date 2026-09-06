@@ -7,7 +7,7 @@ from jax.experimental.pallas import tpu as pltpu
 from .beam_histogram_pair_sum import pallas_sum_histogram_pairs
 
 
-def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_only=False,local_replicate=False,initialize_wire=False):
+def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_only=False,local_replicate=False,initialize_wire=False,explicit_hbm_output=False):
     """All ranks enter after the common request decision with frozen local sums.
 
     Uses 2*ranks*width uint32 HBM scratch, not a ring reduce-scatter. The local
@@ -52,8 +52,13 @@ def make_s5_histogram_call(mesh,*,width,interpret=False,return_wire=False,own_on
             transfer.wait_send()
             transfer.wait_recv()
     hbm = pl.BlockSpec(memory_space=pltpu.HBM)
+    output_shape = (2 if own_only else 2*ranks,width)
+    # Ref placement inside the kernel and custom-call output placement are
+    # distinct contracts. Keep the explicit output constraint diagnostic-only.
+    output_type = (pltpu.HBM(output_shape,jnp.uint32) if explicit_hbm_output
+                   else jax.ShapeDtypeStruct(output_shape,jnp.uint32))
     wire_call = pl.pallas_call(exchange,
-        out_shape=jax.ShapeDtypeStruct((2 if own_only else 2*ranks,width),jnp.uint32),
+        out_shape=output_type,
         in_specs=(hbm,),out_specs=hbm,
         scratch_shapes=(pltpu.SemaphoreType.DMA,
             pltpu.SemaphoreType.DMA((max(1,ranks-1),)),

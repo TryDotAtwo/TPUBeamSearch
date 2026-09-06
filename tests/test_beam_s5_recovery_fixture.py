@@ -39,3 +39,12 @@ def test_local_replicate_fixture_preserves_full_wire_shape():
         assert expected.shape == (8,16,256)
         for rank in range(8):
             np.testing.assert_array_equal(expected[rank],np.tile(source[rank],(8,1)))
+
+
+def test_hbm_controls_use_identical_remote_wire_expectations():
+    from benchmarks.beam_s5_request_probe import recovery_fixtures
+    for kind in ('hbm','hbm_initialized'):
+        for actual,reference in zip(recovery_fixtures(kind),recovery_fixtures('wire'),strict=True):
+            assert actual[0] == reference[0]
+            np.testing.assert_array_equal(actual[1],reference[1])
+            np.testing.assert_array_equal(actual[2],reference[2])
