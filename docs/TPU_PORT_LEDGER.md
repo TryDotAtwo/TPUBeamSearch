@@ -910,3 +910,13 @@ target-local index and validity; all invalid records zeroed. Included in the
 849-test run. Still not connected to inter-rank FinalHistory transport or host
 completion/lifetime handling; the scalar host history service does not imply
 the entire beam has been integrated.
+
+V6 submitted sourceb2d6f8b launcher42c3659, observedQUEUED. Full25104terminal
+849passed; do not poll that completed handle.
+
+`pallas_final_history_plan` shares one balance calculation between requests
+and history. Requests retain source routing, history destination routing;
+target-local and validity agree. Fifteen focused tests passed6.17s
+(`local_final_history_plan.xml`), including interpreter outputs transferred
+explicitly to host and inserted into two rank-local histories. No remote DMA,
+actual CUDA/TPU replay or integrated asynchronous lifetime acceptance yet.

@@ -1,6 +1,7 @@
 """Compose balanced destinations with source-routed final materialize requests."""
 from .beam_final_balance import pallas_final_balance
 from .beam_final_request import pallas_final_requests
+from .beam_final_history import pallas_final_history_records
 import jax
 import jax.numpy as jnp
 from jax.experimental import pallas as pl
@@ -53,3 +54,20 @@ def pallas_final_plan(meta, indices, boundaries, *, world_size, interpret=False)
         world_size=world_size,interpret=interpret)
     requests, sources = pallas_final_requests(meta,local,ranks,interpret=interpret)
     return requests,sources,valid
+
+
+def pallas_final_history_plan(meta, indices, boundaries, *, world_size, interpret=False):
+    """Build requests and history from one balanced destination calculation.
+
+    Returns requests, source routing, validity, history5xN, destination ranks.
+    Request transport routes by source; history routes by destination. Inputs
+    follow pallas_final_plan's capped-index contract. No host/inter-rank DMA is
+    performed here; both consumers must honor validity and completion lifetimes.
+    """
+    if meta.ndim != 2 or indices.ndim != 2 or meta.shape[1] != indices.shape[1]:
+        raise ValueError('final metadata and global indices must align')
+    ranks,local,valid=pallas_final_balance(indices,boundaries,
+        world_size=world_size,interpret=interpret)
+    requests,sources=pallas_final_requests(meta,local,ranks,interpret=interpret)
+    history=pallas_final_history_records(meta,local,valid,interpret=interpret)
+    return requests,sources,valid,history,ranks
