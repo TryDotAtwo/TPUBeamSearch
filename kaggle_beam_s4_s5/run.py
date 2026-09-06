@@ -1,10 +1,10 @@
-"""Pinned private S5 explicit-HBM reduction and serialized epoch gate, V7."""
+"""Pinned private S5 fixed-width scan serialized epoch gate, V8."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = '6c3fc5936616b7c22bf502030477eead523c356b'
+COMMIT_SHA = 'b8e063d6fe367b0b557eb0dcf8916caddfc0af23'
 CHECKOUT = Path('/tmp/TPUBeamSearch-s4-s5')
 OUTPUT = Path('/kaggle/working/beam_s4_s5')
 
@@ -20,7 +20,7 @@ def main():
         PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))))
     OUTPUT.mkdir(parents=True,exist_ok=True)
     subprocess.run((sys.executable,'-m','benchmarks.beam_s4_s5_bundle',
-        '--output',str(OUTPUT),'--epoch-control'),cwd=CHECKOUT,env=env,check=True)
+        '--output',str(OUTPUT),'--epoch-only'),cwd=CHECKOUT,env=env,check=True)
 
 
 if __name__ == '__main__':
