@@ -1,0 +1,65 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1788720931.598702      56 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: ===
+learning/45eac/tfrc/runtime/common_lib.cc:238
+count0_remote
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 353, in backend_compile_and_load
+    return backend.compile_and_load(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+jax.errors.JaxRuntimeError: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+at location: loc("dma_start:"("dma_start/dma_start"(callsite("pallas_materialize_final.<locals>.kernel.<locals>.valid"("/tmp/TPUBeamSearch-final-gate/src/tpu_beam_search/beam_final_materialize.py":38:12 to :24) at "pallas_materialize_final.<locals>.kernel.<locals>.valid"("/tmp/TPUBeamSearch-final-gate/src/tpu_beam_search/beam_final_materialize.py":38:12 to :24)))))
+
+The MLIR operation involved:
+  %67 = "tpu.memref_slice"(%arg1, %54, %18) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<7x128xi8, #tpu.tiled<(8,128)(4,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x128xi8, #tpu.tiled<(8,128)(4,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/TPUBeamSearch-final-gate/benchmarks/beam_cuda_final_probe.py", line 75, in <module>
+    main()
+  File "/tmp/TPUBeamSearch-final-gate/benchmarks/beam_cuda_final_probe.py", line 56, in main
+    exe = fn.lower(*inputs).compile()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/stages.py", line 592, in compile
+    return Compiled(self._lowering.compile(**kw), self._lowering.const_args,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1239, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1733, in from_hlo
+    xla_executable = _cached_compilation(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/interpreters/pxla.py", line 1516, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 469, in compile_or_get_cached
+    return _compile_and_write_cache(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 737, in _compile_and_write_cache
+    executable = backend_compile_and_load(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/profiler.py", line 420, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/jax/_src/compiler.py", line 362, in backend_compile_and_load
+    raise handler_result from e
+  File "/tmp/TPUBeamSearch-final-gate/src/tpu_beam_search/beam_final_materialize.py", line 38, in pallas_materialize_final.<locals>.kernel.<locals>.valid
+    copy.start()
+  File "/tmp/TPUBeamSearch-final-gate/src/tpu_beam_search/beam_final_materialize.py", line 38, in dma_start/dma_start"(callsite("pallas_materialize_final.<locals>.kernel.<locals>.valid
+    copy.start()
+jax._src.pallas.mosaic.error_handling.MosaicError: INTERNAL: Mosaic failed to compile TPU kernel: Offsets along tiled dimensions must be aligned to tiles. Failed to verify that the index at dimension 0 is divisible by the tile dimension 8. If it is, use tpu.assume_multiple to suppress this error.
+
+The MLIR operation involved:
+  %67 = "tpu.memref_slice"(%arg1, %54, %18) <{operandSegmentSizes = array<i32: 1, 2, 0>}> : (memref<7x128xi8, #tpu.tiled<(8,128)(4,1),[1,1]>, #tpu.memory_space<hbm>>, i32, i32) -> memref<1x128xi8, #tpu.tiled<(8,128)(4,1),[1,1]>, #tpu.memory_space<hbm>>
+
+Please report a bug at: https://github.com/jax-ml/jax/issues/new/choose
+

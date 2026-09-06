@@ -1251,3 +1251,29 @@ Full13332 TERMINATED:936passed1210.32s, zero failures/errors/skips, both C++
 oracles enabled (`local_final_dma_output_full.xml`). Do not poll or repeat.
 This includes history-arena and materialization output-DMA candidate. Physical
 acceptance remains pending; V1 report is `docs/research/2026-09-06-final-v1-results.md`.
+
+Final V2 terminal ERROR, downloaded completely to `test_results/beam_final_v2`.
+Source cec9e41940a95c2388fc84446a9bdd6d32649244. Exchange16 and coverage7
+remain exact, return0. Materialization count0_remote fails compilation at
+parent DMA `copy.start()` (line38), return1; remaining5 cases not reached.
+Mosaic rejects dynamic row slicing of uint8 parent memref7x128 tiled(8,128):
+row offset is not proven divisible by8. V1 output BlockSpec error is no longer
+the reported failure; this is a distinct DMA alignment constraint. Do NOT use
+assume_multiple on arbitrary parent indices: the precondition would be false.
+No materialization execution or speed measurement. Need a real aligned layout
+or aligned-tile read plus row extraction, including the seven-parent tail,
+and aligned output stores. No restart yet. All previous local full runs terminal.
+
+V3 candidate moves the independently addressed record axis outside the two
+minor dimensions: internal parent/output ABI [records,1,width], VMEM stage
+[1,1,width]. External [records,width] API retained. No assume_multiple and no
+invented valid parent padding. New structural regression failed on old7x128
+input before change; three focused tests passed4.85s including existing
+race-detecting interpreter. This is a physical-layout hypothesis, not TPU
+acceptance: singleton-axis reshape may require layout conversion/padding and
+must not be called zero-copy or a speedup. Full local regression started with
+both C++ oracles, `local_final_record_axis_full.xml`; freeze Python snapshot.
+
+Full96346 TERMINATED:937passed750.09s, zero errors/failures/skips. Do not poll
+or repeat. V3 record-axis candidate locally validated, physical gate pending.
+V2 report: `docs/research/2026-09-06-final-v2-results.md`.

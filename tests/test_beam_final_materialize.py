@@ -16,7 +16,23 @@ def test_materialize_output_avoids_illegal_single_row_pipeline_block():
     calls = [eq for eq in traced.jaxpr.eqns if eq.primitive.name == 'pallas_call']
     mapping = calls[-1].params['grid_mapping'].block_mappings[-1]
     sizes = tuple(getattr(dim,'block_size',dim) for dim in mapping.block_shape)
-    assert sizes[0] == 128 or sizes[0] % 8 == 0, sizes
+    whole = calls[-1].outvars[0].aval.shape
+    assert sizes[-2] == whole[-2] or sizes[-2] % 8 == 0, sizes
+
+
+def test_materialize_dma_record_axis_is_outside_minor_tiled_dimensions():
+    """V2 regression: arbitrary parent IDs must not slice a tiled row axis."""
+    import jax
+    from tpu_beam_search.beam_final_materialize import pallas_materialize_final
+    args = (jnp.zeros((7,128),jnp.uint8),
+            jnp.tile(jnp.arange(128,dtype=jnp.int32),(24,1)),
+            jnp.zeros((4,128),jnp.uint32),jnp.zeros((1,),jnp.uint32),
+            jnp.ones((1,),jnp.uint32))
+    traced = jax.make_jaxpr(lambda *xs: pallas_materialize_final(
+        *xs,state_len=120,interpret=True))(*args)
+    call = [eq for eq in traced.jaxpr.eqns if eq.primitive.name == 'pallas_call'][-1]
+    assert call.invars[0].aval.shape == (7,1,128)
+    assert call.outvars[0].aval.shape == (128,1,128)
 
 
 def test_materialize_valid_and_reject_entire_invalid_batch():
