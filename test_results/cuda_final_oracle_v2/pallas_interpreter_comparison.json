@@ -1,0 +1,48 @@
+{
+  "scope": "actual single GPU output vs Pallas CPU interpreter, NOT physical TPU",
+  "cases": [
+    {
+      "name": "count0_remote",
+      "input_sha256": "2d6b29de899bdecb0b367deabe49658c344255a1c8cf12a0d03b7c807de96a95",
+      "cuda_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pallas_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exact": true
+    },
+    {
+      "name": "count1_remote",
+      "input_sha256": "abbeb4fc7491aae902e9f6abc4e1a6309b079d3e394fcc205897da8caebe8823",
+      "cuda_sha256": "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+      "pallas_sha256": "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+      "exact": true
+    },
+    {
+      "name": "count127_remote",
+      "input_sha256": "744f482d83026df3ff4961b0f584becc9715fc05f01eee65530e81513df97df7",
+      "cuda_sha256": "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+      "pallas_sha256": "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+      "exact": true
+    },
+    {
+      "name": "count128_remote",
+      "input_sha256": "1e94d66e1cfcf453990b375b4d816b98257785ca8fcc27f4333efba1fdf3ed02",
+      "cuda_sha256": "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+      "pallas_sha256": "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+      "exact": true
+    },
+    {
+      "name": "count129_remote",
+      "input_sha256": "55c38858e2f29df764d0d09f2e6667d66308c44e31fd788c248596ca5af0ee6b",
+      "cuda_sha256": "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+      "pallas_sha256": "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+      "exact": true
+    },
+    {
+      "name": "count127_local",
+      "input_sha256": "a683df08e43e0e07a5deaec2a169d23bf3c6ebdf1308364b9276e41d6d9a74e4",
+      "cuda_sha256": "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+      "pallas_sha256": "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+      "exact": true
+    }
+  ],
+  "all_exact": true
+}

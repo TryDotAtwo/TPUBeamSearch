@@ -1,0 +1,35 @@
+{
+  "scope": "one physical CUDA GPU, original materialize/validation; independent NumPy byte reference, not TPU or full beam",
+  "cases": [
+    {
+      "count": 0,
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=0 bytes=0\n",
+      "stderr": "",
+      "input_sha256": "2d6b29de899bdecb0b367deabe49658c344255a1c8cf12a0d03b7c807de96a95",
+      "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exact": true
+    },
+    {
+      "count": 1,
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=1 bytes=128\n",
+      "stderr": "",
+      "input_sha256": "abbeb4fc7491aae902e9f6abc4e1a6309b079d3e394fcc205897da8caebe8823",
+      "expected_sha256": "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+      "output_sha256": "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+      "exact": true
+    },
+    {
+      "count": 127,
+      "returncode": 2,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\n",
+      "stderr": "final request validation failed: invalid_count=126 first_index=0 parent_idx=0 current_frontier_size=7 target_local_idx=126 target_count=127 move=0 move_count=24 request_count=127 reason_mask=8 reason_parent=0 reason_target=0 reason_move=0 reason_slot=1\n",
+      "input_sha256": "744f482d83026df3ff4961b0f584becc9715fc05f01eee65530e81513df97df7",
+      "expected_sha256": "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exact": false
+    }
+  ]
+}

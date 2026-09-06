@@ -1,0 +1,72 @@
+{
+  "scope": "one physical CUDA GPU, original materialize/validation; independent NumPy byte reference, not TPU or full beam",
+  "cases": [
+    {
+      "count": 0,
+      "mode": "remote",
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=0 bytes=0\n",
+      "stderr": "",
+      "input_sha256": "2d6b29de899bdecb0b367deabe49658c344255a1c8cf12a0d03b7c807de96a95",
+      "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exact": true
+    },
+    {
+      "count": 1,
+      "mode": "remote",
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=1 bytes=128\n",
+      "stderr": "",
+      "input_sha256": "abbeb4fc7491aae902e9f6abc4e1a6309b079d3e394fcc205897da8caebe8823",
+      "expected_sha256": "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+      "output_sha256": "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+      "exact": true
+    },
+    {
+      "count": 127,
+      "mode": "remote",
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=127 bytes=16256\n",
+      "stderr": "",
+      "input_sha256": "744f482d83026df3ff4961b0f584becc9715fc05f01eee65530e81513df97df7",
+      "expected_sha256": "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+      "output_sha256": "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+      "exact": true
+    },
+    {
+      "count": 128,
+      "mode": "remote",
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=128 bytes=16384\n",
+      "stderr": "",
+      "input_sha256": "1e94d66e1cfcf453990b375b4d816b98257785ca8fcc27f4333efba1fdf3ed02",
+      "expected_sha256": "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+      "output_sha256": "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+      "exact": true
+    },
+    {
+      "count": 129,
+      "mode": "remote",
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=129 bytes=16512\n",
+      "stderr": "",
+      "input_sha256": "55c38858e2f29df764d0d09f2e6667d66308c44e31fd788c248596ca5af0ee6b",
+      "expected_sha256": "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+      "output_sha256": "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+      "exact": true
+    },
+    {
+      "count": 127,
+      "mode": "local",
+      "returncode": 0,
+      "stdout": "device=NVIDIA GeForce RTX 3070 Laptop GPU sm=86\nresponses=127 bytes=16256\n",
+      "stderr": "",
+      "input_sha256": "a683df08e43e0e07a5deaec2a169d23bf3c6ebdf1308364b9276e41d6d9a74e4",
+      "expected_sha256": "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+      "output_sha256": "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+      "exact": true
+    }
+  ],
+  "all_exact": true
+}
