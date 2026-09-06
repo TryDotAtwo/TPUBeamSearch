@@ -1138,3 +1138,14 @@ Regression95887 has TERMINATED:909passed1166.12s, zero failures/errors/skips,
 `local_final_prior_full.xml`, both C++ oracle paths enabled. This accepts the
 prior-error extension locally and the seven-case physical fixture preparation.
 Do not poll or repeat that handle. Physical final29-case acceptance is pending.
+
+Final gate V1 submitted: private trydotatwo/tpu-beam-final-gate, source
+0e98b90310bc897a941f61bbd5e5bf2cbccfc9c7, launcher308e156, latest QUEUED.
+Do not restart or run a second TPU session. Independent test-only history
+composition passed26.10s (`local_final_history_transport.xml`): projection,
+destination grouping, intervals, chunk packing, simulated source-major links,
+Pallas receive compaction and host rank-layer publication. Two senders and
+three destinations include an empty receiver, sparse valid slots, high-bit
+64-bit parents and reversed target/receive order. Literal expected records
+check original route preservation. No production changes, physical DMA,
+multi-rank atomic publication or consumer-drain claim.
