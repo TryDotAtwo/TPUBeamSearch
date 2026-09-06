@@ -1,10 +1,10 @@
-"""Pinned private S5 full-shape local-copy control, V4."""
+"""Pinned private S5 initialized remote-wire control, V5."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = '89b4d3c5616e5a701f32c854bb7ee66ac83b4825'
+COMMIT_SHA = 'cf66f4027af3311fa5cb7ce8a0ae6b7ded8164e3'
 CHECKOUT = Path('/tmp/TPUBeamSearch-s4-s5')
 OUTPUT = Path('/kaggle/working/beam_s4_s5')
 
@@ -20,7 +20,7 @@ def main():
         PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))))
     OUTPUT.mkdir(parents=True,exist_ok=True)
     subprocess.run((sys.executable,'-m','benchmarks.beam_s4_s5_bundle',
-        '--output',str(OUTPUT),'--layout-control'),cwd=CHECKOUT,env=env,check=True)
+        '--output',str(OUTPUT),'--initialized-control'),cwd=CHECKOUT,env=env,check=True)
 
 
 if __name__ == '__main__':
