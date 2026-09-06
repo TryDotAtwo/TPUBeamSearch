@@ -18,6 +18,7 @@ def run_bundle(output, *, runner=subprocess.run):
     for name, module, gate, count in (
         ('cuda_final', 'benchmarks.beam_cuda_final_probe', 'all_exact', 6),
         ('final_exchange', 'benchmarks.beam_final_exchange_probe', 'exact', 16),
+        ('final_coverage', 'benchmarks.beam_final_coverage_probe', 'exact', 6),
     ):
         folder = output / name
         folder.mkdir(parents=True, exist_ok=True)

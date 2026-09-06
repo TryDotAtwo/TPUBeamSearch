@@ -1100,3 +1100,11 @@ Full98963 has TERMINATED:907passed1522.85s, zero failures/errors/skips,
 `local_final_coverage_full.xml`, both C++ oracle paths enabled. Coverage and
 agreement modules are locally regression-verified, not physically TPU-accepted.
 Do not poll the completed handle. Full final drain/publication remains open.
+
+Prepared final bundle now has three isolated sequential groups: CUDA byte
+materialization6, snapshot exchange16, coverage agreement6. Coverage fixtures
+include empty/uneven ranks and one-rank duplicate/missing/extra/overflow; all
+ranks must see the same error while only the offending local summary is bad.
+Four coordinator/fixture tests pass3.25s (`local_final_bundle_expanded.xml`).
+This benchmark-only change follows the907 production regression. None of
+these new physical groups has run yet; V9 remains the sole queued session.
