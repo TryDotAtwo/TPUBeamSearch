@@ -1,0 +1,56 @@
+{
+  "groups": [
+    {
+      "name": "epoch",
+      "exact": false,
+      "status": "returned",
+      "returncode": 1,
+      "report": {
+        "source_sha": "b8e063d6fe367b0b557eb0dcf8916caddfc0af23",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "scope": "serialized S5 state-carry epochs, frozen histograms; not concurrent writer/reader or full beam",
+        "explicit_hbm_output": true,
+        "exact": false,
+        "cases": []
+      }
+    }
+  ],
+  "all_exact": false,
+  "scope": "serialized S5 epoch only; combined histogram already accepted separately"
+}

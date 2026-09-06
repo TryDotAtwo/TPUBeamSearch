@@ -1043,3 +1043,10 @@ the independent group after a native abort. Ten focused loader/coordinator
 tests pass (0.49s). These new benchmark tests are not part of the earlier
 878-test production regression. Physical final gates remain pending V8 terminal;
 no full-beam correctness, performance or overlap claim follows from preparation.
+
+V8 has now terminated ERROR (superseding QUEUED above). All returned files are
+in `test_results/beam_s4_s5_v8`; source/runtime/eight TPU IDs match. Epoch cases
+empty, subprocess rc1. Compiler rejects scalar VMEM store in publication
+dependency at beam_s5_epoch.py:35. No timing or epoch acceptance. See
+`docs/research/2026-09-06-s4-s5-v8-results.md`. Local83193 remains running on its
+unchanged Python snapshot; fix and new launch follow its terminal result.
