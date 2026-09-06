@@ -31,3 +31,11 @@ def test_own_copy_cases_expect_identity_and_save_failure_arrays(tmp_path):
         np.testing.assert_array_equal(data['input'],source)
         np.testing.assert_array_equal(data['expected'],expected)
         np.testing.assert_array_equal(data['actual'],actual)
+
+
+def test_local_replicate_fixture_preserves_full_wire_shape():
+    from benchmarks.beam_s5_request_probe import recovery_fixtures
+    for _,source,expected in recovery_fixtures('replicate'):
+        assert expected.shape == (8,16,256)
+        for rank in range(8):
+            np.testing.assert_array_equal(expected[rank],np.tile(source[rank],(8,1)))

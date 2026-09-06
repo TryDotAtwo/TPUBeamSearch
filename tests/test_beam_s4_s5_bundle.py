@@ -49,3 +49,15 @@ def test_transport_isolation_runs_own_and_wire_even_after_failure(tmp_path):
     report = run_bundle(tmp_path,runner=runner,transport=True)
     assert calls == ['own','wire']
     assert not report['all_exact']
+
+
+def test_layout_control_does_not_repeat_accepted_or_unchanged_groups(tmp_path):
+    from benchmarks.beam_s4_s5_bundle import run_bundle
+    calls = []
+    def runner(command,**kwargs):
+        folder = Path(command[command.index('--output')+1])
+        calls.append(folder.name)
+        (folder/'s5_replicate.json').write_text(json.dumps({'exact':True}))
+        return SimpleNamespace(returncode=0)
+    assert run_bundle(tmp_path,runner=runner,layout_control=True)['all_exact']
+    assert calls == ['replicate']

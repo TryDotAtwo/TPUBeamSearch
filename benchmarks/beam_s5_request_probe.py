@@ -59,6 +59,8 @@ def recovery_fixtures(kind):
             request,expected = (source,wire) if kind == 'wire' else (wire,total) if kind == 'reduction' else (source,total)
             if kind == 'own':
                 request,expected = source,source.copy()
+            if kind == 'replicate':
+                request,expected = source,np.stack([np.tile(row,(8,1)) for row in source])
             cases.append((f'recovery{repeat}_{step}',request,expected))
     return cases
 
@@ -72,7 +74,7 @@ def save_failure_arrays(output,name,request,expected,actual):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output',required=True,type=Path)
-    parser.add_argument('--kind',choices=('request','histogram','wire','reduction','combined','own'),default='request')
+    parser.add_argument('--kind',choices=('request','histogram','wire','reduction','combined','own','replicate'),default='request')
     args = parser.parse_args()
     output = args.output
     output.mkdir(parents=True,exist_ok=True)
@@ -93,7 +95,8 @@ def main():
     sharding = jax.sharding.NamedSharding(mesh,spec)
     call = (make_s5_request_call(mesh) if args.kind == 'request'
             else pallas_sum_histogram_pairs if args.kind == 'reduction'
-            else make_s5_histogram_call(mesh,width=256,return_wire=args.kind == 'wire',own_only=args.kind == 'own'))
+            else make_s5_histogram_call(mesh,width=256,return_wire=args.kind == 'wire',own_only=args.kind == 'own',
+                                        local_replicate=args.kind == 'replicate'))
     def local(request):
         return call(request[0])[None]
     fn = jax.jit(jax.shard_map(local,mesh=mesh,in_specs=spec,out_specs=spec,check_vma=False))

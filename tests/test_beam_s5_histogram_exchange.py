@@ -38,3 +38,11 @@ def test_own_only_diagnostic_has_no_remote_axis_requirement():
     fn = make_s5_histogram_call(SimpleNamespace(size=8),width=256,own_only=True,
         interpret=pltpu.InterpretParams(detect_races=True))
     np.testing.assert_array_equal(fn(jnp.asarray(values)),values)
+
+
+def test_full_shape_local_replication_initializes_every_pair_without_remote():
+    from tpu_beam_search.beam_s5_histogram_exchange import make_s5_histogram_call
+    values = np.arange(512,dtype=np.uint32).reshape(2,256)+17
+    fn = make_s5_histogram_call(SimpleNamespace(size=8),width=256,local_replicate=True,
+        interpret=pltpu.InterpretParams(detect_races=True))
+    np.testing.assert_array_equal(fn(jnp.asarray(values)),np.tile(values,(8,1)))

@@ -814,3 +814,15 @@ wirefirstcase32704mismatch. NPZ actualallzero atallrankrows, includingown.
 Own-only outputshape differs, so remoteDMA vs full-outputlayout remains
 confounded. Next probe must hold fullshape fixed withoutremote, initialized
 allregions. See research/2026-09-06-s4-s5-v3-results.md. NoactiveTPUsession.
+
+Pending local diagnostic: `local_replicate=True` keeps the full wire output
+shape but locally fills every pair with the immutable own input, without
+remote DMA. Five interpreter tests passed in3.36s
+(`local_s5_full_shape_copy.xml`) after a failing API test. Not a production
+fix or TPU result. Driver `replicate` now expects own input repeated in all
+eight pair slots; coordinator --layout-control runs only this new group.
+Fourteen targeted checks passed in3.33s (`local_s5_layout_control.xml`). Full
+regression session62209 passed829 tests in1124.00s, exit0
+(`local_s5_layout_full.xml`). Publish scoped changes/results, pin V4
+launcher with new public SHA and --layout-control, then submit same private
+slug. V3 is already terminal/downloaded; do not repeat it.
