@@ -1071,3 +1071,11 @@ Regression85379 has TERMINATED: 896 passed1367.89s, zero failures/errors/skips
 the S5 vector-store fix, final count guards and response transport adapter.
 Do not poll or repeat this completed run. V9 physical epoch acceptance remains
 pending; interpreter/JAXPR checks do not establish TPU compilation.
+
+V9 source f9a8bee57b8d3bd075d78ff2d37cab2fdd300b94 / launcher8bf352d is now
+submitted and QUEUED. No duplicate session. Independent local response routing
+composition passes: byte pack -> uint32 SoA -> stable return-rank grouping ->
+byte restore -> response unpack preserves logical state, high-bit target_idx,
+rank and valid prefix (`local_final_response_grouping.xml`,1passed14.19s).
+This adds test-only evidence after the896-run; production code is unchanged.
+Actual request/response exchange and complete final publication remain pending.
