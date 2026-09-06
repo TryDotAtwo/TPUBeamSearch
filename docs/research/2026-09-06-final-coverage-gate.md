@@ -27,3 +27,27 @@ collective execution of this composition remain pending. No full beam proof.
 Full unchanged-snapshot regression:907passed1522.85s, zero failures/errors/skips,
 with both source C++ oracle paths enabled (`local_final_coverage_full.xml`).
 This is local regression evidence only. Agreement focused tests:3passed13.82s.
+
+## Accumulated transport/history errors
+
+The pending extension accepts `prior_error: uint32[1,128]`, with an accumulated
+local error in lane `[0,0]`. The common flag is the normalized logical OR of
+coverage failure and this prior error, before the unconditional collective.
+A nonzero high bit is an error, not a signed negative value to be lost by MAX.
+The returned local summary deliberately remains coverage-only: callers retain
+their transport/history diagnostics separately.
+
+Focused evidence: `local_final_prior_error.xml` has four passing tests,
+including valid coverage with prior flag `0x80000000`. The expanded physical
+fixture/coordinator tests have eight passes (`local_final_prior_bundle.xml`).
+The physical bundle now requires 6 CUDA-byte cases, 16 exchange cases and
+7 coverage cases. The new coverage case places a prior error on rank6 with
+valid target coverage everywhere; all ranks must reject publication.
+
+Full regression `local_final_prior_full.xml` has completed:909passed1166.12s,
+zero failures/errors/skips, with both C++ oracle paths enabled. These changes
+are locally verified, not physically TPU-accepted. The prepared final launcher
+must pin this verified public source before submission. S5 V9 is now accepted
+separately and no longer occupies a session.
+Neither a zero common flag nor exact coverage proves that DMA/history consumers
+have drained; that synchronization remains a separate caller obligation.

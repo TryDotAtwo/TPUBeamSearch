@@ -14,7 +14,7 @@ def test_isolated_groups_and_complete_case_gate(tmp_path, failure):
         folder = Path(command[command.index('--output') + 1])
         calls.append(folder.name)
         materialize = folder.name == 'cuda_final'
-        count = 16 if folder.name == 'final_exchange' else 6
+        count = {'final_exchange':16,'cuda_final':6,'final_coverage':7}[folder.name]
         if failure == 'partial' and materialize:
             count -= 1
         data = {'all_exact' if materialize else 'exact': True,

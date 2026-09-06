@@ -12,10 +12,11 @@ from tpu_beam_search.beam_final_agreement import make_final_coverage_agreement
 
 
 def fixtures():
-    for name in ('empty','uneven','duplicate','missing','extra','overflow'):
+    for name in ('empty','uneven','duplicate','missing','extra','overflow','prior_error'):
         targets = np.full((8,1,256),0xffffffff,np.uint32)
         valid = np.zeros_like(targets)
         counts = np.zeros((8,1),np.uint32)
+        prior = np.zeros((8,1,128),np.uint32)
         for rank in range(8):
             n = 0 if name == 'empty' else (0,1,127,128,129,17,2,256)[rank]
             counts[rank,0] = n
@@ -28,7 +29,8 @@ def fixtures():
         if name == 'missing': valid[4,0,np.flatnonzero(valid[4,0])[0]] = 0
         if name == 'extra': valid[0,0,0] = 1
         if name == 'overflow': counts[4,0] = 257
-        yield name,(targets,valid,counts),int(name not in ('empty','uneven'))
+        if name == 'prior_error': prior[6,0,0] = 0x80000000
+        yield name,(targets,valid,counts,prior),int(name not in ('empty','uneven'))
 
 
 def main():
@@ -47,9 +49,9 @@ def main():
     save()
     mesh = jax.sharding.Mesh(np.asarray(devices),('core',))
     p = jax.sharding.PartitionSpec
-    specs = (p('core',None,None),p('core',None,None),p('core',None))
+    specs = (p('core',None,None),p('core',None,None),p('core',None),p('core',None,None))
     call = make_final_coverage_agreement(mesh)
-    def local(t,v,c): return tuple(x[None] for x in call(t[0],v[0],c[0]))
+    def local(t,v,c,e): return tuple(x[None] for x in call(t[0],v[0],c[0],e[0]))
     fn = jax.jit(jax.shard_map(local,mesh=mesh,in_specs=specs,
         out_specs=(p('core',None,None),)*2,check_vma=False))
     exe = None
@@ -66,7 +68,7 @@ def main():
         expected[:,0,0] = error
         local_bad = (summary[:,0,0] != 0)
         expected_bad = np.zeros(8,bool)
-        if error: expected_bad[0 if name == 'extra' else 4] = True
+        if error and name != 'prior_error': expected_bad[0 if name == 'extra' else 4] = True
         exact = bool(np.array_equal(common,expected) and np.array_equal(local_bad,expected_bad))
         row.update(exact=exact,output_sha256=digest((common,summary)),invalid_counts=summary[:,0,0].tolist())
         save()

@@ -1133,3 +1133,8 @@ Source/runtime match. Full output is `test_results/beam_s4_s5_v9`; report
 `docs/research/2026-09-06-s4-s5-v9-results.md`. No timing/overlap or concurrent
 writer proof. Do not rerun V9. Final gate awaits verified seven-case source pin;
 local regression95887 remains running and its Python snapshot is unchanged.
+
+Regression95887 has TERMINATED:909passed1166.12s, zero failures/errors/skips,
+`local_final_prior_full.xml`, both C++ oracle paths enabled. This accepts the
+prior-error extension locally and the seven-case physical fixture preparation.
+Do not poll or repeat that handle. Physical final29-case acceptance is pending.

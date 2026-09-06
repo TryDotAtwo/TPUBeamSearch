@@ -23,3 +23,13 @@ def test_eight_rank_coverage_agreement_traces():
               jax.ShapeDtypeStruct((1,),jnp.uint32))
     traced = jax.make_jaxpr(call,axis_env=[('core',8)])(*shapes)
     assert [x.aval.shape for x in traced.jaxpr.outvars] == [(1,128),(2,128)]
+
+
+def test_prior_transport_error_is_not_hidden_by_valid_coverage():
+    from tpu_beam_search.beam_final_agreement import make_final_coverage_agreement
+    call = make_final_coverage_agreement(SimpleNamespace(size=1),interpret=True)
+    targets = jnp.arange(128,dtype=jnp.uint32)[None,:]
+    prior = jnp.zeros((1,128),jnp.uint32).at[0,0].set(0x80000000)
+    common, summary = call(targets,jnp.ones_like(targets),jnp.array([128],jnp.uint32),prior)
+    assert int(common[0,0]) == 1
+    assert int(summary[0,0]) == 0

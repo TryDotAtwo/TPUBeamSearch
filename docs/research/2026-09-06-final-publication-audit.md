@@ -1,4 +1,44 @@
-# Final publication audit, pending fixes
+# Final publication audit and remaining integration gates
+
+## Current status (supersedes the original reproduction notes below)
+
+The batch-capacity defects below were fixed in published commit `f9a8bee`.
+`test_beam_final_count_guard.py` verifies count129/UINT32_MAX rejects the
+entire batch, zeroes materializer output and preserves the scatter frontier;
+count0/128 remain valid. The full snapshot passed896 tests with both C++
+oracles (`test_results/local_v9_full.xml`). This is local evidence, not
+physical TPU acceptance. The original reproduction is retained for attribution.
+
+Target coverage and collective rejection are implemented separately; see
+`2026-09-06-final-coverage-gate.md`. They do not implement the remaining
+integrated transaction. Its required order is:
+
+1. Finish request, response and history exchanges, including empty peers.
+2. Validate complete response and history target sets and accumulated errors;
+   all ranks participate in the common decision even after a local error.
+3. On rejection, retain current frontier and do not publish the new depth.
+4. On acceptance, finish temporary-frontier writes and preserve history input
+   until the host copy consumer has completed.
+5. Publish the next frontier, then permit scratch-layout reuse only after all
+   consumers of the common prefix have drained.
+
+The source dispatcher schedules history copy before frontier copy; it does
+not imply that host history copy completes at that point. A TPU implementation
+must retain that distinction rather than treating a scheduled copy as a drain.
+The present host history store publishes rank layers independently and requires
+caller coordination. It is not yet a transactional multi-rank publication path.
+
+Read-only caller follow-up: `tools/production_runner.cu:2689-2725` queries
+`slot.copy_done` (or synchronizes with `wait_all`) before starting the host
+history writer. At lines4830-4887 the depth caller passes that event into
+finalization, commits the slot and calls `pump_completed(false)`. The explicit
+synchronizations there are conditional debug/verbose branches. Thus host
+writer readiness is demonstrated by source; an unconditional device scratch
+reuse dependency is not established by these excerpts. Do not describe this
+as a proven CUDA race: the complete lifetime/alias path needs separate tracing.
+For TPU acceptance, require an explicit completed consumer dependency before
+overwriting shared device history input, and separately wait for host writer
+completion before reusing its host slot or reconstructing an unpublished layer.
 
 Read-only CUDA source `D:/100XH100/cuda/dispatcher.cu:4634-4664` drains all
 response slots, requires history and response totals equal local_target_count,
