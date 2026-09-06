@@ -1032,3 +1032,14 @@ neither handle should be polled again. The878-run includes final chunk,
 exchange/probe/receive composition and fixed-width threshold scan/epoch-only
 mode. Actual single-GPU original final smoke and six full-byte CUDA-vs-Pallas
 interpreter fixtures are separately publishedfd5e649; not physical TPU replay.
+
+V8 source b8e063d / launcher 6a0e770 is submitted and currently QUEUED.
+The old pre-submission note above is superseded; no duplicate session launched.
+Shared CUDA fixture loader and physical eight-TPU materialization probe are
+published c7934bf. Prepared `beam_final_bundle` runs six materialization cases
+then sixteen exchange cases in separate sequential subprocesses. It preserves
+return codes and nested reports, rejects incomplete case sets, and continues
+the independent group after a native abort. Ten focused loader/coordinator
+tests pass (0.49s). These new benchmark tests are not part of the earlier
+878-test production regression. Physical final gates remain pending V8 terminal;
+no full-beam correctness, performance or overlap claim follows from preparation.
