@@ -1,10 +1,10 @@
-"""Pinned private S5 fixed-width scan serialized epoch gate, V8."""
+"""Pinned private S5 vector publication store serialized epoch gate, V9."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = 'b8e063d6fe367b0b557eb0dcf8916caddfc0af23'
+COMMIT_SHA = 'f9a8bee57b8d3bd075d78ff2d37cab2fdd300b94'
 CHECKOUT = Path('/tmp/TPUBeamSearch-s4-s5')
 OUTPUT = Path('/kaggle/working/beam_s4_s5')
 
