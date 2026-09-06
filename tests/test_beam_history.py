@@ -48,3 +48,34 @@ def test_history_entry_rejects_out_of_range_words(parent,route):
     from tpu_beam_search.beam_history import HistoryEntry
     with pytest.raises(ValueError):
         HistoryEntry(parent,route)
+
+
+def test_store_reorders_target_slots_and_rejects_duplicate_missing_atomically():
+    from tpu_beam_search.beam_history import HistoryEntry, RankHistoryStore
+    store = RankHistoryStore(world_size=2)
+    a,b = HistoryEntry(9,3),HistoryEntry(4,7)
+    with pytest.raises(ValueError,match='duplicate'):
+        store.append_rank_layer(0,[(0,a),(0,b)],target_count=2)
+    with pytest.raises(ValueError,match='missing'):
+        store.append_rank_layer(0,[(0,a)],target_count=2)
+    store.append_rank_layer(0,[(1,b),(0,a)],target_count=2)
+    store.append_rank_layer(1,[],target_count=0)
+    assert store.read_entry(0,0,0) == a
+    assert store.read_entry(0,0,1) == b
+    with pytest.raises(IndexError):
+        store.read_entry(1,0,0)
+    with pytest.raises(IndexError):
+        store.read_entry(0,0,-1)
+
+
+def test_rank_store_reconstruction_crosses_balanced_frontiers():
+    from tpu_beam_search.beam_history import HistoryEntry, RankHistoryStore, reconstruct_history
+    store = RankHistoryStore(world_size=3)
+    for rank in range(3):
+        store.append_rank_layer(rank,[(0,HistoryEntry(0,rank+1))],target_count=1)
+    for rank in range(3):
+        # This record resides on rank, but refers to another source rank.
+        store.append_rank_layer(rank,[(0,HistoryEntry(0,(((rank+1)%3)<<16)|4))],target_count=1)
+    path = reconstruct_history(HistoryEntry(0,(1<<16)|5),depth=3,
+        world_size=3,move_count=6,read_entry=store.read_entry)
+    assert path.moves == (3,4,5)

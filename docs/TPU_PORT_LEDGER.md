@@ -882,3 +882,12 @@ parent and route only. Nine focused tests passed1.81s after initial missing
 module failures (`local_history_reconstruction.xml`): cross-rank chain, high
 parent word, root/empty, invalid move/rank/word ranges. No distributed history
 transport, storage integration, suffix replay or actual puzzle replay yet.
+
+RankHistoryStore now stores rank-local layers as host uint64/uint32 arrays
+(12 payload bytes/entry, excluding containers and transient validity bitmap).
+It reorders records by target-local index, rejects duplicate/missing/out-of-range
+targets before appending a layer, and bounds-checks reads. Eleven focused
+history tests passed1.68s (`local_history_store.xml`), including reconstruction
+across three relocated rank histories. This host component is not wired to
+TPU FinalHistory transport, has no concurrent writers or dead-branch GC, and
+does not establish complete solution replay. No changes to V5 pinned source.

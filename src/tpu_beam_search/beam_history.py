@@ -1,5 +1,6 @@
 """Host reconstruction over rank-local history; no TPU transfer implementation."""
 from dataclasses import dataclass
+from array import array
 from typing import Callable
 
 
@@ -19,6 +20,58 @@ class HistoryEntry:
 class HistoryPath:
     moves: tuple[int,...]
     parent_indices: tuple[int,...]
+
+
+class RankHistoryStore:
+    """Append-only host SoA history: uint64 parents and uint32 routes.
+
+    Not a distributed service or concurrent writer. The caller publishes each
+    rank's layer only after its transfer completes, and coordinates layer
+    readiness before reconstruction. Failed validation publishes no layer.
+    """
+
+    def __init__(self, *, world_size: int):
+        if not isinstance(world_size,int) or not 1 <= world_size <= 65536:
+            raise ValueError('invalid history world_size')
+        if array('Q').itemsize != 8 or array('I').itemsize != 4:
+            raise RuntimeError('host array word sizes do not match history ABI')
+        self._layers = [[] for _ in range(world_size)]
+
+    def _rank(self, rank):
+        if not isinstance(rank,int) or not 0 <= rank < len(self._layers):
+            raise IndexError('history rank out of range')
+        return self._layers[rank]
+
+    def append_rank_layer(self, rank, records, *, target_count):
+        layers = self._rank(rank)
+        if not isinstance(target_count,int) or not 0 <= target_count < 1 << 32:
+            raise ValueError('invalid history target_count')
+        parents = array('Q',[0]) * target_count
+        routes = array('I',[0]) * target_count
+        seen = bytearray(target_count)
+        count = 0
+        for target,entry in records:
+            if not isinstance(target,int) or not 0 <= target < target_count:
+                raise ValueError('history target out of range')
+            if seen[target]:
+                raise ValueError('duplicate history target')
+            if not isinstance(entry,HistoryEntry):
+                raise TypeError('history records require HistoryEntry')
+            parents[target],routes[target] = entry.parent_idx,entry.route_packed
+            seen[target] = 1
+            count += 1
+        if count != target_count:
+            raise ValueError('missing history target')
+        layers.append((parents,routes))
+
+    def read_entry(self, rank, layer, index):
+        layers = self._rank(rank)
+        if not isinstance(layer,int) or not 0 <= layer < len(layers):
+            raise IndexError('history layer out of range')
+        parents,routes = layers[layer]
+        if not isinstance(index,int) or not 0 <= index < len(parents):
+            raise IndexError('history parent index out of range')
+        return HistoryEntry(parents[index],routes[index])
 
 
 def reconstruct_history(solved: HistoryEntry, *, depth: int, world_size: int,
