@@ -789,3 +789,9 @@ One local test passed in4.22s (`local_final_prefix.xml`) across carry and
 nonzero padded lanes. Equal prefix includes global-less offset. Snapshot
 exchange, cap gate, boundaries and compaction remain unintegrated; no physical
 TPU acceptance or complete distributed-final claim.
+
+`pallas_final_cap` computes pair-word K=min(beam,L+E) and explicit L>K error.
+Six cap/prefix local tests passed in4.89s (`local_final_cap.xml`), covering
+zero, underfilled beam, carry and invalid threshold. Caller must stop on error;
+this gate is not yet wired into materialization. Sum-fit-uint64 is required.
+No physical TPU or complete final-selection acceptance is claimed.
