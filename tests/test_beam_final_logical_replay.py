@@ -7,6 +7,7 @@ def test_final_plan_materialization_and_history_agree_after_relocation():
     from tpu_beam_search.beam_final_plan import pallas_final_history_plan
     from tpu_beam_search.beam_final_materialize import pallas_materialize_final
     from tpu_beam_search.beam_final_scatter import pallas_scatter_final_responses
+    from tpu_beam_search.beam_final_group import pallas_group_final_records
     from tpu_beam_search.beam_history import HistoryEntry,RankHistoryStore
     parents=np.zeros((2,2,128),np.uint8)
     parents[0,0,:3],parents[0,1,:3]=[0,1,2],[2,1,0]
@@ -23,18 +24,19 @@ def test_final_plan_materialization_and_history_agree_after_relocation():
     boundaries[0,:3]=[0,2,3]
     plan=pallas_final_history_plan(*map(jnp.asarray,(meta,indices,boundaries)),world_size=2,interpret=True)
     requests,sources,valid,history,destinations=map(np.asarray,plan)
+    grouped=np.asarray(pallas_group_final_records(plan[0],plan[1],plan[2],interpret=True))
     received=[[],[]]
     # Explicit host routing is a fixture adapter, not the production data plane.
     for source in range(2):
-        slots=[i for i in range(128) if valid[0,i] and sources[0,i]==source]
+        slots=[i for i in range(128) if grouped[6,i] and grouped[4,i]==source]
         packed=np.zeros((4,128),np.uint32)
-        packed[:,:len(slots)]=requests[:,slots]
+        packed[:,:len(slots)]=grouped[:4,slots]
         wire,errors=pallas_materialize_final(jnp.asarray(parents[source]),
             jnp.asarray(generators),jnp.asarray(packed),jnp.array([len(slots)],jnp.uint32),
             jnp.array([2],jnp.uint32),state_len=120,interpret=True)
         assert int(errors[0,0])==0
         for row,slot in enumerate(slots):
-            received[int(requests[3,slot]&65535)].append(np.asarray(wire[row]))
+            received[int(grouped[3,slot]&65535)].append(np.asarray(wire[row]))
     store=RankHistoryStore(world_size=2)
     for rank,count in enumerate((2,1)):
         wire=np.zeros((128,128),np.uint8)

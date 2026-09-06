@@ -928,3 +928,15 @@ history points to the exact resulting frontier indices and padding is zero.
 14 focused checks passed12.26s (`local_final_logical_replay.xml`). Host routing
 and Pallas interpretation are explicit: no actual inter-device DMA, multi-depth
 beam selection, CUDA oracle, or performance evidence is claimed.
+
+V6 terminalCOMPLETE: hbm8/8exact and hbm_initialized8/8exact,8TPUv5lite,
+sourceb2d6f8b. Output/log/HLO downloadedbeam_s4_s5_v6; no failedarrays.
+Explicit custom-call HBM output removes the tested allzero failure without
+requiring initialization; rootcopy still exists. See V6report. Full reduction
+and coordinated epochs remain next physical gates, no throughput measured.
+
+Stable final rank grouping now uses tiled HBM bitonic sort with original
+ordinal tie-break. Two tests passed20.31s (local_final_group.xml), including
+cross-tile sparse/empty; final logical replay using Pallas-grouped requests
+passed10.33s (local_final_group_replay.xml). Still host transport adapter,
+O(Nlog^2N) baseline and power-of-two capacity; no DMA/performance acceptance.

@@ -1,0 +1,12 @@
+[{"stream_name":"stderr","time":22.817718323,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":25.073019942,"data":"\n"}
+,{"stream_name":"stderr","time":25.073041802,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":25.073046292,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":25.2070346,"data":"Cloning into '/tmp/TPUBeamSearch-s4-s5'...\n"}
+,{"stream_name":"stderr","time":33.384375018,"data":"Updating files:  88% (3669/4140)\rUpdating files:  89% (3685/4140)\rUpdating files:  90% (3726/4140)\rUpdating files:  91% (3768/4140)\rUpdating files:  92% (3809/4140)\rUpdating files:  93% (3851/4140)\rUpdating files:  94% (3892/4140)\rUpdating files:  95% (3933/4140)\rUpdating files:  96% (3975/4140)\rUpdating files:  97% (4016/4140)\rUpdating files:  98% (4058/4140)\rUpdating files:  99% (4099/4140)\rUpdating files: 100% (4140/4140)\rUpdating files: 100% (4140/4140), done.\n"}
+,{"stream_name":"stderr","time":34.152094031,"data":"HEAD is now at b2d6f8b Constrain S5 diagnostic output memory and project final history\n"}
+,{"stream_name":"stdout","time":34.193420832,"data":"GROUP hbm\n"}
+,{"stream_name":"stdout","time":57.348598807,"data":"GROUP hbm_initialized\n"}
+,{"stream_name":"stderr","time":76.359723069,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":78.763506328,"data":"[NbConvertApp] Writing 278167 bytes to __results__.html\n"}
+]
