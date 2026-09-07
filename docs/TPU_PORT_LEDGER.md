@@ -1432,3 +1432,15 @@ Full6194 TERMINATED0:970passed1456.83s, XML confirms zero failures/errors/skips
 with both C++ oracles. `test_results/local_final_scatter_probe_full.xml`.
 Do not poll/repeat this completed run. Fixture/probe are locally validated;
 two-process coordinator and physical scatter/chain acceptance remain pending.
+
+New no-JAX scatter bundle coordinator implemented after22missing-module RED
+failures;22tests now pass0.45s. It reconstructs hashes/error counts from local
+fixtures, rejects incomplete/forged reports, preserves native abort partial
+JSON/logs, runs the other child, requires matching runtime and a fresh output
+directory. Physical execution and full regression for this coordinator remain
+pending; the previous970pass result does not cover this new code.
+
+Full66601 TERMINATED0:992passed1471.96s. XML
+`test_results/local_final_scatter_bundle_full.xml` confirms zero failures,
+errors and skips with both C++ oracles. Coordinator local regression accepted;
+physical scatter/chain still unverified. Do not poll/repeat66601.

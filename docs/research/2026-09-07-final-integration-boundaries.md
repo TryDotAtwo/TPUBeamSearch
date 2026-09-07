@@ -61,3 +61,15 @@ spawning children. Device IDs must be unique, not merely eight list entries.
 Use strict integer checks for counters so JSON booleans cannot pass as zero or
 one through Python equality. Runtime version fields must be nonempty and match
 between both child reports before declaring the bundle accepted.
+
+## Launcher migration checklist
+
+The existing `kaggle_beam_final_gate/run.py` still launches V7's
+`benchmarks.beam_final_bundle` and creates its output directory beforehand.
+For the scatter bundle, remove that precreation: the new coordinator owns the
+fresh-directory check and intentionally rejects an existing destination.
+Switch the module to `benchmarks.beam_final_scatter_bundle`, pass
+`--source-sha` equal to the pinned checkout SHA, and use a distinct
+`/kaggle/working/beam_final_scatter` output. Keep the runtime pins and private
+single-session policy. Test the launch command and directory ownership before
+submission; merely changing the module would fail before either TPU probe.
