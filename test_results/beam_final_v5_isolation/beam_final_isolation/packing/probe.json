@@ -1,0 +1,51 @@
+{
+  "mode": "packing",
+  "exact": false,
+  "cases": [
+    {
+      "count": 0,
+      "status": "compiling",
+      "input_sha256": "cac52d0e8d9ad45d4c889b4e7b3c9c416b61ca1bb6487dac2b856428e3e10c55",
+      "expected_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe"
+    }
+  ],
+  "source_sha": "7cabf39e866642ccd1f5d1b9993601faa3b4e3af",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "isolated operation bytes, not full final/beam or performance"
+}

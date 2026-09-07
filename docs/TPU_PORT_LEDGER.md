@@ -1344,3 +1344,14 @@ freeze Python snapshot. Private launcher/publication still pending.
 Full23569 TERMINATED952passed1290.92s, zero failures/errors/skips with both
 C++ oracles. Do not poll/repeat. Isolation diagnostic ready for scoped
 publication and private physical launch; native abort cause still unknown.
+
+V5 isolation terminal ERROR downloaded fully `test_results/beam_final_v5_isolation`.
+DMA and cast both count0/2 execute exact on all8devices, rc0 and hashes match.
+Gather1D first count0 compile aborts rc-6 with the same layout.h341(1vs2).
+Packing and production also abort rc-6. Gather2D instead fails lowering rc1:
+Only take_along_axis-like gathers supported; it is NOT a successful alternative.
+This isolates a sufficient reproducer to the added rank-one gather path versus
+working DMA/cast scopes; do not claim all production issues are solved.
+Precompile MLIR and logs retained, no timings. Next isolate supported gather
+representation or a permutation alternative, leaving production unchanged until
+physical diagnostic evidence. No restart yet.
