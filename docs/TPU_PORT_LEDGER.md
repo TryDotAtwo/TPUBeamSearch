@@ -1396,3 +1396,18 @@ Download47812 TERMINATED0, all JSON/log/HLO present. Runtime verified across
 the three groups; report `docs/research/2026-09-07-final-v7-results.md` records
 separate component acceptance and explicit missing integration/performance.
 Do not redownload/re-run V7 as a substitute for the integrated final gate.
+
+New local integration tests materialize->unpack/scatter:5passed43.23s with
+race-detecting interpreter, counts0/1/127/128/129, seven parents, reverse
+permutation, unique non-eight-aligned targets and unchanged frontier canaries.
+Literal NumPy expected frontier includes zeroed index tail. No production
+change, no remote execution, and no full regression yet for these added tests.
+Physical scatter remains unaccepted; see final-integration-boundaries plan.
+
+Full64741 started with both C++ oracles for the new integration tests,
+`local_final_materialize_scatter_full.xml`. Freeze Python snapshot until
+terminal; this is not a repeat of the earlier materialization-only regression.
+
+Full64741 TERMINATED959passed1301.59s, zero failures/errors/skips with both
+C++ oracles. Do not poll/repeat. Local integration tests ready for publication;
+physical scatter/integrated gate still needs a benchmark runner and execution.
