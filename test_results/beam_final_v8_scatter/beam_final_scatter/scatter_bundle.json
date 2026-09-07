@@ -1,0 +1,133 @@
+{
+  "all_exact": false,
+  "source_sha": "580a05c6f651eb685698fb49a9b5a9065d628292",
+  "cases": [
+    {
+      "mode": "scatter",
+      "exact": false,
+      "status": "returned",
+      "returncode": 1,
+      "report": {
+        "mode": "scatter",
+        "exact": false,
+        "cases": [
+          {
+            "name": "count0_valid",
+            "exact": false,
+            "status": "compiling",
+            "input_sha256": "e13036146311c7d8cdef0ac353e882c3e8b6e67f70496960e6ea878e1239cd1c",
+            "expected_sha256": "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+            "expected_error": 0
+          }
+        ],
+        "source_sha": "580a05c6f651eb685698fb49a9b5a9065d628292",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "scope": "scatter and valid local chain only; not distributed publication or timing"
+      },
+      "validation_errors": [
+        "invalid exact",
+        "wrong case identities"
+      ]
+    },
+    {
+      "mode": "integrated",
+      "exact": false,
+      "status": "returned",
+      "returncode": 1,
+      "report": {
+        "mode": "integrated",
+        "exact": false,
+        "cases": [
+          {
+            "name": "count0_valid",
+            "exact": false,
+            "status": "compiling",
+            "input_sha256": "e13036146311c7d8cdef0ac353e882c3e8b6e67f70496960e6ea878e1239cd1c",
+            "expected_sha256": "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+            "expected_error": 0
+          }
+        ],
+        "source_sha": "580a05c6f651eb685698fb49a9b5a9065d628292",
+        "jax": "0.10.2",
+        "jaxlib": "0.10.2",
+        "libtpu": "0.0.42.1",
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "scope": "scatter and valid local chain only; not distributed publication or timing"
+      },
+      "validation_errors": [
+        "invalid exact",
+        "wrong case identities"
+      ]
+    }
+  ],
+  "scope": "local scatter/chain gates, not distributed final publication or timing"
+}

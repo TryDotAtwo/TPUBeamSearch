@@ -1455,3 +1455,38 @@ external stream3/split/sort, RDMA/selector/primitive gates all COMPLETE before
 submission. Output root is beam_final_scatter. Do not restart QUEUED/RUNNING.
 V8 must validate scatter7 + integrated5 and each nested process report;
 submission is not physical acceptance or performance evidence.
+
+While V8 QUEUED, added local response-routing preparation from packed requests,
+receive control and materialization validation. Preserves low16 return-rank,
+masks poisoned tails, rejects reserved byte/rank/count and either upstream
+error; whole batch invalid on error. Seven missing-module RED cases then
+7passed6.95s. Module `beam_final_response_routing.py` is not wired to transport
+yet, not physically accepted and not covered by full regression. Every rank
+must still execute common error agreement/zero-count epochs and DMA drains;
+destination-specific target capacity remains a separate required check.
+
+Response preparation now composes routing, wire-to-SoA, stable rank grouping
+and send intervals. Two missing-function RED cases observed, then combined
+9tests passed18.98s. Literal byte/order oracle checks nontrivial return-rank
+order and zero send intervals on materialization failure. This prepares data
+only: common error agreement, transport, destination capacities and publication
+remain outstanding. Full regression started for this snapshot with both C++
+oracles, `test_results/local_final_response_prepare_full.xml`; freeze Python
+until terminal. V8 source/launcher unchanged and still awaiting physical gate.
+
+V8 terminal ERROR, artifacts downloaded beam_final_v8_scatter. Both children
+rc1 at count0 compile, zero executed cases. Compiler explicitly rejects dynamic
+load row offset in uint8 tiled(32,128)(4,1); see final-v8-scatter-results report.
+Full53469 handle/XML lost; escalated OS process inspection found only unrelated
+main.py/radio_carpet processes, no pytest. Prior partial run is unverified,
+not a pass. A fresh regression is required, not a duplicate of a live process.
+
+V8 structural DMA-axis regression failed first (2D versus record-axis). Scatter
+candidate now uses internal [records,1,width] HBM and [1,1,width] staging for
+both load/store, retaining external 2D ABI. Focused run44973 in progress;
+physical compile and full regression remain pending. No assume_multiple added.
+
+Full35960 TERMINATED0:1003passed1343.97s; XML confirms zero failures/errors/
+skips with both C++ oracles. Includes response preparation and V8 DMA-axis fix.
+Previous53469 partial progress remains unverified; this new run supplies full
+local coverage. Physical acceptance of the fix still requires a new TPU gate.

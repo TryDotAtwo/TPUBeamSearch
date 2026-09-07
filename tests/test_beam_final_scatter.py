@@ -3,6 +3,20 @@ import jax.numpy as jnp
 from jax.experimental.pallas import tpu as pltpu
 
 
+def test_scatter_dma_record_axis_avoids_v8_tiled_row_slice():
+    """Structural V8 regression; physical compilation remains a separate gate."""
+    import jax
+    from tpu_beam_search.beam_final_scatter import pallas_scatter_final_responses
+    traced=jax.make_jaxpr(lambda f,w,c: pallas_scatter_final_responses(
+        f,w,c,state_len=120,interpret=True))(
+            jnp.zeros((256,128),jnp.uint8),jnp.zeros((128,128),jnp.uint8),
+            jnp.ones((1,),jnp.uint32))
+    call=[eq for eq in traced.jaxpr.eqns if eq.primitive.name=='pallas_call'][-1]
+    assert call.invars[0].aval.shape==(256,1,128)
+    assert call.invars[1].aval.shape==(128,1,128)
+    assert call.outvars[0].aval.shape==(256,1,128)
+
+
 def test_scatter_response_reorders_and_rejects_out_of_capacity_batch():
     from tpu_beam_search.beam_final_scatter import pallas_scatter_final_responses
     wire = np.zeros((128,128),np.uint8)

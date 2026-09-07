@@ -32,16 +32,18 @@ def pallas_scatter_final_responses(frontier,wire,count,*,state_len,interpret=Fal
         @pl.when((index.astype(jnp.uint32) < c[0]) & (e[0,0] == 0))
         def write():
             target = jnp.sum(jnp.where(jnp.arange(128) == index%128,t[0],jnp.uint32(0)).astype(jnp.int32))
-            load = pltpu.make_async_copy(data.at[pl.ds(index,1),:],staging,sem)
+            load = pltpu.make_async_copy(data.at[pl.ds(index,1),:,:],staging,sem)
             load.start()
             load.wait()
-            store = pltpu.make_async_copy(staging,out.at[pl.ds(target,1),:],sem)
+            store = pltpu.make_async_copy(staging,out.at[pl.ds(target,1),:,:],sem)
             store.start()
             store.wait()
     hbm = pl.BlockSpec(memory_space=pltpu.HBM)
-    result = pl.pallas_call(scatter,out_shape=jax.ShapeDtypeStruct(frontier.shape,jnp.uint8),
+    # Keep arbitrary record offsets outside the two minor tiled dimensions.
+    # External ABI is unchanged; physical alias/layout acceptance is tested on TPU.
+    result = pl.pallas_call(scatter,out_shape=jax.ShapeDtypeStruct((frontier.shape[0],1,width),jnp.uint8),
         in_specs=(hbm,hbm,pl.BlockSpec((1,128),lambda i:(0,i//128)),pl.BlockSpec((1,)),pl.BlockSpec((2,128))),
         out_specs=hbm,input_output_aliases={0:0},grid=(n,),
-        scratch_shapes=(pltpu.VMEM((1,width),jnp.uint8),pltpu.SemaphoreType.DMA),
-        interpret=interpret,name='beam_final_response_scatter')(frontier,clean,targets,count,errors)
-    return result,errors
+        scratch_shapes=(pltpu.VMEM((1,1,width),jnp.uint8),pltpu.SemaphoreType.DMA),
+        interpret=interpret,name='beam_final_response_scatter')(frontier[:,None,:],clean[:,None,:],targets,count,errors)
+    return result[:,0,:],errors
