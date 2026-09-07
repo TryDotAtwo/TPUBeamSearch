@@ -1308,3 +1308,39 @@ test-isolation fix. Previous83939 must not be polled or called a full pass.
 Full76339 TERMINATED938passed1231.27s, zero failures/errors/skips, both C++
 oracles. Do not poll/repeat. V4 gather-width candidate ready for physical gate;
 report `docs/research/2026-09-07-final-v3-results.md`. No TPU acceptance yet.
+
+Final V4 terminal ERROR, all outputs downloaded to `test_results/beam_final_v4`.
+Sourceb4beacd95d5de126ef3ad6ac503e44b72585ca60. CUDA group returncode-6,
+SIGABRT during first-case compilation: layout.h:341 checks arr.size() >=
+layout_rank(implicit_dim), reports(1 vs2). No materialization case executed.
+Exchange16/16 and coverage7/7 exact, return0. This is a native layout abort,
+not the prior recoverable gather-bitwidth error. The responsible source
+expression has NOT been isolated; stack assertion alone does not establish
+whether gather, conversion, singleton layout or another operation causes it.
+Need isolated compile probes before another production change. No restart.
+
+Pending isolation coordinator `benchmarks/beam_final_isolation_bundle.py`
+implements six sequential subprocess modes, partial JSON and native returncode
+preservation. Missing-module test failed first, then1passed0.17s verifies an
+abort in the first case does not skip the other five. Probe implementation
+`benchmarks/beam_final_isolation_probe.py` is NOT written yet: bundle is not
+runnable on TPU and must not be launched. No full regression of coordinator
+yet; no production changes. Protocol: final-v4-isolation-plan research document.
+
+Isolation probe core now implemented (six modes; zero/two valid rows selecting
+parents6/0; explicit NumPy expected permutation/packing). Missing-module test
+failed first, then12passed7.07s in CPU interpreter. Physical CLI, eight-device
+sharding, runtime/source/hash metadata, precompile IR and partial JSON saving
+are STILL MISSING; do not launch coordinator yet. Production unchanged.
+
+Physical CLI now implemented: requires8TPU, disablesx64, shard_map identical
+fixtures, source/runtime/device/input/expected/output hashes, pending JSON
+before compile, lowered MLIR before backend compilation, compiled HLO after.
+Gate requires both count0/2 and eight zero mismatch counts. Missing-gate test
+failed first;14 focused tests passed7.37s. No physical execution yet. Full
+regression started with both C++ oracles, `local_final_isolation_full.xml`;
+freeze Python snapshot. Private launcher/publication still pending.
+
+Full23569 TERMINATED952passed1290.92s, zero failures/errors/skips with both
+C++ oracles. Do not poll/repeat. Isolation diagnostic ready for scoped
+publication and private physical launch; native abort cause still unknown.
