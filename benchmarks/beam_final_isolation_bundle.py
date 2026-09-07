@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-MODES = ('dma','cast','gather_1d','gather_2d','packing','production')
+MODES = ('dma','cast','gather_1d','gather_2d','packing','production','select_reduce')
 
 
 def run_bundle(output, *, runner=subprocess.run):

@@ -1355,3 +1355,13 @@ working DMA/cast scopes; do not claim all production issues are solved.
 Precompile MLIR and logs retained, no timings. Next isolate supported gather
 representation or a permutation alternative, leaving production unchanged until
 physical diagnostic evidence. No restart yet.
+
+V5 artifacts/report published821c556. Added diagnostic-only select_reduce
+permutation: integer equality mask and sum, O(width squared), no dynamic gather.
+Missing-mode test failed first;16focusedpassed7.05s (zero/two valid records).
+Production unchanged; this is not a performance recommendation. New full run
+`local_final_select_reduce_full.xml` started with both C++ oracles; freeze Python.
+
+Full78129 TERMINATED954passed1253.04s, zero failures/errors/skips, both C++
+oracles. Do not poll/repeat. Select-reduce diagnostic ready for physical test;
+no production change or speed claim. Next launcher runs only this new mode.

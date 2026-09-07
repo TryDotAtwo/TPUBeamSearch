@@ -113,6 +113,11 @@ def run_probe(mode,parents,perm,requests,count,*,interpret=False):
                 elif mode == 'gather_2d':
                     value = jnp.take_along_axis(value[None,:],g[...],axis=1,
                                                mode='promise_in_bounds')[0]
+                elif mode == 'select_reduce':
+                    # Diagnostic O(width squared) permutation, not a speed claim.
+                    # Exactly one input lane contributes to each output lane.
+                    value = jnp.sum(jnp.where(lanes[:,None]==g[...],
+                                              value[:,None],jnp.int32(0)),axis=0)
                 child = value.astype(jnp.uint8)
                 if mode == 'packing':
                     target = jnp.sum(jnp.where(lanes==i,r[2],jnp.uint32(0)).astype(jnp.int32)).astype(jnp.uint32)
