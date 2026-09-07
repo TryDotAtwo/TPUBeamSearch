@@ -1,0 +1,16 @@
+[{"stream_name":"stderr","time":25.791633413,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":27.146522162,"data":"\n"}
+,{"stream_name":"stderr","time":27.146546582,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":27.146552731,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":27.286031192,"data":"Cloning into '/tmp/TPUBeamSearch-final-gate'...\n"}
+,{"stream_name":"stderr","time":32.730075463,"data":"Updating files:  94% (4110/4353)\rUpdating files:  95% (4136/4353)\rUpdating files:  96% (4179/4353)\rUpdating files:  97% (4223/4353)\rUpdating files:  98% (4266/4353)\rUpdating files:  99% (4310/4353)\rUpdating files: 100% (4353/4353)\rUpdating files: 100% (4353/4353), done.\n"}
+,{"stream_name":"stderr","time":32.839742971,"data":"HEAD is now at be93929 Add select-reduce permutation diagnostic\n"}
+,{"stream_name":"stderr","time":36.656895225,"data":"/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c \"echo always \u003e /sys/kernel/mm/transparent_hugepage/enabled\")\n"}
+,{"stream_name":"stderr","time":36.656925615,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":41.88086143,"data":"WARNING: Logging before InitGoogle() is written to STDERR\n"}
+,{"stream_name":"stderr","time":41.88089808,"data":"E0000 00:00:1788757586.212914      55 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`=\"local\"\n"}
+,{"stream_name":"stderr","time":41.88090532,"data":"=== Source Location Trace: ===\n"}
+,{"stream_name":"stderr","time":41.88090965,"data":"learning/45eac/tfrc/runtime/common_lib.cc:238\n"}
+,{"stream_name":"stderr","time":59.296749796,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":61.559682142,"data":"[NbConvertApp] Writing 278331 bytes to __results__.html\n"}
+]

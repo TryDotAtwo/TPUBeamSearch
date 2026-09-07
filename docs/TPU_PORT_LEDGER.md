@@ -1365,3 +1365,9 @@ Production unchanged; this is not a performance recommendation. New full run
 Full78129 TERMINATED954passed1253.04s, zero failures/errors/skips, both C++
 oracles. Do not poll/repeat. Select-reduce diagnostic ready for physical test;
 no production change or speed claim. Next launcher runs only this new mode.
+
+V6 select_reduce COMPLETE, downloaded test_results/beam_final_v6_select_reduce:
+sourcebe93929, JAX/jaxlib0.10.2 libtpu0.0.42.1 eightTPUv5lite. Bothcount0/2
+execute with eight zero mismatch counts and matching output/expected hashes.
+Isolated permutation accepted; no full-materialization or performance claim.
+Next TDD integration followed by full physical CUDA-fixture validation.

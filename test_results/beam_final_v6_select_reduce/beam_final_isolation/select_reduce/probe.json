@@ -1,0 +1,97 @@
+{
+  "mode": "select_reduce",
+  "exact": true,
+  "cases": [
+    {
+      "count": 0,
+      "status": "executed",
+      "input_sha256": "cac52d0e8d9ad45d4c889b4e7b3c9c416b61ca1bb6487dac2b856428e3e10c55",
+      "expected_sha256": "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+      "mismatches": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": [
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe",
+        "4fe7b59af6de3b665b67788cc2f99892ab827efae3a467342b3bb4e3bc8e5bfe"
+      ]
+    },
+    {
+      "count": 2,
+      "status": "executed",
+      "input_sha256": "9a19513f0788c6eeb9a534e1484772643716fad1a9182885692e05ae6fd26746",
+      "expected_sha256": "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+      "mismatches": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": [
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0",
+        "d8aaab0dd0d90a9cc9b16562416eafbd91a4d96468fcf04e50128a72794dd3d0"
+      ]
+    }
+  ],
+  "source_sha": "be939296d25133e20ae921ddb4547aaa4a8c457e",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "isolated operation bytes, not full final/beam or performance"
+}
