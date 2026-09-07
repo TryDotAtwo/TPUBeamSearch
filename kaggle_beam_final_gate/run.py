@@ -1,12 +1,12 @@
-"""Prepared private final gate; submit only after the S5 TPU session terminates."""
+"""Private scatter/chain gate; submit only when the TPU slot is free."""
 import os
 from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = '7c5f5854b2d73f1f90a574dd8c2a35192ed8760a'
+COMMIT_SHA = '580a05c6f651eb685698fb49a9b5a9065d628292'
 CHECKOUT = Path('/tmp/TPUBeamSearch-final-gate')
-OUTPUT = Path('/kaggle/working/beam_final')
+OUTPUT = Path('/kaggle/working/beam_final_scatter')
 
 
 def main():
@@ -18,9 +18,8 @@ def main():
     env.update(JAX_ENABLE_X64='False',PYTHONUNBUFFERED='1',
         XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
         PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))))
-    OUTPUT.mkdir(parents=True,exist_ok=True)
-    subprocess.run((sys.executable,'-m','benchmarks.beam_final_bundle',
-        '--output',str(OUTPUT)),cwd=CHECKOUT,env=env,check=True)
+    subprocess.run((sys.executable,'-m','benchmarks.beam_final_scatter_bundle',
+        '--output',str(OUTPUT),'--source-sha',COMMIT_SHA),cwd=CHECKOUT,env=env,check=True)
 
 
 if __name__ == '__main__':
