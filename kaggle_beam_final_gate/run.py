@@ -4,9 +4,9 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA = 'be939296d25133e20ae921ddb4547aaa4a8c457e'
+COMMIT_SHA = '7c5f5854b2d73f1f90a574dd8c2a35192ed8760a'
 CHECKOUT = Path('/tmp/TPUBeamSearch-final-gate')
-OUTPUT = Path('/kaggle/working/beam_final_isolation')
+OUTPUT = Path('/kaggle/working/beam_final')
 
 
 def main():
@@ -19,8 +19,8 @@ def main():
         XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
         PYTHONPATH=os.pathsep.join((str(CHECKOUT),str(CHECKOUT/'src'))))
     OUTPUT.mkdir(parents=True,exist_ok=True)
-    subprocess.run((sys.executable,'-m','benchmarks.beam_final_isolation_probe',
-        '--mode','select_reduce','--output',str(OUTPUT/'select_reduce')),cwd=CHECKOUT,env=env,check=True)
+    subprocess.run((sys.executable,'-m','benchmarks.beam_final_bundle',
+        '--output',str(OUTPUT)),cwd=CHECKOUT,env=env,check=True)
 
 
 if __name__ == '__main__':
