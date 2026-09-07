@@ -31,9 +31,8 @@ def test_materialize_gather_bitwidth_and_all_byte_values():
     # other collected modules that globally enable x64 for their own oracles.
     with jax.enable_x64(False):
         visit(jax.make_jaxpr(run)(*args))
-    assert gathers
-    for eq in gathers:
-        assert eq.invars[0].aval.dtype.itemsize == eq.invars[1].aval.dtype.itemsize
+    # Physical V5 rejects dynamic gather; V6 validated select/reduce instead.
+    assert not gathers
     with jax.enable_x64(False):
         wire,errors = run(*args)
     expected = np.zeros((128,512),np.uint8)

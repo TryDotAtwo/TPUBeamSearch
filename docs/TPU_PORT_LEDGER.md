@@ -1371,3 +1371,14 @@ sourcebe93929, JAX/jaxlib0.10.2 libtpu0.0.42.1 eightTPUv5lite. Bothcount0/2
 execute with eight zero mismatch counts and matching output/expected hashes.
 Isolated permutation accepted; no full-materialization or performance claim.
 Next TDD integration followed by full physical CUDA-fixture validation.
+
+Materialization candidate now uses V6 equality/reduction permutation instead
+of dynamic gather, retaining explicit clipping to[0,width-1] and uint8 output.
+Structural no-gather regression failed before change, then4focusedpassed9.46s
+including all byte values. O(width squared), not an optimization claim. Full
+`local_final_select_integrated_full.xml` started with both C++ oracles; freeze
+Python snapshot. Full production TPU compilation/bytes remain unverified.
+
+Full96430 TERMINATED954passed1272.55s, zero errors/failures/skips with both
+C++ oracles. Do not poll/repeat. Integrated select-reduce candidate ready for
+full physical final gate; no speed claim or end-to-end acceptance yet.

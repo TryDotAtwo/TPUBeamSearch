@@ -5,7 +5,6 @@ from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
 from .beam_final_validation import pallas_validate_final_requests
 from .beam_final_error_summary import pallas_final_error_summary
-from .beam_stream2 import _take_clipped
 
 
 def pallas_materialize_final(parents,generators,requests,count,target_count,*,state_len,interpret=False):
@@ -39,8 +38,12 @@ def pallas_materialize_final(parents,generators,requests,count,target_count,*,st
             copy.wait()
             move = ((packed>>jnp.uint32(16))&jnp.uint32(255)).astype(jnp.int32)
             selected = jnp.sum(jnp.where(jnp.arange(generators.shape[0])[:,None] == move,g[...],0),axis=0).astype(jnp.int32)
-            # Mosaic dynamic_gather requires equal data/index bitwidths.
-            child = _take_clipped(staging[0,0].astype(jnp.int32),selected).astype(jnp.uint8)
+            # Diagnostic correctness path: V6 accepted equality/reduction on
+            # TPU where rank-one dynamic_gather aborts. O(width squared).
+            selected = jnp.clip(selected,0,width-1)
+            child = jnp.sum(jnp.where(jnp.arange(width,dtype=jnp.int32)[:,None]
+                == selected[None,:],staging[0,0].astype(jnp.int32)[:,None],
+                jnp.int32(0)),axis=0).astype(jnp.uint8)
             positions = jnp.arange(width)
             child = jnp.where(positions < state_len,child,jnp.uint8(0))
             for byte in range(4):
