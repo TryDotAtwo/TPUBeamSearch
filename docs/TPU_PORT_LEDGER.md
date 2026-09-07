@@ -1411,3 +1411,24 @@ terminal; this is not a repeat of the earlier materialization-only regression.
 Full64741 TERMINATED959passed1301.59s, zero failures/errors/skips with both
 C++ oracles. Do not poll/repeat. Local integration tests ready for publication;
 physical scatter/integrated gate still needs a benchmark runner and execution.
+
+New benchmark fixture module added with count0/1/127/128/129 and separate
+scatter count-overflow/target-overflow inputs; literal wire bytes, target tail
+and unchanged-frontier expected result on failure. Missing module failed
+first, then7passed0.13s. Physical runner still pending, no production changes.
+Invalid fixtures are for scatter-only: do not silently pass a failed
+materialization's zero wire into scatter with a nonzero original count.
+
+Scatter probe runner now implements eight-device scatter-only and valid
+materialize->scatter modes, pending JSON/precompile IR/HLO/runtime/source/hashes.
+Scatter-only has5valid+2invalid cases; integrated has5valid cases only.
+Missing-module test failed first, then11focusedpassed7.33s with fixture tests.
+This is a diagnostic, not a safe publication caller; error outputs are retained.
+Full regression started `local_final_scatter_probe_full.xml` with both C++
+oracles. Python snapshot frozen. Isolated two-process coordinator/launcher
+still pending; no remote execution or production change.
+
+Full6194 TERMINATED0:970passed1456.83s, XML confirms zero failures/errors/skips
+with both C++ oracles. `test_results/local_final_scatter_probe_full.xml`.
+Do not poll/repeat this completed run. Fixture/probe are locally validated;
+two-process coordinator and physical scatter/chain acceptance remain pending.

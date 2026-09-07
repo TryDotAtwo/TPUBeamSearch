@@ -29,3 +29,35 @@ completion, and failure must leave the previously published frontier intact.
 Production caller, shared scratch aliases and full ownership/lifetime protocol
 remain outstanding. This document is a test sequence, not implementation or
 physical evidence. No performance claim.
+
+## Remote result acceptance contract
+
+The pending two-process coordinator must require exactly these case identities:
+
+- Scatter: count0_valid, count1_valid, count127_valid, count128_valid,
+  count129_valid, count129_count_overflow, count129_target_overflow.
+- Integrated: the five valid cases above; invalid upstream materialization is
+  outside this diagnostic's contract and must not be represented as safe commit.
+
+Reject duplicates, missing/extra cases, wrong mode, nonzero process returncode,
+pending/compiling status and malformed metrics even if a nested exact flag is
+true. Require eight mismatch entries equal to zero, eight expected error-count
+entries (one for overflow fixtures, zero otherwise), and eight SHA values equal
+to the expected frontier SHA. Check source SHA and eight physical TPU devices
+against the pinned launch. A fresh destination avoids stale nested results.
+
+Save coordinator JSON before each child and after return, retain native signal
+returncode and partial reports, and continue the other child after a crash.
+This contract is additional to the runner's own final exact flag; it must be
+tested with false-positive fixtures before launch. Physical output byte
+equality remains the gate, not CPU pass count or kernel COMPLETE status.
+
+The coordinator must derive expected input/output hashes and error counts from
+the local pinned fixture, not trust the nested report's expected fields. A
+self-consistent but wrong expected/output hash pair must fail acceptance.
+Include that mutation in the false-positive tests. The coordinator may import
+the NumPy-only fixture module; it must not import JAX or initialize TPU before
+spawning children. Device IDs must be unique, not merely eight list entries.
+Use strict integer checks for counters so JSON booleans cannot pass as zero or
+one through Python equality. Runtime version fields must be nonempty and match
+between both child reports before declaring the bundle accepted.
