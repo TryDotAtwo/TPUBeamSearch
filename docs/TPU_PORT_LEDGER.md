@@ -1444,3 +1444,14 @@ Full66601 TERMINATED0:992passed1471.96s. XML
 `test_results/local_final_scatter_bundle_full.xml` confirms zero failures,
 errors and skips with both C++ oracles. Coordinator local regression accepted;
 physical scatter/chain still unverified. Do not poll/repeat66601.
+
+Coordinator published580a05c6f651eb685698fb49a9b5a9065d628292.
+Launcher1f36ce2 switches to scatter bundle, passes pinned SHA and leaves fresh
+output creation to coordinator. Behavioral launcher RED observed first;
+23launcher/coordinator tests passed0.70s after fix. Source full992 remains
+the source gate; launcher-only change has focused validation.
+Kaggle accepted private final-gate V8 push on2026-09-07. Previous final/S5,
+external stream3/split/sort, RDMA/selector/primitive gates all COMPLETE before
+submission. Output root is beam_final_scatter. Do not restart QUEUED/RUNNING.
+V8 must validate scatter7 + integrated5 and each nested process report;
+submission is not physical acceptance or performance evidence.
