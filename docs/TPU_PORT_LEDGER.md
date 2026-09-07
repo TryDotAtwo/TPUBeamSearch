@@ -1382,3 +1382,17 @@ Python snapshot. Full production TPU compilation/bytes remain unverified.
 Full96430 TERMINATED954passed1272.55s, zero errors/failures/skips with both
 C++ oracles. Do not poll/repeat. Integrated select-reduce candidate ready for
 full physical final gate; no speed claim or end-to-end acceptance yet.
+
+V7 COMPLETE: downloaded bundle reports all29exact, all3subprocesses rc0,
+source7c5f5854b2d73f1f90a574dd8c2a35192ed8760a eightdevices. Six CUDA
+materialization cases count0/1/127/128/129remote and127local each have zero
+byte mismatches/invalid counts and per-device SHA matching actualCUDA oracle.
+Exchange16 and coverage7 exact. This accepts the separate final components,
+not full final publication or multi-depth beam. No speed measurements. Output
+download session47812 was still active at this note; verify terminal before
+publishing all artifacts. Destination `test_results/beam_final_v7`.
+
+Download47812 TERMINATED0, all JSON/log/HLO present. Runtime verified across
+the three groups; report `docs/research/2026-09-07-final-v7-results.md` records
+separate component acceptance and explicit missing integration/performance.
+Do not redownload/re-run V7 as a substitute for the integrated final gate.

@@ -1,0 +1,206 @@
+{
+  "source_sha": "7c5f5854b2d73f1f90a574dd8c2a35192ed8760a",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "same CUDA fixtures on each TPU; materialization only, not exchange or full beam",
+  "all_exact": true,
+  "cases": [
+    {
+      "name": "count0_remote",
+      "input_sha256": "2d6b29de899bdecb0b367deabe49658c344255a1c8cf12a0d03b7c807de96a95",
+      "cuda_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exact": true,
+      "mismatches": 0,
+      "invalid_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "device_sha256": [
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ]
+    },
+    {
+      "name": "count1_remote",
+      "input_sha256": "abbeb4fc7491aae902e9f6abc4e1a6309b079d3e394fcc205897da8caebe8823",
+      "cuda_sha256": "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+      "exact": true,
+      "mismatches": 0,
+      "invalid_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "device_sha256": [
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a",
+        "e50f02a2e3a7e278ec1a8d3aea172d187218b07a77493d415b6246cadc5f272a"
+      ]
+    },
+    {
+      "name": "count127_remote",
+      "input_sha256": "744f482d83026df3ff4961b0f584becc9715fc05f01eee65530e81513df97df7",
+      "cuda_sha256": "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+      "exact": true,
+      "mismatches": 0,
+      "invalid_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "device_sha256": [
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449",
+        "c07f6c2de962d6c9d14afbbef559cf28aeaf6f8b66e58a7da8f5a01898bc1449"
+      ]
+    },
+    {
+      "name": "count128_remote",
+      "input_sha256": "1e94d66e1cfcf453990b375b4d816b98257785ca8fcc27f4333efba1fdf3ed02",
+      "cuda_sha256": "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+      "exact": true,
+      "mismatches": 0,
+      "invalid_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "device_sha256": [
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0",
+        "5643a3f3a9695cbb555412931f4d86209c00fcf597088395baecd00fc3dfc3f0"
+      ]
+    },
+    {
+      "name": "count129_remote",
+      "input_sha256": "55c38858e2f29df764d0d09f2e6667d66308c44e31fd788c248596ca5af0ee6b",
+      "cuda_sha256": "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+      "exact": true,
+      "mismatches": 0,
+      "invalid_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "device_sha256": [
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439",
+        "8c8c7dbb3c23016efa56cc59d93d56e0b0c0cec9a93f9171753e8fe269095439"
+      ]
+    },
+    {
+      "name": "count127_local",
+      "input_sha256": "a683df08e43e0e07a5deaec2a169d23bf3c6ebdf1308364b9276e41d6d9a74e4",
+      "cuda_sha256": "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+      "exact": true,
+      "mismatches": 0,
+      "invalid_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "device_sha256": [
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c",
+        "97657228e3e605cc9a5b06bf7ae488fffaa903ba8222574148a2a3c9269b1e3c"
+      ]
+    }
+  ]
+}

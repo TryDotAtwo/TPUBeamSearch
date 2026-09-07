@@ -1,0 +1,13 @@
+[{"stream_name":"stderr","time":14.018316699,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":15.762146247,"data":"\n"}
+,{"stream_name":"stderr","time":15.762164347,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":15.762168877,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":16.606948969,"data":"Cloning into '/tmp/TPUBeamSearch-final-gate'...\n"}
+,{"stream_name":"stderr","time":25.304986523,"data":"Updating files:  87% (3818/4361)\rUpdating files:  88% (3838/4361)\rUpdating files:  89% (3882/4361)\rUpdating files:  90% (3925/4361)\rUpdating files:  91% (3969/4361)\rUpdating files:  92% (4013/4361)\rUpdating files:  93% (4056/4361)\rUpdating files:  94% (4100/4361)\rUpdating files:  95% (4143/4361)\rUpdating files:  96% (4187/4361)\rUpdating files:  97% (4231/4361)\rUpdating files:  98% (4274/4361)\rUpdating files:  99% (4318/4361)\rUpdating files: 100% (4361/4361)\rUpdating files: 100% (4361/4361), done.\n"}
+,{"stream_name":"stderr","time":26.054016359,"data":"HEAD is now at 7c5f585 Integrate validated select-reduce into final materialization\n"}
+,{"stream_name":"stdout","time":26.095153072,"data":"GROUP cuda_final\n"}
+,{"stream_name":"stdout","time":49.377122075,"data":"GROUP final_exchange\n"}
+,{"stream_name":"stdout","time":65.223541405,"data":"GROUP final_coverage\n"}
+,{"stream_name":"stderr","time":88.372890527,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":90.586323582,"data":"[NbConvertApp] Writing 278130 bytes to __results__.html\n"}
+]
