@@ -1277,3 +1277,34 @@ both C++ oracles, `local_final_record_axis_full.xml`; freeze Python snapshot.
 Full96346 TERMINATED:937passed750.09s, zero errors/failures/skips. Do not poll
 or repeat. V3 record-axis candidate locally validated, physical gate pending.
 V2 report: `docs/research/2026-09-06-final-v2-results.md`.
+
+Final V3 terminal ERROR, all output downloaded to `test_results/beam_final_v3`.
+Mosaic now rejects `tpu.dynamic_gather(vector<128xi8>,vector<128xi32>)`:
+"Gather indices and result have different bitwidths". The prior row-DMA
+alignment rejection is no longer reported, but this does not prove execution
+or physical memory cost. Materialization still fails before any case executes.
+Next candidate should widen gathered state values to32bits, gather with32bit
+indices and narrow losslessly to uint8 afterwards, with a regression test.
+No restart yet; physical acceptance and full beam remain outstanding.
+
+V4 candidate widens only the permutation gather data to int32 and narrows
+back to uint8. Structural recursive JAXPR regression failed on8/32bit mismatch
+before implementation. Byte-exact reverse permutation uses width512/state508
+and all256 byte values, with seven parents and zero response tail. Test's
+initial zero-error-summary expectation was corrected to documented no-error
+first-index UINT32_MAX. Four focused tests passed7.60s. Full83939 started with
+both C++ oracles, `local_final_gather_width_full.xml`; freeze Python snapshot.
+This remains CPU/structural evidence, not physical TPU compilation acceptance.
+
+Full83939 terminal XML:938tests,1failure,0errors (937passed). Failure is the
+new structural gather check: full collection enables global x64 from
+test_artgor_staged_beam.py, yielding int64 indices vs int32 data. Pinned TPU
+launcher explicitly disables x64. The test now locally scopes tracing and
+execution with jax.enable_x64(False), restoring the previous setting on exit.
+Combined staged-beam plus materialization run10passed12.81s. New full run uses
+`local_final_gather_width_x64_scope_full.xml`; no production change for this
+test-isolation fix. Previous83939 must not be polled or called a full pass.
+
+Full76339 TERMINATED938passed1231.27s, zero failures/errors/skips, both C++
+oracles. Do not poll/repeat. V4 gather-width candidate ready for physical gate;
+report `docs/research/2026-09-07-final-v3-results.md`. No TPU acceptance yet.

@@ -1,0 +1,21 @@
+[{"stream_name":"stderr","time":17.556155172,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":21.03997736,"data":"\n"}
+,{"stream_name":"stderr","time":21.04001869,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":21.04002513,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":21.175316792,"data":"Cloning into '/tmp/TPUBeamSearch-final-gate'...\n"}
+,{"stream_name":"stderr","time":26.886926164,"data":"Updating files:  85% (3684/4297)\rUpdating files:  86% (3696/4297)\rUpdating files:  87% (3739/4297)\rUpdating files:  88% (3782/4297)\rUpdating files:  89% (3825/4297)\rUpdating files:  90% (3868/4297)\rUpdating files:  91% (3911/4297)\rUpdating files:  92% (3954/4297)\rUpdating files:  93% (3997/4297)\rUpdating files:  94% (4040/4297)\rUpdating files:  95% (4083/4297)\rUpdating files:  96% (4126/4297)\rUpdating files:  97% (4169/4297)\rUpdating files:  98% (4212/4297)\rUpdating files:  99% (4255/4297)\rUpdating files: 100% (4297/4297)\rUpdating files: 100% (4297/4297), done.\n"}
+,{"stream_name":"stderr","time":27.872570044,"data":"HEAD is now at 090a81e Move final DMA record axis outside minor tiles and record V2\n"}
+,{"stream_name":"stdout","time":27.913202098,"data":"GROUP cuda_final\n"}
+,{"stream_name":"stdout","time":50.729243549,"data":"GROUP final_exchange\n"}
+,{"stream_name":"stdout","time":67.667675857,"data":"GROUP final_coverage\n"}
+,{"stream_name":"stderr","time":84.386518866,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":84.386554146,"data":"  File \"/kaggle/src/script.py\", line 27, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":84.386563235,"data":"    main()\n"}
+,{"stream_name":"stderr","time":84.386704435,"data":"  File \"/kaggle/src/script.py\", line 22, in main\n"}
+,{"stream_name":"stderr","time":84.386736055,"data":"    subprocess.run((sys.executable,'-m','benchmarks.beam_final_bundle',\n"}
+,{"stream_name":"stderr","time":84.386741875,"data":"  File \"/usr/local/lib/python3.12/subprocess.py\", line 571, in run\n"}
+,{"stream_name":"stderr","time":84.390096306,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":84.390109956,"data":"subprocess.CalledProcessError: Command '('/usr/local/bin/python', '-m', 'benchmarks.beam_final_bundle', '--output', '/kaggle/working/beam_final')' returned non-zero exit status 1.\n"}
+,{"stream_name":"stderr","time":88.363007872,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":90.590789514,"data":"[NbConvertApp] Writing 278130 bytes to __results__.html\n"}
+]

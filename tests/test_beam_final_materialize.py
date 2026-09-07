@@ -3,6 +3,47 @@ import jax.numpy as jnp
 from jax.experimental.pallas import tpu as pltpu
 
 
+def test_materialize_gather_bitwidth_and_all_byte_values():
+    import jax
+    from tpu_beam_search.beam_final_materialize import pallas_materialize_final
+    parents = np.tile(np.arange(256,dtype=np.uint8),(7,2))
+    generators = np.arange(511,-1,-1,dtype=np.int32)[None,:]
+    requests = np.zeros((4,128),np.uint32)
+    requests[0,0] = 6
+    args = tuple(map(jnp.asarray,(parents,generators,requests,
+                 np.array([1],np.uint32),np.array([1],np.uint32))))
+    def run(*xs):
+        return pallas_materialize_final(*xs,state_len=508,interpret=True)
+    gathers = []
+    def visit(obj):
+        if hasattr(obj,'jaxpr'):
+            visit(obj.jaxpr)
+        elif hasattr(obj,'eqns'):
+            for eq in obj.eqns:
+                if eq.primitive.name == 'gather':
+                    gathers.append(eq)
+                for value in eq.params.values():
+                    visit(value)
+        elif isinstance(obj,(tuple,list)):
+            for value in obj:
+                visit(value)
+    # Match the pinned TPU launcher's JAX_ENABLE_X64=False, independently of
+    # other collected modules that globally enable x64 for their own oracles.
+    with jax.enable_x64(False):
+        visit(jax.make_jaxpr(run)(*args))
+    assert gathers
+    for eq in gathers:
+        assert eq.invars[0].aval.dtype.itemsize == eq.invars[1].aval.dtype.itemsize
+    with jax.enable_x64(False):
+        wire,errors = run(*args)
+    expected = np.zeros((128,512),np.uint8)
+    expected[0,:508] = parents[6,generators[0]][:508]
+    np.testing.assert_array_equal(wire,expected)
+    expected_errors = np.zeros((2,128),np.uint32)
+    expected_errors[1,0] = 0xffffffff
+    np.testing.assert_array_equal(errors,expected_errors)
+
+
 def test_materialize_output_avoids_illegal_single_row_pipeline_block():
     """Structural regression for the V1 TPU rejection, not TPU acceptance."""
     import jax

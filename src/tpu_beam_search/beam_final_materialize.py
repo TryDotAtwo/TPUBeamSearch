@@ -39,7 +39,8 @@ def pallas_materialize_final(parents,generators,requests,count,target_count,*,st
             copy.wait()
             move = ((packed>>jnp.uint32(16))&jnp.uint32(255)).astype(jnp.int32)
             selected = jnp.sum(jnp.where(jnp.arange(generators.shape[0])[:,None] == move,g[...],0),axis=0).astype(jnp.int32)
-            child = _take_clipped(staging[0,0],selected)
+            # Mosaic dynamic_gather requires equal data/index bitwidths.
+            child = _take_clipped(staging[0,0].astype(jnp.int32),selected).astype(jnp.uint8)
             positions = jnp.arange(width)
             child = jnp.where(positions < state_len,child,jnp.uint8(0))
             for byte in range(4):
