@@ -1574,3 +1574,33 @@ Kaggle COMPLETE alone is insufficient. Expected download directory:
 test_results/beam_response_epoch_v1. No physical response result or speed
 claim yet. Whole-response coverage, destination-specific capacities and
 atomic candidate publication remain separate integration work.
+
+Local routed-bound implementation in progress (not published/TPU-accepted):
+validator optionally accepts per-return-rank logical counts, preserving scalar
+callers and reason bits; new rank32/reserved64 bits reject malformed routes.
+Static table selection avoids indexing by an unchecked rank. RED missing
+return_counts argument observed before implementation. Materialization now
+passes this table into the pre-DMA whole-batch validation summary. Four RED
+integration cases then GREEN; validation/materialization suite10passed15.44s,
+including valid wire bytes and whole-wire rejection with race-detect interpreter.
+Snapshot caller propagation, additional boundary tests and full regression are
+still pending. Do not treat this local interpreter result as physical DMA proof.
+
+Snapshot caller now propagates return_counts through compaction to the same
+pre-DMA validator. Three missing-argument RED cases then GREEN cover mixed
+return ranks, destination counts2/1/0, poisoned tails and retained request
+order; invalid destination rejects the entire output wire. Combined receive/
+validation/materialization suite16passed52.01s. Full regression and physical
+TPU compilation of this new path remain pending; source changes stay local.
+
+Full routed-bound regression started with BEAM_SOURCE_ORACLE and
+BEAM_ROUTE_ORACLE resolving existing .local executables; XML target
+test_results/local_routed_bounds_full.xml. Python snapshot frozen until
+terminal. This run must complete before scoped source publication; prior
+16-test success is not full regression acceptance.
+
+Full1759 terminated0:1032passed1480.22s. XML independently confirms zero
+failures/errors/skips with both C++ oracles enabled. Routed destination bounds
+through snapshot compaction and materialization are locally regression-valid.
+Physical TPU compilation/execution of this new path remains unverified.
+Response epoch V1 remains QUEUED on its unchanged earlier source SHA.

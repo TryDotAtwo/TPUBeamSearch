@@ -71,6 +71,33 @@ missing-target validation. Neither path may reuse the published old frontier
 as scratch. Account full-response staging in the scratch budget if choosing
 the former; it is not free memory or an established production layout.
 
+Source architecture recheck: ARCHITECTURE_NEED.md lines645-649 retain
+selection outputs in a common prefix while selection temporaries overlay
+materialization exchange temporaries. Line1688 places next_frontier_states_tmp
+inside final scratch, not in an additional persistent allocation. Accordingly,
+an integrated caller must account candidate bytes, accumulated target/validity
+coverage, prepared grouped responses and exchange snapshots in materialization
+peak lifetime, while retaining the common prefix. A standalone allocation per
+helper would not establish the required one-pool architecture.
+
+Current beam_scratch.plan_scratch only supplies geometry. Its read helper
+copies data, and its write helper aliases only its own arena input/output;
+neither proves whole-caller physical reuse. Require compiled memory/alias
+evidence for the integrated caller before declaring the three overlays done.
+make_final_coverage_agreement returns a common error, not a DMA-drained token:
+publication must depend on completed transport, consumers and history work,
+not solely on the common-error scalar being zero.
+
+History ABI must remain distinct from request routing. Final requests encode
+return rank in low16 and move in bits16..23. History projection retains the
+original metadata route (meta plane7); reconstruct_history reads move in low8
+and previous source rank in high16. Do not store request word3 as the history
+route or replace that original source rank with the response destination.
+RankHistoryStore.append_all_rank_layer validates all host layers before one
+replacement assignment, but explicitly assumes completed transfers and a
+successful distributed decision. Its atomic host update is not an atomic
+frontier/history commit across TPU devices.
+
 ## Destination capacity audit
 
 The existing request validator accepts scalar target_count and compares every

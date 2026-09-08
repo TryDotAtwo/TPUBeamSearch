@@ -50,16 +50,20 @@ def pallas_compact_final_received(snapshots,counts,error,*,interpret=False):
     return packed,control
 
 
-def pallas_materialize_final_snapshots(parents,generators,snapshots,counts,error,target_count,*,state_len,interpret=False):
+def pallas_materialize_final_snapshots(parents,generators,snapshots,counts,error,target_count,*,state_len,interpret=False,
+                                       return_counts=None):
     """Compact requests and materialize without a host count/record readback.
 
     Return wire, validation summary, receive controls and packed requests.
     Caller must preserve and collectively gate both error summaries before
     sending responses. Packed requests retain return-rank/move alongside each
     response and must stay live through response routing. No publication here.
+    return_counts supplies logical destination bounds for mixed return ranks;
+    it is not the per-source received chunk counts argument.
     """
     from .beam_final_materialize import pallas_materialize_final
     requests,control=pallas_compact_final_received(snapshots,counts,error,interpret=interpret)
     wire,validation=pallas_materialize_final(parents,generators,requests,
-        control[0,:1],target_count,state_len=state_len,interpret=interpret)
+        control[0,:1],target_count,state_len=state_len,interpret=interpret,
+        return_counts=return_counts)
     return wire,validation,control,requests

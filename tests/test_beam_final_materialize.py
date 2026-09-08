@@ -1,6 +1,28 @@
 import numpy as np
 import jax.numpy as jnp
+import pytest
 from jax.experimental.pallas import tpu as pltpu
+
+
+@pytest.mark.parametrize('route,bound,accepted',[(1,2,True),(1,1,False),(2,2,False),(1<<24,2,False)])
+def test_materialize_routed_bounds_gate_whole_wire(route,bound,accepted):
+    from tpu_beam_search.beam_final_materialize import pallas_materialize_final
+    parents = jnp.full((1,128),7,jnp.uint8)
+    generators = jnp.arange(128,dtype=jnp.int32)[None,:]
+    requests = np.zeros((4,128),np.uint32)
+    requests[2,:2] = 1
+    requests[3,1] = route
+    wire,errors = pallas_materialize_final(parents,generators,jnp.asarray(requests),
+        jnp.array([2],jnp.uint32),jnp.array([99],jnp.uint32),state_len=120,
+        return_counts=jnp.array([2,bound],jnp.uint32),
+        interpret=pltpu.InterpretParams(detect_races=True))
+    want = np.zeros((128,128),np.uint8)
+    if accepted:
+        want[:2,:120] = 7
+        want[:2,120] = 1
+    np.testing.assert_array_equal(wire,want)
+    assert int(errors[0,0]) == (0 if accepted else 1)
+    assert int(errors[1,0]) == (0xffffffff if accepted else 1)
 
 
 def test_materialize_gather_bitwidth_and_all_byte_values():

@@ -7,12 +7,15 @@ from .beam_final_validation import pallas_validate_final_requests
 from .beam_final_error_summary import pallas_final_error_summary
 
 
-def pallas_materialize_final(parents,generators,requests,count,target_count,*,state_len,interpret=False):
+def pallas_materialize_final(parents,generators,requests,count,target_count,*,state_len,interpret=False,
+                             return_counts=None):
     """Whole invalid batch yields zero wire and error summary, no parent DMA.
 
     Caller validates permutations and return ranks and gates sending on errors.
     Parent arena is locally indexed and fits signed32. No response exchange or
     frontier scatter; one DMA per valid request is a diagnostic baseline.
+    With return_counts, target bounds and route bits are validated before DMA;
+    otherwise the original scalar target bound/caller route contract applies.
     """
     if (parents.ndim != 2 or parents.dtype != jnp.uint8 or not 0 < parents.shape[0] < 0x7fffffff
             or parents.shape[1]%128 or not 0 < state_len <= parents.shape[1]-4
@@ -21,7 +24,7 @@ def pallas_materialize_final(parents,generators,requests,count,target_count,*,st
         raise ValueError('invalid final parent/generator ABI')
     reasons = pallas_validate_final_requests(requests,count,
         jnp.array([parents.shape[0],0],jnp.uint32),target_count,
-        move_count=generators.shape[0],interpret=interpret)
+        move_count=generators.shape[0],interpret=interpret,return_counts=return_counts)
     errors = pallas_final_error_summary(reasons,interpret=interpret)
     width,n = parents.shape[1],requests.shape[1]
     def kernel(p,g,r,c,e,out,staging,sem):
