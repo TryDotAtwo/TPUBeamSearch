@@ -1513,3 +1513,23 @@ Full76695 terminated0: 1009passed1776.41s; XML independently confirms zero
 failures/errors/skips. Covers upstream-error chunk controls and response
 preparation-to-packing integration with both C++ oracles enabled. This is local
 regression evidence, not physical multi-rank response exchange acceptance.
+
+Next response epoch composition added locally: prepared grouped payload ->
+chunk pack with prior error -> common-error-gated exchange -> receive compact
+-> wire bytes. Returned frontier data is private; no scatter/publication or
+destination-capacity claim. Two missing-module RED cases observed. New tests
+exercise actual single-rank interpreter transport and upstream failure, not
+physical remote DMA. Multi-rank fixtures and full regression remain required
+before publication or a new physical gate.
+
+Response epoch tests now cover 129 records across three sequential epochs
+(128,1,0), preserving errors through the empty epoch and all payload bytes.
+Focused response/exchange 4passed65.88s; eight-rank ABI JAXPR test separately
+1passed3.50s. The trace proves shapes/no host readback only, not TPU execution.
+Full regression started for this snapshot with both C++ oracles, XML
+test_results/local_final_response_chunk_full.xml. Freeze Python until terminal.
+
+Full53207 terminated0:1012passed1422.19s. XML confirms zero failures/errors/
+skips. Response epoch composition is locally regression-valid; no physical
+eight-rank routing run yet. Next gate protocol and coverage/destination-count
+integration constraints: docs/research/2026-09-08-response-epoch-gate-protocol.md.
