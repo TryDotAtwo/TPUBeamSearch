@@ -1,6 +1,7 @@
 # Routed response epoch gate
 
-Status: protocol; physical run not prepared or launched. Builds on accepted
+Status: V1 submitted, last checked QUEUED; physical acceptance pending. Source
+8dc27ca763764c8485988c06210fddfc7c0f5854, launcher 1ec87f5. Builds on accepted
 local scatter V9 and exchange V7 without repeating those isolated gates.
 
 ## Scope and oracle
@@ -83,6 +84,31 @@ Allocated storage capacity and logical selected count must remain distinct.
 Receiver-side final coverage remains necessary even after this source check.
 Include a fixture where target 1 is legal at one destination but illegal at
 another, plus zero-count destinations and poisoned invalid tail ranks.
+
+### Concrete integration points audited after submission
+
+`beam_final_validation.pallas_validate_final_requests` currently enforces
+`target_count.shape == (1,)` and evaluates `r[2] >= t[0]`; its documented
+contract delegates return-rank validation to the caller. Its reason bits are
+parent=1, target=2, move=4, local-slot=8, count-overflow=16. Preserve these
+existing local-call semantics when adding the routed variant.
+
+`beam_final_materialize.pallas_materialize_final` invokes that scalar validator
+before `pallas_final_error_summary`; the DMA predicate is whole-batch
+`errors[0,0] == 0`. Therefore a routed validator must feed this same pre-DMA
+summary, not merely reject a response after materialization has occurred.
+Use source-local `parents.shape[0]` only for the parent bound; it cannot supply
+the target bound. Propagate the per-return-rank logical count table through
+the remote snapshot materialization caller before enabling routed requests.
+
+Regression requirements for that change: retain scalar callers unchanged;
+mixed ranks with identical target index but different logical bounds;
+zero-count destination; invalid rank and reserved byte; poisoned inactive
+tails; count overflow; and a whole-batch rejection with zero output wire.
+Assign any new reason bits explicitly without changing existing bit meanings.
+The table access itself must be safe for malformed rank values, independently
+of the final error mask. These are implementation requirements, not claims
+that the routed validator or its TPU gate already exists.
 
 ## Launcher failure capture
 
