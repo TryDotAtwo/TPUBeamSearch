@@ -1562,3 +1562,15 @@ Full67329 terminated0:1022passed1527.22s; XML confirms zero failures/errors/
 skips. Response gate source is locally regression-valid; physical execution
 and independent report acceptance remain unverified. Next: pin public source
 in launcher with durable child log/returncode, then submit only with free TPU.
+
+Response epoch gate V1 submitted after the previous final gate was COMPLETE.
+Private slug: trydotatwo/tpu-beam-response-epoch-gate. Published source:
+8dc27ca763764c8485988c06210fddfc7c0f5854; launcher:1ec87f5.
+Launcher tests:2passed, including durable child log/returncode on failure.
+Current checked status:QUEUED; no restart. Monitoring now targets this gate.
+Terminal acceptance requires process returncode0 and independent validation
+of all11cases/33epochs, runtime/eight TPU devices and reconstructed hashes;
+Kaggle COMPLETE alone is insufficient. Expected download directory:
+test_results/beam_response_epoch_v1. No physical response result or speed
+claim yet. Whole-response coverage, destination-specific capacities and
+atomic candidate publication remain separate integration work.
