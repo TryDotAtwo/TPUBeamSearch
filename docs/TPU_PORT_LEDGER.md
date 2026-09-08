@@ -1611,3 +1611,11 @@ with valid/invalid destination bounds. Literal full payload/control arrays
 prove rejection flags persist on both peers in the subsequent empty epoch;
 valid bytes go only to destination1 in epoch0. Response preparation suite:
 4passed42.44s. These are local composition checks, not physical transport.
+
+Whole-response decode/coverage characterization added without production
+changes:129 literal little-endian target records across128+1 chunk boundary,
+poisoned inactive tails, duplicate replacing the last target and late prior
+transport error. Decoded targets feed existing common coverage agreement;
+duplicate fails local coverage, late error fails common agreement despite
+valid local coverage. Combined coverage/agreement suite14passed68.42s.
+No frontier scatter/publication or eight-device execution is claimed here.

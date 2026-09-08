@@ -2,6 +2,26 @@ from types import SimpleNamespace
 import jax.numpy as jnp
 import pytest
 import jax
+import numpy as np
+
+
+@pytest.mark.parametrize('case',['valid','duplicate_across_chunks','late_error'])
+def test_decoded_whole_response_coverage_and_late_error(case):
+    from tpu_beam_search.beam_final_response import pallas_unpack_response
+    from tpu_beam_search.beam_final_agreement import make_final_coverage_agreement
+    # Already assembled private responses: epoch0 has128 records, epoch1 has1.
+    # Encode by literal LE bytes, independently of the production pack helper.
+    wire = np.full((256,128),255,np.uint8)
+    for slot in range(129):
+        target = 0 if case == 'duplicate_across_chunks' and slot == 128 else slot
+        wire[slot,120:124] = list(target.to_bytes(4,'little'))
+    _,targets = pallas_unpack_response(jnp.asarray(wire),state_len=120,interpret=True)
+    valid = jnp.asarray((np.arange(256)<129).astype(np.uint32)[None,:])
+    prior = jnp.zeros((1,128),jnp.uint32).at[0,0].set(int(case == 'late_error'))
+    common,summary = make_final_coverage_agreement(
+        SimpleNamespace(size=1),interpret=True)(targets,valid,jnp.array([129],jnp.uint32),prior)
+    assert int(common[0,0]) == int(case != 'valid')
+    assert (int(summary[0,0]) != 0) == (case == 'duplicate_across_chunks')
 
 
 @pytest.mark.parametrize('bad', [False,True])
