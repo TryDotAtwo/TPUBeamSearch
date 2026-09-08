@@ -1490,3 +1490,11 @@ Full35960 TERMINATED0:1003passed1343.97s; XML confirms zero failures/errors/
 skips with both C++ oracles. Includes response preparation and V8 DMA-axis fix.
 Previous53469 partial progress remains unverified; this new run supplies full
 local coverage. Physical acceptance of the fix still requires a new TPU gate.
+
+V9 COMPLETE:12/12cases accepted independently on eightTPUv5lite, sourceef293af,
+launcher1299461. Scatter7 + integrated5, both childrc0. Zero byte mismatches
+and expected SHA on every device; overflow fixtures preserve full frontier
+and return error1. Runtime matches JAX/jaxlib0.10.2 libtpu0.0.42.1. Artifacts
+beam_final_v9_scatter; report2026-09-08-final-v9-scatter-results.md. Do not
+repeat V9. This is replicated local-chain acceptance, not routed exchange,
+full publication/multi-depth beam or performance evidence.

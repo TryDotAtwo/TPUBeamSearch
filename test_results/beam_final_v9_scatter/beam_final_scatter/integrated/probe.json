@@ -1,0 +1,235 @@
+{
+  "mode": "integrated",
+  "exact": true,
+  "cases": [
+    {
+      "name": "count0_valid",
+      "exact": true,
+      "status": "executed",
+      "input_sha256": "e13036146311c7d8cdef0ac353e882c3e8b6e67f70496960e6ea878e1239cd1c",
+      "expected_sha256": "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+      "expected_error": 0,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "invalid": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": [
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a",
+        "abfbbdc1b806bdc6921280a3b6ba9481dac32e8bcd2e9248e027ebd16a82a58a"
+      ]
+    },
+    {
+      "name": "count1_valid",
+      "exact": true,
+      "status": "executed",
+      "input_sha256": "179c22715b46226795c3f9385d1260e4bdbd051919714690f735615a9757261d",
+      "expected_sha256": "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+      "expected_error": 0,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "invalid": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": [
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23",
+        "6f5d7e4bfd7bb4a889593d86a101402bbf574ace8eba0f8fb41a4277a60a7b23"
+      ]
+    },
+    {
+      "name": "count127_valid",
+      "exact": true,
+      "status": "executed",
+      "input_sha256": "8676d1d8201f4eff44328acfd2a7d60b5a676180d0dc7413c8520f0130199b5e",
+      "expected_sha256": "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+      "expected_error": 0,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "invalid": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": [
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3",
+        "5ad258d75ae26355d30ea297ddb09a993dbf14fb108bc5ca524435df427505a3"
+      ]
+    },
+    {
+      "name": "count128_valid",
+      "exact": true,
+      "status": "executed",
+      "input_sha256": "83d1112761f0761df756af18fbc4418008c6206b7ef15903c1c398958d6c9c5b",
+      "expected_sha256": "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+      "expected_error": 0,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "invalid": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": [
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca",
+        "079a64e486ce63cb6e442ba9c038401a06b763f39101ec4242a34db5cd4ec7ca"
+      ]
+    },
+    {
+      "name": "count129_valid",
+      "exact": true,
+      "status": "executed",
+      "input_sha256": "0b143c12c372f9b589c2026d77ceb4d5ca0beb23bdffb41779b1c564a0d0b1e8",
+      "expected_sha256": "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+      "expected_error": 0,
+      "mismatches": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "invalid": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "output_sha256": [
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7",
+        "2de88cedfaa62ff3d22fab68498a4304bca27841fe5b1a57889a448dc342dca7"
+      ]
+    }
+  ],
+  "source_sha": "ef293af3753f06b6d031a1dd35b7d9d1df034501",
+  "jax": "0.10.2",
+  "jaxlib": "0.10.2",
+  "libtpu": "0.0.42.1",
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "scope": "scatter and valid local chain only; not distributed publication or timing"
+}

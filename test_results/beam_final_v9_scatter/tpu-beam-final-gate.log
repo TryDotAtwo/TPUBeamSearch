@@ -1,0 +1,10 @@
+[{"stream_name":"stderr","time":19.632585545,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":25.844724688,"data":"\n"}
+,{"stream_name":"stderr","time":25.857813069,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":25.85782416,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":25.997005081,"data":"Cloning into '/tmp/TPUBeamSearch-final-gate'...\n"}
+,{"stream_name":"stderr","time":33.806096007,"data":"Updating files:  85% (3772/4403)\rUpdating files:  86% (3787/4403)\rUpdating files:  87% (3831/4403)\rUpdating files:  88% (3875/4403)\rUpdating files:  89% (3919/4403)\rUpdating files:  90% (3963/4403)\rUpdating files:  91% (4007/4403)\rUpdating files:  92% (4051/4403)\rUpdating files:  93% (4095/4403)\rUpdating files:  94% (4139/4403)\rUpdating files:  95% (4183/4403)\rUpdating files:  96% (4227/4403)\rUpdating files:  97% (4271/4403)\rUpdating files:  98% (4315/4403)\rUpdating files:  99% (4359/4403)\rUpdating files: 100% (4403/4403)\rUpdating files: 100% (4403/4403), done.\n"}
+,{"stream_name":"stderr","time":34.404627266,"data":"HEAD is now at ef293af Fix final scatter DMA record layout and prepare response routing\n"}
+,{"stream_name":"stderr","time":79.213584442,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":81.496777628,"data":"[NbConvertApp] Writing 277931 bytes to __results__.html\n"}
+]
