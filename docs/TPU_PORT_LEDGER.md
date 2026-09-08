@@ -1533,3 +1533,32 @@ Full53207 terminated0:1012passed1422.19s. XML confirms zero failures/errors/
 skips. Response epoch composition is locally regression-valid; no physical
 eight-rank routing run yet. Next gate protocol and coverage/destination-count
 integration constraints: docs/research/2026-09-08-response-epoch-gate-protocol.md.
+
+Physical response gate preparation: independent host expected_epoch oracle
+added from original request order, without production sort/group/pack helpers.
+Literal source0/source7 -> destination3 test covers 129-record boundary,
+source-major receive order and failure at an otherwise empty source. Missing
+module RED then 1passed0.12s. Fixture matrix, physical runner and independent
+report validation still pending; no new TPU job submitted.
+
+Response fixture matrix added:11 cases for eight distinct sources, poisoned
+request tails, counts0/1/127/128/129, self/cycle/fanout/fanin/uneven and four
+failure types followed by new recovery bytes. Missing-function RED observed;
+fixture/oracle tests2passed0.47s. Physical runner still pending; fixtures alone
+do not prove TPU routing or compilation.
+
+Response gate runner now prepares runtime inputs once per case then executes
+three coordinated dynamic epochs, retaining grouped buffers between calls.
+Saves pending JSON before compile/execution and MLIR/HLO. Independent report
+validator reconstructs expected bytes and checks all33epochs, eight unique TPU
+devices, source/input/output hashes and per-rank integer mismatch arrays.
+RED missing modules/functions observed; focused suite10passed10.16s.
+Input records are shuffled together with bytes to exercise real grouping.
+Full regression started with both C++ oracles; XML target
+test_results/local_response_epoch_gate_full.xml. Freeze Python until terminal.
+No physical gate submitted; source publication and launcher still pending.
+
+Full67329 terminated0:1022passed1527.22s; XML confirms zero failures/errors/
+skips. Response gate source is locally regression-valid; physical execution
+and independent report acceptance remain unverified. Next: pin public source
+in launcher with durable child log/returncode, then submit only with free TPU.

@@ -83,3 +83,15 @@ Allocated storage capacity and logical selected count must remain distinct.
 Receiver-side final coverage remains necessary even after this source check.
 Include a fixture where target 1 is legal at one destination but illegal at
 another, plus zero-count destinations and poisoned invalid tail ranks.
+
+## Launcher failure capture
+
+Keep the launcher parent free of JAX imports. Run the probe in a child with
+stdout/stderr redirected to a durable process.log under the Kaggle output
+root. Write a pending process manifest before start, then record returncode
+after termination, including native signal/abort failures. The child creates
+its own fresh output subdirectory; parent must not pre-create that directory.
+Do not infer success from the Kaggle terminal state: require child returncode
+zero and independent report acceptance. Pin public source SHA and the already
+accepted JAX/jaxlib0.10.2, libtpu0.0.42.1 runtime. Do not update or submit the
+launcher until the current source regression is terminal and source published.
