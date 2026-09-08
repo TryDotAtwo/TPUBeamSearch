@@ -1604,3 +1604,10 @@ failures/errors/skips with both C++ oracles enabled. Routed destination bounds
 through snapshot compaction and materialization are locally regression-valid.
 Physical TPU compilation/execution of this new path remains unverified.
 Response epoch V1 remains QUEUED on its unchanged earlier source SHA.
+
+Post-regression integration characterization (no production changes): actual
+snapshot materialization -> response grouping -> chunk controls now tested
+with valid/invalid destination bounds. Literal full payload/control arrays
+prove rejection flags persist on both peers in the subsequent empty epoch;
+valid bytes go only to destination1 in epoch0. Response preparation suite:
+4passed42.44s. These are local composition checks, not physical transport.
