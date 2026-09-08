@@ -3,6 +3,28 @@ import jax.numpy as jnp
 import pytest
 
 
+@pytest.mark.parametrize('count',[0,1])
+@pytest.mark.parametrize('error',[0,7,0xffffffff])
+def test_upstream_error_survives_empty_chunk_and_blocks_nonempty_chunk(count,error):
+    from tpu_beam_search.beam_final_chunk import pallas_pack_final_chunk
+    intervals=np.zeros((3,128),np.uint32)
+    intervals[1,0]=count
+    prior=np.zeros((1,128),np.uint32)
+    prior[0,0]=error
+    wire,control=map(np.asarray,pallas_pack_final_chunk(
+        jnp.ones((4,128),jnp.uint32),jnp.asarray(intervals),
+        jnp.array([0],jnp.uint32),world_size=2,prior_error=jnp.asarray(prior),interpret=True))
+    expected=np.zeros((2,4,128),np.uint32)
+    expected_control=np.zeros((2,2,128),np.uint32)
+    if error:
+        expected_control[:,1,0]=1
+    elif count:
+        expected[0,:,0]=1
+        expected_control[0,0,0]=1
+    np.testing.assert_array_equal(wire,expected)
+    np.testing.assert_array_equal(control,expected_control)
+
+
 @pytest.mark.parametrize('chunk',[0,1,2,0xffffffff])
 def test_chunk_preserves_unaligned_ranges_and_zero_tail(chunk):
     from tpu_beam_search.beam_final_chunk import pallas_pack_final_chunk

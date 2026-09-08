@@ -1498,3 +1498,18 @@ and return error1. Runtime matches JAX/jaxlib0.10.2 libtpu0.0.42.1. Artifacts
 beam_final_v9_scatter; report2026-09-08-final-v9-scatter-results.md. Do not
 repeat V9. This is replicated local-chain acceptance, not routed exchange,
 full publication/multi-depth beam or performance evidence.
+
+Response-to-chunk integration in progress: chunk packing accepts upstream
+prior_error lane0 and emits normalized error on every peer control, including
+empty chunks, while suppressing payload. This preserves preparation failures
+that otherwise look like successful empty intervals to exchange preflight.
+Six missing-argument RED cases observed; focused chunk/preparation suite
+16passed34.76s including literal grouped response bytes through packing.
+Full regression started with both C++ oracles, output
+test_results/local_final_chunk_prior_error_full.xml. Source snapshot frozen
+pending terminal; no new TPU launch or physical acceptance claimed.
+
+Full76695 terminated0: 1009passed1776.41s; XML independently confirms zero
+failures/errors/skips. Covers upstream-error chunk controls and response
+preparation-to-packing integration with both C++ oracles enabled. This is local
+regression evidence, not physical multi-rank response exchange acceptance.

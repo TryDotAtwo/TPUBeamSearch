@@ -6,13 +6,15 @@ from jax.experimental.pallas import tpu as pltpu
 from .beam_stream2 import _take_clipped
 
 
-def pallas_pack_final_chunk(payload,intervals,chunk,*,world_size,interpret=False):
+def pallas_pack_final_chunk(payload,intervals,chunk,*,world_size,prior_error=None,interpret=False):
     """Emit [rank,planes,128] and [rank,2,128] count/error controls.
 
     Chunk index is dynamic uint32. Two aligned input tiles cover an unaligned
     interval; each DMA completes before reading scratch. Any invalid interval
     blocks all ranks in this local call. Caller still needs collective error
     agreement and coordinated chunk epochs before inter-device transport.
+    prior_error is the upstream [1,128] error flag (lane zero). It must not
+    disappear when upstream preparation masks all send counts to zero.
     """
     if (not isinstance(world_size,int) or not 1 <= world_size <= 128
             or payload.ndim != 2 or not payload.shape[0] or not payload.shape[1]
@@ -20,12 +22,16 @@ def pallas_pack_final_chunk(payload,intervals,chunk,*,world_size,interpret=False
             or intervals.shape!=(3,128) or chunk.shape!=(1,)
             or any(x.dtype!=jnp.uint32 for x in (payload,intervals,chunk))):
         raise ValueError('invalid final chunk ABI')
+    if prior_error is None:
+        prior_error=jnp.zeros((1,128),jnp.uint32)
+    if prior_error.shape!=(1,128) or prior_error.dtype!=jnp.uint32:
+        raise ValueError('invalid final chunk prior error ABI')
     planes,n=payload.shape
-    def kernel(source,ranges,index,out,control,staging,sem):
+    def kernel(source,ranges,index,prior,out,control,staging,sem):
         peer=pl.program_id(0)
         lanes=jnp.arange(128,dtype=jnp.uint32)
         starts,counts=ranges[0,:],ranges[1,:]
-        bad=jnp.any((lanes<world_size)&((counts>n)|(starts>jnp.uint32(n)-counts))) | (ranges[2,0]!=0)
+        bad=jnp.any((lanes<world_size)&((counts>n)|(starts>jnp.uint32(n)-counts))) | (ranges[2,0]!=0) | (prior[0,0]!=0)
         out[...] = jnp.zeros((1,planes,128),jnp.uint32)
         control[...] = jnp.zeros((1,2,128),jnp.uint32)
         control[0,1,:] = jnp.where(lanes==0,bad.astype(jnp.uint32),jnp.uint32(0))
@@ -54,7 +60,7 @@ def pallas_pack_final_chunk(payload,intervals,chunk,*,world_size,interpret=False
     return pl.pallas_call(kernel,
         out_shape=(jax.ShapeDtypeStruct((world_size,planes,128),jnp.uint32),
                    jax.ShapeDtypeStruct((world_size,2,128),jnp.uint32)),
-        in_specs=(pl.BlockSpec(memory_space=pltpu.HBM),pl.BlockSpec((3,128)),pl.BlockSpec((1,))),
+        in_specs=(pl.BlockSpec(memory_space=pltpu.HBM),pl.BlockSpec((3,128)),pl.BlockSpec((1,)),pl.BlockSpec((1,128))),
         out_specs=(pl.BlockSpec((1,planes,128),lambda r:(r,0,0)),pl.BlockSpec((1,2,128),lambda r:(r,0,0))),
         grid=(world_size,),scratch_shapes=(pltpu.VMEM((planes,256),jnp.uint32),pltpu.SemaphoreType.DMA),
-        interpret=interpret,name='beam_final_peer_chunk')(payload,intervals,chunk)
+        interpret=interpret,name='beam_final_peer_chunk')(payload,intervals,chunk,prior_error)
