@@ -1674,3 +1674,25 @@ candidate bytes and unchanged source device array; inactive requests are
 poisoned. Existing production code unchanged. Combined agreement/integration
 suite 11 passed in 92.07s. This is interpreter component-chain evidence only,
 not remote exchange, history publication, scratch aliasing or physical TPU.
+
+History host adapter in progress: decode_history_soa consumes completed NumPy
+uint32 [5,N] projection and yields target/HistoryEntry without parent64 loss
+or source/destination substitution. Strict live validity and source/move bounds
+reject malformed late records through append_all_rank_layer's staging barrier.
+Four new tests first failed for missing adapter; focused history suite now
+22 passed 5.92s, including real Pallas projection -> host decode -> rank2
+publication preserving source6. No transfer or distributed commit is claimed.
+Full regression started with both C++ oracles, session70434, JUnit target
+test_results/local_history_decode_full.xml. Freeze Python edits until terminal;
+publish this source only after full acceptance. Response V2 remains QUEUED.
+
+Later status check: response V2 is now terminal ERROR. Cause unknown until
+artifacts are retrieved; do not attribute it to the previous unsigned sum.
+First output download timed out; retry session81952 is still live, destination
+test_results/beam_response_epoch_v2. No successor submitted. Local full70434
+remains live after95% output; lack of new output is not a terminal condition.
+
+Full70434 terminated successfully: 1060 passed in1862.33s, exit0; JUnit
+local_history_decode_full.xml confirms zero failures/errors/skips. History
+decoder is locally regression-valid. V2 artifact download81952 still pending;
+hardware failure cause remains unknown, and no successor has been submitted.

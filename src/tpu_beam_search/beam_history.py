@@ -22,6 +22,35 @@ class HistoryPath:
     parent_indices: tuple[int,...]
 
 
+def decode_history_soa(records, *, world_size, move_count):
+    """Iterate completed host [parent_lo,hi,route,target,valid] uint32 SoA.
+
+    Caller must finish device transfer and retain immutable host storage through
+    iteration. This does not wait for DMA or establish collective success.
+    Feed this iterator into append_all_rank_layer, which stages every rank
+    before publication; a malformed late record must not publish a prefix.
+    No destination/source substitution or narrowing of parent IDs is allowed.
+    """
+    import numpy as np
+    if (not isinstance(records,np.ndarray) or records.ndim != 2
+            or records.shape[0] != 5 or records.dtype != np.uint32):
+        raise ValueError('history requires completed host uint32 [5,N]')
+    if (not isinstance(world_size,int) or not 1 <= world_size <= 65536
+            or not isinstance(move_count,int) or not 1 <= move_count <= 256):
+        raise ValueError('invalid history geometry')
+    for column in range(records.shape[1]):
+        live = int(records[4,column])
+        if live == 0:
+            continue
+        if live != 1:
+            raise ValueError('invalid history validity')
+        route = int(records[2,column])
+        if route >> 16 >= world_size or (route & 255) >= move_count:
+            raise ValueError('invalid history source rank or move')
+        parent = int(records[0,column]) | (int(records[1,column]) << 32)
+        yield int(records[3,column]), HistoryEntry(parent,route)
+
+
 class RankHistoryStore:
     """Append-only host SoA history: uint64 parents and uint32 routes.
 
