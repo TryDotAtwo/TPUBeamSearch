@@ -2,6 +2,18 @@ import numpy as np
 import jax.numpy as jnp
 
 
+def test_prefix_reaches_last_rank_without_including_its_own_count():
+    from tpu_beam_search.beam_final_intervals import pallas_final_rank_intervals
+    ranks = np.full((1,256),127,np.uint32)
+    ranks[0,:129] = 0
+    got = np.asarray(pallas_final_rank_intervals(jnp.asarray(ranks),
+        jnp.ones((1,256),jnp.uint32),world_size=128,interpret=True))
+    expected = np.zeros((3,128),np.uint32)
+    expected[0,1:] = 129
+    expected[1,0],expected[1,127] = 129,127
+    np.testing.assert_array_equal(got,expected)
+
+
 def test_sorted_intervals_cross_tiles_and_empty_ranks():
     from tpu_beam_search.beam_final_intervals import pallas_final_rank_intervals
     ranks = np.full((1,256),0xffffffff,np.uint32)

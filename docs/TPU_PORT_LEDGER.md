@@ -1703,3 +1703,18 @@ New failure: intervals.py:40 associative_scan lowers a size0 vector slice,
 rejected by Mosaic during prep.lower. See 2026-09-09-response-epoch-v2-error.md.
 No native abort, timings or exact execution. Next fix must target this scan
 with a failing regression and retain the full response gate workload.
+
+V2 scan repair pending full acceptance: regression reproduced two size0
+slices and one size0 add in the actual nested Pallas JAXPR. Replaced fixed128
+exclusive scan with lower-triangular masked signed32 sum, uint32 output;
+sum bound is input capacity<2**31. No zero-sized intermediates remain in the
+traced path. Seven focused tests passed11.84s, including rank127 and cross-tile
+prefix, empty/bad ranks, actual grouped payload and signed reductions.
+This is not TPU lowering acceptance or a performance measurement.
+Full regression with both C++ oracles is live session41373, XML target
+test_results/local_interval_prefix_full.xml. Freeze Python changes until
+terminal; then publish source, pin successor launcher and submit only one V3.
+
+Full41373 exit0:1062 passed1790.97s; final XML confirms zero failures/errors/
+skips. Prefix repair is locally accepted, not yet TPU validated. Proceed to
+published source pin and response epoch V3 with unchanged 11-case workload.

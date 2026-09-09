@@ -1,6 +1,5 @@
 """Rank intervals for an already stable-grouped, valid-prefix final buffer."""
 import jax
-from jax import lax
 import jax.numpy as jnp
 from jax.experimental import pallas as pl
 
@@ -37,7 +36,13 @@ def pallas_final_rank_intervals(ranks,valid,*,world_size,interpret=False):
         @pl.when(tile == tiles-1)
         def finalize():
             counts = out[1,:]
-            starts = lax.associative_scan(jnp.add,counts)-counts
+            # Fixed128-lane exclusive prefix. associative_scan introduces
+            # zero-length slices rejected by Mosaic (response gate V2).
+            # Total counts <= input capacity <2**31, so each signed sum is
+            # exact. Keep uint32 at the external interval boundary.
+            preceding = lanes[None,:] < lanes[:,None]
+            starts = jnp.sum(jnp.where(preceding,counts[None,:],jnp.uint32(0))
+                .astype(jnp.int32),axis=1,dtype=jnp.int32).astype(jnp.uint32)
             out[0,:] = jnp.where(lanes < world_size,starts,jnp.uint32(0))
     spec = pl.BlockSpec((1,128),lambda i:(0,i))
     return pl.pallas_call(kernel,
