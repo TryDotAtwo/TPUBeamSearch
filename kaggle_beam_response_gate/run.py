@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA='8dc27ca763764c8485988c06210fddfc7c0f5854'
+COMMIT_SHA='7c62221c19343dc385539755476cfb0484a43f43'
 CHECKOUT=Path('/tmp/TPUBeamSearch-response-gate')
 OUTPUT=Path('/kaggle/working/beam_response_epoch')
 
