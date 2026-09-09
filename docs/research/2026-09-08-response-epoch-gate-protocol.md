@@ -100,6 +100,28 @@ frontier/history commit across TPU devices.
 
 ## Destination capacity audit
 
+Status update, 2026-09-09: the following audit describes the original gap,
+not the current source. Commit ea798ed added optional `return_counts` to
+validation and both materialization callers, retaining the scalar ABI.
+Destination bounds are selected with static table accesses; rank32 and
+reserved64 are distinct reason bits. Local full regression passed 1032 tests.
+Commit 7e5e421 subsequently gated scatter writes on `prior_error`, with
+coverage-to-scatter tests including duplicate targets across chunk boundaries.
+These changes do not establish an integrated hardware final transaction.
+
+The queued V2 response gate pins 7c62221 and exercises response preparation,
+chunk transport and receive only. Although that checkout contains routed
+materialization and scatter changes, successful V2 execution would NOT
+validate those uncalled paths. The next integrated hardware gate must execute
+source-local parent materialization with unequal per-destination bounds,
+response transport, whole-depth coverage agreement and gated private scatter,
+including a late error after an earlier successful chunk. It must verify that
+the published old frontier and history remain unchanged on every failed case.
+History records must be projected from original selected metadata, not rebuilt
+from request routing. Completed device transfers and a common successful
+decision must precede host history publication. Physical scratch aliasing and
+multi-depth GPU comparison remain separate requirements after that gate.
+
 The existing request validator accepts scalar target_count and compares every
 request target against that scalar. After requests from different return ranks
 are compacted together, this is insufficient for unequal destination counts.
