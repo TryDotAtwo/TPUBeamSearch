@@ -1665,3 +1665,12 @@ is unchanged. On terminal download all output to test_results/beam_response_epoc
 validate process returncode, source/runtime/eight devices, every case and
 epoch independently; status COMPLETE alone is not acceptance. V1 logs remain
 preserved. Hardware lowering and exactness of the signed repair are pending.
+
+Local final-chain integration added while V2 remains QUEUED:
+tests/test_beam_final_materialize_coverage.py feeds actual materialized wire
+through unpack, whole-target coverage/common error and private scatter.
+Cases valid/repeated target/high parent word/late prior error verify exact
+candidate bytes and unchanged source device array; inactive requests are
+poisoned. Existing production code unchanged. Combined agreement/integration
+suite 11 passed in 92.07s. This is interpreter component-chain evidence only,
+not remote exchange, history publication, scratch aliasing or physical TPU.
