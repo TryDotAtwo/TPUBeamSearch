@@ -28,9 +28,11 @@ def pallas_final_rank_intervals(ranks,valid,*,world_size,interpret=False):
             out[...] = jnp.zeros((3,128),jnp.uint32)
         live = v[0,:] != 0
         hits = (lanes[:,None] == r[0,:][None,:]) & live[None,:]
-        counts = jnp.sum(hits.astype(jnp.uint32),axis=1)
+        # At most128 hits per tile; signed reduction is exact and supported
+        # by Mosaic. Keep the external/accumulated counts in uint32.
+        counts = jnp.sum(hits.astype(jnp.int32),axis=1,dtype=jnp.int32).astype(jnp.uint32)
         out[1,:] = out[1,:]+jnp.where(lanes < world_size,counts,jnp.uint32(0))
-        bad = jnp.sum((live & (r[0,:] >= world_size)).astype(jnp.uint32))
+        bad = jnp.sum((live & (r[0,:] >= world_size)).astype(jnp.int32),dtype=jnp.int32).astype(jnp.uint32)
         out[2,:] = out[2,:]+jnp.where(lanes == 0,bad,jnp.uint32(0))
         @pl.when(tile == tiles-1)
         def finalize():

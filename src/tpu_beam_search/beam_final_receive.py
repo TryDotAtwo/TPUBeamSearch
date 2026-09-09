@@ -21,7 +21,10 @@ def pallas_compact_final_received(snapshots,counts,error,*,interpret=False):
     n=1<<(ranks*128-1).bit_length()
     def summarize(c,e,out):
         bad=(e[0,0]!=0)|jnp.any(c[:,0,0]>128)
-        total=jnp.sum(c[:,0,0])
+        # At most128 sources x128 records. Check raw overflow above, clamp
+        # before signed conversion, and retain the uint32 control ABI.
+        total=jnp.sum(jnp.minimum(c[:,0,0],jnp.uint32(128)).astype(jnp.int32),
+                      dtype=jnp.int32).astype(jnp.uint32)
         lanes=jnp.arange(128)
         out[0,:]=jnp.where((lanes==0)&(~bad),total,jnp.uint32(0))
         out[1,:]=jnp.where(lanes==0,bad.astype(jnp.uint32),jnp.uint32(0))

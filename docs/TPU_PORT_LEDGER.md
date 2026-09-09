@@ -1638,3 +1638,21 @@ exit code was not recovered; suite success is established by its final XML,
 including scatter prior-error and coverage-to-scatter cases. Long elapsed
 time includes the interrupted observation period, not a benchmark result.
 Response V1 is terminal ERROR (published38ffb90), not still queued.
+
+V1 lowering fix in progress: interval hit/bad sums now explicitly int32 with
+uint32 result conversion (per-tile bound128). Receive total clamps raw counts
+to128 before int32 sum; raw overflow detection remains unchanged. Maximum
+legal sum is128 sources*128 records=16384. JAXPR regression first failed on
+actual uint32 reduce_sum operands in each path, then passed with signed32.
+Focused intervals/receive/reduction suite14passed39.38s, including malformed
+counts129/0x80000000/UINT32_MAX. This is not physical TPU compile evidence.
+Full regression started with both C++ oracles, session2065, XML target
+test_results/local_response_signed_reductions_full.xml. Freeze Python until
+terminal; publish source and pin successor launcher only after acceptance.
+No new Kaggle session has been submitted.
+
+Full2065 terminated0:1048passed1693.22s. Final JUnit XML confirms zero
+failures/errors/skips. Signed reduction repair is locally regression-valid;
+V1 TPU rejection is not yet cleared by physical execution. Next: publish this
+source, pin its SHA in the response gate launcher and submit V2 after checking
+the prior session remains terminal. Preserve V1 evidence and identical cases.

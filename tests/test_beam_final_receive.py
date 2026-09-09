@@ -3,6 +3,19 @@ import jax.numpy as jnp
 import pytest
 
 
+@pytest.mark.parametrize('bad_count',[129,0x80000000,0xffffffff])
+def test_received_count_overflow_cannot_wrap_into_valid_total(bad_count):
+    from tpu_beam_search.beam_final_receive import pallas_compact_final_received
+    counts = jnp.zeros((2,1,128),jnp.uint32).at[:,0,0].set(
+        jnp.array([128,bad_count],jnp.uint32))
+    packed,control = pallas_compact_final_received(jnp.ones((2,4,128),jnp.uint32),
+        counts,jnp.zeros((1,128),jnp.uint32),interpret=True)
+    np.testing.assert_array_equal(packed,np.zeros((4,256),np.uint32))
+    expected = np.zeros((2,128),np.uint32)
+    expected[1,0] = 1
+    np.testing.assert_array_equal(control,expected)
+
+
 @pytest.mark.parametrize('destination_count,accepted',[(2,True),(1,False),(0,False)])
 def test_received_mixed_rank_bounds_survive_compaction(destination_count,accepted):
     from tpu_beam_search.beam_final_receive import pallas_materialize_final_snapshots
