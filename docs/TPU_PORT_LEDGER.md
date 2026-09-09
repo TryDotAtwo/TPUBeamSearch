@@ -1718,3 +1718,10 @@ terminal; then publish source, pin successor launcher and submit only one V3.
 Full41373 exit0:1062 passed1790.97s; final XML confirms zero failures/errors/
 skips. Prefix repair is locally accepted, not yet TPU validated. Proceed to
 published source pin and response epoch V3 with unchanged 11-case workload.
+
+Response epoch V3 submitted successfully after confirming V2 terminal ERROR.
+Source3fb2250f94c6f6f5a81e174572f4226a8144b466, launcher e34117c (2 tests
+passed0.21s). Current observed state QUEUED. Do not restart; one TPU session.
+On terminal retrieve to test_results/beam_response_epoch_v3, check process,
+source/runtime/eight devices and every one of11cases/33epochs. COMPLETE alone
+is not acceptance. V1/V2 artifacts are already published; do not fetch them again.
