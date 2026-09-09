@@ -21,3 +21,19 @@ uint32 storage ABI. Inspect other reductions in this same preparation path;
 do not infer their TPU acceptance from interpreter success. Re-run full tests,
 publish a new source SHA, then submit a successor only after terminal status.
 The already running local scatter regression must finish before source edits.
+
+## Adjacent reduction audit
+
+The same intervals kernel has a second unsigned sum for bad-rank count.
+Both sums reduce at most128 boolean values per tile: signed int32 reduction
+is range-safe, followed by uint32 storage conversion. Accumulated counts
+remain below the existing capacity bound2^31. The associative prefix scan
+is a different operation; do not assert its rejection from the sum exception.
+
+`beam_final_receive.pallas_compact_final_received` also sums uint32 source
+counts. That path was not reached in this V1 run, so its rejection is only a
+candidate for the next compile check. Valid counts are at most128 per source
+and there are at most128 sources. If changing its arithmetic, bound values
+before signed conversion so malformed uint32 counts cannot wrap; preserve the
+existing original-count overflow flag and zero output on error. A new test
+must cover UINT32_MAX alongside valid total16384, not only normal counts.

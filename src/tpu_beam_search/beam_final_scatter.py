@@ -7,25 +7,31 @@ from .beam_final_response import pallas_unpack_response
 from .beam_final_error_summary import pallas_final_error_summary
 
 
-def pallas_scatter_final_responses(frontier,wire,count,*,state_len,interpret=False):
+def pallas_scatter_final_responses(frontier,wire,count,*,state_len,interpret=False,prior_error=None):
     """Reject whole batch on target overflow; caller ensures unique targets.
 
     Count must fit wire capacity. Frontier is exclusive until call completion.
     This does not detect duplicate/missing targets or coordinate remote ranks.
+    prior_error lane0 must contain the caller's common decision. A nonzero
+    value suppresses all writes, including when count is zero. No publication.
     """
     if (frontier.ndim != 2 or frontier.dtype != jnp.uint8 or not 0 < frontier.shape[0] < 0x7fffffff
             or frontier.shape[1] != wire.shape[1] or count.shape != (1,) or count.dtype != jnp.uint32):
         raise ValueError('invalid final scatter ABI')
+    if prior_error is None:
+        prior_error = jnp.zeros((1,128),jnp.uint32)
+    if prior_error.shape != (1,128) or prior_error.dtype != jnp.uint32:
+        raise ValueError('invalid scatter prior error ABI')
     clean,targets = pallas_unpack_response(wire,state_len=state_len,interpret=interpret)
     n,width = wire.shape
-    def bounds(t,c,out):
+    def bounds(t,c,p,out):
         index = pl.program_id(0).astype(jnp.uint32)*128+jnp.arange(128,dtype=jnp.uint32)
         out[...] = (((index[None] < c[0]) & (t[...] >= frontier.shape[0]))
-                    | ((c[0] > n) & (index[None] == 0))).astype(jnp.uint32)
+                    | (((c[0] > n) | (p[0,0] != 0)) & (index[None] == 0))).astype(jnp.uint32)
     reason = pl.pallas_call(bounds,out_shape=jax.ShapeDtypeStruct((1,n),jnp.uint32),
-        in_specs=(pl.BlockSpec((1,128),lambda i:(0,i)),pl.BlockSpec((1,))),
+        in_specs=(pl.BlockSpec((1,128),lambda i:(0,i)),pl.BlockSpec((1,)),pl.BlockSpec((1,128))),
         out_specs=pl.BlockSpec((1,128),lambda i:(0,i)),grid=(n//128,),
-        interpret=interpret,name='beam_final_scatter_bounds')(targets,count)
+        interpret=interpret,name='beam_final_scatter_bounds')(targets,count,prior_error)
     errors = pallas_final_error_summary(reason,interpret=interpret)
     def scatter(old,data,t,c,e,out,staging,sem):
         index = pl.program_id(0)

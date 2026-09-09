@@ -22,6 +22,17 @@ def test_decoded_whole_response_coverage_and_late_error(case):
         SimpleNamespace(size=1),interpret=True)(targets,valid,jnp.array([129],jnp.uint32),prior)
     assert int(common[0,0]) == int(case != 'valid')
     assert (int(summary[0,0]) != 0) == (case == 'duplicate_across_chunks')
+    from tpu_beam_search.beam_final_scatter import pallas_scatter_final_responses
+    candidate = np.full((129,128),37,np.uint8)
+    actual,scatter_error = pallas_scatter_final_responses(jnp.asarray(candidate.copy()),
+        jnp.asarray(wire),jnp.array([129],jnp.uint32),state_len=120,
+        prior_error=common,interpret=True)
+    expected = candidate.copy()
+    if case == 'valid':
+        expected[:,:120] = 255
+        expected[:,120:] = 0
+    np.testing.assert_array_equal(actual,expected)
+    assert (int(scatter_error[0,0]) != 0) == (case != 'valid')
 
 
 @pytest.mark.parametrize('bad', [False,True])

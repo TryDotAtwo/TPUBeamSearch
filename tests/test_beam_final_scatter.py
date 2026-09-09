@@ -1,6 +1,28 @@
 import numpy as np
 import jax.numpy as jnp
+import pytest
 from jax.experimental.pallas import tpu as pltpu
+
+
+@pytest.mark.parametrize('count',[0,1])
+@pytest.mark.parametrize('flag',[0,1,0x80000000])
+def test_scatter_prior_error_preserves_all_frontier_bytes(count,flag):
+    from tpu_beam_search.beam_final_scatter import pallas_scatter_final_responses
+    frontier = np.arange(4*128,dtype=np.uint8).reshape(4,128)
+    wire = np.zeros((128,128),np.uint8)
+    wire[0,:120] = 7
+    wire[0,120] = 2
+    prior = jnp.zeros((1,128),jnp.uint32).at[0,0].set(flag)
+    actual,errors = pallas_scatter_final_responses(jnp.asarray(frontier.copy()),
+        jnp.asarray(wire),jnp.array([count],jnp.uint32),state_len=120,
+        prior_error=prior,interpret=pltpu.InterpretParams(detect_races=True))
+    want = frontier.copy()
+    if not flag and count:
+        want[2,:120] = 7
+        want[2,120:] = 0
+    np.testing.assert_array_equal(actual,want)
+    assert int(errors[0,0]) == int(flag != 0)
+    assert int(errors[1,0]) == (0 if flag else 0xffffffff)
 
 
 def test_scatter_dma_record_axis_avoids_v8_tiled_row_slice():

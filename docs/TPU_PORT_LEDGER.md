@@ -1619,3 +1619,22 @@ transport error. Decoded targets feed existing common coverage agreement;
 duplicate fails local coverage, late error fails common agreement despite
 valid local coverage. Combined coverage/agreement suite14passed68.42s.
 No frontier scatter/publication or eight-device execution is claimed here.
+
+Scatter common-error gating in progress: optional prior_error lane0 enters
+the pre-DMA summary and suppresses every write, including count0. Six RED
+missing-argument tests preceded implementation; isolated scatter8passed12.82s.
+Decoded whole-response coverage now feeds the real scatter prior_error in
+composition tests; duplicate-across-chunks and late error preserve all private
+candidate bytes. Combined agreement/scatter15passed46.25s. No publication,
+history transaction or physical multi-rank acceptance is implied.
+Full regression started with both C++ oracles, XML target
+test_results/local_scatter_prior_error_full.xml. Freeze Python until terminal;
+source remains local pending full acceptance. Active response V1 stays QUEUED.
+
+2026-09-09 recovery: session8437 handle expired, but completed JUnit XML
+test_results/local_scatter_prior_error_full.xml is present and parses as
+1043 tests, zero failures/errors/skips, elapsed10746.940s. Terminal process
+exit code was not recovered; suite success is established by its final XML,
+including scatter prior-error and coverage-to-scatter cases. Long elapsed
+time includes the interrupted observation period, not a benchmark result.
+Response V1 is terminal ERROR (published38ffb90), not still queued.
