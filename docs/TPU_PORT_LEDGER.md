@@ -1696,3 +1696,10 @@ Full70434 terminated successfully: 1060 passed in1862.33s, exit0; JUnit
 local_history_decode_full.xml confirms zero failures/errors/skips. History
 decoder is locally regression-valid. V2 artifact download81952 still pending;
 hardware failure cause remains unknown, and no successor has been submitted.
+
+V2 artifacts retrieved after DNS recovered, in beam_response_epoch_v2_retry.
+rc1, correct source7c62221/runtime/eight TPUv5lite devices, zero epochs.
+New failure: intervals.py:40 associative_scan lowers a size0 vector slice,
+rejected by Mosaic during prep.lower. See 2026-09-09-response-epoch-v2-error.md.
+No native abort, timings or exact execution. Next fix must target this scan
+with a failing regression and retain the full response gate workload.
