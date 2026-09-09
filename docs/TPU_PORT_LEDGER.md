@@ -1656,3 +1656,12 @@ failures/errors/skips. Signed reduction repair is locally regression-valid;
 V1 TPU rejection is not yet cleared by physical execution. Next: publish this
 source, pin its SHA in the response gate launcher and submit V2 after checking
 the prior session remains terminal. Preserve V1 evidence and identical cases.
+
+Response epoch V2 submitted successfully on 2026-09-09 after observing V1
+ERROR. Published source 7c62221c19343dc385539755476cfb0484a43f43;
+launcher 677a69a; launcher regression 2 passed. Immediate status QUEUED:
+do not restart or start another TPU session. The 11-case/33-epoch workload
+is unchanged. On terminal download all output to test_results/beam_response_epoch_v2,
+validate process returncode, source/runtime/eight devices, every case and
+epoch independently; status COMPLETE alone is not acceptance. V1 logs remain
+preserved. Hardware lowering and exactness of the signed repair are pending.
