@@ -36,7 +36,13 @@ def pallas_pack_final_chunk(payload,intervals,chunk,*,world_size,prior_error=Non
         control[...] = jnp.zeros((1,2,128),jnp.uint32)
         control[0,1,:] = jnp.where(lanes==0,bad.astype(jnp.uint32),jnp.uint32(0))
         offset=jnp.minimum(index[0],jnp.uint32(n//128))*jnp.uint32(128)
-        start,count=starts[peer],counts[peer]
+        # Value-array dynamic_slice is not supported by Mosaic (V3).
+        # Exactly one lane contributes: signed reduction retains all uint32
+        # bits after conversion back, including malformed interval sentinels.
+        def select_peer(values):
+            return jnp.sum(jnp.where(lanes==peer,values,jnp.uint32(0))
+                .astype(jnp.int32),dtype=jnp.int32).astype(jnp.uint32)
+        start,count=select_peer(starts),select_peer(counts)
         @pl.when((~bad)&(offset<count))
         def pack():
             length=jnp.minimum(jnp.uint32(128),count-offset)

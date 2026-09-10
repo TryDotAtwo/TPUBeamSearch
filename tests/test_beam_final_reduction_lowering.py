@@ -59,3 +59,27 @@ def test_interval_prefix_has_no_zero_sized_vector_intermediates():
                 visit(value)
     visit(traced)
     assert not empty, empty
+
+
+def test_chunk_peer_selection_has_no_value_array_dynamic_slice():
+    from tpu_beam_search.beam_final_chunk import pallas_pack_final_chunk
+    with jax.enable_x64(False):
+        traced = jax.make_jaxpr(lambda p,r,c: pallas_pack_final_chunk(
+            p,r,c,world_size=8,interpret=True))(
+                jnp.zeros((32,256),jnp.uint32),jnp.zeros((3,128),jnp.uint32),
+                jnp.zeros((1,),jnp.uint32))
+    unsupported = []
+    def visit(obj):
+        if hasattr(obj,'jaxpr'):
+            visit(obj.jaxpr)
+        elif hasattr(obj,'eqns'):
+            for eq in obj.eqns:
+                if eq.primitive.name == 'dynamic_slice':
+                    unsupported.append(eq.primitive.name)
+                for value in eq.params.values():
+                    visit(value)
+        elif isinstance(obj,(tuple,list)):
+            for value in obj:
+                visit(value)
+    visit(traced)
+    assert not unsupported, unsupported

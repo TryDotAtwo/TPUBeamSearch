@@ -1725,3 +1725,22 @@ passed0.21s). Current observed state QUEUED. Do not restart; one TPU session.
 On terminal retrieve to test_results/beam_response_epoch_v3, check process,
 source/runtime/eight devices and every one of11cases/33epochs. COMPLETE alone
 is not acceptance. V1/V2 artifacts are already published; do not fetch them again.
+
+V3 terminal ERROR; all output downloaded to beam_response_epoch_v3. Correct
+source3fb2250/runtime/eightdevices. Prepare compiled/executed empty input,
+but epoch0 step.lower rejects dynamic_slice at beam_final_chunk.py:39
+(starts[peer],counts[peer]). No completed response epochs or timings. See
+2026-09-10-response-epoch-v3-error.md. Diagnose/fix this expression via TDD
+before a successor; no V4 submitted yet.
+
+V3 peer-selection regression first failed on two actual nested dynamic_slice
+primitives. Replaced value-array indexing with one-hot selected signed32 sums,
+converted back to uint32; only one contributor preserves every bit including
+invalid sentinels. Focused chunk/lowering suite18passed15.07s. Full regression
+with both C++ oracles is live; XML local_chunk_peer_selection_full.xml.
+Freeze Python until terminal and publish only after full acceptance; V4 pending.
+
+Original full68075 lost its handle and produced no final XML; process inventory
+confirmed no pytest remained. Retry98332 completed exit0:1063passed1480.53s,
+XML local_chunk_peer_selection_full_retry.xml verifies zero failures/errors/
+skips. V3 peer-selection fix is locally accepted; hardware V4 remains pending.
