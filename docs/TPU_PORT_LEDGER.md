@@ -1744,3 +1744,16 @@ Original full68075 lost its handle and produced no final XML; process inventory
 confirmed no pytest remained. Retry98332 completed exit0:1063passed1480.53s,
 XML local_chunk_peer_selection_full_retry.xml verifies zero failures/errors/
 skips. V3 peer-selection fix is locally accepted; hardware V4 remains pending.
+
+2026-09-12: V4 source2a7f7f594cf44c5756c18465df649028ee06e822,
+launcher b898282 was published and submitted after V3 terminal ERROR.
+V4 is terminal ERROR, returncode -6. Complete available artifacts are in
+test_results/beam_response_epoch_v4_diagnostic (earlier v4 download is partial).
+Runtime JAX/jaxlib0.10.2, libtpu0.0.42.1, eight distinct TPU v5 lite IDs0..7.
+Prepare executed empty input; epoch lowering saved MLIR, but epoch compilation
+aborted in VectorLayout::join: arr.size() >= layout_rank(implicit_dim), 1 vs2.
+No completed epochs or timings; pending exact=false is not a mismatch result.
+Specific source expression is unproven. Next: isolated subprocess compilation
+of packing/exchange/receive/byte conversion and unchanged composition before
+minimal TDD repair. See docs/research/2026-09-12-response-epoch-v4-error.md.
+Old monitor instructions about V1 and live8437 are stale; do not repeat them.
