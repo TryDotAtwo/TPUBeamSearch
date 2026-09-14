@@ -1757,3 +1757,12 @@ Specific source expression is unproven. Next: isolated subprocess compilation
 of packing/exchange/receive/byte conversion and unchanged composition before
 minimal TDD repair. See docs/research/2026-09-12-response-epoch-v4-error.md.
 Old monitor instructions about V1 and live8437 are stale; do not repeat them.
+
+2026-09-14: response isolation coordinator and compile-only stage runner added
+locally for packing/exchange/receive/planes-to-wire/unchanged composition.
+Inputs retain V4 sizes and dynamic replicated epoch index. Coordinator continues
+after native abort, preserves per-stage logs, and requires MLIR plus compiled
+HLO for compile success; this is never an exactness or speed gate. Seven focused
+tests passed. Full regression session18868 completed exit0: 1070 passed1260.76s
+with both CPU C++ oracles; local_response_isolation_full.xml has zero failures,
+errors and skips. No physical TPU isolation results yet; launcher pending.
