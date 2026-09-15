@@ -1790,3 +1790,18 @@ local_receive_unsigned_min_full.xml confirms1073 tests, zero failures/errors/
 skips with both CPU C++ oracles configured. Receive fix is locally accepted;
 physical compilation remains unverified. Python freeze lifted. Proceed with
 byte-store TDD repair and finer packing probes; do not claim response acceptance.
+
+Byte-store candidate replaces rank-one uint8 column writes with full128x128
+stores. Extraction remains uint32 until the complete rectangle is narrowed;
+32-word tiles cover arbitrary aligned wire widths. RED actual nested JAXPR
+test detected128 rank-one stores. GREEN focused transport/response/isolation
+suite16passed65.35s, XML local_byte_store_focused.xml, including independent
+little-endian checks over32/64/96 words and384 rows. TPU compile/execution are
+still unverified; the new uint32 transpose/broadcast must pass physical gate.
+Full regression with both CPU C++ oracles started, XML local_byte_store_full.xml.
+Freeze Python until terminal. Packing source-expression isolation remains next.
+
+Byte-store full regression session18934 completed exit0:1077passed1290.75s.
+Final local_byte_store_full.xml confirms1077 tests with zero failures/errors/
+skips. Local acceptance only; physical transpose/broadcast/store compilation
+and execution remain pending. Python freeze lifted for packing isolation work.

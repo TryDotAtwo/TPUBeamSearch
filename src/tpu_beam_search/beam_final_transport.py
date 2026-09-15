@@ -34,12 +34,18 @@ def pallas_planes_to_wire(planes, *, interpret=False):
     words, n = planes.shape
 
     def kernel(src, dst):
-        for word in range(words):
-            for byte in range(4):
-                dst[:, word * 4 + byte] = ((src[word, :] >> jnp.uint32(byte * 8))
-                                          & jnp.uint32(255)).astype(jnp.uint8)
+        # Keep byte extraction in uint32 and narrow only a complete rectangle.
+        # Narrow column stores require an unsupported TPU rank-changing cast.
+        columns = jnp.arange(128, dtype=jnp.uint32)[None, :]
+        shifts = (columns % 4) * 8
+        tile = jnp.zeros((128,128), jnp.uint32)
+        for word in range(32):
+            values = src[word:word+1, :].T
+            extracted = (values >> shifts) & jnp.uint32(255)
+            tile |= jnp.where(columns // 4 == word, extracted, jnp.uint32(0))
+        dst[...] = tile.astype(jnp.uint8)
 
     return pl.pallas_call(kernel, out_shape=jax.ShapeDtypeStruct((n, words * 4), jnp.uint8),
-        in_specs=(pl.BlockSpec((words, 128), lambda i: (0, i)),),
-        out_specs=pl.BlockSpec((128, words * 4), lambda i: (i, 0)),
-        grid=(n // 128,), interpret=interpret, name='beam_final_planes_to_wire')(planes)
+        in_specs=(pl.BlockSpec((32,128), lambda i,w: (w,i)),),
+        out_specs=pl.BlockSpec((128,128), lambda i,w: (i,w)),
+        grid=(n//128,words//32), interpret=interpret, name='beam_final_planes_to_wire')(planes)
