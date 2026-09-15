@@ -26,8 +26,8 @@ def test_abort_and_missing_compile_evidence_do_not_hide_remaining_stages(tmp_pat
         return SimpleNamespace(returncode=-6 if stage == 'packing' else 0)
 
     report = run_bundle(tmp_path, runner=runner)
-    assert visited == ['packing', 'exchange', 'receive', 'planes_to_wire', 'composition']
-    assert [r['compiled'] for r in report['cases']] == [False, True, False, True, True]
+    assert visited == ['packing', 'packing_control', 'packing_selection', 'exchange', 'receive', 'planes_to_wire', 'composition']
+    assert [r['compiled'] for r in report['cases']] == [False, True, True, True, False, True, True]
     assert report['cases'][0]['returncode'] == -6
     assert not report['all_compiled']
     assert 'all_exact' not in report

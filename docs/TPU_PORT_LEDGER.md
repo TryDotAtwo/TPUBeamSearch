@@ -1805,3 +1805,16 @@ Byte-store full regression session18934 completed exit0:1077passed1290.75s.
 Final local_byte_store_full.xml confirms1077 tests with zero failures/errors/
 skips. Local acceptance only; physical transpose/broadcast/store compilation
 and execution remain pending. Python freeze lifted for packing isolation work.
+
+Packing prefix diagnostics added without production changes: packing_control
+retains interval/prior-error expressions; packing_selection adds the original
+runtime offset and one-contributor peer selection. Diagnostic control lanes
+expose start/count/offset to prevent dead-code elimination; these are not valid
+transport controls. Same V4 input/output shapes and replicated chunk argument.
+Coordinator now attempts seven sequential subprocesses, retaining original
+packing and composition controls. RED missing-stage and omitted-subprocess
+tests observed; GREEN13passed6.81s (local_packing_prefix_focused.xml).
+Production last full suite remains1077passed on dd69e9a; this later benchmark
+change has targeted evidence only. These prefixes do not isolate DMA/gather
+yet; if both compile and packing still aborts, split those remaining operations.
+No new TPU run submitted yet.

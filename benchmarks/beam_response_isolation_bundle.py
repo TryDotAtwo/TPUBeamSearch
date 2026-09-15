@@ -5,7 +5,8 @@ from pathlib import Path
 import subprocess
 import sys
 
-STAGES = ('packing', 'exchange', 'receive', 'planes_to_wire', 'composition')
+STAGES = ('packing', 'packing_control', 'packing_selection',
+          'exchange', 'receive', 'planes_to_wire', 'composition')
 
 
 def run_bundle(output, *, runner=subprocess.run):
