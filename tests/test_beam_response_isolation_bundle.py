@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import pytest
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -33,3 +34,26 @@ def test_abort_and_missing_compile_evidence_do_not_hide_remaining_stages(tmp_pat
     assert 'all_exact' not in report
     assert json.loads((tmp_path/'response_isolation.json').read_text()) == report
     assert (tmp_path/'composition'/'process.log').read_text() == 'diagnostic composition'
+
+
+@pytest.mark.parametrize('contents',[None,'{"compiled":','[]','null'])
+def test_missing_or_partial_nested_report_preserves_later_diagnostics(tmp_path,contents):
+    from benchmarks.beam_response_isolation_bundle import run_bundle,STAGES
+    def runner(command,**kwargs):
+        stage=command[command.index('--stage')+1]
+        folder=Path(command[command.index('--output')+1])
+        if stage == 'packing':
+            if contents is not None:
+                (folder/'probe.json').write_text(contents)
+        else:
+            (folder/'probe.json').write_text(json.dumps(dict(stage=stage,compiled=True)))
+        (folder/'lowered.mlir').write_text('diagnostic fixture')
+        (folder/'compiled.hlo.txt').write_text('diagnostic fixture')
+        return SimpleNamespace(returncode=0)
+    report=run_bundle(tmp_path,runner=runner)
+    assert len(report['cases'])==len(STAGES)
+    assert not report['cases'][0]['compiled']
+    assert 'report_error' in report['cases'][0]
+    assert all(row['compiled'] for row in report['cases'][1:])
+    assert not report['all_compiled']
+    assert json.loads((tmp_path/'response_isolation.json').read_text())==report
