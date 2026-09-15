@@ -5,6 +5,28 @@ import numpy as np
 import pytest
 
 
+def test_receive_has_no_unsigned_minimum_rejected_by_stage_isolation():
+    from tpu_beam_search.beam_final_receive import pallas_compact_final_received
+    traced = jax.make_jaxpr(lambda x,c,e: pallas_compact_final_received(
+        x,c,e,interpret=True))(jnp.zeros((8,32,128),jnp.uint32),
+            jnp.zeros((8,1,128),jnp.uint32),jnp.zeros((1,128),jnp.uint32))
+    unsupported = []
+    def visit(obj):
+        if hasattr(obj,'jaxpr'):
+            visit(obj.jaxpr)
+        elif hasattr(obj,'eqns'):
+            for eq in obj.eqns:
+                if eq.primitive.name == 'min' and eq.invars[0].aval.dtype == np.dtype('uint32'):
+                    unsupported.append(eq.primitive.name)
+                for value in eq.params.values():
+                    visit(value)
+        elif isinstance(obj,(tuple,list)):
+            for value in obj:
+                visit(value)
+    visit(traced)
+    assert not unsupported, unsupported
+
+
 @pytest.mark.parametrize('stage',['intervals','receive'])
 def test_sum_operands_are_signed_int32_for_mosaic(stage):
     from tpu_beam_search.beam_final_intervals import pallas_final_rank_intervals

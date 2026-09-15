@@ -1775,3 +1775,18 @@ planes_to_wire1 (uint8 column-store reshape at transport.py39); composition-6.
 Packing reproduces native VectorLayout::join abort but exact expression remains
 unproven. Three independent compile blockers; no execution/timing acceptance.
 See docs/research/2026-09-15-response-stage-isolation-v1.md. No successor yet.
+
+Receive unsigned-min repair: RED JAXPR regression detected the uint32 min;
+replaced it with unsigned compare/select before bounded signed summation.
+Raw count overflow and prior-error checks remain unchanged. Focused receive
+and lowering suite completed exit0: 14 passed84.62s, XML
+test_results/local_receive_unsigned_min_focused.xml. This is local evidence,
+not physical TPU compile acceptance. Full regression with both CPU C++ oracles
+is running in session24082, XML local_receive_unsigned_min_full.xml; freeze
+Python changes until terminal. Packing and byte-store blockers remain open.
+
+Full session24082 completed exit0:1073passed1997.20s. Final XML
+local_receive_unsigned_min_full.xml confirms1073 tests, zero failures/errors/
+skips with both CPU C++ oracles configured. Receive fix is locally accepted;
+physical compilation remains unverified. Python freeze lifted. Proceed with
+byte-store TDD repair and finer packing probes; do not claim response acceptance.

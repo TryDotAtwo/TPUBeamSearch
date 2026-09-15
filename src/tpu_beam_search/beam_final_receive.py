@@ -23,7 +23,10 @@ def pallas_compact_final_received(snapshots,counts,error,*,interpret=False):
         bad=(e[0,0]!=0)|jnp.any(c[:,0,0]>128)
         # At most128 sources x128 records. Check raw overflow above, clamp
         # before signed conversion, and retain the uint32 control ABI.
-        total=jnp.sum(jnp.minimum(c[:,0,0],jnp.uint32(128)).astype(jnp.int32),
+        # Mosaic rejects unsigned min (physical stage-isolation V1).
+        # Select while still unsigned: casting UINT_MAX first would wrap.
+        bounded=jnp.where(c[:,0,0]>jnp.uint32(128),jnp.uint32(128),c[:,0,0])
+        total=jnp.sum(bounded.astype(jnp.int32),
                       dtype=jnp.int32).astype(jnp.uint32)
         lanes=jnp.arange(128)
         out[0,:]=jnp.where((lanes==0)&(~bad),total,jnp.uint32(0))
