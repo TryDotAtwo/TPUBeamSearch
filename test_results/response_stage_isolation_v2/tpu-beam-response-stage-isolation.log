@@ -1,0 +1,16 @@
+[{"stream_name":"stderr","time":21.038308398,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":24.190416765,"data":"\n"}
+,{"stream_name":"stderr","time":24.190441675,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":24.190446995,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":24.334051127,"data":"Cloning into '/tmp/TPUBeamSearch-response-isolation'...\n"}
+,{"stream_name":"stderr","time":30.660690971,"data":"Updating files:  87% (3960/4504)\rUpdating files:  88% (3964/4504)\rUpdating files:  89% (4009/4504)\rUpdating files:  90% (4054/4504)\rUpdating files:  91% (4099/4504)\rUpdating files:  92% (4144/4504)\rUpdating files:  93% (4189/4504)\rUpdating files:  94% (4234/4504)\rUpdating files:  95% (4279/4504)\rUpdating files:  96% (4324/4504)\rUpdating files:  97% (4369/4504)\rUpdating files:  98% (4414/4504)\rUpdating files:  99% (4459/4504)\rUpdating files: 100% (4504/4504)\rUpdating files: 100% (4504/4504), done.\n"}
+,{"stream_name":"stderr","time":31.416886465,"data":"HEAD is now at 5cba03c Isolate packing predicates and runtime peer selection\n"}
+,{"stream_name":"stderr","time":211.05266748,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":211.052702,"data":"  File \"/kaggle/src/script.py\", line 37, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":211.05270903,"data":"    main()\n"}
+,{"stream_name":"stderr","time":211.05271422,"data":"  File \"/kaggle/src/script.py\", line 33, in main\n"}
+,{"stream_name":"stderr","time":211.05271933,"data":"    raise RuntimeError(f'isolation bundle returned {child.returncode}; see stage logs')\n"}
+,{"stream_name":"stderr","time":211.05272444,"data":"RuntimeError: isolation bundle returned 1; see stage logs\n"}
+,{"stream_name":"stderr","time":215.269009644,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":217.703013651,"data":"[NbConvertApp] Writing 280976 bytes to __results__.html\n"}
+]

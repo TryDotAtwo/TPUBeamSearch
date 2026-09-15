@@ -1825,3 +1825,13 @@ launcher tests2passed0.12s. Observed QUEUED; do not restart. On terminal
 download all output into test_results/response_stage_isolation_v2 and inspect
 all seven subprocesses, source/runtime/eight devices, MLIR/HLO and returncodes.
 Prefix success only narrows diagnosis; compile-only does not establish exactness.
+
+V2 terminal ERROR: all seven stage reports and their MLIR/logs downloaded into
+test_results/response_stage_isolation_v2, including full Kaggle log. Source,
+runtime and eight distinct v5 lite device IDs verified in each nested report.
+Five compile: packing_control, packing_selection, exchange, receive,
+planes_to_wire. Packing and composition remain native abort returncode -6,
+VectorLayout::join rank1 vs2. Both V1 receive/byte-store compiler failures are
+cleared at compilation only. No execution or timing acceptance. Next isolate
+packing conditional/DMA/gather with observable cumulative prefixes; do not
+attribute an exact source expression from the stack. See V2 research report.
