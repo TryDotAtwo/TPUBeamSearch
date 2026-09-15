@@ -1766,3 +1766,12 @@ HLO for compile success; this is never an exactness or speed gate. Seven focused
 tests passed. Full regression session18868 completed exit0: 1070 passed1260.76s
 with both CPU C++ oracles; local_response_isolation_full.xml has zero failures,
 errors and skips. No physical TPU isolation results yet; launcher pending.
+
+2026-09-15: stage isolation V1 terminal ERROR, complete output downloaded to
+test_results/response_stage_isolation_v1. Source739ab3d, launcher0876c66.
+All five subprocesses attempted on expected runtime/eight TPU v5 lite devices:
+packing -6; exchange0 with compiled HLO; receive1 (unsigned min at receive.py26);
+planes_to_wire1 (uint8 column-store reshape at transport.py39); composition-6.
+Packing reproduces native VectorLayout::join abort but exact expression remains
+unproven. Three independent compile blockers; no execution/timing acceptance.
+See docs/research/2026-09-15-response-stage-isolation-v1.md. No successor yet.
