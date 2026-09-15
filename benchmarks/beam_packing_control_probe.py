@@ -5,9 +5,9 @@ from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
 
 
-def make_probe(*,selection,world_size,interpret=False,guard=False):
+def make_probe(*,selection,world_size,interpret=False,guard=False,transfer=None):
     def call(payload,intervals,error,index):
-        def kernel(source,ranges,chunk,prior,out,control):
+        def kernel(source,ranges,chunk,prior,out,control,*scratch):
             peer=pl.program_id(0)
             lanes=jnp.arange(128,dtype=jnp.uint32)
             starts,counts=ranges[0,:],ranges[1,:]
@@ -34,9 +34,31 @@ def make_probe(*,selection,world_size,interpret=False,guard=False):
                             jnp.where(lanes==1,begin,jnp.where(lanes==2,
                             aligned.astype(jnp.uint32),jnp.where(lanes==3,
                             shift.astype(jnp.uint32),jnp.uint32(0)))))
+                        if transfer:
+                            staging,sem=scratch
+                            staging[...] = jnp.zeros((32,256),jnp.uint32)
+                            first=pltpu.make_async_copy(source.at[:,pl.ds(aligned,128)],staging.at[:,pl.ds(0,128)],sem)
+                            first.start()
+                            first.wait()
+                            if transfer in ('second','gather'):
+                                @pl.when(shift+length.astype(jnp.int32)>128)
+                                def second_tile():
+                                    second=pltpu.make_async_copy(source.at[:,pl.ds(aligned+128,128)],staging.at[:,pl.ds(128,128)],sem)
+                                    second.start()
+                                    second.wait()
+                            if transfer == 'gather':
+                                from tpu_beam_search.beam_stream2 import _take_clipped
+                                positions=jnp.arange(128,dtype=jnp.int32)+shift
+                                for plane in range(32):
+                                    values=_take_clipped(staging[plane,:],positions)
+                                    out[0,plane,:]=jnp.where(lanes<length,values,jnp.uint32(0))
+                            else:
+                                column=0 if transfer=='first' else 128
+                                out[0,:,:]=staging[:,pl.ds(column,128)]
         return pl.pallas_call(kernel,
             out_shape=(jax.ShapeDtypeStruct((world_size,32,128),jnp.uint32),jax.ShapeDtypeStruct((world_size,2,128),jnp.uint32)),
             in_specs=(pl.BlockSpec(memory_space=pltpu.HBM),pl.BlockSpec((3,128)),pl.BlockSpec((1,)),pl.BlockSpec((1,128))),
             out_specs=(pl.BlockSpec((1,32,128),lambda r:(r,0,0)),pl.BlockSpec((1,2,128),lambda r:(r,0,0))),
-            grid=(world_size,),interpret=interpret,name='packing_selection_probe' if selection else 'packing_control_probe')(payload,intervals,index,error)
+            grid=(world_size,),scratch_shapes=(pltpu.VMEM((32,256),jnp.uint32),pltpu.SemaphoreType.DMA) if transfer else (),
+            interpret=interpret,name='packing_selection_probe' if selection else 'packing_control_probe')(payload,intervals,index,error)
     return call

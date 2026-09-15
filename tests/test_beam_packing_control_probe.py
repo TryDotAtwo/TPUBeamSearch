@@ -68,3 +68,33 @@ def test_selection_probe_preserves_invalid_unsigned_values(start,count,error):
     expected[7,0,:2]=[start,count]
     expected[:,1,0]=error  # any bad live peer poisons every local output peer
     np.testing.assert_array_equal(controls,expected)
+
+
+@pytest.mark.parametrize('transfer',['first','second','gather'])
+@pytest.mark.parametrize('bad',[False,True])
+def test_transfer_prefix_observes_aligned_tiles_and_gather(transfer,bad):
+    from benchmarks.beam_packing_control_probe import make_probe
+    call=make_probe(selection=True,guard=True,transfer=transfer,world_size=8,interpret=True)
+    data=np.arange(32*2048,dtype=np.uint32).reshape(32,2048)
+    ranges=np.zeros((3,128),np.uint32)
+    ranges[0,:8]=[1,127,128,129,255,256,1920,2048]
+    ranges[1,:8]=[128,2,128,0,1,129,128,0]
+    prior=np.zeros((1,128),np.uint32); prior[0,0]=int(bad)
+    actual,control=map(np.asarray,call(jnp.asarray(data),jnp.asarray(ranges),
+        jnp.asarray(prior),jnp.array([0],jnp.uint32)))
+    expected=np.zeros((8,32,128),np.uint32)
+    if not bad:
+        for peer in range(8):
+            start,count=map(int,ranges[:2,peer])
+            if not count:
+                continue
+            length=min(count,128); aligned=start//128*128
+            if transfer=='first':
+                expected[peer]=data[:,aligned:aligned+128]
+            elif transfer=='second':
+                if start%128+length>128:
+                    expected[peer]=data[:,aligned+128:aligned+256]
+            else:
+                expected[peer,:,:length]=data[:,start:start+length]
+    np.testing.assert_array_equal(actual,expected)
+    np.testing.assert_array_equal(control[:,1,0],np.full(8,int(bad),np.uint32))

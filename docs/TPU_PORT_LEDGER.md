@@ -1844,3 +1844,14 @@ GREEN: all11 packing probe tests pass9.33s, local_packing_guard_focused.xml.
 This is interpreter evidence only. Not yet registered in the physical bundle;
 first/second DMA and gather prefixes still to add before the next TPU launch.
 Production unchanged, no successor submitted and no compiler-cause conclusion.
+
+Transfer prefixes now implemented in benchmark make_probe: first aligned DMA,
+conditional second DMA and production per-plane gather/mask. Each transfer
+starts/waits before observation. First/second probes expose their respective
+aligned scratch tile (second stays zero if unused); gather exposes selected
+live rows. Diagnostic geometry controls remain observable and are not transport
+controls. RED6 missing-transfer tests; GREEN17passed11.19s including prior
+prefixes (local_packing_transfer_focused.xml). Cases include unaligned crossing,
+exact tile edge, zero count, final HBM tile and upstream error. Interpreter only.
+Still needs stage registration/sharding and coordinator tests before source
+pin and one sequential physical TPU bundle. No new launch; production unchanged.
