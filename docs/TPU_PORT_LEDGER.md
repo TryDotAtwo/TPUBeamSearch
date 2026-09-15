@@ -1818,3 +1818,10 @@ Production last full suite remains1077passed on dd69e9a; this later benchmark
 change has targeted evidence only. These prefixes do not isolate DMA/gather
 yet; if both compile and packing still aborts, split those remaining operations.
 No new TPU run submitted yet.
+
+Response stage isolation V2 submitted after fresh V1 terminal ERROR.
+Source5cba03c052f07ae35d75aa57b74304d3fb5e4197, launcher0220108;
+launcher tests2passed0.12s. Observed QUEUED; do not restart. On terminal
+download all output into test_results/response_stage_isolation_v2 and inspect
+all seven subprocesses, source/runtime/eight devices, MLIR/HLO and returncodes.
+Prefix success only narrows diagnosis; compile-only does not establish exactness.
