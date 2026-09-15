@@ -1835,3 +1835,12 @@ VectorLayout::join rank1 vs2. Both V1 receive/byte-store compiler failures are
 cleared at compilation only. No execution or timing acceptance. Next isolate
 packing conditional/DMA/gather with observable cumulative prefixes; do not
 attribute an exact source expression from the stack. See V2 research report.
+
+Next diagnostic increment: optional guard prefix in benchmark make_probe,
+retaining the production predicate and length/begin/aligned/shift arithmetic.
+All four geometry values are observable only for live intervals; error and
+empty/exhausted peers leave geometry zero. RED: two missing-guard API tests;
+GREEN: all11 packing probe tests pass9.33s, local_packing_guard_focused.xml.
+This is interpreter evidence only. Not yet registered in the physical bundle;
+first/second DMA and gather prefixes still to add before the next TPU launch.
+Production unchanged, no successor submitted and no compiler-cause conclusion.

@@ -5,7 +5,7 @@ from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
 
 
-def make_probe(*,selection,world_size,interpret=False):
+def make_probe(*,selection,world_size,interpret=False,guard=False):
     def call(payload,intervals,error,index):
         def kernel(source,ranges,chunk,prior,out,control):
             peer=pl.program_id(0)
@@ -21,7 +21,19 @@ def make_probe(*,selection,world_size,interpret=False):
                     return jnp.sum(jnp.where(lanes==peer,values,jnp.uint32(0)).astype(jnp.int32),dtype=jnp.int32).astype(jnp.uint32)
                 start,count=select(starts),select(counts)
                 # Expose each value: a dead predicate must not erase the probe.
-                control[0,0,:]=jnp.where(lanes==0,start,jnp.where(lanes==1,count,jnp.where(lanes==2,offset,jnp.uint32(0))))
+                if not guard:
+                    control[0,0,:]=jnp.where(lanes==0,start,jnp.where(lanes==1,count,jnp.where(lanes==2,offset,jnp.uint32(0))))
+                else:
+                    @pl.when((~bad)&(offset<count))
+                    def geometry():
+                        length=jnp.minimum(jnp.uint32(128),count-offset)
+                        begin=start+offset
+                        aligned=(begin//jnp.uint32(128)*jnp.uint32(128)).astype(jnp.int32)
+                        shift=(begin%jnp.uint32(128)).astype(jnp.int32)
+                        control[0,0,:]=jnp.where(lanes==0,length,
+                            jnp.where(lanes==1,begin,jnp.where(lanes==2,
+                            aligned.astype(jnp.uint32),jnp.where(lanes==3,
+                            shift.astype(jnp.uint32),jnp.uint32(0)))))
         return pl.pallas_call(kernel,
             out_shape=(jax.ShapeDtypeStruct((world_size,32,128),jnp.uint32),jax.ShapeDtypeStruct((world_size,2,128),jnp.uint32)),
             in_specs=(pl.BlockSpec(memory_space=pltpu.HBM),pl.BlockSpec((3,128)),pl.BlockSpec((1,)),pl.BlockSpec((1,128))),

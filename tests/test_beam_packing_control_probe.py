@@ -26,6 +26,30 @@ def test_packing_probe_keeps_runtime_selection_and_error_observable(stage,bad):
     np.testing.assert_array_equal(controls,expected)
 
 
+@pytest.mark.parametrize('bad',[False,True])
+def test_guard_probe_exposes_only_live_interval_geometry(bad):
+    # Removing the guard would expose geometry for empty/exhausted peers.
+    from benchmarks.beam_packing_control_probe import make_probe
+    call=make_probe(selection=True,guard=True,world_size=8,interpret=True)
+    intervals=np.zeros((3,128),np.uint32)
+    intervals[0,:8]=[1,127,128,129,255,256,1000,2048]
+    intervals[1,:8]=[129,257,128,0,200,129,300,0]
+    prior=np.zeros((1,128),np.uint32)
+    prior[0,0]=int(bad)
+    payload,controls=map(np.asarray,call(jnp.zeros((32,2048),jnp.uint32),
+        jnp.asarray(intervals),jnp.asarray(prior),jnp.array([1],jnp.uint32)))
+    expected=np.zeros((8,2,128),np.uint32)
+    expected[:,1,0]=int(bad)
+    if not bad:
+        for peer in range(8):
+            start,count=map(int,intervals[:2,peer])
+            if count>128:
+                begin=start+128
+                expected[peer,0,:4]=[min(128,count-128),begin,begin//128*128,begin%128]
+    assert not payload.any()
+    np.testing.assert_array_equal(controls,expected)
+
+
 @pytest.mark.parametrize('start,count,error',[
     (2048,0,0), (2048,1,1), (0,2049,1),
     (0xffffffff,1,1), (0,0xffffffff,1),
