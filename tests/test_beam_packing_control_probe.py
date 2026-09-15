@@ -24,3 +24,23 @@ def test_packing_probe_keeps_runtime_selection_and_error_observable(stage,bad):
         expected[:,0,1] = np.arange(8)+5
         expected[:,0,2] = 384
     np.testing.assert_array_equal(controls,expected)
+
+
+@pytest.mark.parametrize('start,count,error',[
+    (2048,0,0), (2048,1,1), (0,2049,1),
+    (0xffffffff,1,1), (0,0xffffffff,1),
+])
+def test_selection_probe_preserves_invalid_unsigned_values(start,count,error):
+    from benchmarks.beam_response_isolation_probe import stage_call
+    call,_=stage_call('packing_selection',SimpleNamespace(size=8),interpret=True)
+    intervals=np.zeros((3,128),np.uint32)
+    intervals[0,7]=start
+    intervals[1,7]=count
+    _,controls=map(np.asarray,call(jnp.zeros((32,2048),jnp.uint32),
+        jnp.asarray(intervals),jnp.zeros((1,128),jnp.uint32),
+        jnp.array([0xffffffff],jnp.uint32)))
+    expected=np.zeros((8,2,128),np.uint32)
+    expected[:,0,2]=2048  # saturated offset, not wrapped UINT_MAX*128
+    expected[7,0,:2]=[start,count]
+    expected[:,1,0]=error  # any bad live peer poisons every local output peer
+    np.testing.assert_array_equal(controls,expected)
