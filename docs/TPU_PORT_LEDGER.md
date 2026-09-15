@@ -1855,3 +1855,10 @@ prefixes (local_packing_transfer_focused.xml). Cases include unaligned crossing,
 exact tile edge, zero count, final HBM tile and upstream error. Interpreter only.
 Still needs stage registration/sharding and coordinator tests before source
 pin and one sequential physical TPU bundle. No new launch; production unchanged.
+
+V3 bundle now registers packing_guard/packing_first_dma/packing_second_dma/
+packing_gather with the original runtime input ABI and replicated chunk index.
+Eleven sequential subprocess stages retain original packing/composition controls.
+RED5 missing stages/coordinator omissions; GREEN32passed19.12s across probe,
+bundle and packing interpreter tests (local_packing_bundle_v3.xml). No production
+changes. Compile-only still; aligned-tile diagnostic output is not wire payload.

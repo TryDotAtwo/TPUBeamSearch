@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 STAGES = ('packing', 'packing_control', 'packing_selection',
+          'packing_guard', 'packing_first_dma', 'packing_second_dma', 'packing_gather',
           'exchange', 'receive', 'planes_to_wire', 'composition')
 
 

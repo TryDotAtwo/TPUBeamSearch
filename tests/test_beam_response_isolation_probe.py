@@ -5,6 +5,10 @@ import pytest
 
 @pytest.mark.parametrize('stage,want', [
     ('packing', [(8,32,128),(8,2,128)]),
+    ('packing_guard', [(8,32,128),(8,2,128)]),
+    ('packing_first_dma', [(8,32,128),(8,2,128)]),
+    ('packing_second_dma', [(8,32,128),(8,2,128)]),
+    ('packing_gather', [(8,32,128),(8,2,128)]),
     ('receive', [(32,1024),(2,128)]),
     ('planes_to_wire', [(1024,128)]),
 ])

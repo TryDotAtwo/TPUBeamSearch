@@ -13,9 +13,13 @@ def stage_call(stage, mesh, *, interpret=False):
     def shape(*dims):
         return jax.ShapeDtypeStruct(dims, jnp.uint32)
     ranks = mesh.size
-    if stage in ('packing_control','packing_selection'):
+    if stage in ('packing_control','packing_selection','packing_guard',
+                 'packing_first_dma','packing_second_dma','packing_gather'):
         from .beam_packing_control_probe import make_probe
-        return make_probe(selection=stage=='packing_selection',world_size=ranks,interpret=interpret), (
+        transfer={'packing_first_dma':'first','packing_second_dma':'second','packing_gather':'gather'}.get(stage)
+        return make_probe(selection=stage!='packing_control',
+            guard=stage not in ('packing_control','packing_selection'),transfer=transfer,
+            world_size=ranks,interpret=interpret), (
             shape(32,2048),shape(3,128),shape(1,128),shape(1))
     if stage == 'packing':
         def call(payload, intervals, error, index):
@@ -70,7 +74,7 @@ def main():
     call, local_inputs = stage_call(args.stage, mesh)
     p = jax.sharding.PartitionSpec
     # The V4 epoch index is replicated, all other inputs are per-rank.
-    replicated_index = args.stage in ('packing', 'packing_control', 'packing_selection', 'composition')
+    replicated_index = args.stage == 'composition' or args.stage.startswith('packing')
     specs = tuple(p() if replicated_index and i == len(local_inputs)-1 else p('core')
                   for i in range(len(local_inputs)))
     global_inputs = tuple(jax.ShapeDtypeStruct(
