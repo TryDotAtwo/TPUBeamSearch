@@ -1874,3 +1874,20 @@ DMA/clip operations; inspect retained IR before attributing a source cause.
 Earlier publication was denied due to usage limit. Fresh account check now
 reports ordinaryUsageAllowed=true and25percent weekly usage, permitting a
 new approval review after this external-state change.
+
+V4 submitted and observed QUEUED: source57e45ca790ac185ebe77fa0a5a4c766e44070540,
+launcheraffb74e; fifteen sequential compile-only stages. Do not restart.
+On terminal use fresh test_results/response_stage_isolation_v4 and inspect all
+subprocess reports and retained IR before any production fix.
+
+Independent history integration test strengthened in0d33d09: actual Pallas
+projection/grouping/intervals/chunk packing/receive compaction now feeds
+decode_history_soa and append_all_rank_layer, replacing manual decode and
+rank-local publication. Four local tests passed19.19s; XML
+test_results/local_history_transport_publication.xml. Links remain simulated;
+this does not prove physical history DMA or coupled frontier/history commit.
+Next integration gate must retain private responses until all epochs finish,
+carry late errors into collective coverage agreement, finish history transfers,
+then publish frontier/history under the same successful depth decision.
+Scratch reuse requires explicit DMA and consumer completion evidence, not only
+a zero error flag. These full-caller requirements remain outstanding.
