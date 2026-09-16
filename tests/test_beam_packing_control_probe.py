@@ -70,7 +70,7 @@ def test_selection_probe_preserves_invalid_unsigned_values(start,count,error):
     np.testing.assert_array_equal(controls,expected)
 
 
-@pytest.mark.parametrize('transfer',['first','second','gather'])
+@pytest.mark.parametrize('transfer',['first','second','row_copy','positions','clipped_positions','unmasked_gather','gather'])
 @pytest.mark.parametrize('bad',[False,True])
 def test_transfer_prefix_observes_aligned_tiles_and_gather(transfer,bad):
     from benchmarks.beam_packing_control_probe import make_probe
@@ -89,11 +89,20 @@ def test_transfer_prefix_observes_aligned_tiles_and_gather(transfer,bad):
             if not count:
                 continue
             length=min(count,128); aligned=start//128*128
-            if transfer=='first':
+            if transfer in ('first','row_copy'):
                 expected[peer]=data[:,aligned:aligned+128]
             elif transfer=='second':
                 if start%128+length>128:
                     expected[peer]=data[:,aligned+128:aligned+256]
+            elif transfer in ('positions','clipped_positions'):
+                expected[peer]=np.broadcast_to(np.arange(start%128,start%128+128,dtype=np.uint32),(32,128))
+            elif transfer=='unmasked_gather':
+                # Only the second tile required by the live interval is loaded.
+                scratch=np.zeros((32,256),np.uint32)
+                scratch[:,:128]=data[:,aligned:aligned+128]
+                if start%128+length>128:
+                    scratch[:,128:]=data[:,aligned+128:aligned+256]
+                expected[peer]=scratch[:,start%128:start%128+128]
             else:
                 expected[peer,:,:length]=data[:,start:start+length]
     np.testing.assert_array_equal(actual,expected)

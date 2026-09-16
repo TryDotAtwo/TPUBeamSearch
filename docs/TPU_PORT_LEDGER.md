@@ -1862,3 +1862,15 @@ Eleven sequential subprocess stages retain original packing/composition controls
 RED5 missing stages/coordinator omissions; GREEN32passed19.12s across probe,
 bundle and packing interpreter tests (local_packing_bundle_v3.xml). No production
 changes. Compile-only still; aligned-tile diagnostic output is not wire payload.
+
+V3 terminal ERROR: all11 nested reports verified against source6b8b4e2,
+runtime0.10.2/libtpu0.0.42.1 and eight distinct TPU IDs. Eight compiled;
+packing/gather/composition abort with VectorLayout::join1vs2. Full artifacts
+in test_results/response_stage_isolation_v3; report2026-09-16-response-stage-isolation-v3.md.
+Follow-up adds row_copy, positions, clipped_positions and unmasked_gather to
+the isolated bundle (15 stages). Local TDD validation46passed22.81s; no
+production changes or physical acceptance. Position probes may lose unused
+DMA/clip operations; inspect retained IR before attributing a source cause.
+Earlier publication was denied due to usage limit. Fresh account check now
+reports ordinaryUsageAllowed=true and25percent weekly usage, permitting a
+new approval review after this external-state change.
