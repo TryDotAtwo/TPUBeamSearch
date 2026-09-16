@@ -9,6 +9,7 @@ STAGES = ('packing', 'packing_control', 'packing_selection',
           'packing_guard', 'packing_first_dma', 'packing_second_dma', 'packing_gather',
           'packing_row_copy', 'packing_positions', 'packing_clipped_positions', 'packing_unmasked_gather',
           'packing_bounded_gather', 'packing_rank2_gather',
+          'packing_split_gather',
           'exchange', 'receive', 'planes_to_wire', 'composition')
 
 

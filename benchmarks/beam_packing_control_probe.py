@@ -40,7 +40,7 @@ def make_probe(*,selection,world_size,interpret=False,guard=False,transfer=None)
                             first=pltpu.make_async_copy(source.at[:,pl.ds(aligned,128)],staging.at[:,pl.ds(0,128)],sem)
                             first.start()
                             first.wait()
-                            if transfer in ('second','row_copy','unmasked_gather','gather','bounded_gather','rank2_gather'):
+                            if transfer in ('second','row_copy','unmasked_gather','gather','bounded_gather','rank2_gather','split_gather'):
                                 @pl.when(shift+length.astype(jnp.int32)>128)
                                 def second_tile():
                                     second=pltpu.make_async_copy(source.at[:,pl.ds(aligned+128,128)],staging.at[:,pl.ds(128,128)],sem)
@@ -55,6 +55,12 @@ def make_probe(*,selection,world_size,interpret=False,guard=False,transfer=None)
                             elif transfer == 'row_copy':
                                 for plane in range(32):
                                     out[0,plane,:]=staging[plane,pl.ds(0,128)]
+                            elif transfer == 'split_gather':
+                                positions=jnp.arange(128,dtype=jnp.int32)+shift
+                                indices=jnp.broadcast_to((positions%128)[None,:],(32,128))
+                                low=jnp.take_along_axis(staging[:,pl.ds(0,128)],indices,axis=1,mode='promise_in_bounds')
+                                high=jnp.take_along_axis(staging[:,pl.ds(128,128)],indices,axis=1,mode='promise_in_bounds')
+                                out[0,:,:]=jnp.where(positions[None,:]<128,low,high)
                             elif transfer == 'rank2_gather':
                                 positions=jnp.arange(128,dtype=jnp.int32)+shift
                                 indices=jnp.broadcast_to(jnp.clip(positions,0,255)[None,:],(32,128))

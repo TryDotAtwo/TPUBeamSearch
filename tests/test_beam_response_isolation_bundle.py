@@ -31,6 +31,7 @@ def test_abort_and_missing_compile_evidence_do_not_hide_remaining_stages(tmp_pat
         'packing_guard', 'packing_first_dma', 'packing_second_dma', 'packing_gather',
         'packing_row_copy', 'packing_positions', 'packing_clipped_positions', 'packing_unmasked_gather',
         'packing_bounded_gather', 'packing_rank2_gather',
+        'packing_split_gather',
         'exchange', 'receive', 'planes_to_wire', 'composition']
     assert {r['stage'] for r in report['cases'] if not r['compiled']} == {'packing','receive'}
     assert report['cases'][0]['returncode'] == -6

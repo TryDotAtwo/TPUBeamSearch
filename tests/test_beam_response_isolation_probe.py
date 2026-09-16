@@ -15,6 +15,7 @@ import pytest
     ('packing_unmasked_gather', [(8,32,128),(8,2,128)]),
     ('packing_bounded_gather', [(8,32,128),(8,2,128)]),
     ('packing_rank2_gather', [(8,32,128),(8,2,128)]),
+    ('packing_split_gather', [(8,32,128),(8,2,128)]),
     ('receive', [(32,1024),(2,128)]),
     ('planes_to_wire', [(1024,128)]),
 ])
