@@ -11,7 +11,7 @@ def test_history_transport_preserves_parent64_route_and_target_across_sources():
     from tpu_beam_search.beam_final_intervals import pallas_final_rank_intervals
     from tpu_beam_search.beam_final_chunk import pallas_pack_final_chunk
     from tpu_beam_search.beam_final_receive import pallas_compact_final_received
-    from tpu_beam_search.beam_history import RankHistoryStore, HistoryEntry
+    from tpu_beam_search.beam_history import RankHistoryStore, HistoryEntry, decode_history_soa
 
     rows = (
         ((7, 0xffffffff, 0x00000217, 1, 2), (9, 0x80000000, 0x00000301, 0, 0)),
@@ -41,6 +41,7 @@ def test_history_transport_preserves_parent64_route_and_target_across_sources():
         (HistoryEntry(0x123456780000000b,0x00010102),HistoryEntry(0xffffffff00000007,0x00000217)),
     )
     store = RankHistoryStore(world_size=3)
+    received = []
     for rank,want in enumerate(expected):
         # Only the link is simulated: source-major snapshots are delivered
         # unchanged to the actual Pallas receive compaction.
@@ -52,7 +53,9 @@ def test_history_transport_preserves_parent64_route_and_target_across_sources():
         assert int(control[1,0]) == 0
         assert int(control[0,0]) == len(want)
         assert not packed[:,len(want):].any()
-        records = [(int(packed[3,i]),HistoryEntry(int(packed[0,i]) | (int(packed[1,i]) << 32),
-                                               int(packed[2,i]))) for i in range(len(want))]
-        store.append_rank_layer(rank,records,target_count=len(want))
+        received.append(packed)
+    store.append_all_rank_layer(
+        [decode_history_soa(x,world_size=3,move_count=24) for x in received],
+        target_counts=[len(x) for x in expected],depth=0)
+    for rank,want in enumerate(expected):
         assert tuple(store.read_entry(rank,0,i) for i in range(len(want))) == want
