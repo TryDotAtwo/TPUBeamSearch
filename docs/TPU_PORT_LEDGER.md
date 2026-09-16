@@ -1900,3 +1900,12 @@ variants compile; unmasked gather still aborts, as do masked gather, packing
 and composition (rc-6). Mask is not necessary for the failure; exact lowering
 expression remains unproven. See research/2026-09-16-response-stage-isolation-v4.md.
 No response execution, correctness or timing acceptance. Production unchanged.
+
+V5 terminal ERROR, all17 nested reports/artifacts downloaded and checked
+in response_stage_isolation_v5, sourcec173fbaf974b6ed048f5b6d11a2e3cfd589aca17.
+Eleven stages compile. Bounded rank1 gather still aborts(-6); rank2 gather
+returns1 with explicit unsupported multiple-source-vregs dynamic_gather
+from32x256 to32x128 along dimension1. This does not prove the cause of the
+rank1 assertion. Next diagnostic: two separate128-column gathers and selection.
+See research/2026-09-16-response-stage-isolation-v5.md. Production unchanged;
+no correctness/timing acceptance.
