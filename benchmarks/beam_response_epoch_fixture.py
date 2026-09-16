@@ -48,6 +48,28 @@ def fixtures():
         yield name,(wire,requests,control,validation)
 
 
+def publication_fixtures():
+    """Valid response corpus with destination-local indices; host fixture only.
+
+    Existing shuffled byte-routing fixtures remain unchanged. Assign targets
+    from original request destinations, independently of device grouping.
+    This does not generate history or establish publication/drain correctness.
+    """
+    for name,inputs in fixtures():
+        if name in ('materialization_error','receive_error','bad_rank','reserved'):
+            continue
+        wire,requests,control,validation=inputs
+        destination_counts=np.zeros(8,np.uint32)
+        for source in range(8):
+            for slot in range(int(control[source,0,0])):
+                destination=int(requests[source,3,slot]) & 65535
+                target=int(destination_counts[destination])
+                wire[source,slot,120:124]=np.frombuffer(target.to_bytes(4,'little'),dtype=np.uint8)
+                wire[source,slot,124:]=255
+                destination_counts[destination]+=1
+        yield name,(wire,requests,control,validation),destination_counts
+
+
 def expected_epoch(wire,requests,counts,errors,epoch):
     ranks,capacity,width=wire.shape
     result=np.zeros((ranks,128*ranks,width),np.uint8)
