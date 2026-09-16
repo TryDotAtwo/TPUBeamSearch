@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 
 def test_destination_targets_cover_across_sources_and_epochs():
@@ -20,3 +21,29 @@ def test_destination_targets_cover_across_sources_and_epochs():
         for rank in range(8):
             assert sorted(collected[rank])==list(range(int(counts[rank])))
     assert set(seen_names)=={'empty','self','cycle','one_to_all','all_to_one','uneven','recovery'}
+
+
+@pytest.mark.parametrize('duplicate',[False,True])
+def test_routed_fixture_feeds_pallas_whole_depth_coverage(duplicate):
+    import jax.numpy as jnp
+    from types import SimpleNamespace
+    from benchmarks.beam_response_epoch_fixture import publication_fixtures,expected_epoch
+    from tpu_beam_search.beam_final_response import pallas_unpack_response
+    from tpu_beam_search.beam_final_agreement import make_final_coverage_agreement
+    _,inputs,counts=next(x for x in publication_fixtures() if x[0]=='self')
+    wire,requests,control,validation=inputs
+    assembled=np.zeros((256,128),np.uint8)
+    cursor=0
+    for epoch in range(3):
+        received,status=expected_epoch(wire,requests,control[:,0,0],np.zeros(8,bool),epoch)
+        n=int(status[0,0,0])
+        assembled[cursor:cursor+n]=received[0,:n]
+        cursor+=n
+    assert cursor==129
+    if duplicate:
+        assembled[128,120:124]=assembled[0,120:124]
+    _,targets=pallas_unpack_response(jnp.asarray(assembled),state_len=120,interpret=True)
+    valid=jnp.asarray((np.arange(256)<cursor).astype(np.uint32)[None,:])
+    error,_=make_final_coverage_agreement(SimpleNamespace(size=1),interpret=True)(
+        targets,valid,jnp.asarray(counts[:1]))
+    assert bool(np.asarray(error)[0,0])==duplicate
