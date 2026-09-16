@@ -1,0 +1,82 @@
+{
+  "stage": "packing",
+  "compiled": false,
+  "status": "compiling",
+  "source_sha": "57e45ca790ac185ebe77fa0a5a4c766e44070540",
+  "runtime": {
+    "jax": "0.10.2",
+    "jaxlib": "0.10.2",
+    "libtpu": "0.0.42.1"
+  },
+  "devices": [
+    {
+      "id": 0,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 1,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 2,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 3,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 4,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 5,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 6,
+      "kind": "TPU v5 lite"
+    },
+    {
+      "id": 7,
+      "kind": "TPU v5 lite"
+    }
+  ],
+  "input_abi": [
+    {
+      "shape": [
+        8,
+        32,
+        2048
+      ],
+      "dtype": "uint32",
+      "sharding": "P('core',)"
+    },
+    {
+      "shape": [
+        8,
+        3,
+        128
+      ],
+      "dtype": "uint32",
+      "sharding": "P('core',)"
+    },
+    {
+      "shape": [
+        8,
+        1,
+        128
+      ],
+      "dtype": "uint32",
+      "sharding": "P('core',)"
+    },
+    {
+      "shape": [
+        1
+      ],
+      "dtype": "uint32",
+      "sharding": "P()"
+    }
+  ],
+  "scope": "compile only: no execution, correctness or timings"
+}

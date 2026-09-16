@@ -1891,3 +1891,12 @@ carry late errors into collective coverage agreement, finish history transfers,
 then publish frontier/history under the same successful depth decision.
 Scratch reuse requires explicit DMA and consumer completion evidence, not only
 a zero error flag. These full-caller requirements remain outstanding.
+
+V4 terminal ERROR, downloaded once to response_stage_isolation_v4 (60 files).
+All15 nested reports match source57e45ca, runtime0.10.2/libtpu0.0.42.1,
+eight distinct TPU IDs; MLIR/log present for every stage and compiled HLO
+present exactly for the11 successful stages. Row-copy and both position
+variants compile; unmasked gather still aborts, as do masked gather, packing
+and composition (rc-6). Mask is not necessary for the failure; exact lowering
+expression remains unproven. See research/2026-09-16-response-stage-isolation-v4.md.
+No response execution, correctness or timing acceptance. Production unchanged.
