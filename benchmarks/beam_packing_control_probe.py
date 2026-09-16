@@ -40,7 +40,7 @@ def make_probe(*,selection,world_size,interpret=False,guard=False,transfer=None)
                             first=pltpu.make_async_copy(source.at[:,pl.ds(aligned,128)],staging.at[:,pl.ds(0,128)],sem)
                             first.start()
                             first.wait()
-                            if transfer in ('second','row_copy','unmasked_gather','gather'):
+                            if transfer in ('second','row_copy','unmasked_gather','gather','bounded_gather','rank2_gather'):
                                 @pl.when(shift+length.astype(jnp.int32)>128)
                                 def second_tile():
                                     second=pltpu.make_async_copy(source.at[:,pl.ds(aligned+128,128)],staging.at[:,pl.ds(128,128)],sem)
@@ -55,12 +55,18 @@ def make_probe(*,selection,world_size,interpret=False,guard=False,transfer=None)
                             elif transfer == 'row_copy':
                                 for plane in range(32):
                                     out[0,plane,:]=staging[plane,pl.ds(0,128)]
-                            elif transfer in ('unmasked_gather','gather'):
+                            elif transfer == 'rank2_gather':
+                                positions=jnp.arange(128,dtype=jnp.int32)+shift
+                                indices=jnp.broadcast_to(jnp.clip(positions,0,255)[None,:],(32,128))
+                                out[0,:,:]=jnp.take_along_axis(staging[...],indices,axis=1,mode='promise_in_bounds')
+                            elif transfer in ('unmasked_gather','gather','bounded_gather'):
                                 from tpu_beam_search.beam_stream2 import _take_clipped
                                 positions=jnp.arange(128,dtype=jnp.int32)+shift
                                 for plane in range(32):
-                                    values=_take_clipped(staging[plane,:],positions)
-                                    out[0,plane,:]=values if transfer=='unmasked_gather' else jnp.where(lanes<length,values,jnp.uint32(0))
+                                    # Geometry bounds positions to 0..254, independent of payload.
+                                    values=(jnp.take_along_axis(staging[plane,:],positions,axis=0,mode='promise_in_bounds')
+                                            if transfer=='bounded_gather' else _take_clipped(staging[plane,:],positions))
+                                    out[0,plane,:]=jnp.where(lanes<length,values,jnp.uint32(0)) if transfer=='gather' else values
                             else:
                                 column=0 if transfer=='first' else 128
                                 out[0,:,:]=staging[:,pl.ds(column,128)]

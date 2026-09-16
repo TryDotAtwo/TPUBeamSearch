@@ -15,11 +15,13 @@ def stage_call(stage, mesh, *, interpret=False):
     ranks = mesh.size
     if stage in ('packing_control','packing_selection','packing_guard',
                  'packing_first_dma','packing_second_dma','packing_gather',
-                 'packing_row_copy','packing_positions','packing_clipped_positions','packing_unmasked_gather'):
+                 'packing_row_copy','packing_positions','packing_clipped_positions','packing_unmasked_gather',
+                 'packing_bounded_gather','packing_rank2_gather'):
         from .beam_packing_control_probe import make_probe
         transfer={'packing_first_dma':'first','packing_second_dma':'second','packing_gather':'gather',
                   'packing_row_copy':'row_copy','packing_positions':'positions',
-                  'packing_clipped_positions':'clipped_positions','packing_unmasked_gather':'unmasked_gather'}.get(stage)
+                  'packing_clipped_positions':'clipped_positions','packing_unmasked_gather':'unmasked_gather',
+                  'packing_bounded_gather':'bounded_gather','packing_rank2_gather':'rank2_gather'}.get(stage)
         return make_probe(selection=stage!='packing_control',
             guard=stage not in ('packing_control','packing_selection'),transfer=transfer,
             world_size=ranks,interpret=interpret), (
