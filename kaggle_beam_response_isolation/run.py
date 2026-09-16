@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA='c173fbaf974b6ed048f5b6d11a2e3cfd589aca17'
+COMMIT_SHA='830389d9567d4398ad583a5a85b58a36dee9b4d2'
 CHECKOUT=Path('/tmp/TPUBeamSearch-response-isolation')
 OUTPUT=Path('/kaggle/working/beam_response_isolation')
 
