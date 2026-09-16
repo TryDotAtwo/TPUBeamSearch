@@ -1,9 +1,11 @@
 """History routing composition with simulated links, not physical TPU DMA."""
 import jax.numpy as jnp
 import numpy as np
+import pytest
 
 
-def test_history_transport_preserves_parent64_route_and_target_across_sources():
+@pytest.mark.parametrize('late_corruption',[False,True])
+def test_history_transport_preserves_parent64_route_and_target_across_sources(late_corruption):
     # Catches parent-high truncation, source/destination substitution and
     # publication by receive order rather than target index.
     from tpu_beam_search.beam_final_history import pallas_final_history_records
@@ -54,8 +56,20 @@ def test_history_transport_preserves_parent64_route_and_target_across_sources():
         assert int(control[0,0]) == len(want)
         assert not packed[:,len(want):].any()
         received.append(packed)
-    store.append_all_rank_layer(
-        [decode_history_soa(x,world_size=3,move_count=24) for x in received],
-        target_counts=[len(x) for x in expected],depth=0)
+    def publish():
+        store.append_all_rank_layer(
+            [decode_history_soa(x,world_size=3,move_count=24) for x in received],
+            target_counts=[len(x) for x in expected],depth=0)
+    if late_corruption:
+        received[-1]=received[-1].copy()
+        saved=received[-1][2,1]
+        received[-1][2,1]=3<<16  # impossible original source, at the last rank
+        with pytest.raises(ValueError):
+            publish()
+        for rank in (0,2):
+            with pytest.raises(IndexError):
+                store.read_entry(rank,0,0)
+        received[-1][2,1]=saved
+    publish()
     for rank,want in enumerate(expected):
         assert tuple(store.read_entry(rank,0,i) for i in range(len(want))) == want
