@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-COMMIT_SHA = "31c8e38"
+COMMIT_SHA = "a0450117eaeff1d4311725eb6fb19d5aeed96f7c"
 CHECKOUT = Path("/tmp/TPUBeamSearch-split-execution")
 OUTPUT = Path("/kaggle/working/split_gather_execution")
 
