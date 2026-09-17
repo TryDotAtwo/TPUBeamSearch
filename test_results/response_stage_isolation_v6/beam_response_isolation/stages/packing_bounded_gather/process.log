@@ -1,0 +1,47 @@
+/usr/local/lib/python3.12/site-packages/jax/_src/cloud_tpu_init.py:88: UserWarning: Transparent hugepages are not enabled. TPU runtime startup and shutdown time should be significantly improved on TPU v5e and newer. If not already set, you may need to enable transparent hugepages in your VM image (sudo sh -c "echo always > /sys/kernel/mm/transparent_hugepage/enabled")
+  warnings.warn(
+WARNING: Logging before InitGoogle() is written to STDERR
+E0000 00:00:1789604204.676551   10616 common_lib.cc:674] Could not set metric server port: INVALID_ARGUMENT: Could not find SliceBuilder port 8471 in any of the 0 ports provided in `tpu_process_addresses`="local"
+=== Source Location Trace: === 
+learning/45eac/tfrc/runtime/common_lib.cc:238
+F0917 00:16:55.676806   11534 layout.h:341] Check failed: arr.size() >= layout_rank(implicit_dim) (1 vs. 2) 
+*** Check failure stack trace: ***
+    @     0x7870fa89bc54  absl::log_internal::LogMessage::SendToLog()
+    @     0x7870fa89bc18  absl::log_internal::LogMessage::Flush()
+    @     0x7870ed97cab7  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::inferReshape()
+    @     0x7870ed970529  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::inferBlock()
+    @     0x7870ed9731be  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::infer()
+    @     0x7870ed970267  mlir::tpu::(anonymous namespace)::VectorLayoutInferer::inferBlock()
+    @     0x7870ed96e712  mlir::tpu::(anonymous namespace)::InferVectorLayoutPass::runOnOperation()
+    @     0x7870f64874a7  mlir::detail::OpToOpPassAdaptor::run()
+    @     0x7870f64879e7  mlir::detail::OpToOpPassAdaptor::runPipeline()
+    @     0x7870f6488f64  mlir::detail::OpToOpPassAdaptor::runOnOperationImpl()
+    @     0x7870f64874eb  mlir::detail::OpToOpPassAdaptor::run()
+    @     0x7870f64879e7  mlir::detail::OpToOpPassAdaptor::runPipeline()
+    @     0x7870f6489be7  mlir::PassManager::run()
+    @     0x7870f2d356b9  xla::jellyfish::RunAndCaptureDiagnostics()
+    @     0x7870f2d35535  xla::jellyfish::RunPass()
+    @     0x7870ed0a2b5f  xla::jellyfish::RunMLIRPasses()::$_3::operator()()
+    @     0x7870ed0a1848  xla::jellyfish::RunMLIRPasses()
+    @     0x7870ed09144e  xla::jellyfish::(anonymous namespace)::CustomCallEmitter::Emit()
+    @     0x7870ed09063d  std::__u::__function::__policy_func<>::__call_func<>()
+    @     0x7870ecb3f2fe  xla::jellyfish::LoweringEmitter::HandleCustomCall()::$_1::operator()()
+    @     0x7870ecb64a49  std::__u::__function::__policy_func<>::__call_func<>()
+    @     0x7870ecb6a79d  xla::jellyfish::LoweringEmitter::AddWorkUnit()::$_1::operator()()
+    @     0x7870ecb51cb6  std::__u::__function::__policy_func<>::__call_func<>()
+    @     0x7870f2d0c5b0  absl::internal_any_invocable::RemoteInvoker<>()
+    @     0x7870fa46f3be  thread::Fiber::Body()
+    @     0x7870fa474b82  thread::(anonymous namespace)::FutexDomainThread::WorkLoop()
+    @     0x7870fa47d8d2  thread::CommonFiberDomainThread::Run()
+    @     0x7870fa6d0cf6  Thread::ThreadBody()
+    @     0x7871b87bab7b  (unknown)
+https://symbolize.stripped_domain/r/?trace=7870fa89bc53,7870fa89bc17,7870ed97cab6,7870ed970528,7870ed9731bd,7870ed970266,7870ed96e711,7870f64874a6,7870f64879e6,7870f6488f63,7870f64874ea,7870f64879e6,7870f6489be6,7870f2d356b8,7870f2d35534,7870ed0a2b5e,7870ed0a1847,7870ed09144d,7870ed09063c,7870ecb3f2fd,7870ecb64a48,7870ecb6a79c,7870ecb51cb5,7870f2d0c5af,7870fa46f3bd,7870fa474b81,7870fa47d8d1,7870fa6d0cf5,7871b87bab7a&map= 
+https://symbolize.stripped_domain/r/?trace=7871b87bc95c,7871b8767def,7870fa89bcb8,7870fa89bc17,7870ed97cab6,7870ed970528,7870ed9731bd,7870ed970266,7870ed96e711,7870f64874a6,7870f64879e6,7870f6488f63,7870f64874ea,7870f64879e6,7870f6489be6,7870f2d356b8,7870f2d35534,7870ed0a2b5e,7870ed0a1847,7870ed09144d,7870ed09063c,7870ecb3f2fd,7870ecb64a48,7870ecb6a79c,7870ecb51cb5,7870f2d0c5af,7870fa46f3bd,7870fa474b81,7870fa47d8d1,7870fa6d0cf5,7871b87bab7a&map= 
+*** SIGABRT received by PID 10616 (TID 11534) on cpu 10, si_code=-6, from PID 10616; ***
+E0917 00:16:55.959859   11534 coredump_hook.cc:310] RAW: Remote crash data gathering hook invoked.
+E0917 00:16:55.959882   11534 client.cc:261] RAW: Coroner client retries enabled, will retry for up to 30 sec.
+E0917 00:16:55.959889   11534 coredump_hook.cc:405] RAW: Sending fingerprint to remote end.
+E0917 00:16:55.959905   11534 coredump_hook.cc:415] RAW: Cannot send fingerprint to Coroner: [NOT_FOUND] stat failed on crash reporting socket /var/google/services/logmanagerd/remote_coredump.socket (Is the listener running?): No such file or directory
+E0917 00:16:55.959909   11534 coredump_hook.cc:467] RAW: Dumping core locally.
+F0917 00:16:55.676806   11534 layout.h:341] Check failed: arr.size() >= layout_rank(implicit_dim) (1 vs. 2) 
+E0917 00:17:08.862002   11534 process_state.cc:708] RAW: Raising signal 6 with default behavior

@@ -1,0 +1,16 @@
+[{"stream_name":"stderr","time":18.077384314,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":19.127452101,"data":"\n"}
+,{"stream_name":"stderr","time":19.127505001,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":19.127509981,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":19.262838098,"data":"Cloning into '/tmp/TPUBeamSearch-response-isolation'...\n"}
+,{"stream_name":"stderr","time":28.199533857,"data":"Updating files:  81% (3849/4726)\rUpdating files:  82% (3876/4726)\rUpdating files:  83% (3923/4726)\rUpdating files:  84% (3970/4726)\rUpdating files:  85% (4018/4726)\rUpdating files:  86% (4065/4726)\rUpdating files:  87% (4112/4726)\rUpdating files:  88% (4159/4726)\rUpdating files:  89% (4207/4726)\rUpdating files:  90% (4254/4726)\rUpdating files:  91% (4301/4726)\rUpdating files:  92% (4348/4726)\rUpdating files:  93% (4396/4726)\rUpdating files:  94% (4443/4726)\rUpdating files:  95% (4490/4726)\rUpdating files:  96% (4537/4726)\rUpdating files:  97% (4585/4726)\rUpdating files:  98% (4632/4726)\rUpdating files:  99% (4679/4726)\rUpdating files: 100% (4726/4726)\rUpdating files: 100% (4726/4726), done.\n"}
+,{"stream_name":"stderr","time":32.313016463,"data":"HEAD is now at 830389d Add split-register gather diagnostic\n"}
+,{"stream_name":"stderr","time":483.315937474,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":483.315970184,"data":"  File \"/kaggle/src/script.py\", line 37, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":483.315976244,"data":"    main()\n"}
+,{"stream_name":"stderr","time":483.315980594,"data":"  File \"/kaggle/src/script.py\", line 33, in main\n"}
+,{"stream_name":"stderr","time":483.315993164,"data":"    raise RuntimeError(f'isolation bundle returned {child.returncode}; see stage logs')\n"}
+,{"stream_name":"stderr","time":483.315997734,"data":"RuntimeError: isolation bundle returned 1; see stage logs\n"}
+,{"stream_name":"stderr","time":487.442001945,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":489.719420927,"data":"[NbConvertApp] Writing 280976 bytes to __results__.html\n"}
+]

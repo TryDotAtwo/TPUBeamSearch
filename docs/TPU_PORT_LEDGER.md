@@ -1909,3 +1909,10 @@ from32x256 to32x128 along dimension1. This does not prove the cause of the
 rank1 assertion. Next diagnostic: two separate128-column gathers and selection.
 See research/2026-09-16-response-stage-isolation-v5.md. Production unchanged;
 no correctness/timing acceptance.
+
+V6 terminal ERROR, all18 nested reports/artifacts downloaded and checked in
+response_stage_isolation_v6, source830389d9567d4398ad583a5a85b58a36dee9b4d2.
+The split-gather candidate (two separate 128-column rank-2 gathers plus half
+selection) compiles; the other gather variants retain prior failures. This is
+the first viable physical-execution candidate, not a production fix or speed
+claim. See research/2026-09-17-response-stage-isolation-v6.md.
