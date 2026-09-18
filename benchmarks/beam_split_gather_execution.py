@@ -34,18 +34,18 @@ def expected(data, ranges, prior):
 def run(output):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
-    data = np.arange(8 * 32 * 2048, dtype=np.uint32).reshape(8, 32, 2048)
-    ranges = np.zeros((8, 3, 128), np.uint32)
-    ranges[:, 0, :8] = np.array([1, 127, 128, 129, 255, 256, 1920, 2048])
-    ranges[:, 1, :8] = np.array([128, 2, 128, 0, 1, 129, 128, 0])
-    prior = np.zeros((8, 1, 128), np.uint32)
+    data = np.arange(32 * 2048, dtype=np.uint32).reshape(32, 2048)
+    ranges = np.zeros((3, 128), np.uint32)
+    ranges[0, :8] = np.array([1, 127, 128, 129, 255, 256, 1920, 2048])
+    ranges[1, :8] = np.array([128, 2, 128, 0, 1, 129, 128, 0])
+    prior = np.zeros((1, 128), np.uint32)
     index = jnp.array([0], jnp.uint32)
     call, _ = stage_call("packing_split_gather", SimpleNamespace(size=8), interpret=False)
     actual, control = jax.block_until_ready(call(
-        jnp.asarray(data), jnp.asarray(ranges[0]), jnp.asarray(prior[0]), index))
+        jnp.asarray(data), jnp.asarray(ranges), jnp.asarray(prior), index))
     actual = np.asarray(actual)
     control = np.asarray(control)
-    want = expected(data[0], ranges[0], prior[0])
+    want = expected(data, ranges, prior)
     result = {
         "devices": [{"id": d.id, "kind": d.device_kind} for d in jax.devices()],
         "shape": list(actual.shape),

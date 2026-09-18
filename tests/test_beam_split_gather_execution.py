@@ -19,3 +19,12 @@ def test_split_gather_oracle_preserves_prior_error_zeroing():
     prior = np.zeros((1, 128), np.uint32)
     prior[0, 0] = 1
     assert not expected(data, ranges, prior).any()
+
+
+def test_execution_gate_uses_per_program_source_abi():
+    # pallas grid=(8,) selects the peer; payload remains one 32x2048 HBM tile.
+    import inspect
+    from benchmarks import beam_split_gather_execution as gate
+    source = inspect.getsource(gate.run)
+    assert "reshape(32, 2048)" in source
+    assert "ranges = np.zeros((3, 128)" in source
