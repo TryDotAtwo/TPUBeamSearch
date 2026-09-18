@@ -1910,6 +1910,13 @@ rank1 assertion. Next diagnostic: two separate128-column gathers and selection.
 See research/2026-09-16-response-stage-isolation-v5.md. Production unchanged;
 no correctness/timing acceptance.
 
+Split-gather physical execution V2 is COMPLETE and exact on eight TPU v5 lite
+devices. JSON reports shape[8,32,128], uint32, exact=true, max_abs=0; output
+is finite and matches the independent host oracle. Artifacts are in
+test_results/split_gather_execution_v2 and report
+research/2026-09-18-split-gather-execution-v2.md. This is an isolated
+execution gate, not production response correctness or speed evidence.
+
 V6 terminal ERROR, all18 nested reports/artifacts downloaded and checked in
 response_stage_isolation_v6, source830389d9567d4398ad583a5a85b58a36dee9b4d2.
 The split-gather candidate (two separate 128-column rank-2 gathers plus half
