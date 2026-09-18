@@ -23,8 +23,8 @@ def test_destination_targets_cover_across_sources_and_epochs():
     assert set(seen_names)=={'empty','self','cycle','one_to_all','all_to_one','uneven','recovery'}
 
 
-@pytest.mark.parametrize('duplicate',[False,True])
-def test_routed_fixture_feeds_pallas_whole_depth_coverage(duplicate):
+@pytest.mark.parametrize('fault',['none','duplicate','missing','out_of_range','late_error'])
+def test_routed_fixture_feeds_pallas_whole_depth_coverage(fault):
     import jax.numpy as jnp
     from types import SimpleNamespace
     from benchmarks.beam_response_epoch_fixture import publication_fixtures,expected_epoch
@@ -40,10 +40,15 @@ def test_routed_fixture_feeds_pallas_whole_depth_coverage(duplicate):
         assembled[cursor:cursor+n]=received[0,:n]
         cursor+=n
     assert cursor==129
-    if duplicate:
+    if fault=='duplicate':
         assembled[128,120:124]=assembled[0,120:124]
+    elif fault=='out_of_range':
+        assembled[128,120:124]=list((129).to_bytes(4,'little'))
     _,targets=pallas_unpack_response(jnp.asarray(assembled),state_len=120,interpret=True)
     valid=jnp.asarray((np.arange(256)<cursor).astype(np.uint32)[None,:])
+    if fault=='missing':
+        valid=valid.at[0,128].set(0)
+    prior=jnp.zeros((1,128),jnp.uint32).at[0,0].set(int(fault=='late_error'))
     error,_=make_final_coverage_agreement(SimpleNamespace(size=1),interpret=True)(
-        targets,valid,jnp.asarray(counts[:1]))
-    assert bool(np.asarray(error)[0,0])==duplicate
+        targets,valid,jnp.asarray(counts[:1]),prior)
+    assert bool(np.asarray(error)[0,0])==(fault!='none')
