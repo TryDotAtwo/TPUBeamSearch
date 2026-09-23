@@ -1,0 +1,24 @@
+{
+  "name": "tpu-builder",
+  "version": "0.1.0",
+  "description": "Prepare evidence-backed TPU Builders activity reports and Google Cloud credit requests.",
+  "author": {
+    "name": "TPUBeamSearch contributors",
+    "url": "https://github.com/TryDotAtwo/TPUBeamSearch"
+  },
+  "repository": "https://github.com/TryDotAtwo/TPUBeamSearch",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "TPU Builder",
+    "shortDescription": "Prepare TPU Builders reports and credit requests.",
+    "longDescription": "Uses project evidence and current TPU Builders forms to prepare accurate activity reports and Google Cloud credit applications, track prerequisites, and verify submissions.",
+    "developerName": "TPUBeamSearch contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Draft my TPU Builders monthly activity report from project evidence.",
+      "Prepare a TPU Builders Google Cloud credit request.",
+      "Check TPU Builders onboarding and reporting requirements."
+    ]
+  }
+}
