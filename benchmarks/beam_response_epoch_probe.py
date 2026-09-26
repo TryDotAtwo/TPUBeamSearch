@@ -12,6 +12,26 @@ from tpu_beam_search.beam_final_response_routing import pallas_prepare_final_res
 from tpu_beam_search.beam_final_response_chunk import make_final_response_chunk_call
 
 
+def validate_epoch(actual, expected):
+    wire, control = map(np.asarray, actual)
+    want_wire, want_control = map(np.asarray, expected)
+    shape_ok = (wire.shape == want_wire.shape == (8, 1024, 128)
+                and control.shape == want_control.shape == (8, 2, 128))
+    dtype_ok = (wire.dtype == want_wire.dtype == np.dtype('uint8')
+                and control.dtype == want_control.dtype == np.dtype('uint32'))
+    hash_ok = digest((wire, control)) == digest((want_wire, want_control))
+    mismatches = ([[int(np.count_nonzero(a[rank] != b[rank])) for rank in range(8)]
+                   for a, b in ((wire, want_wire), (control, want_control))]
+                  if shape_ok else None)
+    exact = bool(shape_ok and dtype_ok and hash_ok
+                 and all(not any(row) for row in mismatches))
+    return dict(exact=exact, shape_ok=shape_ok, dtype_ok=dtype_ok,
+                hash_ok=hash_ok, mismatches=mismatches,
+                wire_shape=list(wire.shape), control_shape=list(control.shape),
+                wire_dtype=str(wire.dtype), control_dtype=str(control.dtype),
+                output_sha256=digest((wire, control)))
+
+
 def local_calls(mesh):
     def prepare(wire,requests,control,validation):
         return tuple(x[None] for x in pallas_prepare_final_response_exchange(
@@ -75,12 +95,9 @@ def main():
                 step_exe=lowered.compile()
                 (output/'epoch.hlo.txt').write_text(step_exe.as_text())
             actual=tuple(np.asarray(x) for x in jax.block_until_ready(step_exe(*prepared,number)))
-            mismatch=[[int(np.count_nonzero(a[r]!=e[r])) for r in range(8)]
-                      for a,e in zip(actual,expected,strict=True)]
-            exact=not any(any(x) for x in mismatch)
-            item.update(exact=exact,mismatches=mismatch,output_sha256=digest(actual))
+            item.update(validate_epoch(actual,expected))
             save()
-            if not exact:
+            if not item['exact']:
                 raise RuntimeError(f'{name} epoch{index}: response mismatch')
         row['exact']=True
         save()
