@@ -2016,8 +2016,13 @@ and history projection in interpreter mode for 120/24 and 150/30 geometry.
 This is not physical TPU execution or a distributed commit: the producer must
 include all DMA/consumer dependencies and all final errors in its completion
 contract, keep candidate storage private, and not donate the old frontier.
-The full local suite is still running with two failures observed; it is not
-reported as passing. Kaggle production packing remains QUEUED, not restarted.
+The concurrent full local suite finished with 1145 passed, 16 skipped and two
+width-bridge test failures. Its loaded tests expected five inputs/two outputs,
+but the source was updated during execution to six inputs/four outputs. This
+mixed-snapshot run is not accepted as validation of any commit. The current
+three width-bridge execution tests pass without another code repair. Future
+full validation uses an isolated unchanged checkout. Kaggle production packing
+remains QUEUED, not restarted.
 
 S4 ready admission now checks the sticky fatal lane before claiming a new
 physical sibling. Force-clean/force-dirty flags do not override fatal; existing
