@@ -2005,3 +2005,16 @@ and did not supply the launcher's pinned-checkout readback. The production
 launcher was unchanged; the updated two-case test passes locally. A new full
 suite on the later snapshot was started separately; its result must be read
 from its own JUnit/log, not inferred from the targeted repair.
+
+Single-host final publication now returns one replacement frontier/history
+handle only after returned device results are ready and every rank's host
+history validates. Functional history staging leaves the previous snapshot
+unchanged on late malformed records or common device error. Local validation:
+36 publication/history tests plus a separate second-depth failure/retry test
+pass. Integration uses actual Pallas materialize, coverage, compact scatter
+and history projection in interpreter mode for 120/24 and 150/30 geometry.
+This is not physical TPU execution or a distributed commit: the producer must
+include all DMA/consumer dependencies and all final errors in its completion
+contract, keep candidate storage private, and not donate the old frontier.
+The full local suite is still running with two failures observed; it is not
+reported as passing. Kaggle production packing remains QUEUED, not restarted.

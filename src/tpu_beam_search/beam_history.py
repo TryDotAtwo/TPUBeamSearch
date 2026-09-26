@@ -101,6 +101,15 @@ class RankHistoryStore:
         Existing layer arrays are shared; only rank layer lists are copied.
         Mixing with rank-local appends requires every rank at the same depth.
         """
+        staged = self.stage_all_rank_layer(records_by_rank, target_counts=target_counts, depth=depth)
+        self._layers = staged._layers
+
+    def stage_all_rank_layer(self, records_by_rank, *, target_counts, depth):
+        """Return a complete replacement history without changing this store.
+
+        Used when frontier and history must be promoted through one enclosing
+        state handle. Prior immutable layer arrays are shared, not recopied.
+        """
         if (not isinstance(depth,int) or depth < 0
                 or any(len(layers) != depth for layers in self._layers)):
             raise ValueError('history publication depth mismatch')
@@ -113,7 +122,8 @@ class RankHistoryStore:
         # Build the complete replacement before publishing, including any
         # allocation failures. Do not append incrementally into live layers.
         replacement = [layers + staged._layers[rank] for rank,layers in enumerate(self._layers)]
-        self._layers = replacement
+        staged._layers = replacement
+        return staged
 
     def read_entry(self, rank, layer, index):
         layers = self._rank(rank)
