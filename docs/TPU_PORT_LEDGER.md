@@ -2102,3 +2102,17 @@ not a scalable suffix scan, solved collector/global stop integration, or
 hardware result. The combined batch/metadata/K2 regression run passes all 17
 tests (107.50 seconds); K1/K2 use the TPU interpreter with race detection.
 Full-suite validation remains separate and pending.
+
+`beam_solved_service.py` now builds solved records from the checked S2 batch
+identities and separate projected hashes/suffix IDs, appends them through the
+existing bounded collector, and unconditionally performs common error then
+common stop agreement. An actual hit-count bound prevents uint32 attempted
+counter wrap before any write; empty saturated counters are allowed. Existing
+results survive rejected batches. Storage-capacity overflow retains the source
+sticky overflow/attempted-count semantics; already in-flight results can still
+append after local stop, while the caller must block new admission.
+Fourteen solved-service/collector/request tests pass locally. The eight-rank
+JAXPR check establishes only the output ABI, not distributed execution.
+The service still uses the diagnostic VMEM collector and must be attached to
+the full stream caller with accumulated errors, job admission and DMA drains.
+It does not itself establish scalable solved storage or scratch lifetimes.
