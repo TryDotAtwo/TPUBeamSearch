@@ -41,3 +41,9 @@ were unchanged. After switching the verification checkout to `2044dac`,
 `git diff --stat`, `git diff --numstat`, and the whitespace-insensitive diff
 were empty. A complete run of that immutable revision was started separately;
 its result is pending and does not cover subsequent response-plan edits.
+
+That complete `2044dacf8abdc9b0f2246a01b64b0ef432f12cd8` run has now
+finished: **1255 passed, 16 skipped in3560.81 seconds**. The final stdout and
+verification-worktree JUnit report identify this snapshot. This resolves the
+full-suite checkout-byte failures for that revision; it does not validate the
+later streaming coverage, response/history consumers or materialization round.

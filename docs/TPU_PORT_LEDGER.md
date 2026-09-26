@@ -2240,3 +2240,21 @@ is not a substitute for awaiting actual consumers before publication.
 Ten history/agreement tests passed in53.22 seconds; the export test passed
 separately in29.20 seconds. Physical multi-rank DMA/layout acceptance remains
 pending. The full suite at2044dac excludes these newer components.
+
+`beam_final_materialization_round.py` joins paired request/history exchange,
+checked history consumption, request materialization, response grouping,
+world-size uniform response subepochs and checked frontier consumption.
+Local target count is selected on-device from the agreed destination vector.
+Every rank must execute the same request epoch schedule; final selection,
+global epoch count, final coverage and host publication remain caller-owned.
+Three integration tests passed in50.24 seconds: hand-checked states/history,
+late history failure preserving the private frontier, and eight-rank JAXPR.
+The initial fixture supplied [1,128] counts instead of the declared [world]
+vector; correcting its slice to [0,:world] resolved that harness failure.
+The old process handle disappeared without a terminal XML; the verified rerun
+saved stdout/stderr and JUnit under local_final_materialization_round_retry2.
+No physical eight-rank exchange, CUDA replay or beam performance is implied.
+
+The isolated full suite at2044dac completed with1255 passed and16 skipped
+in3560.81 seconds. That snapshot predates these streaming-consumer additions;
+it is not their full-suite validation.
