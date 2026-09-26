@@ -2201,3 +2201,17 @@ local interpreter/trace results, not physical TPU proof. The complete suite
 at2044dac is still running and excludes this later addition. Response transport,
 cross-epoch coverage/history accumulation and final publication remain to be
 integrated; production defaults and the BN path are unchanged.
+
+`beam_final_streaming_coverage.py` adds private uint32 target marks across
+epochs (4 bytes per allocated target), accepted count and sticky error. Each
+sequential grid program DMA-loads one aligned128-mark tile, detects duplicates,
+and waits for its write before reuse. This forbids concurrent writers; it is
+not an atomic or overlapped implementation. Invalid chunks can leave a private
+marked prefix which must be discarded with the failed depth. A final tiled
+scan checks exact logical prefix coverage and count agreement without retaining
+all response bytes or sorting every target. Transport errors, collective error
+agreement and frontier/history publication still require caller integration.
+Streaming plus existing coverage tests passed15 cases in103.98 seconds;
+a separate same-tile duplicate test with interpreter race detection passed
+in14.70 seconds. Physical alias/layout/DMA acceptance and speed remain unproven.
+The ongoing full suite at2044dac does not cover this later module.
