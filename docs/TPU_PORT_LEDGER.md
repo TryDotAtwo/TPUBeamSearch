@@ -2073,3 +2073,19 @@ This is not a complete depth: S1/S2/solved handling, final selection/publication
 scratch transitions and production capacities remain outside this round. It
 still has bounded128 S3 inputs, snapshot transport and functional state copies.
 No physical eight-TPU execution, residency, overlap or beam speed is claimed.
+
+`beam_candidate_metadata.py` assembles single-slot S2 hashes and supplied
+uint32 score keys into S3 meta8 plus payload IDs. Parent-major/move-minor
+identities match the read-only CUDA Stream3 restoration formula; parent64
+uses explicit low/high carry. Invalid prefix/count or identity overflow
+rejects the entire batch through zero admitted count and an error summary.
+Solved flags remain outside ordinary candidate pruning. Fourteen local tests
+across metadata and immediate S2 pass, including actual S2 output spanning
+two candidate tiles at MOVE_COUNT=24/30. This is interpreter evidence, not
+TPU compilation, K1/K2 integration, a full depth caller or CUDA execution.
+
+The isolated 944478f full-suite rerun is in progress. Reusing the verification
+checkout retained old CRLF bytes despite new LF attributes, so hash tests
+still fail there; files are not refreshed while pytest is running. The Git
+checkout-filter check and main-checkout focused tests pass. A byte-refreshed
+immutable full run remains required before claiming full-suite success.
