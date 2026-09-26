@@ -2044,3 +2044,16 @@ before triggering an S5 request. These tests use the actual Pallas primitives
 in interpreter mode, not mocked stage outputs. This is a serialized pair
 service, not yet the complete depth caller or a physical residency/overlap
 claim; existing diagnostic sort/histogram capacity limits still apply.
+
+`beam_s4_s5_service.py` composes a fixed-order round over up to 64 logical
+pairs, then unconditionally agrees rank fatal flags. Only this common decision
+can skip S5, uniformly; healthy ranks with no local S4 job still enter the S5
+request protocol. Committed histogram rows/versions are packed by Pallas,
+without host reads of counts or flags. Four tests pass: actual local S4-to-S5
+threshold publication, pre-existing fatal in a later pair blocking all local
+admission, an eight-rank JAXPR ABI trace, and forced S5 publication without a
+new local job. The trace is not physical distributed execution. This defines
+an explicit serialized service-round schedule; CUDA parity for that schedule,
+full depth orchestration, S5 update-counter bounds and physical residency still
+need validation. The separate full-suite run remains pinned to 4cbdf38 and
+does not include these newly added service modules.
