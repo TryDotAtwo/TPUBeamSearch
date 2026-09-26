@@ -147,11 +147,11 @@ def reconstruct_history(solved: HistoryEntry, *, depth: int, world_size: int,
         move = cursor.route_packed & 255
         if move >= move_count:
             raise ValueError('history move exceeds move_count')
+        rank = cursor.route_packed >> 16
+        if rank >= world_size:
+            raise ValueError('history source rank exceeds world_size')
         moves.append(move)
         parents.append(cursor.parent_idx)
         if remaining > 1:
-            rank = cursor.route_packed >> 16
-            if rank >= world_size:
-                raise ValueError('history source rank exceeds world_size')
             cursor = read_entry(rank,remaining-2,cursor.parent_idx)
     return HistoryPath(tuple(reversed(moves)),tuple(reversed(parents)))

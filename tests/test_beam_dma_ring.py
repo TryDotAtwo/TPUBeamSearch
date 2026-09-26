@@ -48,3 +48,51 @@ def test_multiple_wraps_require_ack_before_slot_reuse():
                 ring.publish_ready(epoch=2, slot=0)
         ring.ack(epoch=epoch, slot=slot)
         assert ring.epoch_complete(epoch)
+
+
+def test_completed_epoch_stays_complete_after_slot_wrap():
+    ring = RemoteDmaRingModel(slot_count=2)
+    ring.publish_ready(epoch=0, slot=0)
+    ring.start(epoch=0, slot=0, count=0)
+    ring.publish_ready(epoch=1, slot=1)
+    ring.start(epoch=1, slot=1, count=0)
+    ring.publish_ready(epoch=2, slot=0)
+    assert ring.epoch_complete(0)
+    assert ring.epoch_complete(1)
+    assert not ring.epoch_complete(2)
+
+
+def test_duplicate_start_and_duplicate_epoch_are_rejected():
+    ring = RemoteDmaRingModel(slot_count=2)
+    ring.publish_ready(epoch=0, slot=0)
+    ring.start(epoch=0, slot=0, count=1)
+    with pytest.raises(RuntimeError, match='already started'):
+        ring.start(epoch=0, slot=0, count=1)
+    ring.wait_send(epoch=0, slot=0)
+    ring.wait_recv(epoch=0, slot=0)
+    ring.consume(epoch=0, slot=0)
+    ring.ack(epoch=0, slot=0)
+    with pytest.raises(RuntimeError, match='epoch'):
+        ring.publish_ready(epoch=0, slot=0)
+
+
+def test_stale_wait_and_ack_cannot_mutate_reused_slot():
+    ring = RemoteDmaRingModel(slot_count=2)
+    ring.publish_ready(epoch=0, slot=0)
+    ring.start(epoch=0, slot=0, count=0)
+    ring.publish_ready(epoch=1, slot=1)
+    ring.start(epoch=1, slot=1, count=0)
+    ring.publish_ready(epoch=2, slot=0)
+    for operation in (ring.wait_send, ring.wait_recv, ring.ack):
+        with pytest.raises(RuntimeError, match='epoch'):
+            operation(epoch=0, slot=0)
+
+
+def test_ring_window_cannot_advance_past_unfinished_oldest_epoch():
+    ring = RemoteDmaRingModel(slot_count=2)
+    ring.publish_ready(epoch=0, slot=0)
+    ring.start(epoch=0, slot=0, count=1)
+    ring.publish_ready(epoch=1, slot=1)
+    ring.start(epoch=1, slot=1, count=0)
+    with pytest.raises(RuntimeError, match='window'):
+        ring.publish_ready(epoch=2, slot=1)

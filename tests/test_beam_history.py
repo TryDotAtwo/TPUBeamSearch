@@ -26,6 +26,30 @@ def test_history_rejects_invalid_rank_before_reading():
             world_size=8,move_count=24,read_entry=read)
 
 
+def test_history_rejects_invalid_source_rank_on_depth_one_without_reading():
+    from tpu_beam_search.beam_history import HistoryEntry, reconstruct_history
+
+    with pytest.raises(ValueError, match='rank'):
+        reconstruct_history(HistoryEntry(0, (9 << 16) | 1), depth=1,
+            world_size=8, move_count=24,
+            read_entry=lambda *args: pytest.fail('depth one must not read history'))
+
+
+def test_history_rejects_invalid_root_source_after_one_lookup():
+    from tpu_beam_search.beam_history import HistoryEntry, reconstruct_history
+
+    calls = []
+
+    def read(rank, layer, index):
+        calls.append((rank, layer, index))
+        return HistoryEntry(0, (9 << 16) | 2)
+
+    with pytest.raises(ValueError, match='rank'):
+        reconstruct_history(HistoryEntry(4, 1), depth=2,
+            world_size=8, move_count=24, read_entry=read)
+    assert calls == [(0, 0, 4)]
+
+
 @pytest.mark.parametrize('depth,expected',[(0,()),(1,(7,))])
 def test_root_and_empty_paths_do_not_query_history(depth,expected):
     from tpu_beam_search.beam_history import HistoryEntry, reconstruct_history
