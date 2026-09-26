@@ -2158,3 +2158,12 @@ and impossible-cap rejection, and eight-rank JAXPR ABI. A matching globally
 agreed threshold/beam is still an explicit caller precondition; threshold
 derivation, destination boundaries and request/response/history publication
 are not supplied by this function. No hardware or speed claim follows.
+
+`beam_final_boundaries.py` supplies exact `ceil(rank*K/world)` destination
+boundaries and target counts from the agreed keep pair. It uses uint32
+restoring division and split16 multiplication, with no float or uint64 JAX
+arithmetic. Local intervals exceeding UINT32_MAX or prior selection failure
+reject all outputs. Seventeen boundary/balance tests pass (54.21 seconds),
+including K above2^32, uneven/empty ranks, world127 at the allowed maximum,
+and full uint64 overflow inputs. This is interpreter correctness, not TPU
+compile or throughput evidence; caller wiring into materialization remains.
