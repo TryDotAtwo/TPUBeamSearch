@@ -1936,3 +1936,10 @@ both wire and controls with a direct host oracle. Local focused checks:
 gate-fixture/shard-map tests pass. This is still a local candidate: the
 production call has not yet compiled or executed on eight physical TPU cores,
 and no response-epoch correctness or speed claim follows from it.
+
+Production packing execution V1 was submitted to private Kaggle on 2026-09-26
+from source e71c92261811961307d3f2c13d93f36ad45d6a06, launcher 1f0f0f5.
+First status QUEUED. It checks the actual production call on eight sharded TPU
+inputs for both 32/35 planes and mixed/all-live fixtures. No hardware result or
+timing has been accepted; do not restart a queued/running version. Protocol:
+research/2026-09-26-production-packing-gate.md.
