@@ -2089,3 +2089,16 @@ checkout retained old CRLF bytes despite new LF attributes, so hash tests
 still fail there; files are not refreshed while pytest is running. The Git
 checkout-filter check and main-checkout focused tests pass. A byte-refreshed
 immutable full run remains required before claiming full-suite success.
+
+`beam_stream2_batch.py` now composes immediate/K1/K2 S2 with checked candidate
+identity assembly. Immediate child hashes feed S3 metadata; projected solution
+hashes and first suffix IDs remain a separate channel. UINT_MAX score keys do
+not suppress solved flags. Invalid parent counts are bounded before lookup;
+the original count is retained for error diagnosis, and a failed identity
+batch admits neither candidates nor solved flags. Consumers must propagate
+the returned error into collective fatal agreement, not just skip the batch.
+This is a diagnostic composition using the existing static K2 suffix loop,
+not a scalable suffix scan, solved collector/global stop integration, or
+hardware result. The combined batch/metadata/K2 regression run passes all 17
+tests (107.50 seconds); K1/K2 use the TPU interpreter with race detection.
+Full-suite validation remains separate and pending.
