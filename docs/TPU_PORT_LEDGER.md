@@ -1989,6 +1989,11 @@ pass locally. It is not yet submitted because the one allowed Kaggle TPU
 session is occupied by production packing; queueing another session would
 violate the active-session contract. Physical compilation and execution are
 unverified.
+Private launcher `kaggle_beam_state_width_bridge` pins the staged source at
+`6756730b2436b86b62676ae0723f496599aa2fc5`; local tests cover rejection
+of the wrong checkout and invocation from a clean pinned checkout. The launcher
+is prepared, not submitted. This job should follow the production packing and
+response-epoch gates when the single Kaggle TPU slot is free.
 
 The compact-width/final-tile mismatch is now explicit for `STATE_LEN=150`:
 `BeamStorage` gives 160-byte persistent rows and 256-byte final TPU tiles.
