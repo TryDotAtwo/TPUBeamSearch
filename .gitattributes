@@ -1,3 +1,6 @@
 # Generated TPU traces are immutable raw evidence, not source text to normalize.
 test_results/**/*.log -text -diff
 test_results/**/hlo/*.txt -text -diff
+# These published manifest hashes cover LF bytes, including on Windows checkout.
+third_party/artgor_cube555_v344319112/jax_model.py text eol=lf
+notebooks/artgor_cube555_exact_tpu/cayleypy-cube555-tpu-beam-q-exact.ipynb text eol=lf
