@@ -53,3 +53,65 @@ def pallas_scatter_final_responses(frontier,wire,count,*,state_len,interpret=Fal
         scratch_shapes=(pltpu.VMEM((1,1,width),jnp.uint8),pltpu.SemaphoreType.DMA),
         interpret=interpret,name='beam_final_response_scatter')(frontier[:,None,:],clean[:,None,:],targets,count,errors)
     return result[:,0,:],errors
+
+
+def pallas_scatter_compact_final_responses(frontier, wire, count, *, state_len,
+                                           interpret=False, prior_error=None):
+    """Scatter tile-width responses directly into compact aliased frontier rows.
+
+    The response index is decoded before writing and never enters persistent
+    padding. The caller supplies unique targets and a collective prior error;
+    this kernel does not itself establish a distributed publication barrier.
+    """
+    width = frontier.shape[1]
+    if (frontier.ndim != 2 or frontier.dtype != jnp.uint8
+            or not 0 < frontier.shape[0] < 0x7fffffff
+            or not isinstance(state_len, int) or not 0 < state_len <= width - 4
+            or width % 16 or wire.ndim != 2 or wire.dtype != jnp.uint8
+            or wire.shape[0] == 0 or wire.shape[0] % 128
+            or wire.shape[1] % 128 or wire.shape[1] < width
+            or count.shape != (1,) or count.dtype != jnp.uint32):
+        raise ValueError('invalid compact final scatter ABI')
+    if prior_error is None:
+        prior_error = jnp.zeros((1,128),jnp.uint32)
+    if prior_error.shape != (1,128) or prior_error.dtype != jnp.uint32:
+        raise ValueError('invalid compact scatter prior error ABI')
+    clean,targets = pallas_unpack_response(wire,state_len=state_len,interpret=interpret)
+    n,tile_width = wire.shape
+
+    def bounds(t,c,p,out):
+        index = pl.program_id(0).astype(jnp.uint32)*128+jnp.arange(128,dtype=jnp.uint32)
+        out[...] = (((index[None] < c[0]) & (t[...] >= frontier.shape[0]))
+                    | (((c[0] > n) | (p[0,0] != 0)) & (index[None] == 0))).astype(jnp.uint32)
+
+    reason = pl.pallas_call(bounds,out_shape=jax.ShapeDtypeStruct((1,n),jnp.uint32),
+        in_specs=(pl.BlockSpec((1,128),lambda i:(0,i)),pl.BlockSpec((1,)),pl.BlockSpec((1,128))),
+        out_specs=pl.BlockSpec((1,128),lambda i:(0,i)),grid=(n//128,),
+        interpret=interpret,name='beam_final_compact_scatter_bounds')(targets,count,prior_error)
+    errors = pallas_final_error_summary(reason,interpret=interpret)
+
+    def scatter(old,data,t,c,e,out,full,compact,sem):
+        index = pl.program_id(0)
+
+        @pl.when((index.astype(jnp.uint32) < c[0]) & (e[0,0] == 0))
+        def write():
+            target = jnp.sum(jnp.where(jnp.arange(128) == index%128,t[0],jnp.uint32(0)).astype(jnp.int32))
+            load = pltpu.make_async_copy(data.at[pl.ds(index,1),:,:],full,sem)
+            load.start()
+            load.wait()
+            compact[...] = full[:,:,:width]
+            store = pltpu.make_async_copy(compact,out.at[pl.ds(target,1),:,:],sem)
+            store.start()
+            store.wait()
+
+    hbm = pl.BlockSpec(memory_space=pltpu.HBM)
+    result = pl.pallas_call(scatter,
+        out_shape=jax.ShapeDtypeStruct((frontier.shape[0],1,width),jnp.uint8),
+        in_specs=(hbm,hbm,pl.BlockSpec((1,128),lambda i:(0,i//128)),
+                  pl.BlockSpec((1,)),pl.BlockSpec((2,128))),
+        out_specs=hbm,input_output_aliases={0:0},grid=(n,),
+        scratch_shapes=(pltpu.VMEM((1,1,tile_width),jnp.uint8),
+                        pltpu.VMEM((1,1,width),jnp.uint8),pltpu.SemaphoreType.DMA),
+        interpret=interpret,name='beam_final_compact_response_scatter')(
+            frontier[:,None,:],clean[:,None,:],targets,count,errors)
+    return result[:,0,:],errors

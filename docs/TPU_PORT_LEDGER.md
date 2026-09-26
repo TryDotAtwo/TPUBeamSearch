@@ -1983,14 +1983,17 @@ current Kaggle production-packing gate does not cover this new bridge.
 An independent eight-device physical width-bridge gate is now staged in
 `benchmarks/beam_state_width_bridge_execution.py`: eight distinct 150/30
 inputs, compact parent and generator conversion, final materialization,
-compact wire, exact per-device byte/error oracle, source/runtime/device and
-input/output hashes, and saved MLIR/HLO. Its three fixture/interpreter tests
-pass locally. It is not yet submitted because the one allowed Kaggle TPU
+direct Pallas response scatter into aliased 160-byte frontier, exact per-device
+wire/frontier/error oracle, source/runtime/device and input/output hashes,
+and saved MLIR/HLO. The direct compact scatter clears the four-byte response
+index and preserves unselected rows. Thirty related final/bridge tests pass
+locally, including the sharded composed interpreter path. It is not yet
+submitted because the one allowed Kaggle TPU
 session is occupied by production packing; queueing another session would
 violate the active-session contract. Physical compilation and execution are
 unverified.
-Private launcher `kaggle_beam_state_width_bridge` pins the staged source at
-`6756730b2436b86b62676ae0723f496599aa2fc5`; local tests cover rejection
+Private launcher `kaggle_beam_state_width_bridge` pins a staged source SHA;
+local tests cover rejection
 of the wrong checkout and invocation from a clean pinned checkout. The launcher
 is prepared, not submitted. This job should follow the production packing and
 response-epoch gates when the single Kaggle TPU slot is free.
