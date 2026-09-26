@@ -2031,3 +2031,16 @@ first reproduced four failures (all idle-sibling force combinations); after
 the one-predicate repair, 40 ready/commit/collector tests pass locally. This
 implements the source event loop's stop-admission rule, not a distributed stop
 or full depth drain. Hardware and integrated caller validation remain open.
+
+`beam_s4_service.py` now joins logical-pair ready reservation, physical S4
+dedup/histogram commit, sibling control release and S5 completed-job accounting.
+Runtime selection stays on device; Python does not read candidate counts.
+The job increment consumes the physical commit's returned control (after its
+record/histogram DMA waits). A saturated completed-job counter rejects the
+claim, preserves resident/histogram state and sets sticky fatal. Seven local
+integration tests pass across both siblings, fatal/busy/counter rejection,
+empty saturated state, and a second commit that flips histogram generation
+before triggering an S5 request. These tests use the actual Pallas primitives
+in interpreter mode, not mocked stage outputs. This is a serialized pair
+service, not yet the complete depth caller or a physical residency/overlap
+claim; existing diagnostic sort/histogram capacity limits still apply.
