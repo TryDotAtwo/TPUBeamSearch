@@ -2057,3 +2057,19 @@ an explicit serialized service-round schedule; CUDA parity for that schedule,
 full depth orchestration, S5 update-counter bounds and physical residency still
 need validation. The separate full-suite run remains pinned to 4cbdf38 and
 does not include these newly added service modules.
+
+`beam_runner.py` now exposes an array-backed `StreamRoundState` and one actual
+S3 -> local collector -> (multi-rank snapshot RDMA/remote collector) -> S4 -> S5
+round. Runtime counts/thresholds/fatal admission remain device-side. Existing
+fatal admits zero fresh S3 records while retaining the collective sequence.
+The real one-rank path supports interpretation; multi-rank interpretation is
+explicitly rejected, while the physical eight-rank path traces successfully.
+Seven focused runner/legacy-transport tests pass, including a successful round,
+overflow with no partial group admission, three consecutive rounds using the
+published threshold and alternating writable siblings, and fatal admission.
+The repeat test preserves cross-sibling duplicates until the still-separate
+final merge; it does not impose eager A/B dedup or shard top-k.
+This is not a complete depth: S1/S2/solved handling, final selection/publication,
+scratch transitions and production capacities remain outside this round. It
+still has bounded128 S3 inputs, snapshot transport and functional state copies.
+No physical eight-TPU execution, residency, overlap or beam speed is claimed.

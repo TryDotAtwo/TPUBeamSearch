@@ -137,16 +137,28 @@ def make_exchange_collect_call(mesh,*,capacity=128):
     return local_program
 
 
-def make_stream3_collect_call(mesh):
+def make_stream3_collect_call(mesh, *, interpret=False):
     """Bounded128 S3 threshold/dedup/owner/split -> local collect -> exchange.
 
     Metadata must already carry the correct parent/source/move for its payload.
     Does not restore S1/S2 ring payloads or implement coordinated fatal stop.
     Wire packing is deliberately limited to its physically exercised128 ABI.
+    A single-rank path has no remote peers and supports local interpretation;
+    multi-rank interpretation is rejected rather than simulating the network.
     """
     from .beam_external_sort import pallas_external_stream3
     from .beam_stream3 import pallas_stream3_wire_slots
     from .beam_collector import pallas_collect
+    if mesh.size == 1:
+        def local_only(a,b,controls,words,payload,count,threshold,neutral):
+            if words.shape != (8,128) or neutral.shape != (8,128):
+                raise ValueError('integrated wire gate currently requires128 candidates')
+            local,_,local_count,_,_ = pallas_external_stream3(
+                words,payload,count,threshold,local_rank=0,world_size=1,interpret=interpret)
+            return pallas_collect(a,b,local,controls,local_count,interpret=interpret)
+        return local_only
+    if interpret:
+        raise ValueError('multi-rank transport requires physical execution; no implicit network simulation')
     exchange_collect = make_exchange_collect_call(mesh,capacity=128)
     def local_program(a,b,controls,words,payload,count,threshold,neutral):
         if words.shape != (8,128) or neutral.shape != (8,128):
