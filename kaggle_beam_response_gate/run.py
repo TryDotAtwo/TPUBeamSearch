@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA='e71c92261811961307d3f2c13d93f36ad45d6a06'
+COMMIT_SHA='7e1054b1383ee21178413cdf79692a99a25ad8af'
 CHECKOUT=Path('/tmp/TPUBeamSearch-response-gate')
 OUTPUT=Path('/kaggle/working/beam_response_epoch')
 
@@ -28,13 +28,13 @@ def main():
     manifest=OUTPUT/'process.json'
     manifest.write_text(json.dumps(report,indent=2))
     with (OUTPUT/'process.log').open('w') as log:
-        child=subprocess.run((sys.executable,'-m','benchmarks.beam_response_epoch_probe',
-            '--output',str(OUTPUT/'probe')),cwd=CHECKOUT,env=env,
+        child=subprocess.run((sys.executable,'-m','benchmarks.beam_response_followup_bundle',
+            '--output',str(OUTPUT/'bundle')),cwd=CHECKOUT,env=env,
             stdout=log,stderr=subprocess.STDOUT,check=False)
     report['returncode']=child.returncode
     manifest.write_text(json.dumps(report,indent=2))
     if child.returncode:
-        raise RuntimeError(f'response gate child returned {child.returncode}; see process.log')
+        raise RuntimeError(f'response follow-up returned {child.returncode}; see process.log')
 
 
 if __name__=='__main__':

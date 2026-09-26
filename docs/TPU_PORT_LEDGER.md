@@ -1947,8 +1947,11 @@ timing has been accepted; do not restart a queued/running version. Protocol:
 research/2026-09-26-production-packing-gate.md.
 
 The existing private response-epoch launcher is prepared, not submitted, for
-source e71c92261811961307d3f2c13d93f36ad45d6a06. It verifies a clean
-pinned checkout before the existing 11-fixture/33-epoch sharded gate. Launch
+source 7e1054b1383ee21178413cdf79692a99a25ad8af. It verifies a clean
+pinned checkout, then runs sequential subprocesses: isolated packing compile,
+isolated composition compile, then the 11-fixture/33-epoch sharded gate only
+if both compiles pass. The coordinator keeps separate logs, return codes,
+partial JSON, MLIR and HLO. Three local coordinator tests pass. Launch
 only after the current production 32-plane packing gate reaches terminal and
 passes correctness; one TPU session at a time. No response acceptance is
 implied by preparing the launcher.
