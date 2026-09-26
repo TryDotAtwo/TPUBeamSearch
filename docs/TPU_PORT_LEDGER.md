@@ -2227,3 +2227,16 @@ input. Consumer/streaming coverage/scatter tests passed21 cases in136.42 seconds
 including the eight-rank JAXPR shape path; physical collectives and aliasing
 remain pending. Final mark scan, history consumption and publication are not
 yet integrated, and this commit is newer than the running full-suite snapshot.
+
+`beam_final_history_consumer.py` validates live history source/move/validity,
+marks targets across epochs and agrees errors before sequential tiled history
+stores. Storage is private [tile,5,128]; parent low/high and original route
+are preserved. Parent bounds against the previous source frontier remain a
+publication obligation. `pallas_history_tiles_to_soa` explicitly copies to the
+existing host publication ABI; no zero-copy claim is made.
+`beam_final_streaming_agreement.py` checks response and history coverage
+independently and agrees their errors plus prior error on every rank. Its flag
+is not a substitute for awaiting actual consumers before publication.
+Ten history/agreement tests passed in53.22 seconds; the export test passed
+separately in29.20 seconds. Physical multi-rank DMA/layout acceptance remains
+pending. The full suite at2044dac excludes these newer components.
