@@ -2148,3 +2148,13 @@ Eleven count-exchange/prefix tests pass, including all eight offset layouts,
 high unsigned counts, actual single-rank exchange and eight-rank JAXPR ABI.
 Synthetic remote-wire fixtures do not prove physical multi-rank transport.
 The caller must still supply one frozen epoch and agree errors separately.
+
+`beam_final_selection.py` now joins resident prefix validation, unconditional
+common-error agreement, phase masks/scan, actual count exchange, rank prefixes,
+exact cap, dynamic-rank indices and HBM bitonic compaction. Dirty/busy/fatal
+prefixes or L>K reject every output record. Five selection/index tests pass
+(54.83 seconds): less-before-equal ordering, physical tie order, invalid-state
+and impossible-cap rejection, and eight-rank JAXPR ABI. A matching globally
+agreed threshold/beam is still an explicit caller precondition; threshold
+derivation, destination boundaries and request/response/history publication
+are not supplied by this function. No hardware or speed claim follows.

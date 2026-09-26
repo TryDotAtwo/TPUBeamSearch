@@ -11,18 +11,20 @@ def pallas_final_indices(ordinal,bases,keep,error,*,rank,interpret=False):
     UINT32_MAX ordinals are invalid. Any cap error rejects every lane.
     Prefix+ordinal must fit uint64. Zero invalid index words are unspecified
     destinations: downstream MUST compact/gate by validity before balance.
+    rank=None selects the current `core` rank inside the Pallas kernel.
     """
     if (ordinal.ndim != 3 or ordinal.shape[0] != 2 or not ordinal.shape[1]
             or not ordinal.shape[2] or ordinal.shape[2]%128
             or bases.shape != (4,128) or keep.shape != (2,128)
-            or error.shape != (1,128) or not 0<=rank<128
+            or error.shape != (1,128) or (rank is not None and not 0<=rank<128)
             or any(x.dtype != jnp.uint32 for x in (ordinal,bases,keep,error))):
         raise ValueError('invalid final index ABI')
     def kernel(o,b,k,e,index,valid):
         phase = pl.program_id(0)
-        base = b[2*phase,rank]
+        source_rank = jax.lax.axis_index('core') if rank is None else rank
+        base = b[2*phase,source_rank]
         lo = base+o[0,0,:]
-        hi = b[2*phase+1,rank]+(lo<base).astype(jnp.uint32)
+        hi = b[2*phase+1,source_rank]+(lo<base).astype(jnp.uint32)
         below = (hi<k[1,0])|((hi==k[1,0])&(lo<k[0,0]))
         live = (o[0,0,:]!=jnp.uint32(0xffffffff))&below&(e[0,0]==0)
         index[0,0,0,:] = jnp.where(live,lo,jnp.uint32(0))
