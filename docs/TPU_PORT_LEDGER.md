@@ -1980,6 +1980,15 @@ parent and generator through final materialization and back to 160-byte wire;
 30 related tests passed locally. This is not physical Mosaic compilation,
 resident A/B scatter, or the full final request/response transaction. The
 current Kaggle production-packing gate does not cover this new bridge.
+An independent eight-device physical width-bridge gate is now staged in
+`benchmarks/beam_state_width_bridge_execution.py`: eight distinct 150/30
+inputs, compact parent and generator conversion, final materialization,
+compact wire, exact per-device byte/error oracle, source/runtime/device and
+input/output hashes, and saved MLIR/HLO. Its three fixture/interpreter tests
+pass locally. It is not yet submitted because the one allowed Kaggle TPU
+session is occupied by production packing; queueing another session would
+violate the active-session contract. Physical compilation and execution are
+unverified.
 
 The compact-width/final-tile mismatch is now explicit for `STATE_LEN=150`:
 `BeamStorage` gives 160-byte persistent rows and 256-byte final TPU tiles.
