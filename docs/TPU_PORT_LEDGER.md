@@ -1992,8 +1992,8 @@ submitted because the one allowed Kaggle TPU
 session is occupied by production packing; queueing another session would
 violate the active-session contract. Physical compilation and execution are
 unverified.
-Private launcher `kaggle_beam_state_width_bridge` pins a staged source SHA;
-local tests cover rejection
+Private launcher `kaggle_beam_state_width_bridge` pins source
+`4bd9090b6a0ad8e0f83b8166fd1811b9d072673f`; local tests cover rejection
 of the wrong checkout and invocation from a clean pinned checkout. The launcher
 is prepared, not submitted. This job should follow the production packing and
 response-epoch gates when the single Kaggle TPU slot is free.

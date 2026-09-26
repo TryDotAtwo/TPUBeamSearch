@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 
-COMMIT_SHA = "6756730b2436b86b62676ae0723f496599aa2fc5"
+COMMIT_SHA = "4bd9090b6a0ad8e0f83b8166fd1811b9d072673f"
 CHECKOUT = Path("/tmp/TPUBeamSearch-state-width-bridge")
 OUTPUT = Path("/kaggle/working/state_width_bridge_execution")
 
