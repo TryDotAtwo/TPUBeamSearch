@@ -2176,3 +2176,14 @@ cannot revive zero-index padding. Five delivery/plan/history tests pass
 (18.21 seconds). The output is a routing plan, not completed delivery: source
 request grouping, chunk exchange, responses, target coverage and publication
 still must be connected and physically validated.
+
+`beam_final_delivery_exchange.py` groups requests by parent source and history
+by new destination, computes separate intervals and combines preparation
+errors. Each common epoch executes request exchange followed by history
+exchange; request failure gates the latter. The final returned common error
+also invalidates request snapshots received before a late history failure.
+Three primary tests pass (104.43 seconds):129-record tails, empty epochs,
+invalid source blocking both routes and eight-rank ABI tracing. A separate
+late-history-error test passes (15.83 seconds). These are local interpreter/
+JAXPR results, not physical remote transfers. Caller still owns a common epoch
+schedule, materialization/response consumption and final coverage/publication.
