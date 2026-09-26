@@ -1945,3 +1945,10 @@ First status QUEUED. It checks the actual production call on eight sharded TPU
 inputs with 32 planes, plus a 35-plane stress case, for mixed/all-live fixtures. No hardware result or
 timing has been accepted; do not restart a queued/running version. Protocol:
 research/2026-09-26-production-packing-gate.md.
+
+The existing private response-epoch launcher is prepared, not submitted, for
+source e71c92261811961307d3f2c13d93f36ad45d6a06. It verifies a clean
+pinned checkout before the existing 11-fixture/33-epoch sharded gate. Launch
+only after the current production 32-plane packing gate reaches terminal and
+passes correctness; one TPU session at a time. No response acceptance is
+implied by preparing the launcher.

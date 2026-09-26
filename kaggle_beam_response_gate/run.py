@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-COMMIT_SHA='2a7f7f594cf44c5756c18465df649028ee06e822'
+COMMIT_SHA='e71c92261811961307d3f2c13d93f36ad45d6a06'
 CHECKOUT=Path('/tmp/TPUBeamSearch-response-gate')
 OUTPUT=Path('/kaggle/working/beam_response_epoch')
 
@@ -15,6 +15,10 @@ def main():
         'jax[tpu]==0.10.2','jaxlib==0.10.2','libtpu==0.0.42.1'),check=True)
     subprocess.run(('git','clone','https://github.com/TryDotAtwo/TPUBeamSearch.git',str(CHECKOUT)),check=True)
     subprocess.run(('git','checkout','--detach',COMMIT_SHA),cwd=CHECKOUT,check=True)
+    actual=subprocess.check_output(('git','rev-parse','HEAD'),cwd=CHECKOUT,text=True).strip()
+    dirty=subprocess.check_output(('git','status','--porcelain'),cwd=CHECKOUT,text=True).strip()
+    if actual!=COMMIT_SHA or dirty:
+        raise RuntimeError('pinned source checkout is not clean')
     env=os.environ.copy()
     env.update(JAX_ENABLE_X64='False',PYTHONUNBUFFERED='1',
         XLA_PYTHON_CLIENT_MEM_FRACTION='0.90',
