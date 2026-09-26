@@ -37,6 +37,10 @@ class BeamStorage:
         return pad_to_multiple(self.STATE_LEN + 4, 16)
 
     @property
+    def STATE_KERNEL_LEN(self):
+        return pad_to_multiple(self.STATE_STORAGE_LEN, 128)
+
+    @property
     def response_index_offset(self):
         return self.STATE_LEN
 

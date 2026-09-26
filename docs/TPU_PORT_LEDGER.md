@@ -1970,3 +1970,23 @@ duplicate epoch publication and stale operations after reuse are rejected. The
 21 focused ring
 and history tests pass. These are host oracle checks, not physical TPU DMA or
 full final publication acceptance.
+
+The compact-width/final-tile mismatch is now explicit for `STATE_LEN=150`:
+`BeamStorage` gives 160-byte persistent rows and 256-byte final TPU tiles.
+`beam_state_width_bridge.py` supplies Pallas conversion for uint8 state rows
+and int32 move tables, clearing all padding beyond the logical state and
+response index. An interpreter integration fixture passes a 150/30 compact
+parent and generator through final materialization and back to 160-byte wire;
+30 related tests passed locally. This is not physical Mosaic compilation,
+resident A/B scatter, or the full final request/response transaction. The
+current Kaggle production-packing gate does not cover this new bridge.
+
+The compact-width/final-tile mismatch is now explicit for `STATE_LEN=150`:
+`BeamStorage` gives 160-byte persistent rows and 256-byte final TPU tiles.
+`beam_state_width_bridge.py` supplies Pallas conversion for uint8 state rows
+and int32 move tables, clearing all padding beyond the logical state and
+response index. An interpreter integration fixture passes a 150/30 compact
+parent and generator through final materialization and back to 160-byte wire;
+30 related tests passed locally. This is not physical Mosaic compilation,
+resident A/B scatter, or the full final request/response transaction. The
+current Kaggle production-packing gate does not cover this new bridge.
