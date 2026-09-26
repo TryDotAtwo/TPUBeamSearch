@@ -1910,8 +1910,9 @@ rank1 assertion. Next diagnostic: two separate128-column gathers and selection.
 See research/2026-09-16-response-stage-isolation-v5.md. Production unchanged;
 no correctness/timing acceptance.
 
-Split-gather physical execution V2 is COMPLETE and exact on eight TPU v5 lite
-devices. JSON reports shape[8,32,128], uint32, exact=true, max_abs=0; output
+Split-gather physical execution V2 is COMPLETE and exact on one unsharded TPU
+call, with eight TPU v5 lite devices merely inventoried by JAX. The output's
+leading eight is the peer grid, not a device axis. JSON reports shape[8,32,128], uint32, exact=true, max_abs=0; output
 is finite and matches the independent host oracle. Artifacts are in
 test_results/split_gather_execution_v2 and report
 research/2026-09-18-split-gather-execution-v2.md. This is an isolated
@@ -1923,3 +1924,15 @@ The split-gather candidate (two separate 128-column rank-2 gathers plus half
 selection) compiles; the other gather variants retain prior failures. This is
 the first viable physical-execution candidate, not a production fix or speed
 claim. See research/2026-09-17-response-stage-isolation-v6.md.
+
+The next production packing candidate applies the accepted rank-2 split gather
+to all planes in `beam_final_chunk.py`, retaining peer controls, bad-interval
+zeroing, chunk offsets and DMA waits. A new eight-way sharded execution gate
+checks both 32-plane isolation and the 35-plane response caller. Each shape
+executes mixed/error fixtures and an all-live fixture covering every device
+and peer with full-range uint32 values. It compares
+both wire and controls with a direct host oracle. Local focused checks:
+20 final-chunk/split tests, 25 response-composition/isolation tests and six
+gate-fixture/shard-map tests pass. This is still a local candidate: the
+production call has not yet compiled or executed on eight physical TPU cores,
+and no response-epoch correctness or speed claim follows from it.

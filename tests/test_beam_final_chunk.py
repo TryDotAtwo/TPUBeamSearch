@@ -96,3 +96,27 @@ def test_cross_tile_dma_with_interpreter_race_detection():
     np.testing.assert_array_equal(wire[0,:,:2],payload[:,127:129])
     assert not wire[0,:,2:].any()
     assert control[0,0,0]==2
+def test_split_take_uses_two_128_lanes_for_unaligned_positions():
+    import jax.numpy as jnp
+    from tpu_beam_search.beam_final_chunk import _split_take
+    values=jnp.arange(256,dtype=jnp.uint32)[None,:]
+    got=_split_take(values[:,:128],values[:,128:],jnp.arange(128,dtype=jnp.int32)+127)
+    want=jnp.arange(127,255,dtype=jnp.uint32)[None,:]
+    assert jnp.array_equal(got,want)
+
+
+def test_split_take_preserves_plane_axis_for_tpu_supported_gather():
+    from tpu_beam_search.beam_final_chunk import _split_take
+    values = jnp.arange(2 * 256, dtype=jnp.uint32).reshape(2, 256)
+    positions = jnp.arange(128, dtype=jnp.int32) + 127
+    got = _split_take(values[:, :128], values[:, 128:], positions)
+    want = values[:, 127:255]
+    np.testing.assert_array_equal(got, want)
+
+
+def test_split_take_accepts_separately_loaded_vmem_halves():
+    from tpu_beam_search.beam_final_chunk import _split_take
+    values = jnp.arange(2 * 256, dtype=jnp.uint32).reshape(2, 256)
+    positions = jnp.arange(128, dtype=jnp.int32) + 127
+    got = _split_take(values[:, :128], values[:, 128:], positions)
+    np.testing.assert_array_equal(got, values[:, 127:255])

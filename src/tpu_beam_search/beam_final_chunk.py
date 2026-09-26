@@ -3,7 +3,15 @@ import jax
 import jax.numpy as jnp
 from jax.experimental import pallas as pl
 from jax.experimental.pallas import tpu as pltpu
-from .beam_stream2 import _take_clipped
+
+
+def _split_take(low_tile, high_tile, positions):
+    """Gather two 128-lane halves separately; avoids a 32x256 gather."""
+    local = positions % 128
+    indices = jnp.broadcast_to(local[None, :], (low_tile.shape[0], 128))
+    low = jnp.take_along_axis(low_tile, indices, axis=1, mode='promise_in_bounds')
+    high = jnp.take_along_axis(high_tile, indices, axis=1, mode='promise_in_bounds')
+    return jnp.where(positions[None, :] < 128, low, high)
 
 
 def pallas_pack_final_chunk(payload,intervals,chunk,*,world_size,prior_error=None,interpret=False):
@@ -59,9 +67,8 @@ def pallas_pack_final_chunk(payload,intervals,chunk,*,world_size,prior_error=Non
                 second.start()
                 second.wait()
             positions=jnp.arange(128,dtype=jnp.int32)+shift
-            for plane in range(planes):
-                values=_take_clipped(staging[plane,:],positions)
-                out[0,plane,:]=jnp.where(lanes<length,values,jnp.uint32(0))
+            values=_split_take(staging[:,pl.ds(0,128)],staging[:,pl.ds(128,128)],positions)
+            out[0,:,:]=jnp.where(lanes[None,:]<length,values,jnp.uint32(0))
             control[0,0,:]=jnp.where(lanes==0,length,jnp.uint32(0))
     return pl.pallas_call(kernel,
         out_shape=(jax.ShapeDtypeStruct((world_size,planes,128),jnp.uint32),
