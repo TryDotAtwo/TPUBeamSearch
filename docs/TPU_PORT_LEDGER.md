@@ -2187,3 +2187,17 @@ invalid source blocking both routes and eight-rank ABI tracing. A separate
 late-history-error test passes (15.83 seconds). These are local interpreter/
 JAXPR results, not physical remote transfers. Caller still owns a common epoch
 schedule, materialization/response consumption and final coverage/publication.
+
+`beam_final_response_plan.py` consumes the final paired-delivery error,
+compacts received requests, materializes children with per-destination logical
+bounds and prepares grouped responses. Both receive and validation errors
+suppress all send intervals. The destination capacity vector must cover every
+rank; received chunk counts cannot substitute for it. One request epoch can
+require up to world-size response chunks, which the caller must schedule
+uniformly, including empty/error ranks.
+The response-plan/receive/routing run passed21 tests in213.63 seconds; the
+additional eight-rank JAXPR interface test passed in12.30 seconds. These are
+local interpreter/trace results, not physical TPU proof. The complete suite
+at2044dac is still running and excludes this later addition. Response transport,
+cross-epoch coverage/history accumulation and final publication remain to be
+integrated; production defaults and the BN path are unchanged.

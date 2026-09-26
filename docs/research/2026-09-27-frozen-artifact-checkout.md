@@ -26,3 +26,18 @@ full-suite result remains red and is not relabeled as passing.
 
 Kaggle production packing remains QUEUED during this diagnosis; no duplicate
 TPU job was submitted and no accelerator correctness/speed claim follows.
+
+## Existing-checkout follow-up
+
+The isolated `944478f` run finished with **1188 passed, 16 skipped, 2 failed**
+in 2508.86 seconds. The same two hash checks failed: switching to the commit
+containing attributes did not rewrite existing CRLF working-tree files.
+`git ls-files --eol` confirmed `i/lf w/crlf attr/text eol=lf` for both paths.
+Even `checkout-index --force` retained their bytes in this checkout.
+
+Explicitly normalizing only these two known-clean files to LF made both test
+modules pass: **10 passed in 2.33 seconds**. Expected digests and source content
+were unchanged. After switching the verification checkout to `2044dac`,
+`git diff --stat`, `git diff --numstat`, and the whitespace-insensitive diff
+were empty. A complete run of that immutable revision was started separately;
+its result is pending and does not cover subsequent response-plan edits.
