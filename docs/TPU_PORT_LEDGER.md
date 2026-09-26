@@ -2139,3 +2139,12 @@ multiplicity for source parity. `beam_final_resident.py` connects frozen
 resident buffers to final phase/scan inputs with dirty/busy/fatal/count gates.
 Nine local tests pass, including duplicate hashes with distinct parents and
 cap-dependent tie traversal. No CUDA execution or physical TPU gate is claimed.
+
+`beam_final_count_exchange.py` reuses the serialized S5 wire transport without
+its histogram sum. Each wire pair carries independent less/equal phase counts;
+offset d comes from (rank-d) modulo world. A Pallas reorder produces absolute
+rank-major counts before final prefixes. Padding is ignored and cleared.
+Eleven count-exchange/prefix tests pass, including all eight offset layouts,
+high unsigned counts, actual single-rank exchange and eight-rank JAXPR ABI.
+Synthetic remote-wire fixtures do not prove physical multi-rank transport.
+The caller must still supply one frozen epoch and agree errors separately.
