@@ -13,7 +13,10 @@ eight TPU devices but did not test all eight. The production gate uses a
 is `[32 or 35,2048]` uint32 HBM payload, `[3,128]` intervals, `[1]` chunk and
 `[1,128]` prior error. The leading global dimension is the device axis.
 
-For both 32-plane isolation and 35-plane response-caller shapes, one compiled
+The current response caller receives a 35-plane grouped input, but passes only
+its first 32 payload planes to production packing; the other three planes are
+routing metadata. Thus 32 is the actual packing shape and 35 is an additional
+layout stress case, not a response-caller claim. For both shapes, one compiled
 executable processes two fixture rounds. Mixed cases cover tile crossing,
 second chunk, empty, malformed bounds, rank error, prior error, final HBM tile
 and exhausted chunk. The all-live round sends 128 records for every device and

@@ -24,7 +24,7 @@ def test_physical_gate_uses_independent_payloads_on_each_core():
     assert len({payload[rank].tobytes() for rank in range(8)}) == 8
 
 
-def test_physical_gate_covers_35_plane_response_caller():
+def test_physical_gate_covers_35_plane_layout_stress():
     from benchmarks.beam_production_packing_execution import make_inputs, expected
 
     arrays = make_inputs(planes=35)

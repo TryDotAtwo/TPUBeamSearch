@@ -1928,7 +1928,9 @@ claim. See research/2026-09-17-response-stage-isolation-v6.md.
 The next production packing candidate applies the accepted rank-2 split gather
 to all planes in `beam_final_chunk.py`, retaining peer controls, bad-interval
 zeroing, chunk offsets and DMA waits. A new eight-way sharded execution gate
-checks both 32-plane isolation and the 35-plane response caller. Each shape
+checks the actual 32-plane response payload and an additional 35-plane layout
+stress case. The caller's 35 grouped planes include three routing planes that
+are not passed to packing. Each shape
 executes mixed/error fixtures and an all-live fixture covering every device
 and peer with full-range uint32 values. It compares
 both wire and controls with a direct host oracle. Local focused checks:
@@ -1940,6 +1942,6 @@ and no response-epoch correctness or speed claim follows from it.
 Production packing execution V1 was submitted to private Kaggle on 2026-09-26
 from source e71c92261811961307d3f2c13d93f36ad45d6a06, launcher 1f0f0f5.
 First status QUEUED. It checks the actual production call on eight sharded TPU
-inputs for both 32/35 planes and mixed/all-live fixtures. No hardware result or
+inputs with 32 planes, plus a 35-plane stress case, for mixed/all-live fixtures. No hardware result or
 timing has been accepted; do not restart a queued/running version. Protocol:
 research/2026-09-26-production-packing-gate.md.
