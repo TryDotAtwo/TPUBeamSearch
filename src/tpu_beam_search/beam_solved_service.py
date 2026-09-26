@@ -21,7 +21,7 @@ def make_solved_batch_service(mesh, *, local_rank, stop_on_found, interpret=Fals
     The underlying solved arena is still the small VMEM diagnostic collector;
     this does not establish scalable HBM residency or a scratch/DMA barrier.
     """
-    if type(local_rank) is not int or not 0 <= local_rank <= 255:
+    if local_rank is not None and (type(local_rank) is not int or not 0 <= local_rank <= 255):
         raise ValueError('local rank must fit solved owner byte')
     agree = make_s5_request_call(mesh, interpret=interpret)
 
@@ -47,10 +47,12 @@ def make_solved_batch_service(mesh, *, local_rank, stop_on_found, interpret=Fals
                 control,hits,batch.error,prior_error)
 
         def records(w,h,s,d,f,e,out,flags):
+            rank = (jax.lax.axis_index('core').astype(jnp.uint32)
+                    if local_rank is None else jnp.uint32(local_rank))
             out[:4,:] = h[...]
             out[4:6,:] = w[4:6,:]
             out[6,:] = jnp.zeros((128,),jnp.uint32)
-            out[7,:] = (w[7,:] & jnp.uint32(255)) | jnp.uint32((local_rank<<16)|(local_rank<<8))
+            out[7,:] = (w[7,:] & jnp.uint32(255)) | (rank<<jnp.uint32(16)) | (rank<<jnp.uint32(8))
             out[8,:] = jnp.full((128,),d[0],jnp.uint32)
             out[9,:] = s[0,:]
             flags[...] = jnp.where(e[0,0] == 0,f[...],jnp.uint32(0))

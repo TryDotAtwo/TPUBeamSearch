@@ -2116,3 +2116,17 @@ JAXPR check establishes only the output ABI, not distributed execution.
 The service still uses the diagnostic VMEM collector and must be attached to
 the full stream caller with accumulated errors, job admission and DMA drains.
 It does not itself establish scalable solved storage or scratch lifetimes.
+
+`beam_candidate_round.py` joins checked S2/K1/K2, solved append/common
+error-stop, and the real serialized S3/collector/S4/S5 round using supplied
+uint32 score keys. Prior common stop rejects new parents; an already-admitted
+batch finishes its accounting. Common solved errors mark resident controls
+fatal before S3 admission. All ranks retain the collective schedule even on
+empty/rejected input. Multi-rank solved metadata now derives source/owner rank
+from `core`, while the true one-rank interpreter path uses rank zero.
+Ten candidate-round/solved-service tests pass (197.17 seconds), including two
+successive rounds with stop, identity failure preserving old arrays, and an
+eight-rank JAXPR ABI trace. This is not physical distributed correctness.
+The integrated round is still limited to128 candidates and supplied scores;
+final A/B merge, global cap/balance, frontier/history publication, scratch
+lifetime and actual inference integration remain separate requirements.
