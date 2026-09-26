@@ -88,11 +88,19 @@ def test_stale_wait_and_ack_cannot_mutate_reused_slot():
             operation(epoch=0, slot=0)
 
 
-def test_ring_window_cannot_advance_past_unfinished_oldest_epoch():
+def test_free_slot_can_advance_while_another_epoch_remains_unfinished():
     ring = RemoteDmaRingModel(slot_count=2)
     ring.publish_ready(epoch=0, slot=0)
     ring.start(epoch=0, slot=0, count=1)
     ring.publish_ready(epoch=1, slot=1)
     ring.start(epoch=1, slot=1, count=0)
-    with pytest.raises(RuntimeError, match='window'):
-        ring.publish_ready(epoch=2, slot=1)
+    for epoch in range(2, 102):
+        ring.publish_ready(epoch=epoch, slot=1)
+        ring.start(epoch=epoch, slot=1, count=0)
+        assert ring.epoch_complete(epoch)
+    assert not ring.epoch_complete(0)
+    ring.wait_send(epoch=0, slot=0)
+    ring.wait_recv(epoch=0, slot=0)
+    ring.consume(epoch=0, slot=0)
+    ring.ack(epoch=0, slot=0)
+    assert all(ring.epoch_complete(epoch) for epoch in range(102))

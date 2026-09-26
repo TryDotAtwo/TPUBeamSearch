@@ -27,13 +27,28 @@ class RemoteDmaRingModel:
         self._slots = [_Slot() for _ in range(slot_count)]
         self._next_epoch = 0
         self._retired_before = 0
-        self._completed_pending: set[int] = set()
+        self._completed_ranges: list[tuple[int, int]] = []
 
     def _mark_completed(self, epoch: int) -> None:
-        self._completed_pending.add(epoch)
-        while self._retired_before in self._completed_pending:
-            self._completed_pending.remove(self._retired_before)
-            self._retired_before += 1
+        lo = hi = epoch
+        merged = []
+        inserted = False
+        for start, end in self._completed_ranges:
+            if end + 1 < lo:
+                merged.append((start, end))
+            elif hi + 1 < start:
+                if not inserted:
+                    merged.append((lo, hi))
+                    inserted = True
+                merged.append((start, end))
+            else:
+                lo, hi = min(lo, start), max(hi, end)
+        if not inserted:
+            merged.append((lo, hi))
+        self._completed_ranges = merged
+        if merged and merged[0][0] == self._retired_before:
+            self._retired_before = merged[0][1] + 1
+            merged.pop(0)
 
     def _slot(self, slot: int) -> _Slot:
         if not 0 <= slot < len(self._slots):
@@ -51,8 +66,6 @@ class RemoteDmaRingModel:
             raise RuntimeError('previous use is not acknowledged')
         if not isinstance(epoch, int) or epoch != self._next_epoch:
             raise RuntimeError('epoch must be the next unpublished epoch')
-        if epoch - self._retired_before >= len(self._slots):
-            raise RuntimeError('ring window is blocked by an unfinished epoch')
         state.epoch = epoch
         state.ready = True
         state.started = state.send_done = state.recv_done = state.consumed = False
@@ -118,4 +131,5 @@ class RemoteDmaRingModel:
 
     def epoch_complete(self, epoch: int) -> bool:
         return (isinstance(epoch, int) and epoch >= 0
-                and (epoch < self._retired_before or epoch in self._completed_pending))
+                and (epoch < self._retired_before
+                     or any(lo <= epoch <= hi for lo, hi in self._completed_ranges)))

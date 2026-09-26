@@ -1963,8 +1963,10 @@ execution.
 Host final/history and remote-DMA protocol oracles received two fail-closed
 repairs after red tests. `reconstruct_history` now validates the source rank
 of every entry, including the last/root entry, without reading a previous
-layer at depth one. `RemoteDmaRingModel` now tracks completed epochs with a
-bounded retirement window independent of mutable slot reuse, rejects duplicate
-starts/epoch publication and stale operations after reuse. The 21 focused ring
+layer at depth one. `RemoteDmaRingModel` now tracks completed epochs with compact
+intervals and a retirement watermark independent of mutable slot reuse. A free
+acknowledged slot may advance past another unfinished slot; duplicate starts,
+duplicate epoch publication and stale operations after reuse are rejected. The
+21 focused ring
 and history tests pass. These are host oracle checks, not physical TPU DMA or
 full final publication acceptance.
