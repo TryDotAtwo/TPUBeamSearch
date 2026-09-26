@@ -2215,3 +2215,15 @@ Streaming plus existing coverage tests passed15 cases in103.98 seconds;
 a separate same-tile duplicate test with interpreter race detection passed
 in14.70 seconds. Physical alias/layout/DMA acceptance and speed remain unproven.
 The ongoing full suite at2044dac does not cover this later module.
+
+`beam_final_response_consumer.py` now connects receive status, persistent target
+marks, collective error agreement and compact private-frontier scatter. A
+duplicate discovered after earlier valid records blocks the entire current
+chunk's stores; any marked prefix remains private and the depth stays failed.
+Receive errors also poison empty epochs. A second unconditional agreement
+retains scatter failures across ranks and future epochs. All ranks must invoke
+the same schedule. Old published frontiers are forbidden as this consumer's
+input. Consumer/streaming coverage/scatter tests passed21 cases in136.42 seconds,
+including the eight-rank JAXPR shape path; physical collectives and aliasing
+remain pending. Final mark scan, history consumption and publication are not
+yet integrated, and this commit is newer than the running full-suite snapshot.
