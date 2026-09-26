@@ -1994,3 +1994,11 @@ Private launcher `kaggle_beam_state_width_bridge` pins the staged source at
 of the wrong checkout and invocation from a clean pinned checkout. The launcher
 is prepared, not submitted. This job should follow the production packing and
 response-epoch gates when the single Kaggle TPU slot is free.
+
+Full local suite from the pre-width-gate snapshot finished with 1136 passed,
+16 skipped and two failures in `test_beam_response_launcher` (29m29s).
+Both failures were the obsolete test harness: it expected the old child module
+and did not supply the launcher's pinned-checkout readback. The production
+launcher was unchanged; the updated two-case test passes locally. A new full
+suite on the later snapshot was started separately; its result must be read
+from its own JUnit/log, not inferred from the targeted repair.
