@@ -48,11 +48,19 @@ local work. The source's 2026-05-26 Stream5 update supersedes older local-only
 multi-rank threshold text. Threshold never relaxes after initialization.
 Dedup tie-break is score/payload in S3, score/parent/route in S4.
 
-Final drains pending work, deduplicates across A/B siblings, computes global
-threshold and exact beam cap including ties, balances, exchanges parent
+Final drains pending work, deduplicates within each physical A/B buffer,
+computes global threshold and exact beam cap including ties, balances, exchanges parent
 requests and child responses in chunks, clears response padding and emits CPU
 history. Goal records bypass threshold/dedup/final selection. K1/K2 lookup and
 suffix reconstruction remain explicit port requirements, not disabled defaults.
+
+Source-parity clarification (2026-09-27): the audited CUDA final path does not
+merge/deduplicate hashes across A/B siblings. Preserve physical traversal
+`A0,B0,A1,B1,...`, slot order, and less-then-equal score phases; identical
+hashes in different physical buffers remain separate records with their own
+parent/history. A cross-buffer uniqueness requirement would change current
+CUDA semantics and must not be silently added to the port. See
+[source audit](research/2026-09-27-final-physical-sibling-parity.md).
 
 ## Overlap from the first implementation
 

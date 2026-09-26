@@ -2130,3 +2130,12 @@ eight-rank JAXPR ABI trace. This is not physical distributed correctness.
 The integrated round is still limited to128 candidates and supplied scores;
 final A/B merge, global cap/balance, frontier/history publication, scratch
 lifetime and actual inference integration remain separate requirements.
+
+Source audit correction: earlier references here to a final cross-A/B merge
+were assumptions, not CUDA behavior. At source b5fcf6b the final path processes
+physical prefixes independently; see research/2026-09-27-final-physical-sibling-parity.md.
+The architecture now preserves A0,B0,A1,B1 traversal and cross-physical hash
+multiplicity for source parity. `beam_final_resident.py` connects frozen
+resident buffers to final phase/scan inputs with dirty/busy/fatal/count gates.
+Nine local tests pass, including duplicate hashes with distinct parents and
+cap-dependent tie traversal. No CUDA execution or physical TPU gate is claimed.
