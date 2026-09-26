@@ -2167,3 +2167,12 @@ reject all outputs. Seventeen boundary/balance tests pass (54.21 seconds),
 including K above2^32, uneven/empty ranks, world127 at the allowed maximum,
 and full uint64 overflow inputs. This is interpreter correctness, not TPU
 compile or throughput evidence; caller wiring into materialization remains.
+
+`beam_final_delivery.py` now joins packed capped records, exact boundaries,
+request construction and history projection through one destination/local-index
+calculation. Source rank, old owner and new return rank remain distinct;
+parent64 and original history route are preserved. Prior errors and K=0
+cannot revive zero-index padding. Five delivery/plan/history tests pass
+(18.21 seconds). The output is a routing plan, not completed delivery: source
+request grouping, chunk exchange, responses, target coverage and publication
+still must be connected and physically validated.
