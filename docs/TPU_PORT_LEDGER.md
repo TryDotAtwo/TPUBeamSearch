@@ -2018,3 +2018,11 @@ include all DMA/consumer dependencies and all final errors in its completion
 contract, keep candidate storage private, and not donate the old frontier.
 The full local suite is still running with two failures observed; it is not
 reported as passing. Kaggle production packing remains QUEUED, not restarted.
+
+S4 ready admission now checks the sticky fatal lane before claiming a new
+physical sibling. Force-clean/force-dirty flags do not override fatal; existing
+busy flags are preserved for the separate completion path. The new regression
+first reproduced four failures (all idle-sibling force combinations); after
+the one-predicate repair, 40 ready/commit/collector tests pass locally. This
+implements the source event loop's stop-admission rule, not a distributed stop
+or full depth drain. Hardware and integrated caller validation remain open.

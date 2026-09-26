@@ -25,6 +25,8 @@ def pallas_claim_ready(controls,*,capacity,clean_ready_threshold,dirty_trigger,
     Caller serializes this with collector control publication. Geometry and
     clean+dirty <= capacity are caller contracts. Returns controls and lane-zero
     [enabled, physical_buffer] job descriptor, not a globally compacted queue.
+    Sticky fatal blocks new claims even under force flags. Completion of an
+    already claimed job is separate; this call never releases its busy flag.
     """
     if controls.shape != (8,128) or controls.dtype != jnp.uint32:
         raise ValueError('controls must be uint32 [8,128]')
@@ -43,7 +45,7 @@ def pallas_claim_ready(controls,*,capacity,clean_ready_threshold,dirty_trigger,
         tie_b = jnp.where(total_a >= capacity,current == 1,current == 0)
         prefer_b = (db&~da)|((db == da)&((total_b > total_a)|((total_b == total_a)&tie_b)))
         choose_b = rb&(~ra|prefer_b)
-        enabled = (ra|rb)&(c[4,0] == 0)&(c[5,0] == 0)
+        enabled = (ra|rb)&(c[4,0] == 0)&(c[5,0] == 0)&(c[7,0] == 0)
         selected = choose_b.astype(jnp.uint32)
         sibling_space = jnp.where(choose_b,total_a,total_b) < capacity
         write = jnp.where(enabled&sibling_space,selected^jnp.uint32(1),c[6,0])

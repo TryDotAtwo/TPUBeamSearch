@@ -61,3 +61,16 @@ def test_ready_threshold_reserves_ceiling_average_plus_quarter(capacity,shards,b
     assert hasattr(beam_s4_ready,'clean_ready_threshold')
     assert beam_s4_ready.clean_ready_threshold(capacity=capacity,logical_shards=shards,
                                               stream3_batch=batch) == want
+
+
+@pytest.mark.parametrize('force_dirty,force_clean', [(False,False),(True,False),(False,True),(True,True)])
+@pytest.mark.parametrize('busy', [(0,0),(1,0),(0,1)])
+def test_sticky_fatal_blocks_new_claim_without_releasing_inflight_job(force_dirty,force_clean,busy):
+    from tpu_beam_search.beam_s4_ready import pallas_claim_ready
+    controls = np.zeros((8,128),np.uint32)
+    controls[:,0] = (0,128,64,0,*busy,0,1)
+    actual,job = pallas_claim_ready(jnp.asarray(controls),capacity=256,
+        clean_ready_threshold=120,dirty_trigger=64,force_dirty=force_dirty,
+        force_clean=force_clean,interpret=True)
+    np.testing.assert_array_equal(actual,controls)
+    np.testing.assert_array_equal(job,np.zeros((2,128),np.uint32))
