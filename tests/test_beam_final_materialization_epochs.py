@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 
+import jax
 import jax.numpy as jnp
 import numpy as np
 import pytest
@@ -47,3 +48,21 @@ def test_single_rank_epoch_loop_materializes_and_checks_both_streams(prior_error
     assert not np.asarray(history_error).any()
     np.testing.assert_array_equal(np.asarray(result.frontier)[0,:3],[5,6,4])
     np.testing.assert_array_equal(np.asarray(result.history)[0,:,0],[1,0,0,0,1])
+
+
+def test_eight_rank_epoch_loop_traces_dynamic_common_bound():
+    from tpu_beam_search.beam_final_materialization_round import FinalMaterializationState
+    from tpu_beam_search.beam_final_materialization_epochs import make_final_materialization_epochs
+    u32=lambda shape:jax.ShapeDtypeStruct(shape,jnp.uint32)
+    state=FinalMaterializationState(jax.ShapeDtypeStruct((128,160),jnp.uint8),
+        u32((1,5,128)),u32((1,128)),u32((2,128)),u32((1,128)),
+        u32((2,128)),u32((1,128)))
+    prepared=(u32((7,128)),u32((3,128)),u32((8,128)),u32((3,128)),u32((1,128)))
+    call=make_final_materialization_epochs(SimpleNamespace(size=8),
+        state_len=150,move_count=2,request_capacity=128,history_capacity=128)
+    trace=jax.make_jaxpr(call,axis_env=[('core',8)])(state,
+        jax.ShapeDtypeStruct((128,256),jnp.uint8),
+        jax.ShapeDtypeStruct((2,256),jnp.int32),prepared,u32((8,)),u32((1,)))
+    assert [value.shape for value in trace.out_avals]==[
+        (128,160),(1,5,128),(1,128),(2,128),(1,128),(2,128),(1,128),
+        (1,128),(1,128)]
