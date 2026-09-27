@@ -2274,3 +2274,10 @@ round count from both channels and performs unconditional rank-wide error
 and count agreements. Malformed intervals or a prior error force zero rounds
 on every rank. Its eight local interpreter cases pass; multi-rank physical
 execution and integration with the final depth caller remain pending.
+
+The private final-materialization epoch loop now uses that uniform scheduler,
+invokes the paired delivery round for every common epoch, then agrees on
+response and history target coverage. A pre-existing state error joins the
+plan error before scheduling; a regression test catches loss of this flag.
+The focused local interpreter/scheduler suite passes 11 tests. Publication,
+multi-rank TPU execution and end-to-end replay are still separate gates.
