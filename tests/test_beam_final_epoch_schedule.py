@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 import numpy as np
 import jax.numpy as jnp
+import jax
 import pytest
 
 
@@ -27,3 +28,14 @@ def test_bad_interval_rejects_schedule_instead_of_running_unbounded_epochs(fault
     rounds,error=make_final_epoch_schedule(SimpleNamespace(size=1),request_capacity=256,
         history_capacity=512,interpret=True)(ri,hi,prior)
     assert int(rounds[0])==0 and int(error[0,0])==1
+
+
+def test_eight_rank_schedule_traces_two_uniform_agreements():
+    from tpu_beam_search.beam_final_epoch_schedule import make_final_epoch_schedule
+    call=make_final_epoch_schedule(SimpleNamespace(size=8),
+        request_capacity=1024,history_capacity=1024)
+    shape=jax.ShapeDtypeStruct((3,128),jnp.uint32)
+    trace=jax.make_jaxpr(call,axis_env=[('core',8)])(
+        shape,shape,jax.ShapeDtypeStruct((1,128),jnp.uint32))
+    assert [value.shape for value in trace.out_avals]==[(1,),(1,128)]
+    assert str(trace).count('beam_s5_request_exchange')>=2
