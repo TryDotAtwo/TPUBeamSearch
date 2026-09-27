@@ -2295,3 +2295,7 @@ and independent response/history coverage. It returns a private state and
 controls to `commit_final_epoch_states`; caller-owned arenas and actual frozen
 S4/S5 completion remain preconditions. An eight-rank JAXPR shape trace passes.
 This is graph construction, not physical eight-TPU execution or GPU parity.
+The single-rank interpreter now also runs that entire path with two tied
+physical A/B candidates, materializes their states in A0/B0 order, verifies
+both coverage streams, and publishes matching history in one new depth.
+The test passes; it is not an eight-rank hardware or CUDA replay.
