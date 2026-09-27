@@ -2268,3 +2268,9 @@ test_results/production_packing_execution_v1. No speed or RDMA claim.
 See docs/research/2026-09-27-production-packing-result.md.
 Prepared response gate submitted as V5, source d5c8a45, and confirmed QUEUED.
 Do not restart it; state-width bridge remains pending its terminal result.
+
+The paired final request/history epoch scheduler now computes one bounded
+round count from both channels and performs unconditional rank-wide error
+and count agreements. Malformed intervals or a prior error force zero rounds
+on every rank. Its eight local interpreter cases pass; multi-rank physical
+execution and integration with the final depth caller remain pending.
