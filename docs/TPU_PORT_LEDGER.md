@@ -2288,3 +2288,10 @@ awaits every returned state, and stages frontier and history as one new depth.
 Late error retains the old handle. Focused local tests include the actual
 single-rank epoch loop followed by publication. Multi-rank device execution
 and cross-implementation replay remain pending.
+
+The frozen final-depth graph now composes resident A/B selection, capped
+delivery planning, prepared request/history routes, the uniform epoch loop,
+and independent response/history coverage. It returns a private state and
+controls to `commit_final_epoch_states`; caller-owned arenas and actual frozen
+S4/S5 completion remain preconditions. An eight-rank JAXPR shape trace passes.
+This is graph construction, not physical eight-TPU execution or GPU parity.
