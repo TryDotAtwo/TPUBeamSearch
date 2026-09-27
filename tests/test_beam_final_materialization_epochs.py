@@ -48,6 +48,15 @@ def test_single_rank_epoch_loop_materializes_and_checks_both_streams(prior_error
     assert not np.asarray(history_error).any()
     np.testing.assert_array_equal(np.asarray(result.frontier)[0,:3],[5,6,4])
     np.testing.assert_array_equal(np.asarray(result.history)[0,:,0],[1,0,0,0,1])
+    from tpu_beam_search.beam_final_publication import (
+        PublishedBeamDepth,commit_final_epoch_states)
+    from tpu_beam_search.beam_history import HistoryEntry,RankHistoryStore
+    current=PublishedBeamDepth(0,(jnp.zeros((3,160),jnp.uint8),),
+        (2,),RankHistoryStore(world_size=1))
+    published=commit_final_epoch_states(current,states_by_rank=(result,),
+        target_counts=jnp.array([1],jnp.uint32),move_count=2,interpret=True)
+    assert current.depth==0 and published.depth==1
+    assert published.history.read_entry(0,0,0)==HistoryEntry(1,0)
 
 
 def test_eight_rank_epoch_loop_traces_dynamic_common_bound():

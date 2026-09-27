@@ -7,9 +7,12 @@ infer remote DMA completion from an error flag or invent a device barrier.
 from dataclasses import dataclass
 
 import jax
+import jax.numpy as jnp
 import numpy as np
 
 from .beam_history import RankHistoryStore, decode_history_soa
+from .beam_final_history_consumer import pallas_history_tiles_to_soa
+from .beam_final_materialization_round import FinalMaterializationState
 
 
 @dataclass(frozen=True)
@@ -76,3 +79,26 @@ def commit_final_publication(current, *, frontier_by_rank, history_by_rank,
         target_counts=counts, depth=current.depth,
     )
     return PublishedBeamDepth(current.depth + 1, frontier_by_rank, counts, history)
+
+
+def commit_final_epoch_states(current, *, states_by_rank, target_counts,
+                              move_count, interpret=False):
+    """Publish fully checked private epoch results through one host handle.
+
+    Each state must be the completed output of the paired epoch loop, whose
+    common error includes both response and history coverage. The old frontier
+    remains live. The history tile export is a dependent Pallas call; the
+    underlying publication waits that export and every private result before
+    installing a new depth.
+    """
+    states=tuple(states_by_rank)
+    if len(states)!=len(current.frontiers) or not all(
+            isinstance(state,FinalMaterializationState) for state in states):
+        raise ValueError('one final epoch state per rank is required')
+    history=tuple(pallas_history_tiles_to_soa(state.history,
+                    interpret=interpret) for state in states)
+    return commit_final_publication(current,
+        frontier_by_rank=tuple(state.frontier for state in states),
+        history_by_rank=history,target_counts=target_counts,
+        common_error=jnp.stack(tuple(state.error for state in states)),
+        completed_work=(states,history),move_count=move_count)

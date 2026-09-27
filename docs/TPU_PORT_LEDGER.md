@@ -2281,3 +2281,10 @@ response and history target coverage. A pre-existing state error joins the
 plan error before scheduling; a regression test catches loss of this flag.
 The focused local interpreter/scheduler suite passes 11 tests. Publication,
 multi-rank TPU execution and end-to-end replay are still separate gates.
+
+The private epoch result now feeds the existing atomic host publication
+boundary through `commit_final_epoch_states`: it exports tiled Pallas history,
+awaits every returned state, and stages frontier and history as one new depth.
+Late error retains the old handle. Focused local tests include the actual
+single-rank epoch loop followed by publication. Multi-rank device execution
+and cross-implementation replay remain pending.
