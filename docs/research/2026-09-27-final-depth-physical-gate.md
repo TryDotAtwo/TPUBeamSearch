@@ -18,6 +18,8 @@ byte including cleared response-index/padding, every history word, all eight
 per-device errors and target counts, global keep/phase counts, dtype, shape and
 SHA-256. It does not measure time or validate S1-S5 admission/stop.
 
-The source and launcher commits must be pinned when the private Kaggle kernel
-is prepared. The local pure fixture test establishes only input/oracle
-consistency; eight-device correctness requires the physical run.
+The private Kaggle launcher is prepared under
+`kaggle_beam_final_depth_execution/`, pinned to source
+`b4ade889bdebb9b6020468709d490698c3768058`. It is not submitted yet.
+The local pure fixture test establishes only input/oracle consistency;
+eight-device correctness requires the physical run.
