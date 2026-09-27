@@ -2305,3 +2305,14 @@ verification worktree: 1320 collected, 1304 passed, 16 skipped, zero failures
 or errors in 3065.82 seconds. JUnit and stdout/stderr are preserved under
 `test_results/local_isolated_5758c1c.*`. This covers the final depth code
 through that SHA, but predates the later physical-gate benchmark and launcher.
+
+Response epoch V5 ended ERROR on eight TPU v5 lite devices. Isolated packing
+and composition compiled, and all three empty epochs were exact. The first
+nonempty `self` epoch 0 had exact controls but wrong response bytes on every
+rank; later fixtures were not run. Complete output, logs and HLO/MLIR are
+preserved in `test_results/beam_response_epoch_v5/`. The approximate byte
+mismatch fraction does not identify the culprit. A local 129-shuffled-record
+interpreter regression passes, so the next run instruments physical
+preparation, packet and output boundaries without changing production code.
+See `docs/research/2026-09-27-response-epoch-v5-failure.md`. No response
+correctness or beam-throughput claim follows from this failed gate.

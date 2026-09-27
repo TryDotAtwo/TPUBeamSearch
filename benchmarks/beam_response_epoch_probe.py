@@ -10,6 +10,7 @@ from benchmarks.beam_external_dedup_probe import digest
 from benchmarks.beam_response_epoch_fixture import fixtures,expected_epoch
 from tpu_beam_search.beam_final_response_routing import pallas_prepare_final_response_exchange
 from tpu_beam_search.beam_final_response_chunk import make_final_response_chunk_call
+from tpu_beam_search.beam_final_chunk import pallas_pack_final_chunk
 
 
 def validate_epoch(actual, expected):
@@ -30,6 +31,59 @@ def validate_epoch(actual, expected):
                 wire_shape=list(wire.shape), control_shape=list(control.shape),
                 wire_dtype=str(wire.dtype), control_dtype=str(control.dtype),
                 output_sha256=digest((wire, control)))
+
+
+def diagnose_self_epoch(wire, prepared, actual, expected):
+    """Bounded failure evidence for the first nonempty self-routed epoch."""
+    grouped, intervals, error = map(np.asarray, prepared)
+    got_wire, got_control = map(np.asarray, actual)
+    want_wire, want_control = map(np.asarray, expected)
+    live = 129
+    grouped_mismatches = []
+    interval_mismatches = []
+    for rank in range(8):
+        words = wire[rank, :live].copy().view('<u4').T
+        grouped_mismatches.append(int(np.count_nonzero(grouped[rank, :32, :live] != words)))
+        want_intervals = np.zeros((3, 128), np.uint32)
+        want_intervals[1, rank] = live
+        interval_mismatches.append(int(np.count_nonzero(intervals[rank] != want_intervals)))
+    differences = got_wire != want_wire
+    positions = np.argwhere(differences)
+    samples = [[int(x) for x in (*position, got_wire[tuple(position)], want_wire[tuple(position)])]
+               for position in positions[:32]]
+    return dict(grouped_live_word_mismatches=grouped_mismatches,
+                interval_mismatches=interval_mismatches,
+                preparation_error=[int(error[rank, 0, 0]) for rank in range(8)],
+                wire_mismatches_by_byte_column=np.count_nonzero(differences, axis=(0, 1)).astype(int).tolist(),
+                wire_mismatches_by_row=np.count_nonzero(differences, axis=2).astype(int).tolist(),
+                first_wire_mismatches=samples,
+                control_mismatches=int(np.count_nonzero(got_control != want_control)))
+
+
+def diagnose_self_packet(packet, controls, wire):
+    packet, controls = map(np.asarray, (packet, controls))
+    mismatches = []
+    control_mismatches = []
+    for rank in range(8):
+        expected = np.zeros((8,32,128),np.uint32)
+        expected[rank] = wire[rank,:128].copy().view('<u4').T
+        expected_control = np.zeros((8,2,128),np.uint32)
+        expected_control[rank,0,0] = 128
+        mismatches.append(int(np.count_nonzero(packet[rank] != expected)))
+        control_mismatches.append(int(np.count_nonzero(controls[rank] != expected_control)))
+    return dict(packet_word_mismatches=mismatches,
+                packet_control_mismatches=control_mismatches)
+
+
+def local_pack_probe(mesh):
+    spec=jax.sharding.PartitionSpec('core',None,None)
+    replicated=jax.sharding.PartitionSpec()
+    def call(grouped,intervals,error,index):
+        packet,control=pallas_pack_final_chunk(grouped[0,:32],intervals[0],index,
+            world_size=mesh.size,prior_error=error[0])
+        return packet[None],control[None]
+    return jax.jit(jax.shard_map(call,mesh=mesh,
+        in_specs=(spec,spec,spec,replicated),out_specs=(spec,spec),check_vma=False))
 
 
 def local_calls(mesh):
@@ -96,6 +150,10 @@ def main():
                 (output/'epoch.hlo.txt').write_text(step_exe.as_text())
             actual=tuple(np.asarray(x) for x in jax.block_until_ready(step_exe(*prepared,number)))
             item.update(validate_epoch(actual,expected))
+            if not item['exact'] and name == 'self' and index == 0:
+                item['diagnostic'] = diagnose_self_epoch(wire,prepared,actual,expected)
+                packet,packet_controls=jax.block_until_ready(local_pack_probe(mesh)(*prepared,number))
+                item['diagnostic'].update(diagnose_self_packet(packet,packet_controls,wire))
             save()
             if not item['exact']:
                 raise RuntimeError(f'{name} epoch{index}: response mismatch')

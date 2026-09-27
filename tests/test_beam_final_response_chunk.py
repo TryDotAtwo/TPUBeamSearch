@@ -38,3 +38,24 @@ def test_response_epoch_eight_rank_abi_traces_without_host_readback():
         jax.ShapeDtypeStruct((1,),jnp.uint32))
     assert [(x.shape,x.dtype) for x in trace.out_avals]==[
         ((1024,128),jnp.dtype('uint8')),((2,128),jnp.dtype('uint32'))]
+
+
+def test_response_chunk_preserves_shuffled_129_records_across_epochs():
+    from tpu_beam_search.beam_final_response_chunk import make_final_response_chunk_call
+    from tpu_beam_search.beam_final_response_routing import pallas_prepare_final_response_exchange
+    rows = (np.arange(256*128,dtype=np.uint32).reshape(256,128)//7).astype(np.uint8)
+    requests = np.zeros((4,256),np.uint32)
+    control = np.zeros((2,128),np.uint32)
+    control[0,0] = 129
+    order = np.random.default_rng(4200).permutation(129)
+    rows[:129] = rows[:129][order]
+    grouped,intervals,error = pallas_prepare_final_response_exchange(
+        jnp.asarray(rows),jnp.asarray(requests),jnp.asarray(control),
+        jnp.zeros((2,128),jnp.uint32),world_size=1,interpret=True)
+    call = make_final_response_chunk_call(SimpleNamespace(size=1),wire_width=128,interpret=True)
+    for epoch,length in ((0,128),(1,1),(2,0)):
+        got,status = map(np.asarray,call(grouped,intervals,error,jnp.array([epoch],jnp.uint32)))
+        expected = np.zeros((128,128),np.uint8)
+        expected[:length] = rows[epoch*128:epoch*128+length]
+        np.testing.assert_array_equal(got,expected)
+        assert status[0,0] == length

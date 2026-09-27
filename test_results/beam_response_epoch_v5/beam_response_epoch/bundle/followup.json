@@ -1,0 +1,420 @@
+{
+  "all_exact": false,
+  "steps": [
+    {
+      "name": "packing",
+      "status": "returned",
+      "exact": true,
+      "returncode": 0,
+      "report": {
+        "stage": "packing",
+        "compiled": true,
+        "status": "compiled",
+        "source_sha": "d5c8a45f02a9a71e05da2f5584c887fbf968bda3",
+        "runtime": {
+          "jax": "0.10.2",
+          "jaxlib": "0.10.2",
+          "libtpu": "0.0.42.1"
+        },
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "input_abi": [
+          {
+            "shape": [
+              8,
+              32,
+              2048
+            ],
+            "dtype": "uint32",
+            "sharding": "P('core',)"
+          },
+          {
+            "shape": [
+              8,
+              3,
+              128
+            ],
+            "dtype": "uint32",
+            "sharding": "P('core',)"
+          },
+          {
+            "shape": [
+              8,
+              1,
+              128
+            ],
+            "dtype": "uint32",
+            "sharding": "P('core',)"
+          },
+          {
+            "shape": [
+              1
+            ],
+            "dtype": "uint32",
+            "sharding": "P()"
+          }
+        ],
+        "scope": "compile only: no execution, correctness or timings"
+      }
+    },
+    {
+      "name": "composition",
+      "status": "returned",
+      "exact": true,
+      "returncode": 0,
+      "report": {
+        "stage": "composition",
+        "compiled": true,
+        "status": "compiled",
+        "source_sha": "d5c8a45f02a9a71e05da2f5584c887fbf968bda3",
+        "runtime": {
+          "jax": "0.10.2",
+          "jaxlib": "0.10.2",
+          "libtpu": "0.0.42.1"
+        },
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "input_abi": [
+          {
+            "shape": [
+              8,
+              35,
+              2048
+            ],
+            "dtype": "uint32",
+            "sharding": "P('core',)"
+          },
+          {
+            "shape": [
+              8,
+              3,
+              128
+            ],
+            "dtype": "uint32",
+            "sharding": "P('core',)"
+          },
+          {
+            "shape": [
+              8,
+              1,
+              128
+            ],
+            "dtype": "uint32",
+            "sharding": "P('core',)"
+          },
+          {
+            "shape": [
+              1
+            ],
+            "dtype": "uint32",
+            "sharding": "P()"
+          }
+        ],
+        "scope": "compile only: no execution, correctness or timings"
+      }
+    },
+    {
+      "name": "full_response",
+      "status": "returned",
+      "exact": false,
+      "returncode": 1,
+      "report": {
+        "source_sha": "d5c8a45f02a9a71e05da2f5584c887fbf968bda3",
+        "runtime": {
+          "jax": "0.10.2",
+          "jaxlib": "0.10.2",
+          "libtpu": "0.0.42.1"
+        },
+        "devices": [
+          {
+            "id": 0,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 1,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 2,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 3,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 4,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 5,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 6,
+            "kind": "TPU v5 lite"
+          },
+          {
+            "id": 7,
+            "kind": "TPU v5 lite"
+          }
+        ],
+        "scope": "routed response epochs, no materialization/publication or timing",
+        "exact": false,
+        "cases": [
+          {
+            "name": "empty",
+            "input_sha256": "df2885f3d7dac765b7d978aaab20fd182cfb7d825def2081f5b98b30c53f4be2",
+            "epochs": [
+              {
+                "epoch": 0,
+                "expected_sha256": "4b30d275c7213eb453a73fd97c133aa0a327a67fbce0a32853e189a5b4fd6955",
+                "exact": true,
+                "shape_ok": true,
+                "dtype_ok": true,
+                "hash_ok": true,
+                "mismatches": [
+                  [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                ],
+                "wire_shape": [
+                  8,
+                  1024,
+                  128
+                ],
+                "control_shape": [
+                  8,
+                  2,
+                  128
+                ],
+                "wire_dtype": "uint8",
+                "control_dtype": "uint32",
+                "output_sha256": "4b30d275c7213eb453a73fd97c133aa0a327a67fbce0a32853e189a5b4fd6955"
+              },
+              {
+                "epoch": 1,
+                "expected_sha256": "4b30d275c7213eb453a73fd97c133aa0a327a67fbce0a32853e189a5b4fd6955",
+                "exact": true,
+                "shape_ok": true,
+                "dtype_ok": true,
+                "hash_ok": true,
+                "mismatches": [
+                  [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                ],
+                "wire_shape": [
+                  8,
+                  1024,
+                  128
+                ],
+                "control_shape": [
+                  8,
+                  2,
+                  128
+                ],
+                "wire_dtype": "uint8",
+                "control_dtype": "uint32",
+                "output_sha256": "4b30d275c7213eb453a73fd97c133aa0a327a67fbce0a32853e189a5b4fd6955"
+              },
+              {
+                "epoch": 2,
+                "expected_sha256": "4b30d275c7213eb453a73fd97c133aa0a327a67fbce0a32853e189a5b4fd6955",
+                "exact": true,
+                "shape_ok": true,
+                "dtype_ok": true,
+                "hash_ok": true,
+                "mismatches": [
+                  [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                ],
+                "wire_shape": [
+                  8,
+                  1024,
+                  128
+                ],
+                "control_shape": [
+                  8,
+                  2,
+                  128
+                ],
+                "wire_dtype": "uint8",
+                "control_dtype": "uint32",
+                "output_sha256": "4b30d275c7213eb453a73fd97c133aa0a327a67fbce0a32853e189a5b4fd6955"
+              }
+            ],
+            "exact": true
+          },
+          {
+            "name": "self",
+            "input_sha256": "601cad50b4dbab1014131147c8b7adaacc26ac1b892aa0caf485fc774ba7fc2b",
+            "epochs": [
+              {
+                "epoch": 0,
+                "expected_sha256": "39c022022acba4ae9633ad906b7d0756b16beebca3ca13dceb18240c7b95490f",
+                "exact": false,
+                "shape_ok": true,
+                "dtype_ok": true,
+                "hash_ok": false,
+                "mismatches": [
+                  [
+                    2064,
+                    2097,
+                    2052,
+                    2000,
+                    1968,
+                    1967,
+                    1968,
+                    2011
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                ],
+                "wire_shape": [
+                  8,
+                  1024,
+                  128
+                ],
+                "control_shape": [
+                  8,
+                  2,
+                  128
+                ],
+                "wire_dtype": "uint8",
+                "control_dtype": "uint32",
+                "output_sha256": "459205361d3182eca82b1da87ef6b0935d334317b6fd50d4fecd1297362abe16"
+              }
+            ],
+            "exact": false
+          }
+        ]
+      }
+    }
+  ],
+  "scope": "two compile-isolation subprocesses, then 11 fixtures x 3 epochs"
+}

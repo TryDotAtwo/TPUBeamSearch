@@ -1,0 +1,16 @@
+[{"stream_name":"stderr","time":30.207252646,"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"}
+,{"stream_name":"stderr","time":30.390836349,"data":"\n"}
+,{"stream_name":"stderr","time":30.390862249,"data":"[notice] A new release of pip is available: 25.0.1 -\u003e 26.2.1\n"}
+,{"stream_name":"stderr","time":30.390865699,"data":"[notice] To update, run: pip install --upgrade pip\n"}
+,{"stream_name":"stderr","time":30.531012497,"data":"Cloning into '/tmp/TPUBeamSearch-response-gate'...\n"}
+,{"stream_name":"stderr","time":52.120421712,"data":"Updating files:  84% (4131/4890)\rUpdating files:  85% (4157/4890)\rUpdating files:  86% (4206/4890)\rUpdating files:  87% (4255/4890)\rUpdating files:  88% (4304/4890)\rUpdating files:  89% (4353/4890)\rUpdating files:  90% (4401/4890)\rUpdating files:  91% (4450/4890)\rUpdating files:  92% (4499/4890)\rUpdating files:  93% (4548/4890)\rUpdating files:  94% (4597/4890)\rUpdating files:  95% (4646/4890)\rUpdating files:  96% (4695/4890)\rUpdating files:  97% (4744/4890)\rUpdating files:  98% (4793/4890)\rUpdating files:  99% (4842/4890)\rUpdating files: 100% (4890/4890)\rUpdating files: 100% (4890/4890), done.\n"}
+,{"stream_name":"stderr","time":52.960566609,"data":"HEAD is now at d5c8a45 Require strict response epoch output ABI\n"}
+,{"stream_name":"stderr","time":129.405247374,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":129.405284914,"data":"  File \"/kaggle/src/script.py\", line 41, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":129.405290694,"data":"    main()\n"}
+,{"stream_name":"stderr","time":129.405294744,"data":"  File \"/kaggle/src/script.py\", line 37, in main\n"}
+,{"stream_name":"stderr","time":129.405303244,"data":"    raise RuntimeError(f'response follow-up returned {child.returncode}; see process.log')\n"}
+,{"stream_name":"stderr","time":129.405306834,"data":"RuntimeError: response follow-up returned 1; see process.log\n"}
+,{"stream_name":"stderr","time":133.867561676,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":137.739932189,"data":"[NbConvertApp] Writing 282604 bytes to __results__.html\n"}
+]
