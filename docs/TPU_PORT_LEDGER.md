@@ -2299,3 +2299,9 @@ The single-rank interpreter now also runs that entire path with two tied
 physical A/B candidates, materializes their states in A0/B0 order, verifies
 both coverage streams, and publishes matching history in one new depth.
 The test passes; it is not an eight-rank hardware or CUDA replay.
+
+The immutable full-suite run at source `5758c1c` finished in the separate
+verification worktree: 1320 collected, 1304 passed, 16 skipped, zero failures
+or errors in 3065.82 seconds. JUnit and stdout/stderr are preserved under
+`test_results/local_isolated_5758c1c.*`. This covers the final depth code
+through that SHA, but predates the later physical-gate benchmark and launcher.
