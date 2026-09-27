@@ -2258,3 +2258,13 @@ No physical eight-rank exchange, CUDA replay or beam performance is implied.
 The isolated full suite at2044dac completed with1255 passed and16 skipped
 in3560.81 seconds. That snapshot predates these streaming-consumer additions;
 it is not their full-suite validation.
+
+## 2026-09-27: production packing physical gate passed
+
+V1 source e71c922 completed: production32 and stress35, mixed/all_live,
+all eight distinct TPU v5 lite devices exact; shape/dtype/SHA match and
+wire/control max_abs=0. JSON, log, MLIR and HLO preserved in
+test_results/production_packing_execution_v1. No speed or RDMA claim.
+See docs/research/2026-09-27-production-packing-result.md.
+Prepared response gate submitted as V5, source d5c8a45, and confirmed QUEUED.
+Do not restart it; state-width bridge remains pending its terminal result.
