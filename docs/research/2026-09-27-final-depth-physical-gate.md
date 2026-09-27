@@ -23,3 +23,10 @@ The private Kaggle launcher is prepared under
 `b4ade889bdebb9b6020468709d490698c3768058`. It is not submitted yet.
 The local pure fixture test establishes only input/oracle consistency;
 eight-device correctness requires the physical run.
+
+A fresh eight-device CPU JAXPR trace of the prepared `shard_map` wrapper
+completed on 2026-09-27. Its flattened result shapes are frontier
+`[8,128,160]`, tiled history `[8,1,5,128]`, five controls with the expected
+leading eight-device axis, target counts `[8,8]`, keep/counts `[8,2,128]`,
+and local coverage errors `[8,1,128]`. This checks the wrapper's static ABI
+only; it does not compile or execute Mosaic on TPU.
