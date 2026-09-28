@@ -51,6 +51,7 @@ def test_self_epoch_diagnostic_separates_preparation_from_output_corruption():
     error=np.zeros((8,1,128),np.uint32)
     for rank in range(8):
         intervals[rank,1,rank]=129
+        intervals[rank,0,rank+1:8]=129
     want_wire=np.zeros((8,1024,128),np.uint8)
     got_wire=want_wire.copy()
     got_wire[2,0,7]=9

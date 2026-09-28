@@ -46,6 +46,7 @@ def diagnose_self_epoch(wire, prepared, actual, expected):
         grouped_mismatches.append(int(np.count_nonzero(grouped[rank, :32, :live] != words)))
         want_intervals = np.zeros((3, 128), np.uint32)
         want_intervals[1, rank] = live
+        want_intervals[0, rank+1:8] = live
         interval_mismatches.append(int(np.count_nonzero(intervals[rank] != want_intervals)))
     differences = got_wire != want_wire
     positions = np.argwhere(differences)

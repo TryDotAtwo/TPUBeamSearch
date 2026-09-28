@@ -2316,3 +2316,14 @@ interpreter regression passes, so the next run instruments physical
 preparation, packet and output boundaries without changing production code.
 See `docs/research/2026-09-27-response-epoch-v5-failure.md`. No response
 correctness or beam-throughput claim follows from this failed gate.
+
+Response epoch V6 also ended ERROR on eight TPU v5 lite devices at source
+`415ae3524aad20f8f82c7b4247be608af2681234`. The first nonempty `self`
+epoch has exact controls but wrong bytes. Grouped live words already differ
+before exchange; the mismatch is concentrated at byte columns 2 mod 4.
+The original interval diagnostic was a false positive from its oracle and
+has a local red/green regression. Complete physical artifacts are preserved
+under `test_results/beam_response_epoch_v6/`; see
+`docs/research/2026-09-28-response-epoch-v6-failure.md`. The first defective
+primitive remains unproven; an isolated physical adapter/grouping gate is
+next. No full-response or throughput claim is warranted.
